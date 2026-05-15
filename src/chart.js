@@ -2,8 +2,6 @@ const chartInstances = new Map();
 const actualColor = "#176b87";
 const comparisonColor = "#475569";
 const projectionColor = "#f97316";
-const projectionFillColor = "rgba(249, 115, 22, 0.16)";
-const actualFillColor = "rgba(23, 107, 135, 0.14)";
 
 export function renderLineChart(canvas, { points, config, comparison = null }) {
   if (!canvas) {
@@ -30,10 +28,8 @@ export function renderLineChart(canvas, { points, config, comparison = null }) {
       labels,
       displayScale,
       baseColor: actualColor,
-      fillColor: actualFillColor,
       projectionYear,
       isCompactViewport,
-      fill: true,
     }),
   ];
 
@@ -45,10 +41,8 @@ export function renderLineChart(canvas, { points, config, comparison = null }) {
         labels,
         displayScale,
         baseColor: comparisonColor,
-        fillColor: "rgba(71, 85, 105, 0.08)",
         projectionYear,
         isCompactViewport,
-        fill: false,
       }),
     );
   }
@@ -63,8 +57,8 @@ export function renderLineChart(canvas, { points, config, comparison = null }) {
       responsive: true,
       maintainAspectRatio: false,
       interaction: {
-        intersect: false,
-        mode: "index",
+        intersect: true,
+        mode: "nearest",
       },
       plugins: {
         legend: {
@@ -133,6 +127,17 @@ export function renderLineChart(canvas, { points, config, comparison = null }) {
   return chartInstance;
 }
 
+export function clearLineChart(canvas) {
+  if (!canvas) {
+    return;
+  }
+
+  if (chartInstances.has(canvas.id)) {
+    chartInstances.get(canvas.id).destroy();
+    chartInstances.delete(canvas.id);
+  }
+}
+
 function buildChartLabels(points, comparisonPoints = []) {
   const years = new Set();
 
@@ -150,10 +155,8 @@ function buildDataset({
   labels,
   displayScale,
   baseColor,
-  fillColor,
   projectionYear,
   isCompactViewport,
-  fill,
 }) {
   const valueByYear = new Map(points.map((point) => [point.year, point.value]));
 
@@ -164,7 +167,7 @@ function buildDataset({
       return Number.isFinite(value) ? value * displayScale.valueScale : null;
     }),
     borderColor: baseColor,
-    backgroundColor: fillColor,
+    backgroundColor: "transparent",
     borderWidth: isCompactViewport ? 2 : 3,
     spanGaps: true,
     pointBackgroundColor(context) {
@@ -183,18 +186,15 @@ function buildDataset({
     pointHoverRadius(context) {
       return isProjectionPoint(context, labels, projectionYear) ? 7 : 5;
     },
+    pointHitRadius: isCompactViewport ? 16 : 12,
     segment: {
       borderColor(context) {
         const endYear = Number(labels[context.p1DataIndex]);
         return endYear === projectionYear ? projectionColor : baseColor;
       },
-      backgroundColor(context) {
-        const endYear = Number(labels[context.p1DataIndex]);
-        return endYear === projectionYear ? projectionFillColor : fillColor;
-      },
     },
     tension: 0.25,
-    fill,
+    fill: false,
   };
 }
 

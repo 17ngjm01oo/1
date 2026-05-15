@@ -13,11 +13,11 @@ export function transformImfSeries(rawResponse, { indicatorCode, countryCode, st
   const preferredSeries = selectPreferredSeries(seriesCandidates, { indicatorCode, countryCode });
 
   if (!preferredSeries) {
-    console.error("[Transform] No usable series found in IMF response.", {
+    console.warn("[Transform] No usable series found in IMF response.", {
       availableCandidateCount: seriesCandidates.length,
       rawResponse,
     });
-    throw new Error("No usable IMF time series found in the API response.");
+    return [];
   }
 
   const points = Object.entries(preferredSeries)
@@ -38,7 +38,12 @@ export function transformImfSeries(rawResponse, { indicatorCode, countryCode, st
   console.table(points);
 
   if (points.length === 0) {
-    throw new Error("IMF response was loaded, but no numeric points matched the requested period.");
+    console.warn("[Transform] IMF response was loaded, but no numeric points matched the requested period.", {
+      indicatorCode,
+      countryCode,
+      startYear,
+      endYear,
+    });
   }
 
   return points;
@@ -78,9 +83,18 @@ function selectPreferredSeries(candidates, { indicatorCode, countryCode }) {
     return upperPath.includes(indicatorCode.toUpperCase()) && upperPath.includes(countryCode.toUpperCase());
   });
 
-  const selected = matchingCandidate ?? candidates[0];
-  console.info("[Transform] Selected IMF series candidate:", selected.path);
-  return selected.series;
+  if (!matchingCandidate) {
+    console.warn("[Transform] No series candidate matched the requested indicator and country.", {
+      indicatorCode,
+      countryCode,
+      candidateCount: candidates.length,
+      candidatePathSample: candidates.slice(0, 20).map(({ path }) => path),
+    });
+    return null;
+  }
+
+  console.info("[Transform] Selected IMF series candidate:", matchingCandidate.path);
+  return matchingCandidate.series;
 }
 
 function looksLikeYearValueMap(value) {
@@ -113,4 +127,3 @@ function normalizeNumericValue(value) {
 
   return null;
 }
-

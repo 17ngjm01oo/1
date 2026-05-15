@@ -118,12 +118,6 @@ body {
   min-width: 0;
 }
 
-.compare-label {
-  color: var(--muted);
-  font-size: 0.82rem;
-  font-weight: 700;
-}
-
 .compare-input-wrap {
   position: relative;
   min-width: 0;
@@ -145,6 +139,13 @@ body {
 .compare-search-input:focus {
   outline: 3px solid rgba(23, 107, 135, 0.18);
   border-color: rgba(23, 107, 135, 0.5);
+}
+
+.compare-search-input:disabled {
+  background: #eef2f5;
+  color: var(--muted);
+  cursor: not-allowed;
+  opacity: 0.72;
 }
 
 .compare-remove {
@@ -210,15 +211,10 @@ body {
 }
 
 .country-search-panel {
+  position: relative;
   display: grid;
   gap: 10px;
   min-width: 0;
-}
-
-.search-label {
-  color: var(--text);
-  font-size: 0.95rem;
-  font-weight: 700;
 }
 
 .search-input-wrap {
@@ -246,6 +242,12 @@ body {
   margin: 0;
   color: var(--accent);
   font-weight: 700;
+}
+
+.selected-country:empty,
+.indicators-section[hidden],
+.shared-notes[hidden] {
+  display: none;
 }
 
 .category-panel {
@@ -302,6 +304,15 @@ body {
   border: 1px solid var(--border);
   border-radius: 8px;
   background: #fbfcfd;
+}
+
+.country-results[data-mode="search"] {
+  position: absolute;
+  top: 82px;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  box-shadow: 0 16px 34px rgba(23, 32, 42, 0.14);
 }
 
 .country-results[hidden] {
@@ -384,6 +395,10 @@ h1 {
   letter-spacing: 0;
 }
 
+#country-hub-title {
+  font-size: clamp(1.7rem, 4vw, 2.75rem);
+}
+
 .subtitle {
   margin: 0;
   color: var(--muted);
@@ -449,7 +464,8 @@ h1 {
 }
 
 .chart-card.is-loading canvas,
-.chart-card.is-error canvas {
+.chart-card.is-error canvas,
+.chart-card.is-no-data canvas {
   opacity: 0.18;
 }
 
@@ -496,6 +512,11 @@ h1 {
 .chart-card.is-error .chart-overlay {
   background: rgba(255, 240, 240, 0.94);
   color: var(--error);
+}
+
+.chart-card.is-no-data .chart-overlay {
+  background: rgba(251, 252, 253, 0.94);
+  color: var(--muted);
 }
 
 .data-table-toggle {
@@ -553,6 +574,12 @@ h1 {
 
 .data-table tbody tr:last-child td {
   border-bottom: 0;
+}
+
+.data-table-empty {
+  padding: 14px 16px;
+  color: var(--muted);
+  font-weight: 700;
 }
 
 @keyframes spin {
@@ -624,6 +651,10 @@ h1 {
     max-height: 240px;
   }
 
+  .country-results[data-mode="search"] {
+    top: 78px;
+  }
+
   .chart-card {
     height: 360px;
     min-height: 320px;
@@ -637,6 +668,10 @@ h1 {
 
   h1 {
     font-size: clamp(1.85rem, 9vw, 2.45rem);
+  }
+
+  #country-hub-title {
+    font-size: clamp(1.55rem, 7.6vw, 2rem);
   }
 
 }

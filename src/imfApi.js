@@ -90,6 +90,22 @@ export async function fetchImfSeries({
     if (!response.ok) {
       const errorBody = await response.text();
       console.error("[IMF API] Error response body:", errorBody);
+
+      if (response.status === 404) {
+        console.warn("[IMF API] Series was not found. Treating this as no data.", {
+          requestUrl: appUrl,
+          remoteUrl,
+          indicatorCode,
+          countryCode,
+        });
+
+        return {
+          data: {},
+          url: remoteUrl,
+          requestUrl: appUrl,
+        };
+      }
+
       throw new Error(`IMF API request failed: ${response.status} ${response.statusText}`);
     }
 

@@ -1,11 +1,11 @@
-import { selectedCountryCode, seriesConfigs } from "./config.js";
+import { seriesConfigs } from "./config.js";
 import { countries, countryCategories } from "./countries.js";
 import { fetchImfSeries, buildImfRequestUrls } from "./imfApi.js";
 import { transformImfSeries } from "./transform.js";
-import { formatDisplayValue, getDisplayScale, renderLineChart } from "./chart.js";
+import { clearLineChart, formatDisplayValue, getDisplayScale, renderLineChart } from "./chart.js";
 import { getFlagEmoji } from "./flags.js";
 
-let activeCountryCode = selectedCountryCode;
+let activeCountryCode = null;
 let renderRequestId = 0;
 let currentCountryMatches = [];
 let highlightedCountryIndex = -1;
@@ -22,6 +22,7 @@ const seriesRuntimeState = new Map(
       comparisonRequestId: 0,
       comparisonMatches: [],
       highlightedComparisonIndex: -1,
+      hasMainData: false,
     },
   ]),
 );
@@ -41,29 +42,39 @@ initializeApp().catch((error) => {
 });
 
 async function initializeApp() {
-  const selectedCountry = getSelectedCountry(activeCountryCode);
-  initializeCountrySearch(selectedCountry);
+  document.title = "Nominal GDP and Nominal GDP per capita";
+  setCountryContentVisibility(false);
+  initializeCountrySearch();
   initializeCompareSearches();
   renderRegions();
   renderCategories();
-  await loadCountry(selectedCountry);
 }
 
 function getSelectedCountry(countryCode) {
+  if (!countryCode) {
+    return null;
+  }
+
   const selectedCountry = countries.find((country) => country.code === countryCode);
 
   if (!selectedCountry) {
-    console.warn("[App] Selected country code was not found. Falling back to the first country.", {
+    console.warn("[App] Selected country code was not found.", {
       countryCode,
       countries,
     });
   }
 
-  return selectedCountry ?? countries[0];
+  return selectedCountry ?? null;
 }
 
 async function selectCountry(countryCode) {
   const selectedCountry = getSelectedCountry(countryCode);
+
+  if (!selectedCountry) {
+    console.warn("[App] Could not select country because the code was not found.", { countryCode });
+    return;
+  }
+
   activeCountryCode = selectedCountry.code;
   updateCountrySelectionUi(selectedCountry);
   await loadCountry(selectedCountry);
@@ -74,9 +85,10 @@ async function loadCountry(selectedCountry) {
   const countrySeriesConfigs = buildCountrySeriesConfigs(selectedCountry);
 
   document.title = `${selectedCountry.name} GDP Charts`;
+  setCountryContentVisibility(true);
   updateCountryDataHeading(selectedCountry);
   updateSeriesHeadings(countrySeriesConfigs);
-  reconcileComparisonCountries(selectedCountry);
+  resetComparisons();
 
   await Promise.all(
     countrySeriesConfigs.map((seriesConfig) =>
@@ -85,15 +97,28 @@ async function loadCountry(selectedCountry) {
   );
 }
 
-function reconcileComparisonCountries(selectedCountry) {
+function setCountryContentVisibility(isVisible) {
+  const indicatorsSection = document.querySelector(".indicators-section");
+  const sharedNotes = document.querySelector(".shared-notes");
+
+  if (indicatorsSection) {
+    indicatorsSection.hidden = !isVisible;
+  }
+
+  if (sharedNotes) {
+    sharedNotes.hidden = !isVisible;
+  }
+}
+
+function resetComparisons() {
   seriesRuntimeState.forEach((state, seriesId) => {
-    if (state.comparisonCountry?.code === selectedCountry.code) {
-      state.comparisonCountry = null;
-      state.comparisonPoints = null;
-      state.comparisonRequestId += 1;
-    }
+    state.comparisonCountry = null;
+    state.comparisonPoints = null;
+    state.comparisonRequestId += 1;
+    state.hasMainData = false;
 
     updateCompareSelectionUi(seriesId);
+    updateCompareAvailability(seriesId);
     hideCompareResults(seriesId);
   });
 }
@@ -135,7 +160,7 @@ function updateCountryDataHeading(selectedCountry) {
   countryDataTitle.append(nameElement);
 }
 
-function initializeCountrySearch(selectedCountry) {
+function initializeCountrySearch() {
   const searchInput = document.querySelector("#countrySearchInput");
   const resultsElement = document.querySelector("#countrySearchResults");
 
@@ -161,7 +186,7 @@ function initializeCountrySearch(selectedCountry) {
     }
   });
 
-  updateCountrySelectionUi(selectedCountry);
+  updateCountrySelectionUi(null);
 }
 
 function initializeCompareSearches() {
@@ -313,10 +338,14 @@ function updateCountrySelectionUi(selectedCountry) {
   }
 
   if (selectedCountryLabel) {
-    selectedCountryLabel.textContent = `Selected country: ${selectedCountry.name} (${selectedCountry.code})`;
+    selectedCountryLabel.textContent = selectedCountry
+      ? `Selected country: ${selectedCountry.name} (${selectedCountry.code})`
+      : "";
   }
 
-  updateCountryDataHeading(selectedCountry);
+  if (selectedCountry) {
+    updateCountryDataHeading(selectedCountry);
+  }
 
   activeCategoryId = null;
   activeRegionId = null;
@@ -352,6 +381,7 @@ function renderCountryResults(query, selectedCountry) {
   updateRegionButtons();
   updateCategoryButtons();
   resultsElement.hidden = false;
+  resultsElement.dataset.mode = "search";
   searchInput?.setAttribute("aria-expanded", "true");
 
   const matchingCountries = filterCountries(normalizedQuery);
@@ -362,14 +392,50 @@ function renderCategoryCountries(categoryId, selectedCountry) {
   const matchingCountries = sortCountriesByName(
     countries.filter((country) => country.categories?.includes(categoryId)),
   );
+  setCountryResultsMode("category");
   renderCountryList(matchingCountries, selectedCountry, "No countries in this category.");
 }
 
 function renderRegionCountries(regionId, selectedCountry) {
   const matchingCountries = sortCountriesByName(
-    countries.filter((country) => country.region === regionId),
+    countries.filter((country) => countryBelongsToRegion(country, regionId)),
   );
+  setCountryResultsMode("region");
   renderCountryList(matchingCountries, selectedCountry, "No countries in this region.");
+}
+
+function countryBelongsToRegion(country, regionId) {
+  return country.region
+    .split("/")
+    .map((region) => region.trim())
+    .includes(regionId);
+}
+
+function setCountryResultsMode(mode) {
+  const resultsElement = document.querySelector("#countrySearchResults");
+
+  if (resultsElement) {
+    resultsElement.dataset.mode = mode;
+    placeCountryResultsElement(mode, resultsElement);
+  }
+}
+
+function placeCountryResultsElement(mode, resultsElement) {
+  const searchPanel = document.querySelector(".country-search-panel");
+
+  if (!searchPanel) {
+    return;
+  }
+
+  if (mode === "region") {
+    const regionPanel = document.querySelector("#region-heading")?.closest(".category-panel");
+    if (regionPanel) {
+      regionPanel.after(resultsElement);
+      return;
+    }
+  }
+
+  searchPanel.append(resultsElement);
 }
 
 function sortCountriesByName(countryList) {
@@ -409,7 +475,7 @@ function renderCountryList(matchingCountries, selectedCountry, emptyMessage) {
     resultButton.dataset.countrySlug = country.slug;
     resultButton.id = `country-result-${country.code}`;
     resultButton.setAttribute("aria-selected", String(index === highlightedCountryIndex));
-    resultButton.dataset.isActiveCountry = String(country.code === selectedCountry.code);
+    resultButton.dataset.isActiveCountry = String(country.code === selectedCountry?.code);
     resultButton.addEventListener("click", () => {
       chooseCountry(country);
     });
@@ -530,7 +596,8 @@ function renderCompareResults(seriesId, query) {
   const state = seriesRuntimeState.get(seriesId);
   const { input, results } = getCompareElements(seriesId);
 
-  if (!state || !results) {
+  if (!state || !results || !state.hasMainData || input?.disabled) {
+    hideCompareResults(seriesId);
     return;
   }
 
@@ -589,6 +656,11 @@ function renderCompareResults(seriesId, query) {
 function handleCompareSearchKeydown(event, seriesId) {
   const state = seriesRuntimeState.get(seriesId);
   const { results } = getCompareElements(seriesId);
+
+  if (!state?.hasMainData) {
+    return;
+  }
+
   const hasOpenResults = state && results && !results.hidden && state.comparisonMatches.length > 0;
 
   if (event.key === "Escape") {
@@ -657,14 +729,15 @@ function syncHighlightedComparison(seriesId) {
 }
 
 function chooseComparisonCountry(seriesId, country) {
-  if (country.code === activeCountryCode) {
+  const state = seriesRuntimeState.get(seriesId);
+
+  if (!state?.hasMainData) {
     hideCompareResults(seriesId);
     return;
   }
 
-  const state = seriesRuntimeState.get(seriesId);
-
-  if (!state) {
+  if (country.code === activeCountryCode) {
+    hideCompareResults(seriesId);
     return;
   }
 
@@ -755,6 +828,24 @@ function updateCompareSelectionUi(seriesId, stateName = "ready") {
   }
 }
 
+function updateCompareAvailability(seriesId) {
+  const state = seriesRuntimeState.get(seriesId);
+  const { input, removeButton } = getCompareElements(seriesId);
+  const isDisabled = !state?.hasMainData;
+
+  if (input) {
+    input.disabled = isDisabled;
+    input.setAttribute("aria-disabled", String(isDisabled));
+  }
+
+  if (isDisabled) {
+    hideCompareResults(seriesId);
+    if (removeButton) {
+      removeButton.hidden = true;
+    }
+  }
+}
+
 function getCompareElements(seriesId) {
   return {
     input: document.querySelector(`#${seriesId}CompareInput`),
@@ -773,6 +864,7 @@ function hideCountryResults() {
 
   resultsElement.hidden = true;
   resultsElement.innerHTML = "";
+  resultsElement.removeAttribute("data-mode");
   currentCountryMatches = [];
   highlightedCountryIndex = -1;
 
@@ -835,15 +927,35 @@ async function loadAndRenderSeries(seriesConfig, requestId) {
       return;
     }
 
-    warnIfExpectedEndYearIsMissing(points, seriesConfig);
-
     const state = seriesRuntimeState.get(seriesConfig.id);
 
     if (state) {
       state.mainConfig = seriesConfig;
       state.mainPoints = points;
       state.comparisonPoints = null;
+      state.hasMainData = points.length > 0;
     }
+
+    if (points.length === 0) {
+      updateCompareAvailability(seriesConfig.id);
+      clearLineChart(canvas);
+      renderNoDataTable(seriesConfig);
+      hideStatus(statusElement);
+      showNoDataState({
+        chartCard,
+        overlayElement,
+        countryName: seriesConfig.countryName,
+      });
+
+      console.info(`[App] No ${seriesConfig.indicatorCode} data points were available from IMF.`, {
+        url,
+        countryCode: seriesConfig.countryCode,
+      });
+      return;
+    }
+
+    updateCompareAvailability(seriesConfig.id);
+    warnIfExpectedEndYearIsMissing(points, seriesConfig);
 
     renderCurrentSeriesChart(seriesConfig.id);
     renderDataTable(points, seriesConfig);
@@ -1029,6 +1141,21 @@ function renderDataTable(points, seriesConfig) {
   tableWrap.append(table);
 }
 
+function renderNoDataTable(seriesConfig) {
+  const tableWrap = document.querySelector(`#${seriesConfig.id}TableWrap`);
+
+  if (!tableWrap) {
+    return;
+  }
+
+  tableWrap.innerHTML = "";
+
+  const noDataElement = document.createElement("div");
+  noDataElement.className = "data-table-empty";
+  noDataElement.textContent = "No data";
+  tableWrap.append(noDataElement);
+}
+
 function appendDataTableHeaders(row, valueHeading) {
   const yearHeader = document.createElement("th");
   yearHeader.scope = "col";
@@ -1064,7 +1191,7 @@ function getDataTableValueHeading(seriesConfig) {
 }
 
 function showLoadingState({ statusElement, chartCard, overlayElement, countryName }) {
-  showStatus(statusElement, `Loading ${countryName} data...`, "loading");
+  hideStatus(statusElement);
   showChartOverlay({
     chartCard,
     overlayElement,
@@ -1084,10 +1211,20 @@ function showErrorState({ statusElement, chartCard, overlayElement, countryName 
   });
 }
 
+function showNoDataState({ chartCard, overlayElement, countryName }) {
+  showChartOverlay({
+    chartCard,
+    overlayElement,
+    message: `No data available for ${countryName}.`,
+    state: "no-data",
+  });
+}
+
 function showChartOverlay({ chartCard, overlayElement, message, state }) {
   if (chartCard) {
     chartCard.classList.toggle("is-loading", state === "loading");
     chartCard.classList.toggle("is-error", state === "error");
+    chartCard.classList.toggle("is-no-data", state === "no-data");
   }
 
   if (!overlayElement) {
@@ -1113,7 +1250,7 @@ function showChartOverlay({ chartCard, overlayElement, message, state }) {
 
 function hideChartOverlay(chartCard, overlayElement) {
   if (chartCard) {
-    chartCard.classList.remove("is-loading", "is-error");
+    chartCard.classList.remove("is-loading", "is-error", "is-no-data");
   }
 
   if (!overlayElement) {
