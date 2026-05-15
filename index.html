@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>United States GDP Charts</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+    <script type="module" src="./src/main.js"></script>
+  </head>
+  <body>
+    <main class="page-shell">
+      <section class="hub-section" aria-labelledby="country-hub-title">
+        <header class="page-header">
+          <h1 id="country-hub-title">Economic Data by Country</h1>
+          <p class="subtitle">Choose a country to view IMF World Economic Outlook indicators.</p>
+        </header>
+
+        <div class="country-search-panel">
+          <label class="search-label" for="countrySearchInput">Search country</label>
+          <div class="search-input-wrap">
+            <input
+              id="countrySearchInput"
+              class="country-search-input"
+              type="search"
+              autocomplete="off"
+              placeholder="Search country or code&hellip;"
+              aria-describedby="selectedCountryLabel"
+              aria-controls="countrySearchResults"
+              role="combobox"
+              aria-autocomplete="list"
+              aria-expanded="false"
+            />
+          </div>
+          <p class="selected-country" id="selectedCountryLabel"></p>
+          <div class="category-panel" aria-labelledby="region-heading">
+            <p class="category-heading" id="region-heading">Regions</p>
+            <div class="category-list" id="regionList"></div>
+          </div>
+          <div class="category-panel" aria-labelledby="category-heading">
+            <p class="category-heading" id="category-heading">Categories</p>
+            <div class="category-list" id="categoryList"></div>
+          </div>
+          <div class="country-results" id="countrySearchResults" role="listbox" aria-label="Country search results" hidden></div>
+        </div>
+      </section>
+
+      <section class="indicators-section" aria-labelledby="country-data-title">
+        <header class="page-header country-data-header">
+          <h1 id="country-data-title"></h1>
+        </header>
+
+        <div class="indicators-card">
+          <section class="indicator-block" aria-labelledby="gdp-title">
+            <header class="indicator-header">
+              <h2 id="gdp-title">GDP, current prices</h2>
+              <div class="compare-control" data-series-id="gdp">
+                <label class="compare-label" for="gdpCompareInput">Compare with</label>
+                <div class="compare-input-wrap">
+                  <input
+                    id="gdpCompareInput"
+                    class="compare-search-input"
+                    type="search"
+                    autocomplete="off"
+                    placeholder="Search country..."
+                    aria-controls="gdpCompareResults"
+                    role="combobox"
+                    aria-autocomplete="list"
+                    aria-expanded="false"
+                  />
+                  <button class="compare-remove" id="gdpCompareRemove" type="button" hidden aria-label="Remove GDP comparison">
+                    &times;
+                  </button>
+                </div>
+                <p class="compare-selected" id="gdpCompareSelected"></p>
+                <div class="country-results compare-results" id="gdpCompareResults" role="listbox" aria-label="GDP comparison country results" hidden></div>
+              </div>
+            </header>
+
+            <div class="status-bar" id="gdpStatus" role="status" aria-live="polite" hidden>
+            </div>
+
+            <div class="chart-card" id="gdpChartCard">
+              <canvas id="gdpChart" aria-label="GDP line chart" role="img"></canvas>
+              <div class="chart-overlay" id="gdpOverlay" aria-hidden="true"></div>
+            </div>
+
+            <details class="data-table-toggle" id="gdpTableToggle">
+              <summary>Show data table</summary>
+              <div class="data-table-wrap" id="gdpTableWrap"></div>
+            </details>
+          </section>
+
+          <section class="indicator-block" aria-labelledby="gdpPerCapita-title">
+            <header class="indicator-header">
+              <h2 id="gdpPerCapita-title">GDP per capita, current prices</h2>
+              <div class="compare-control" data-series-id="gdpPerCapita">
+                <label class="compare-label" for="gdpPerCapitaCompareInput">Compare with</label>
+                <div class="compare-input-wrap">
+                  <input
+                    id="gdpPerCapitaCompareInput"
+                    class="compare-search-input"
+                    type="search"
+                    autocomplete="off"
+                    placeholder="Search country..."
+                    aria-controls="gdpPerCapitaCompareResults"
+                    role="combobox"
+                    aria-autocomplete="list"
+                    aria-expanded="false"
+                  />
+                  <button class="compare-remove" id="gdpPerCapitaCompareRemove" type="button" hidden aria-label="Remove GDP per capita comparison">
+                    &times;
+                  </button>
+                </div>
+                <p class="compare-selected" id="gdpPerCapitaCompareSelected"></p>
+                <div class="country-results compare-results" id="gdpPerCapitaCompareResults" role="listbox" aria-label="GDP per capita comparison country results" hidden></div>
+              </div>
+            </header>
+
+            <div class="status-bar" id="gdpPerCapitaStatus" role="status" aria-live="polite" hidden>
+            </div>
+
+            <div class="chart-card" id="gdpPerCapitaChartCard">
+              <canvas id="gdpPerCapitaChart" aria-label="GDP per capita line chart" role="img"></canvas>
+              <div class="chart-overlay" id="gdpPerCapitaOverlay" aria-hidden="true"></div>
+            </div>
+
+            <details class="data-table-toggle" id="gdpPerCapitaTableToggle">
+              <summary>Show data table</summary>
+              <div class="data-table-wrap" id="gdpPerCapitaTableWrap"></div>
+            </details>
+          </section>
+        </div>
+      </section>
+
+      <footer class="shared-notes" aria-label="Chart notes">
+        <p>Source: IMF World Economic Outlook via IMF DataMapper API, 1980&ndash;2026.</p>
+        <p>Orange shading indicates IMF estimates or projections. Depending on the country, other years may also include IMF estimates or projections.</p>
+      </footer>
+    </main>
+  </body>
+</html>
