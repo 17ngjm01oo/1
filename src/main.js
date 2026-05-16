@@ -1201,8 +1201,8 @@ function showLoadingState({ statusElement, chartCard, overlayElement, countryNam
 }
 
 function showErrorState({ statusElement, chartCard, overlayElement, countryName }) {
-  const message = `Failed to load ${countryName} data. See the browser console for details.`;
-  showStatus(statusElement, message, "error");
+  const message = `Failed to load ${countryName} data.`;
+  hideStatus(statusElement);
   showChartOverlay({
     chartCard,
     overlayElement,
