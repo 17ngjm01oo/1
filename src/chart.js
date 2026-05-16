@@ -15,8 +15,6 @@ export function renderLineChart(canvas, { points, config, comparison = null }) {
     chartInstances.get(canvas.id).destroy();
   }
 
-  enableChartTouchHandling(canvas);
-
   const allPoints = comparison?.points?.length ? [...points, ...comparison.points] : points;
   const labels = buildChartLabels(points, comparison?.points);
   const displayScale = getDisplayScale(allPoints, config);
@@ -123,23 +121,6 @@ export function renderLineChart(canvas, { points, config, comparison = null }) {
   chartInstances.set(canvas.id, chartInstance);
 
   return chartInstance;
-}
-
-function enableChartTouchHandling(canvas) {
-  const chartTouchTarget = canvas.closest(".chart-card") ?? canvas;
-
-  if (chartTouchTarget.dataset.touchHandlingEnabled === "true") {
-    return;
-  }
-
-  const preventPageScroll = (event) => {
-    if (event.cancelable) {
-      event.preventDefault();
-    }
-  };
-
-  chartTouchTarget.addEventListener("touchmove", preventPageScroll, { passive: false });
-  chartTouchTarget.dataset.touchHandlingEnabled = "true";
 }
 
 export function clearLineChart(canvas) {
