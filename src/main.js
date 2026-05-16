@@ -48,6 +48,12 @@ async function initializeApp() {
   initializeCompareSearches();
   renderRegions();
   renderCategories();
+
+  const initialCountry = getInitialCountryFromUrl();
+
+  if (initialCountry) {
+    await selectCountry(initialCountry.code);
+  }
 }
 
 function getSelectedCountry(countryCode) {
@@ -61,6 +67,31 @@ function getSelectedCountry(countryCode) {
     console.warn("[App] Selected country code was not found.", {
       countryCode,
       countries,
+    });
+  }
+
+  return selectedCountry ?? null;
+}
+
+function getInitialCountryFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const countryParam = params.get("country");
+
+  if (!countryParam) {
+    return null;
+  }
+
+  const normalizedCountryParam = countryParam.trim().toLowerCase();
+  const selectedCountry = countries.find((country) => {
+    return (
+      country.code.toLowerCase() === normalizedCountryParam ||
+      country.slug.toLowerCase() === normalizedCountryParam
+    );
+  });
+
+  if (!selectedCountry) {
+    console.warn("[App] Country query parameter did not match a known country.", {
+      countryParam,
     });
   }
 
@@ -331,16 +362,9 @@ function updateCategoryButtons() {
 
 function updateCountrySelectionUi(selectedCountry) {
   const searchInput = document.querySelector("#countrySearchInput");
-  const selectedCountryLabel = document.querySelector("#selectedCountryLabel");
 
   if (searchInput) {
     searchInput.value = "";
-  }
-
-  if (selectedCountryLabel) {
-    selectedCountryLabel.textContent = selectedCountry
-      ? `Selected country: ${selectedCountry.name} (${selectedCountry.code})`
-      : "";
   }
 
   if (selectedCountry) {

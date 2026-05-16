@@ -12,8 +12,12 @@
     <main class="page-shell">
       <section class="hub-section" aria-labelledby="country-hub-title">
         <header class="page-header">
-          <h1 id="country-hub-title">Nominal GDP and Nominal GDP per capita</h1>
+          <h1 id="country-hub-title" class="page-title">Nominal GDP and Nominal GDP per capita</h1>
           <p class="subtitle">Choose a country to view IMF World Economic Outlook indicators.</p>
+          <nav class="site-nav" aria-label="Site navigation">
+            <a href="./rankings/nominal-gdp/">Nominal GDP Ranking</a>
+            <a href="./rankings/nominal-gdp-per-capita/">GDP per Capita Ranking</a>
+          </nav>
         </header>
 
         <div class="country-search-panel">
@@ -24,14 +28,12 @@
               type="search"
               autocomplete="off"
               placeholder="Search country or code&hellip;"
-              aria-describedby="selectedCountryLabel"
               aria-controls="countrySearchResults"
               role="combobox"
               aria-autocomplete="list"
               aria-expanded="false"
             />
           </div>
-          <p class="selected-country" id="selectedCountryLabel"></p>
           <div class="category-panel" aria-labelledby="region-heading">
             <p class="category-heading" id="region-heading">Regions</p>
             <div class="category-list" id="regionList"></div>
