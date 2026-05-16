@@ -6,6 +6,8 @@ import { initializeRankingFilters } from "./rankingFilters.js";
 
 const gdpPerCapitaDataUrl = new URL("../data/imf/nominal-gdp-per-capita.json", import.meta.url);
 const rankingEndYear = 2026;
+const rankingTitleBase = "GDP per Capita Ranking";
+const rankingTableTitle = document.querySelector("#ranking-table-title");
 const rankingTableBody = document.querySelector("#rankingTableBody");
 const rankingSummary = document.querySelector("#rankingSummary");
 let allRankingRows = [];
@@ -73,8 +75,18 @@ function buildGdpPerCapitaRanking(data) {
 
 function renderScopedRanking() {
   const rankingRows = filterRankingRows(allRankingRows, activeScope);
+  updateRankingTitle(activeScope);
   renderRankingTable(rankingRows);
   updateRankingSummary(rankingRows, activeScope);
+}
+
+function updateRankingTitle(scope) {
+  if (!rankingTableTitle) {
+    return;
+  }
+
+  const scopeLabel = scope?.label ?? "World";
+  rankingTableTitle.textContent = `${rankingTitleBase} - ${scopeLabel}`;
 }
 
 function filterRankingRows(rankingRows, scope) {

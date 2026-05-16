@@ -184,7 +184,7 @@ function updateCountryDataHeading(selectedCountry) {
 }
 
 function formatCountryHeadingText(country) {
-  return country.region ? `${country.name} - ${country.region}` : country.name;
+  return country.name;
 }
 
 function formatCountryMetaText(country) {

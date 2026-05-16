@@ -6,6 +6,8 @@ import { initializeRankingFilters } from "./rankingFilters.js";
 
 const nominalGdpDataUrl = new URL("../data/imf/nominal-gdp.json", import.meta.url);
 const rankingEndYear = 2026;
+const rankingTitleBase = "Nominal GDP Ranking";
+const rankingTableTitle = document.querySelector("#ranking-table-title");
 const rankingTableBody = document.querySelector("#rankingTableBody");
 const rankingSummary = document.querySelector("#rankingSummary");
 let allRankingRows = [];
@@ -67,8 +69,18 @@ function buildNominalGdpRanking(data) {
 
 function renderScopedRanking() {
   const rankingRows = filterRankingRows(allRankingRows, activeScope);
+  updateRankingTitle(activeScope);
   renderRankingTable(rankingRows);
   updateRankingSummary(rankingRows, activeScope);
+}
+
+function updateRankingTitle(scope) {
+  if (!rankingTableTitle) {
+    return;
+  }
+
+  const scopeLabel = scope?.label ?? "World";
+  rankingTableTitle.textContent = `${rankingTitleBase} - ${scopeLabel}`;
 }
 
 function filterRankingRows(rankingRows, scope) {

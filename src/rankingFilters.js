@@ -63,6 +63,7 @@ function createScopeButton({ scope, onSelect }) {
   button.textContent = scope.label;
   button.addEventListener("click", () => {
     onSelect(scope);
+    button.closest("details")?.removeAttribute("open");
   });
 
   return button;
