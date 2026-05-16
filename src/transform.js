@@ -1,21 +1,20 @@
 export function transformImfSeries(rawResponse, { indicatorCode, countryCode, startYear, endYear }) {
-  console.groupCollapsed("[Transform] Inspecting IMF response");
+  console.groupCollapsed("[Static Data] Inspecting series data");
   console.log({
     indicatorCode,
     countryCode,
     startYear,
     endYear,
-    rawResponse,
+    availableIndicators: rawResponse?.values ? Object.keys(rawResponse.values) : [],
   });
   console.groupEnd();
 
-  const seriesCandidates = collectSeriesCandidates(rawResponse);
-  const preferredSeries = selectPreferredSeries(seriesCandidates, { indicatorCode, countryCode });
+  const preferredSeries = getStaticSeries(rawResponse, { indicatorCode, countryCode });
 
   if (!preferredSeries) {
-    console.warn("[Transform] No usable series found in IMF response.", {
-      availableCandidateCount: seriesCandidates.length,
-      rawResponse,
+    console.info("[Static Data] No series data found for the requested country and indicator.", {
+      indicatorCode,
+      countryCode,
     });
     return [];
   }
@@ -38,7 +37,7 @@ export function transformImfSeries(rawResponse, { indicatorCode, countryCode, st
   console.table(points);
 
   if (points.length === 0) {
-    console.warn("[Transform] IMF response was loaded, but no numeric points matched the requested period.", {
+    console.info("[Static Data] Series exists, but no numeric points matched the requested period.", {
       indicatorCode,
       countryCode,
       startYear,
@@ -49,66 +48,45 @@ export function transformImfSeries(rawResponse, { indicatorCode, countryCode, st
   return points;
 }
 
-function collectSeriesCandidates(value, path = "root", candidates = []) {
-  if (!value || typeof value !== "object") {
-    return candidates;
+function getStaticSeries(rawResponse, { indicatorCode, countryCode }) {
+  if (!rawResponse || typeof rawResponse !== "object") {
+    throw new Error("Static data file did not contain a JSON object.");
   }
 
-  if (looksLikeYearValueMap(value)) {
-    candidates.push({
-      path,
-      series: value,
+  if (!rawResponse.values || typeof rawResponse.values !== "object") {
+    throw new Error("Static data file is missing the values object.");
+  }
+
+  const indicatorValues = rawResponse.values[indicatorCode];
+
+  if (!indicatorValues || typeof indicatorValues !== "object") {
+    console.info("[Static Data] Indicator is not present in the static data file.", {
+      indicatorCode,
+      availableIndicators: Object.keys(rawResponse.values),
     });
-  }
-
-  if (Array.isArray(value)) {
-    value.forEach((item, index) => collectSeriesCandidates(item, `${path}[${index}]`, candidates));
-    return candidates;
-  }
-
-  Object.entries(value).forEach(([key, childValue]) => {
-    collectSeriesCandidates(childValue, `${path}.${key}`, candidates);
-  });
-
-  return candidates;
-}
-
-function selectPreferredSeries(candidates, { indicatorCode, countryCode }) {
-  if (candidates.length === 0) {
     return null;
   }
 
-  const matchingCandidate = candidates.find(({ path }) => {
-    const upperPath = path.toUpperCase();
-    return upperPath.includes(indicatorCode.toUpperCase()) && upperPath.includes(countryCode.toUpperCase());
-  });
+  const series = indicatorValues[countryCode];
 
-  if (!matchingCandidate) {
-    console.warn("[Transform] No series candidate matched the requested indicator and country.", {
+  if (!series || typeof series !== "object") {
+    console.info("[Static Data] Country is not present for this indicator.", {
       indicatorCode,
       countryCode,
-      candidateCount: candidates.length,
-      candidatePathSample: candidates.slice(0, 20).map(({ path }) => path),
     });
     return null;
   }
 
-  console.info("[Transform] Selected IMF series candidate:", matchingCandidate.path);
-  return matchingCandidate.series;
-}
-
-function looksLikeYearValueMap(value) {
-  const entries = Object.entries(value);
-
-  if (entries.length === 0) {
-    return false;
+  if (Array.isArray(series)) {
+    throw new Error("Static data series must be a year-value object, not an array.");
   }
 
-  const yearLikeEntries = entries.filter(([key, entryValue]) => {
-    return /^\d{4}$/.test(key) && normalizeNumericValue(entryValue) !== null;
+  console.info("[Static Data] Selected static series.", {
+    indicatorCode,
+    countryCode,
   });
 
-  return yearLikeEntries.length > 0;
+  return series;
 }
 
 function normalizeNumericValue(value) {

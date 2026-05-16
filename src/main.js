@@ -818,6 +818,9 @@ function updateCompareSelectionUi(seriesId, stateName = "ready") {
   } else if (stateName === "error") {
     selected.textContent = `Failed to load ${state.comparisonCountry.name}.`;
     selected.classList.add("is-error");
+  } else if (stateName === "no-data") {
+    selected.textContent = `No data for ${state.comparisonCountry.name}.`;
+    selected.classList.add("is-error");
   } else {
     selected.textContent = `Comparing with ${state.comparisonCountry.name} (${state.comparisonCountry.code})`;
     selected.classList.remove("is-error");
@@ -913,14 +916,14 @@ async function loadAndRenderSeries(seriesConfig, requestId) {
     clearDataTable(seriesConfig);
 
     const requestUrls = buildImfRequestUrls(seriesConfig);
-    console.info(`[App] ${seriesConfig.indicatorCode} IMF API URL for verification:`, requestUrls.remoteUrl);
-    console.info(`[App] ${seriesConfig.indicatorCode} browser request URL:`, requestUrls.appUrl);
+    console.info(`[App] ${seriesConfig.indicatorCode} static data file:`, requestUrls.appUrl);
+    console.info(`[App] ${seriesConfig.indicatorCode} source IMF URL for data updates:`, requestUrls.remoteUrl);
 
     const { data, url } = await fetchImfSeries(seriesConfig);
     const points = transformImfSeries(data, seriesConfig);
 
     if (requestId !== renderRequestId) {
-      console.info("[App] Ignored stale IMF response.", {
+      console.info("[App] Ignored stale static data response.", {
         indicatorCode: seriesConfig.indicatorCode,
         countryCode: seriesConfig.countryCode,
       });
@@ -947,7 +950,7 @@ async function loadAndRenderSeries(seriesConfig, requestId) {
         countryName: seriesConfig.countryName,
       });
 
-      console.info(`[App] No ${seriesConfig.indicatorCode} data points were available from IMF.`, {
+      console.info(`[App] No ${seriesConfig.indicatorCode} data points were found in the static data file.`, {
         url,
         countryCode: seriesConfig.countryCode,
       });
@@ -960,7 +963,7 @@ async function loadAndRenderSeries(seriesConfig, requestId) {
     renderCurrentSeriesChart(seriesConfig.id);
     renderDataTable(points, seriesConfig);
 
-    console.info(`[App] Loaded ${points.length} ${seriesConfig.indicatorCode} data points from IMF.`, {
+    console.info(`[App] Loaded ${points.length} ${seriesConfig.indicatorCode} data points from static data.`, {
       url,
     });
     hideStatus(statusElement);
@@ -977,7 +980,7 @@ async function loadAndRenderSeries(seriesConfig, requestId) {
     }
   } catch (error) {
     if (requestId !== renderRequestId) {
-      console.info("[App] Ignored stale IMF error.", {
+      console.info("[App] Ignored stale static data error.", {
         indicatorCode: seriesConfig.indicatorCode,
         countryCode: seriesConfig.countryCode,
         error,
@@ -1017,8 +1020,9 @@ async function loadAndRenderComparison(seriesId) {
 
   try {
     const requestUrls = buildImfRequestUrls(comparisonConfig);
+    console.info(`[App] ${comparisonConfig.indicatorCode} comparison static data file:`, requestUrls.appUrl);
     console.info(
-      `[App] ${comparisonConfig.indicatorCode} comparison IMF API URL for verification:`,
+      `[App] ${comparisonConfig.indicatorCode} comparison source IMF URL for data updates:`,
       requestUrls.remoteUrl,
     );
 
@@ -1030,9 +1034,21 @@ async function loadAndRenderComparison(seriesId) {
       comparisonCountry.code !== state.comparisonCountry?.code ||
       activeCountryCode !== state.mainConfig.countryCode
     ) {
-      console.info("[App] Ignored stale comparison IMF response.", {
+      console.info("[App] Ignored stale comparison static data response.", {
         indicatorCode: comparisonConfig.indicatorCode,
         comparisonCountryCode: comparisonConfig.countryCode,
+      });
+      return;
+    }
+
+    if (points.length === 0) {
+      state.comparisonPoints = null;
+      renderCurrentSeriesChart(seriesId);
+      updateCompareSelectionUi(seriesId, "no-data");
+      console.info("[App] No comparison data points were found in the static data file.", {
+        url,
+        seriesId,
+        countryCode: comparisonConfig.countryCode,
       });
       return;
     }
@@ -1042,14 +1058,14 @@ async function loadAndRenderComparison(seriesId) {
     renderCurrentSeriesChart(seriesId);
     updateCompareSelectionUi(seriesId);
 
-    console.info(`[App] Loaded ${points.length} comparison data points from IMF.`, {
+    console.info(`[App] Loaded ${points.length} comparison data points from static data.`, {
       url,
       seriesId,
       countryCode: comparisonConfig.countryCode,
     });
   } catch (error) {
     if (comparisonRequestId !== state.comparisonRequestId) {
-      console.info("[App] Ignored stale comparison IMF error.", {
+      console.info("[App] Ignored stale comparison static data error.", {
         seriesId,
         comparisonCountryCode: comparisonCountry.code,
         error,

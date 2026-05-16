@@ -1,10 +1,13 @@
 import { dataSources } from "./config.js";
 
+const staticDataCache = new Map();
+
 export function buildImfRequestUrls(options) {
-  const remoteUrl = buildImfDataMapperUrl(options);
-  const appUrl = shouldUseLocalProxy()
-    ? buildLocalProxyUrl(options, remoteUrl)
-    : remoteUrl;
+  const remoteUrl = buildImfDataMapperUrl({
+    ...options,
+    countryCode: null,
+  });
+  const appUrl = buildStaticDataUrl(options);
 
   return {
     appUrl,
@@ -12,18 +15,16 @@ export function buildImfRequestUrls(options) {
   };
 }
 
-function shouldUseLocalProxy() {
-  const proxyMode = dataSources.imfDataMapper.useLocalProxy;
-
-  if (proxyMode === true) {
-    return true;
+function buildStaticDataUrl({ staticDataPath, indicatorCode }) {
+  if (!dataSources.imfDataMapper.useStaticData) {
+    throw new Error("Static data mode is required for this site.");
   }
 
-  if (proxyMode !== "localOnly") {
-    return false;
+  if (!staticDataPath) {
+    throw new Error(`staticDataPath is required for ${indicatorCode}.`);
   }
 
-  return ["localhost", "127.0.0.1"].includes(window.location.hostname);
+  return new URL(staticDataPath, window.location.href).toString();
 }
 
 export function buildImfDataMapperUrl({
@@ -33,43 +34,21 @@ export function buildImfDataMapperUrl({
   startYear,
   endYear,
 }) {
-  if (!indicatorCode || !countryCode) {
-    throw new Error("indicatorCode and countryCode are required to build the IMF API URL.");
+  if (!indicatorCode) {
+    throw new Error("indicatorCode is required to build the IMF source URL.");
   }
 
   // DataMapper v2 identifies the WEO dataset through indicator metadata.
   // The visible DataMapper page uses NGDPD@WEO, but the API endpoint returns series data with NGDPD.
   // If IMF changes this path convention, update this function first.
-  const url = new URL(
-    `${dataSources.imfDataMapper.baseUrl}/${encodeURIComponent(indicatorCode)}/${encodeURIComponent(countryCode)}`,
-  );
+  const path = countryCode
+    ? `${dataSources.imfDataMapper.baseUrl}/${encodeURIComponent(indicatorCode)}/${encodeURIComponent(countryCode)}`
+    : `${dataSources.imfDataMapper.baseUrl}/${encodeURIComponent(indicatorCode)}`;
+  const url = new URL(path);
 
   if (Number.isInteger(startYear) && Number.isInteger(endYear)) {
     url.searchParams.set("periods", buildPeriodList(startYear, endYear).join(","));
   }
-
-  return url.toString();
-}
-
-export function buildLocalProxyUrl(
-  { indicatorCode, countryCode, dataset = "WEO", startYear, endYear },
-  remoteUrl,
-) {
-  const url = new URL(dataSources.imfDataMapper.proxyPath, window.location.origin);
-
-  url.searchParams.set("indicatorCode", indicatorCode);
-  url.searchParams.set("countryCode", countryCode);
-  url.searchParams.set("dataset", dataset);
-
-  if (Number.isInteger(startYear)) {
-    url.searchParams.set("startYear", String(startYear));
-  }
-
-  if (Number.isInteger(endYear)) {
-    url.searchParams.set("endYear", String(endYear));
-  }
-
-  url.searchParams.set("remoteUrl", remoteUrl);
 
   return url.toString();
 }
@@ -80,6 +59,7 @@ export async function fetchImfSeries({
   dataset,
   startYear,
   endYear,
+  staticDataPath,
 }) {
   const { appUrl, remoteUrl } = buildImfRequestUrls({
     indicatorCode,
@@ -87,46 +67,39 @@ export async function fetchImfSeries({
     dataset,
     startYear,
     endYear,
+    staticDataPath,
   });
 
-  console.info("[IMF API] Browser request URL:", appUrl);
-  console.info("[IMF API] Remote IMF URL:", remoteUrl);
+  console.info("[Static Data] Data file URL:", appUrl);
+  console.info("[Static Data] Source IMF URL for updates:", remoteUrl);
 
   try {
+    if (staticDataCache.has(appUrl)) {
+      return {
+        data: staticDataCache.get(appUrl),
+        url: remoteUrl,
+        requestUrl: appUrl,
+      };
+    }
+
     const response = await fetch(appUrl, {
       headers: {
         Accept: "application/json",
       },
     });
 
-    console.info("[IMF API] Response status:", response.status, response.statusText);
+    console.info("[Static Data] Response status:", response.status, response.statusText);
 
     if (!response.ok) {
       const errorBody = await response.text();
-      console.error("[IMF API] Error response body:", errorBody);
-
-      if (response.status === 404) {
-        console.warn("[IMF API] Series was not found. Treating this as no data.", {
-          requestUrl: appUrl,
-          remoteUrl,
-          indicatorCode,
-          countryCode,
-        });
-
-        return {
-          data: {},
-          url: remoteUrl,
-          requestUrl: appUrl,
-        };
-      }
-
-      throw new Error(`IMF API request failed: ${response.status} ${response.statusText}`);
+      console.error("[Static Data] Error response body:", errorBody);
+      throw new Error(`Static data file request failed: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
+    staticDataCache.set(appUrl, data);
 
-    // Keep the raw response visible while confirming or changing IMF response shapes.
-    console.groupCollapsed("[IMF API] Raw response");
+    console.groupCollapsed("[Static Data] Raw response");
     console.log(data);
     console.groupEnd();
 
@@ -136,7 +109,7 @@ export async function fetchImfSeries({
       requestUrl: appUrl,
     };
   } catch (error) {
-    console.error("[IMF API] Failed to fetch series.", {
+    console.error("[Static Data] Failed to load static data file.", {
       requestUrl: appUrl,
       remoteUrl,
       indicatorCode,

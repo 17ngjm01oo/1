@@ -1,5 +1,3 @@
-export const selectedCountryCode = "USA";
-
 export const seriesConfigs = [
   {
     id: "gdp",
@@ -10,9 +8,9 @@ export const seriesConfigs = [
     dataSource: "IMF DataMapper API",
     dataset: "WEO",
     indicatorCode: "NGDPD",
+    staticDataPath: "./data/imf/nominal-gdp.json",
     startYear: 1980,
     endYear: 2026,
-    projectionYear: 2026,
     titleTemplate: "GDP, current prices",
     subtitle: "IMF World Economic Outlook, 1980-2026",
     unitLabel: "Billions of U.S. dollars",
@@ -29,9 +27,9 @@ export const seriesConfigs = [
     dataSource: "IMF DataMapper API",
     dataset: "WEO",
     indicatorCode: "NGDPDPC",
+    staticDataPath: "./data/imf/nominal-gdp-per-capita.json",
     startYear: 1980,
     endYear: 2026,
-    projectionYear: 2026,
     titleTemplate: "GDP per capita, current prices",
     subtitle: "IMF World Economic Outlook, 1980-2026",
     unitLabel: "U.S. dollars per person",
@@ -46,7 +44,6 @@ export const dataSources = {
   imfDataMapper: {
     // Keep this centralized for future SDMX or alternate DataMapper version migration.
     baseUrl: "https://www.imf.org/external/datamapper/api/v1",
-    proxyPath: "/api/imf",
-    useLocalProxy: "localOnly",
+    useStaticData: true,
   },
 };

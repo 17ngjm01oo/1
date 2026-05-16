@@ -1,7 +1,6 @@
 const chartInstances = new Map();
 const actualColor = "#176b87";
 const comparisonColor = "#475569";
-const projectionColor = "#f97316";
 
 export function renderLineChart(canvas, { points, config, comparison = null }) {
   if (!canvas) {
@@ -20,7 +19,6 @@ export function renderLineChart(canvas, { points, config, comparison = null }) {
   const labels = buildChartLabels(points, comparison?.points);
   const displayScale = getDisplayScale(allPoints, config);
   const isCompactViewport = window.matchMedia("(max-width: 640px)").matches;
-  const projectionYear = config.projectionYear ?? 2026;
   const datasets = [
     buildDataset({
       label: config.countryName,
@@ -28,7 +26,6 @@ export function renderLineChart(canvas, { points, config, comparison = null }) {
       labels,
       displayScale,
       baseColor: actualColor,
-      projectionYear,
       isCompactViewport,
     }),
   ];
@@ -41,7 +38,6 @@ export function renderLineChart(canvas, { points, config, comparison = null }) {
         labels,
         displayScale,
         baseColor: comparisonColor,
-        projectionYear,
         isCompactViewport,
       }),
     );
@@ -155,7 +151,6 @@ function buildDataset({
   labels,
   displayScale,
   baseColor,
-  projectionYear,
   isCompactViewport,
 }) {
   const valueByYear = new Map(points.map((point) => [point.year, point.value]));
@@ -170,37 +165,14 @@ function buildDataset({
     backgroundColor: "transparent",
     borderWidth: isCompactViewport ? 2 : 3,
     spanGaps: true,
-    pointBackgroundColor(context) {
-      return isProjectionPoint(context, labels, projectionYear) ? projectionColor : baseColor;
-    },
-    pointBorderColor(context) {
-      return isProjectionPoint(context, labels, projectionYear) ? projectionColor : baseColor;
-    },
-    pointRadius(context) {
-      if (isProjectionPoint(context, labels, projectionYear)) {
-        return isCompactViewport ? 4 : 5;
-      }
-
-      return isCompactViewport ? 0 : 2;
-    },
-    pointHoverRadius(context) {
-      return isProjectionPoint(context, labels, projectionYear) ? 7 : 5;
-    },
-    pointHitRadius: isCompactViewport ? 16 : 12,
-    segment: {
-      borderColor(context) {
-        const endYear = Number(labels[context.p1DataIndex]);
-        return endYear === projectionYear ? projectionColor : baseColor;
-      },
-    },
+    pointBackgroundColor: baseColor,
+    pointBorderColor: baseColor,
+    pointRadius: isCompactViewport ? 0 : 2,
+    pointHoverRadius: 5,
+    pointHitRadius: isCompactViewport ? 20 : 16,
     tension: 0.25,
     fill: false,
   };
-}
-
-function isProjectionPoint(context, labels, projectionYear) {
-  const year = Number(labels[context.dataIndex]);
-  return year === projectionYear;
 }
 
 export function getDisplayScale(points, config) {

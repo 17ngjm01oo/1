@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "update-data": "python3 scripts/update-data.py"
+  }
+}
