@@ -1,5 +1,6 @@
 import { seriesConfigs } from "./config.js";
-import { countries, countryCategories } from "./countries.js";
+import { countries, countryCategories, countryRegions } from "./countries.js";
+import { countryBelongsToRegion } from "./countryFilters.js";
 import { fetchImfSeries, buildImfRequestUrls } from "./imfApi.js";
 import { transformImfSeries } from "./transform.js";
 import { clearLineChart, formatDisplayValue, getDisplayScale, renderLineChart } from "./chart.js";
@@ -26,16 +27,6 @@ const seriesRuntimeState = new Map(
     },
   ]),
 );
-
-const countryRegions = [
-  { id: "Asia", label: "Asia" },
-  { id: "Europe", label: "Europe" },
-  { id: "North America", label: "North America" },
-  { id: "South America", label: "South America" },
-  { id: "Africa", label: "Africa" },
-  { id: "Oceania", label: "Oceania" },
-  { id: "Middle East", label: "Middle East" },
-];
 
 initializeApp().catch((error) => {
   console.error("[App] Unhandled initialization error.", error);
@@ -461,13 +452,6 @@ function renderRegionCountries(regionId, selectedCountry) {
   );
   setCountryResultsMode("region");
   renderCountryList(matchingCountries, selectedCountry, "No countries in this region.");
-}
-
-function countryBelongsToRegion(country, regionId) {
-  return country.region
-    .split("/")
-    .map((region) => region.trim())
-    .includes(regionId);
 }
 
 function setCountryResultsMode(mode) {

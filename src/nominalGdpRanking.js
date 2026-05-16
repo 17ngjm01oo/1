@@ -1,11 +1,15 @@
 import { countries } from "./countries.js";
+import { filterCountriesByScope } from "./countryFilters.js";
 import { getDisplayScale, formatDisplayValue } from "./chart.js";
 import { getFlagEmoji } from "./flags.js";
+import { initializeRankingFilters } from "./rankingFilters.js";
 
 const nominalGdpDataUrl = new URL("../data/imf/nominal-gdp.json", import.meta.url);
 const rankingEndYear = 2026;
 const rankingTableBody = document.querySelector("#rankingTableBody");
 const rankingSummary = document.querySelector("#rankingSummary");
+let allRankingRows = [];
+let activeScope = null;
 
 initializeRanking().catch((error) => {
   console.error("[Ranking] Failed to initialize nominal GDP ranking.", error);
@@ -13,6 +17,13 @@ initializeRanking().catch((error) => {
 });
 
 async function initializeRanking() {
+  activeScope = initializeRankingFilters({
+    onScopeChange(scope) {
+      activeScope = scope;
+      renderScopedRanking();
+    },
+  });
+
   const response = await fetch(nominalGdpDataUrl, {
     headers: {
       Accept: "application/json",
@@ -24,9 +35,8 @@ async function initializeRanking() {
   }
 
   const data = await response.json();
-  const rankingRows = buildNominalGdpRanking(data);
-  renderRankingTable(rankingRows);
-  updateRankingSummary(rankingRows);
+  allRankingRows = buildNominalGdpRanking(data);
+  renderScopedRanking();
 }
 
 function buildNominalGdpRanking(data) {
@@ -52,6 +62,17 @@ function buildNominalGdpRanking(data) {
     })
     .filter(Boolean)
     .sort((countryA, countryB) => countryB.value - countryA.value);
+}
+
+function renderScopedRanking() {
+  const rankingRows = filterRankingRows(allRankingRows, activeScope);
+  renderRankingTable(rankingRows);
+  updateRankingSummary(rankingRows, activeScope);
+}
+
+function filterRankingRows(rankingRows, scope) {
+  const scopedCountryCodes = new Set(filterCountriesByScope(countries, scope).map((country) => country.code));
+  return rankingRows.filter((country) => scopedCountryCodes.has(country.code));
 }
 
 function getLatestNumericPoint(series) {
@@ -119,12 +140,14 @@ function renderRankingTable(rankingRows) {
   });
 }
 
-function updateRankingSummary(rankingRows) {
+function updateRankingSummary(rankingRows, scope) {
   if (!rankingSummary) {
     return;
   }
 
-  rankingSummary.textContent = `Showing ${rankingRows.length} countries with available nominal GDP data.`;
+  const scopeLabel = scope?.label ?? "World";
+  rankingSummary.textContent =
+    `Showing ${rankingRows.length} countries with available nominal GDP data for ${scopeLabel}.`;
 }
 
 function showRankingError() {

@@ -636,6 +636,12 @@ h1 {
   gap: 16px;
 }
 
+.ranking-filter-panel {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
 .ranking-card-header {
   display: grid;
   gap: 6px;
