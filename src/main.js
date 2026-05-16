@@ -45,6 +45,7 @@ async function initializeApp() {
   document.title = "Nominal GDP and Nominal GDP per capita";
   setCountryContentVisibility(false);
   initializeCountrySearch();
+  initializeCountryFilters();
   initializeCompareSearches();
   renderRegions();
   renderCategories();
@@ -220,6 +221,31 @@ function initializeCountrySearch() {
   updateCountrySelectionUi(null);
 }
 
+function initializeCountryFilters() {
+  const regionPanel = document.querySelector("#region-heading")?.closest(".category-panel");
+  const categoryPanel = document.querySelector("#category-heading")?.closest(".category-panel");
+
+  regionPanel?.addEventListener("toggle", () => {
+    if (regionPanel.open || !activeRegionId) {
+      return;
+    }
+
+    activeRegionId = null;
+    updateRegionButtons();
+    hideCountryResults();
+  });
+
+  categoryPanel?.addEventListener("toggle", () => {
+    if (categoryPanel.open || !activeCategoryId) {
+      return;
+    }
+
+    activeCategoryId = null;
+    updateCategoryButtons();
+    hideCountryResults();
+  });
+}
+
 function initializeCompareSearches() {
   seriesConfigs.forEach((seriesConfig) => {
     const { input, removeButton } = getCompareElements(seriesConfig.id);
@@ -375,7 +401,16 @@ function updateCountrySelectionUi(selectedCountry) {
   activeRegionId = null;
   updateRegionButtons();
   updateCategoryButtons();
+  closeCountryFilterPanels();
   hideCountryResults();
+}
+
+function closeCountryFilterPanels() {
+  document.querySelectorAll(".category-panel").forEach((panel) => {
+    if (panel instanceof HTMLDetailsElement) {
+      panel.open = false;
+    }
+  });
 }
 
 function renderCountryResults(query, selectedCountry) {
@@ -846,7 +881,7 @@ function updateCompareSelectionUi(seriesId, stateName = "ready") {
     selected.textContent = `No data for ${state.comparisonCountry.name}.`;
     selected.classList.add("is-error");
   } else {
-    selected.textContent = `Comparing with ${state.comparisonCountry.name} (${state.comparisonCountry.code})`;
+    selected.textContent = `Comparing with ${state.comparisonCountry.name}`;
     selected.classList.remove("is-error");
   }
 

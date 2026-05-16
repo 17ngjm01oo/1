@@ -162,7 +162,7 @@ function buildDataset({
       return Number.isFinite(value) ? value * displayScale.valueScale : null;
     }),
     borderColor: baseColor,
-    backgroundColor: "transparent",
+    backgroundColor: baseColor,
     borderWidth: isCompactViewport ? 2 : 3,
     spanGaps: true,
     pointBackgroundColor: baseColor,
