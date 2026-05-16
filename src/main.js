@@ -179,7 +179,7 @@ function updateCountryDataHeading(selectedCountry) {
 
   const nameElement = document.createElement("span");
   nameElement.className = "country-name";
-  nameElement.textContent = selectedCountry.name;
+  nameElement.textContent = `${selectedCountry.name} (${selectedCountry.code}) - ${selectedCountry.region}`;
   countryDataTitle.append(nameElement);
 }
 

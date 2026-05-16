@@ -63,6 +63,15 @@ body {
   min-width: 0;
 }
 
+.country-summary-card {
+  min-width: 0;
+  padding: 22px 28px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 18px 40px rgba(23, 32, 42, 0.08);
+}
+
 .country-data-header h1 {
   display: flex;
   align-items: center;
@@ -642,6 +651,13 @@ h1 {
   min-width: 0;
 }
 
+.filter-label {
+  margin: 0;
+  color: var(--accent);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
 .ranking-card-header {
   display: grid;
   gap: 6px;
@@ -773,6 +789,10 @@ h1 {
 
   .indicators-section {
     gap: 12px;
+  }
+
+  .country-summary-card {
+    padding: 18px 14px;
   }
 
   .country-data-header h1 {
