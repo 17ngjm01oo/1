@@ -45,8 +45,8 @@ export const seriesConfigs = [
 export const dataSources = {
   imfDataMapper: {
     // Keep this centralized for future SDMX or alternate DataMapper version migration.
-    baseUrl: "https://www.imf.org/external/datamapper/api/v2",
+    baseUrl: "https://www.imf.org/external/datamapper/api/v1",
     proxyPath: "/api/imf",
-    useLocalProxy: true,
+    useLocalProxy: "localOnly",
   },
 };

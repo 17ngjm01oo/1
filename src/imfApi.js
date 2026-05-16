@@ -2,7 +2,7 @@ import { dataSources } from "./config.js";
 
 export function buildImfRequestUrls(options) {
   const remoteUrl = buildImfDataMapperUrl(options);
-  const appUrl = dataSources.imfDataMapper.useLocalProxy
+  const appUrl = shouldUseLocalProxy()
     ? buildLocalProxyUrl(options, remoteUrl)
     : remoteUrl;
 
@@ -10,6 +10,20 @@ export function buildImfRequestUrls(options) {
     appUrl,
     remoteUrl,
   };
+}
+
+function shouldUseLocalProxy() {
+  const proxyMode = dataSources.imfDataMapper.useLocalProxy;
+
+  if (proxyMode === true) {
+    return true;
+  }
+
+  if (proxyMode !== "localOnly") {
+    return false;
+  }
+
+  return ["localhost", "127.0.0.1"].includes(window.location.hostname);
 }
 
 export function buildImfDataMapperUrl({

@@ -7,7 +7,7 @@ import json
 
 HOST = "127.0.0.1"
 PORT = 8001
-IMF_BASE_URL = "https://www.imf.org/external/datamapper/api/v2"
+IMF_BASE_URL = "https://www.imf.org/external/datamapper/api/v1"
 
 
 class AppRequestHandler(SimpleHTTPRequestHandler):

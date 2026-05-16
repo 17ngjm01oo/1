@@ -30,14 +30,14 @@ http://127.0.0.1:8001
 初期設定では以下の形式で IMF DataMapper API にアクセスします。`NGDPDPC` も同じ形式で取得します。
 
 ```text
-https://www.imf.org/external/datamapper/api/v2/NGDPD/USA?periods=1980,1981,...,2026
+https://www.imf.org/external/datamapper/api/v1/NGDPD/USA?periods=1980,1981,...,2026
 ```
 
-IMF DataMapper の公開ドキュメントは現在 `api/v2` を案内しています。DataMapper の画面URLでは `NGDPD@WEO` のように dataset を含めますが、API の系列取得は `NGDPD/USA` で値が返り、レスポンス内のメタデータに `dataset: "WEO"` が含まれます。
+DataMapper の画面URLでは `NGDPD@WEO` のように dataset を含めますが、API の系列取得は `NGDPD/USA` で値が返ります。
 
 API のベースURLは `src/config.js` の `dataSources.imfDataMapper.baseUrl` に集約しています。将来 SDMX API や別バージョンへ移す場合は、まずこの値と `src/imfApi.js` の URL 組み立て処理を変更してください。
 
-ローカルプロキシは `server.py` の `/api/imf` で実装しています。ブラウザ側の取得先は `src/config.js` の `dataSources.imfDataMapper.proxyPath` と `useLocalProxy` で切り替えられます。
+ローカルプロキシは `server.py` の `/api/imf` で実装しています。ブラウザ側の取得先は `src/config.js` の `dataSources.imfDataMapper.proxyPath` と `useLocalProxy` で切り替えられます。GitHub Pages などの静的ホスティングでは `/api/imf` は使わず、IMF DataMapper API の絶対URLへ直接アクセスします。
 
 ## 国を追加・変更する場合
 
