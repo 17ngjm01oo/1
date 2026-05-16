@@ -19,6 +19,7 @@ export const countryRegions = [
 ];
 
 export const countries = [
+  { code: "WEOWORLD", name: "World", slug: "world", region: "", categories: [], includeInRankings: false },
   { code: "USA", name: "United States", slug: "united-states", region: "North America", categories: ["G20", "G7", "OECD"] },
   { code: "JPN", name: "Japan", slug: "japan", region: "Asia", categories: ["G20", "G7", "OECD"] },
   { code: "CHN", name: "China", slug: "china", region: "Asia", categories: ["G20", "BRICS"] },

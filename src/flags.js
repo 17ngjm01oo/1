@@ -200,6 +200,10 @@ const imfCountryCodeToIso2 = {
 };
 
 export function getFlagEmoji(countryCode) {
+  if (countryCode === "WEOWORLD") {
+    return "🌏";
+  }
+
   const iso2Code = imfCountryCodeToIso2[countryCode];
 
   if (!iso2Code) {

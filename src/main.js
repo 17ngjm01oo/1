@@ -41,7 +41,7 @@ async function initializeApp() {
   renderRegions();
   renderCategories();
 
-  const initialCountry = getInitialCountryFromUrl();
+  const initialCountry = getInitialCountryFromUrl() ?? getSelectedCountry("WEOWORLD");
 
   if (initialCountry) {
     await selectCountry(initialCountry.code);
@@ -179,8 +179,16 @@ function updateCountryDataHeading(selectedCountry) {
 
   const nameElement = document.createElement("span");
   nameElement.className = "country-name";
-  nameElement.textContent = `${selectedCountry.name} (${selectedCountry.code}) - ${selectedCountry.region}`;
+  nameElement.textContent = formatCountryHeadingText(selectedCountry);
   countryDataTitle.append(nameElement);
+}
+
+function formatCountryHeadingText(country) {
+  return country.region ? `${country.name} - ${country.region}` : country.name;
+}
+
+function formatCountryMetaText(country) {
+  return country.region ? `${country.region} - ${country.code}` : country.code;
 }
 
 function initializeCountrySearch() {
@@ -529,7 +537,7 @@ function renderCountryList(matchingCountries, selectedCountry, emptyMessage) {
 
     const metaElement = document.createElement("span");
     metaElement.className = "country-result-meta";
-    metaElement.textContent = `${country.region} - ${country.code}`;
+    metaElement.textContent = formatCountryMetaText(country);
 
     resultButton.append(nameElement, metaElement);
     resultsElement.append(resultButton);
@@ -687,7 +695,7 @@ function renderCompareResults(seriesId, query) {
 
     const metaElement = document.createElement("span");
     metaElement.className = "country-result-meta";
-    metaElement.textContent = `${country.region} - ${country.code}`;
+    metaElement.textContent = formatCountryMetaText(country);
 
     resultButton.append(nameElement, metaElement);
     results.append(resultButton);
@@ -1231,10 +1239,34 @@ function appendDataTablePointCells(row, point, displayScale) {
 
   if (point) {
     yearCell.textContent = String(point.year);
-    valueCell.textContent = formatDisplayValue(point.value, displayScale);
+    valueCell.textContent = formatDataTableValue(point.value, displayScale);
   }
 
   row.append(yearCell, valueCell);
+}
+
+function formatDataTableValue(value, displayScale) {
+  const compactUnitLabels = {
+    million: "M",
+    billion: "B",
+    trillion: "T",
+  };
+  const compactUnit = compactUnitLabels[displayScale.tooltipUnit] ?? displayScale.tooltipUnit;
+
+  if (compactUnitLabels[displayScale.tooltipUnit]) {
+    const formattedValue = new Intl.NumberFormat("en-US", {
+      maximumFractionDigits: displayScale.maximumFractionDigits,
+    }).format(value * displayScale.valueScale);
+
+    return `${displayScale.tooltipPrefix}${formattedValue}${compactUnit}`;
+  }
+
+  const tableDisplayScale = {
+    ...displayScale,
+    tooltipUnit: compactUnit,
+  };
+
+  return formatDisplayValue(value, tableDisplayScale);
 }
 
 function getDataTableValueHeading(seriesConfig) {

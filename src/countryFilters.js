@@ -1,4 +1,8 @@
 export function countryBelongsToRegion(country, regionId) {
+  if (!country.region) {
+    return false;
+  }
+
   return country.region
     .split("/")
     .map((region) => region.trim())

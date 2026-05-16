@@ -53,6 +53,7 @@ function buildGdpPerCapitaRanking(data) {
   }
 
   return countries
+    .filter((country) => country.includeInRankings !== false)
     .map((country) => {
       const latestPoint = getLatestNumericPoint(gdpPerCapitaByCountry[country.code]);
 
@@ -77,7 +78,8 @@ function renderScopedRanking() {
 }
 
 function filterRankingRows(rankingRows, scope) {
-  const scopedCountryCodes = new Set(filterCountriesByScope(countries, scope).map((country) => country.code));
+  const rankingCountries = countries.filter((country) => country.includeInRankings !== false);
+  const scopedCountryCodes = new Set(filterCountriesByScope(rankingCountries, scope).map((country) => country.code));
   return rankingRows.filter((country) => scopedCountryCodes.has(country.code));
 }
 
