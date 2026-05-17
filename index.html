@@ -34,14 +34,16 @@
               aria-expanded="false"
             />
           </div>
-          <details class="category-panel" aria-labelledby="region-heading">
-            <summary class="category-heading" id="region-heading">Regions</summary>
-            <div class="category-list" id="regionList"></div>
-          </details>
-          <details class="category-panel" aria-labelledby="category-heading">
-            <summary class="category-heading" id="category-heading">Categories</summary>
-            <div class="category-list" id="categoryList"></div>
-          </details>
+          <div class="filter-panel-row">
+            <details class="category-panel" aria-labelledby="region-heading">
+              <summary class="category-heading" id="region-heading">Regions</summary>
+            </details>
+            <details class="category-panel" aria-labelledby="category-heading">
+              <summary class="category-heading" id="category-heading">Categories</summary>
+            </details>
+          </div>
+          <div class="category-list filter-option-list" id="regionList" hidden></div>
+          <div class="category-list filter-option-list" id="categoryList" hidden></div>
           <div class="country-results" id="countrySearchResults" role="listbox" aria-label="Country search results" hidden></div>
         </div>
       </section>
@@ -129,13 +131,13 @@
               <div class="data-table-wrap" id="gdpPerCapitaTableWrap"></div>
             </details>
           </section>
+
+          <footer class="shared-notes" aria-label="Chart notes" hidden>
+            <p>Source: IMF World Economic Outlook.</p>
+            <p>Data may include IMF estimates and projections.</p>
+          </footer>
         </div>
       </section>
-
-      <footer class="shared-notes" aria-label="Chart notes" hidden>
-        <p>Source: IMF World Economic Outlook via IMF DataMapper API.</p>
-        <p>Data may include IMF estimates and projections.</p>
-      </footer>
     </main>
   </body>
 </html>

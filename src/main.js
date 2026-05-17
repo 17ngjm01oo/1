@@ -1,8 +1,8 @@
 import { seriesConfigs } from "./config.js";
 import { countries, countryCategories, countryRegions } from "./countries.js";
 import { countryBelongsToRegion } from "./countryFilters.js";
-import { fetchImfSeries, buildImfRequestUrls } from "./imfApi.js";
-import { transformImfSeries } from "./transform.js";
+import { buildStaticDataRequestUrls, fetchStaticData } from "./staticData.js";
+import { transformSeriesData } from "./transform.js";
 import { clearLineChart, formatDisplayValue, getDisplayScale, renderLineChart } from "./chart.js";
 import { getFlagEmoji } from "./flags.js";
 
@@ -204,6 +204,7 @@ function initializeCountrySearch() {
     activeRegionId = null;
     updateRegionButtons();
     updateCategoryButtons();
+    closeCountryFilterPanels();
     renderCountryResults(searchInput.value, getSelectedCountry(activeCountryCode));
   });
 
@@ -213,6 +214,7 @@ function initializeCountrySearch() {
 
   searchInput.addEventListener("focus", () => {
     if (searchInput.value.trim()) {
+      closeCountryFilterPanels();
       renderCountryResults(searchInput.value, getSelectedCountry(activeCountryCode));
     }
   });
@@ -225,7 +227,15 @@ function initializeCountryFilters() {
   const categoryPanel = document.querySelector("#category-heading")?.closest(".category-panel");
 
   regionPanel?.addEventListener("toggle", () => {
-    if (regionPanel.open || !activeRegionId) {
+    if (regionPanel.open) {
+      closeCountryFilterPanels(regionPanel);
+      showFilterOptionList("region");
+      return;
+    }
+
+    hideFilterOptionList("region");
+
+    if (!activeRegionId) {
       return;
     }
 
@@ -235,7 +245,15 @@ function initializeCountryFilters() {
   });
 
   categoryPanel?.addEventListener("toggle", () => {
-    if (categoryPanel.open || !activeCategoryId) {
+    if (categoryPanel.open) {
+      closeCountryFilterPanels(categoryPanel);
+      showFilterOptionList("category");
+      return;
+    }
+
+    hideFilterOptionList("category");
+
+    if (!activeCategoryId) {
       return;
     }
 
@@ -243,6 +261,32 @@ function initializeCountryFilters() {
     updateCategoryButtons();
     hideCountryResults();
   });
+}
+
+function showFilterOptionList(type) {
+  const regionList = document.querySelector("#regionList");
+  const categoryList = document.querySelector("#categoryList");
+
+  if (regionList) {
+    regionList.hidden = type !== "region";
+  }
+
+  if (categoryList) {
+    categoryList.hidden = type !== "category";
+  }
+}
+
+function hideFilterOptionList(type) {
+  const list = document.querySelector(type === "region" ? "#regionList" : "#categoryList");
+
+  if (list) {
+    list.hidden = true;
+  }
+}
+
+function hideFilterOptionLists() {
+  hideFilterOptionList("region");
+  hideFilterOptionList("category");
 }
 
 function initializeCompareSearches() {
@@ -404,12 +448,16 @@ function updateCountrySelectionUi(selectedCountry) {
   hideCountryResults();
 }
 
-function closeCountryFilterPanels() {
+function closeCountryFilterPanels(exceptPanel = null) {
   document.querySelectorAll(".category-panel").forEach((panel) => {
-    if (panel instanceof HTMLDetailsElement) {
+    if (panel instanceof HTMLDetailsElement && panel !== exceptPanel) {
       panel.open = false;
     }
   });
+
+  if (!exceptPanel) {
+    hideFilterOptionLists();
+  }
 }
 
 function renderCountryResults(query, selectedCountry) {
@@ -478,10 +526,17 @@ function placeCountryResultsElement(mode, resultsElement) {
     return;
   }
 
-  if (mode === "region") {
-    const regionPanel = document.querySelector("#region-heading")?.closest(".category-panel");
-    if (regionPanel) {
-      regionPanel.after(resultsElement);
+  if (mode === "region" || mode === "category") {
+    const optionList = document.querySelector(mode === "region" ? "#regionList" : "#categoryList");
+    const filterPanelRow = document.querySelector(".filter-panel-row");
+
+    if (optionList && !optionList.hidden) {
+      optionList.after(resultsElement);
+      return;
+    }
+
+    if (filterPanelRow) {
+      filterPanelRow.after(resultsElement);
       return;
     }
   }
@@ -555,6 +610,7 @@ function handleCountrySearchKeydown(event) {
     activeRegionId = null;
     updateRegionButtons();
     updateCategoryButtons();
+    closeCountryFilterPanels();
     hideCountryResults();
     return;
   }
@@ -966,12 +1022,12 @@ async function loadAndRenderSeries(seriesConfig, requestId) {
     });
     clearDataTable(seriesConfig);
 
-    const requestUrls = buildImfRequestUrls(seriesConfig);
+    const requestUrls = buildStaticDataRequestUrls(seriesConfig);
     console.info(`[App] ${seriesConfig.indicatorCode} static data file:`, requestUrls.appUrl);
-    console.info(`[App] ${seriesConfig.indicatorCode} source IMF URL for data updates:`, requestUrls.remoteUrl);
+    console.info(`[App] ${seriesConfig.indicatorCode} source URL for data updates:`, requestUrls.sourceUrl);
 
-    const { data, url } = await fetchImfSeries(seriesConfig);
-    const points = transformImfSeries(data, seriesConfig);
+    const { data, url } = await fetchStaticData(seriesConfig);
+    const points = transformSeriesData(data, seriesConfig);
 
     if (requestId !== renderRequestId) {
       console.info("[App] Ignored stale static data response.", {
@@ -1070,15 +1126,15 @@ async function loadAndRenderComparison(seriesId) {
   updateCompareSelectionUi(seriesId, "loading");
 
   try {
-    const requestUrls = buildImfRequestUrls(comparisonConfig);
+    const requestUrls = buildStaticDataRequestUrls(comparisonConfig);
     console.info(`[App] ${comparisonConfig.indicatorCode} comparison static data file:`, requestUrls.appUrl);
     console.info(
-      `[App] ${comparisonConfig.indicatorCode} comparison source IMF URL for data updates:`,
-      requestUrls.remoteUrl,
+      `[App] ${comparisonConfig.indicatorCode} comparison source URL for data updates:`,
+      requestUrls.sourceUrl,
     );
 
-    const { data, url } = await fetchImfSeries(comparisonConfig);
-    const points = transformImfSeries(data, comparisonConfig);
+    const { data, url } = await fetchStaticData(comparisonConfig);
+    const points = transformSeriesData(data, comparisonConfig);
 
     if (
       comparisonRequestId !== state.comparisonRequestId ||

@@ -1,5 +1,5 @@
 {
   "scripts": {
-    "update-data": "python3 scripts/update-data.py"
+    "update-data": "python3 scripts/update-weo-data.py"
   }
 }

@@ -1,6 +1,6 @@
-# IMF GDP Chart
+# WEO GDP Chart
 
-IMF DataMapper API から事前取得した WEO の `NGDPD` と `NGDPDPC` データを静的JSONとして読み込み、国別の名目GDPと1人当たり名目GDPの推移を 1980-2026 年の折れ線グラフで表示する静的Webアプリです。
+IMF World Economic Outlook の本体データから作成した静的JSONを読み込み、国別の名目GDPと1人当たり名目GDPの推移を 1980-2026 年の折れ線グラフで表示する静的Webアプリです。
 
 ## ローカルでの起動方法
 
@@ -18,9 +18,9 @@ http://127.0.0.1:8001
 
 ## データ更新方法
 
-公開サイトの閲覧者のブラウザから IMF API へ直接アクセスしません。表示用データは `data/imf/` の静的JSONを読み込みます。
+公開サイトの閲覧者のブラウザから IMF API へ直接アクセスしません。表示用データは `data/weo/current-usd.json` の静的JSONを読み込みます。
 
-IMF DataMapper API から最新データを取得して静的JSONを更新する場合は、管理者が以下を実行してください。
+IMF World Economic Outlook の本体データから静的JSONを更新する場合は、管理者が以下を実行してください。
 
 ```bash
 npm run update-data
@@ -29,19 +29,10 @@ npm run update-data
 生成されるファイル:
 
 ```text
-data/imf/nominal-gdp.json
-data/imf/nominal-gdp-per-capita.json
+data/weo/current-usd.json
 ```
 
-更新スクリプトは以下の形式で IMF DataMapper API にアクセスします。`NGDPDPC` も同じ形式で取得します。
-
-```text
-https://www.imf.org/external/datamapper/api/v1/NGDPD?periods=1980,1981,...,2026
-```
-
-DataMapper の画面URLでは `NGDPD@WEO` のように dataset を含めますが、更新スクリプトでは指標単位のJSONを取得します。
-
-API のベースURLは `scripts/update-data.py` と `src/config.js` に集約しています。将来 SDMX API や別バージョンへ移す場合は、更新スクリプトと `src/config.js` の設定を合わせて変更してください。
+更新スクリプトは WEO Entire Dataset Excel から `NGDPD` と `NGDPDPC` を抽出し、サイト内部で使う共通JSON形式に変換します。
 
 ブラウザ側の取得先は `src/config.js` の各 `seriesConfig.staticDataPath` で管理します。GitHub Pages などの静的ホスティングでは `/api/imf` やサーバー側proxyを使いません。
 
@@ -62,13 +53,13 @@ API のベースURLは `scripts/update-data.py` と `src/config.js` に集約し
 ```js
 indicatorCode: "NGDPD",
 titleTemplate: "GDP, current prices",
-staticDataPath: "./data/imf/nominal-gdp.json",
+staticDataPath: "./data/weo/current-usd.json",
 unitLabel: "Billions of U.S. dollars",
 ```
 
-GDP per capita などへ変更する場合は、IMF DataMapper の指標コードを確認し、`indicatorCode`、表示用の `titleTemplate`、`unitLabel`、`staticDataPath` を合わせて変更してください。
+GDP per capita などへ変更する場合は、WEO の指標コードを確認し、`indicatorCode`、表示用の `titleTemplate`、`unitLabel`、`staticDataPath` を合わせて変更してください。
 
-新しい指標を追加する場合は、`seriesConfigs` に `canvasId`、`statusId`、`indicatorCode`、`titleTemplate`、`unitLabel`、`staticDataPath` などを持つ設定を追加し、`index.html` に同じIDの `canvas` とステータス要素を持つブロックを追加します。あわせて `scripts/update-data.py` の `SERIES` に指標コードと出力ファイル名を追加してください。
+新しい指標を追加する場合は、`seriesConfigs` に `canvasId`、`statusId`、`indicatorCode`、`titleTemplate`、`unitLabel`、`staticDataPath` などを持つ設定を追加し、`index.html` に同じIDの `canvas` とステータス要素を持つブロックを追加します。あわせて `scripts/update-weo-data.py` の `TARGET_INDICATORS` に指標コードを追加してください。
 
 ## 期間を変更する場合
 
@@ -79,4 +70,4 @@ startYear: 1980,
 endYear: 2026,
 ```
 
-`scripts/update-data.py` が `periods` クエリを生成し、`src/transform.js` が同じ期間でフィルタします。
+`scripts/update-weo-data.py` と `src/config.js` の対象期間を合わせ、`src/transform.js` が同じ期間でフィルタします。

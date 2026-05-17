@@ -16,7 +16,7 @@ export function renderLineChart(canvas, { points, config, comparison = null }) {
   }
 
   const allPoints = comparison?.points?.length ? [...points, ...comparison.points] : points;
-  const labels = buildChartLabels(points, comparison?.points);
+  const labels = buildChartLabels(config);
   const displayScale = getDisplayScale(allPoints, config);
   const isCompactViewport = window.matchMedia("(max-width: 640px)").matches;
   const datasets = [
@@ -134,15 +134,14 @@ export function clearLineChart(canvas) {
   }
 }
 
-function buildChartLabels(points, comparisonPoints = []) {
-  const years = new Set();
+function buildChartLabels(config) {
+  const startYear = Number.isInteger(config.startYear) ? config.startYear : 1980;
+  const endYear = Number.isInteger(config.endYear) ? config.endYear : startYear;
 
-  points.forEach((point) => years.add(point.year));
-  comparisonPoints?.forEach((point) => years.add(point.year));
-
-  return Array.from(years)
-    .sort((yearA, yearB) => yearA - yearB)
-    .map((year) => String(year));
+  return Array.from(
+    { length: endYear - startYear + 1 },
+    (_, index) => String(startYear + index),
+  );
 }
 
 function buildDataset({

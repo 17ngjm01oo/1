@@ -5,10 +5,11 @@ export const seriesConfigs = [
     chartCardId: "gdpChartCard",
     overlayId: "gdpOverlay",
     statusId: "gdpStatus",
-    dataSource: "IMF DataMapper API",
+    dataSource: "IMF World Economic Outlook",
     dataset: "WEO",
     indicatorCode: "NGDPD",
-    staticDataPath: "./data/imf/nominal-gdp.json",
+    staticDataPath: "./data/weo/current-usd.json",
+    sourceUrl: "https://data.imf.org/-/media/iData/External-Storage/Documents/2F78EE59F79143A7921E5E203D3AAA80/en/WEOApr2026all.xlsx",
     startYear: 1980,
     endYear: 2026,
     titleTemplate: "GDP, current prices",
@@ -24,10 +25,11 @@ export const seriesConfigs = [
     chartCardId: "gdpPerCapitaChartCard",
     overlayId: "gdpPerCapitaOverlay",
     statusId: "gdpPerCapitaStatus",
-    dataSource: "IMF DataMapper API",
+    dataSource: "IMF World Economic Outlook",
     dataset: "WEO",
     indicatorCode: "NGDPDPC",
-    staticDataPath: "./data/imf/nominal-gdp-per-capita.json",
+    staticDataPath: "./data/weo/current-usd.json",
+    sourceUrl: "https://data.imf.org/-/media/iData/External-Storage/Documents/2F78EE59F79143A7921E5E203D3AAA80/en/WEOApr2026all.xlsx",
     startYear: 1980,
     endYear: 2026,
     titleTemplate: "GDP per capita, current prices",
@@ -39,11 +41,3 @@ export const seriesConfigs = [
     maximumFractionDigits: 0,
   },
 ];
-
-export const dataSources = {
-  imfDataMapper: {
-    // Keep this centralized for future SDMX or alternate DataMapper version migration.
-    baseUrl: "https://www.imf.org/external/datamapper/api/v1",
-    useStaticData: true,
-  },
-};

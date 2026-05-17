@@ -3,8 +3,9 @@ import { filterCountriesByScope } from "./countryFilters.js";
 import { formatDisplayValue } from "./chart.js";
 import { getFlagEmoji } from "./flags.js";
 import { initializeRankingFilters } from "./rankingFilters.js";
+import { getIndicatorSeriesMap } from "./seriesData.js";
 
-const gdpPerCapitaDataUrl = new URL("../data/imf/nominal-gdp-per-capita.json", import.meta.url);
+const gdpPerCapitaDataUrl = new URL("../data/weo/current-usd.json", import.meta.url);
 const rankingEndYear = 2026;
 const rankingTitleBase = "GDP per Capita Ranking";
 const rankingTableTitle = document.querySelector("#ranking-table-title");
@@ -48,10 +49,10 @@ async function initializeRanking() {
 }
 
 function buildGdpPerCapitaRanking(data) {
-  const gdpPerCapitaByCountry = data?.values?.NGDPDPC;
+  const gdpPerCapitaByCountry = getIndicatorSeriesMap(data, "NGDPDPC");
 
   if (!gdpPerCapitaByCountry || typeof gdpPerCapitaByCountry !== "object") {
-    throw new Error("Static GDP per capita data file is missing values.NGDPDPC.");
+    throw new Error("Static GDP per capita data file is missing NGDPDPC series.");
   }
 
   return countries
@@ -143,12 +144,13 @@ function renderRankingTable(rankingRows) {
     flagCell.className = "ranking-flag";
     flagCell.textContent = getFlagEmoji(country.code);
 
-    const countryLink = document.createElement("a");
-    countryLink.href = `../../?country=${encodeURIComponent(country.code)}`;
-    countryLink.textContent = country.name;
-    countryCell.append(countryLink);
+    countryCell.textContent = country.name;
 
-    valueCell.textContent = formatDisplayValue(country.value, displayScale);
+    const valueLink = document.createElement("a");
+    valueLink.href = `../../?country=${encodeURIComponent(country.code)}`;
+    valueLink.textContent = formatDisplayValue(country.value, displayScale);
+    valueLink.setAttribute("aria-label", `Open ${country.name} country data page`);
+    valueCell.append(valueLink);
     yearCell.textContent = String(country.year);
 
     row.append(rankCell, flagCell, countryCell, valueCell, yearCell);
@@ -163,7 +165,7 @@ function updateRankingSummary(rankingRows, scope) {
 
   const scopeLabel = scope?.label ?? "World";
   rankingSummary.textContent =
-    `Showing ${rankingRows.length} countries with available GDP per capita data for ${scopeLabel}.`;
+    `Click a value to open that country's GDP per capita chart. ${rankingRows.length} countries shown for ${scopeLabel}.`;
 }
 
 function showRankingError() {

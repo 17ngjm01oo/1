@@ -220,6 +220,24 @@ body {
   margin: 0;
 }
 
+.indicators-card > .shared-notes {
+  padding: 18px 0 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.ranking-card > .shared-notes {
+  padding: 18px 0 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
 .site-nav {
   display: flex;
   flex-wrap: wrap;
@@ -253,6 +271,13 @@ body {
 }
 
 .search-input-wrap {
+  min-width: 0;
+}
+
+.filter-panel-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
   min-width: 0;
 }
 
@@ -324,6 +349,17 @@ body {
   gap: 8px;
   min-width: 0;
   padding: 0 12px 12px;
+}
+
+.filter-option-list {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fbfcfd;
+}
+
+.filter-option-list[hidden] {
+  display: none;
 }
 
 .category-button {
@@ -586,6 +622,7 @@ h1 {
   width: max-content;
   max-width: 100%;
   color: var(--accent);
+  font-size: 1.03rem;
   font-weight: 700;
   cursor: pointer;
   overflow-wrap: anywhere;
@@ -832,6 +869,10 @@ h1 {
 
   .country-results {
     max-height: 240px;
+  }
+
+  .filter-panel-row {
+    grid-template-columns: 1fr;
   }
 
   .country-results[data-mode="search"] {

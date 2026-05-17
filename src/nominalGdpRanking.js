@@ -3,8 +3,9 @@ import { filterCountriesByScope } from "./countryFilters.js";
 import { getDisplayScale, formatDisplayValue } from "./chart.js";
 import { getFlagEmoji } from "./flags.js";
 import { initializeRankingFilters } from "./rankingFilters.js";
+import { getIndicatorSeriesMap } from "./seriesData.js";
 
-const nominalGdpDataUrl = new URL("../data/imf/nominal-gdp.json", import.meta.url);
+const nominalGdpDataUrl = new URL("../data/weo/current-usd.json", import.meta.url);
 const rankingEndYear = 2026;
 const rankingTitleBase = "Nominal GDP Ranking";
 const rankingTableTitle = document.querySelector("#ranking-table-title");
@@ -42,10 +43,10 @@ async function initializeRanking() {
 }
 
 function buildNominalGdpRanking(data) {
-  const gdpByCountry = data?.values?.NGDPD;
+  const gdpByCountry = getIndicatorSeriesMap(data, "NGDPD");
 
   if (!gdpByCountry || typeof gdpByCountry !== "object") {
-    throw new Error("Static GDP data file is missing values.NGDPD.");
+    throw new Error("Static GDP data file is missing NGDPD series.");
   }
 
   return countries
@@ -141,12 +142,13 @@ function renderRankingTable(rankingRows) {
     flagCell.className = "ranking-flag";
     flagCell.textContent = getFlagEmoji(country.code);
 
-    const countryLink = document.createElement("a");
-    countryLink.href = `../../?country=${encodeURIComponent(country.code)}`;
-    countryLink.textContent = country.name;
-    countryCell.append(countryLink);
+    countryCell.textContent = country.name;
 
-    valueCell.textContent = formatDisplayValue(country.value, displayScale);
+    const valueLink = document.createElement("a");
+    valueLink.href = `../../?country=${encodeURIComponent(country.code)}`;
+    valueLink.textContent = formatDisplayValue(country.value, displayScale);
+    valueLink.setAttribute("aria-label", `Open ${country.name} country data page`);
+    valueCell.append(valueLink);
     yearCell.textContent = String(country.year);
 
     row.append(rankCell, flagCell, countryCell, valueCell, yearCell);
@@ -161,7 +163,7 @@ function updateRankingSummary(rankingRows, scope) {
 
   const scopeLabel = scope?.label ?? "World";
   rankingSummary.textContent =
-    `Showing ${rankingRows.length} countries with available nominal GDP data for ${scopeLabel}.`;
+    `Click a value to open that country's GDP chart. ${rankingRows.length} countries shown for ${scopeLabel}.`;
 }
 
 function showRankingError() {
