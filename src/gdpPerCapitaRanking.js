@@ -5,7 +5,7 @@ import { getFlagEmoji } from "./flags.js";
 import { initializeRankingFilters } from "./rankingFilters.js";
 import { getIndicatorSeriesMap } from "./seriesData.js";
 
-const gdpPerCapitaDataUrl = new URL("../data/weo/current-usd.json", import.meta.url);
+const gdpPerCapitaDataUrl = new URL("../data/weo/current-prices.json", import.meta.url);
 const rankingEndYear = 2026;
 const rankingTitleBase = "GDP per Capita Ranking";
 const rankingTableTitle = document.querySelector("#ranking-table-title");
@@ -147,9 +147,9 @@ function renderRankingTable(rankingRows) {
     countryCell.textContent = country.name;
 
     const valueLink = document.createElement("a");
-    valueLink.href = `../../?country=${encodeURIComponent(country.code)}`;
+    valueLink.href = `../../countries/${country.slug}/gdp-per-capita/`;
     valueLink.textContent = formatDisplayValue(country.value, displayScale);
-    valueLink.setAttribute("aria-label", `Open ${country.name} country data page`);
+    valueLink.setAttribute("aria-label", `Open ${country.name} GDP per capita page`);
     valueCell.append(valueLink);
     yearCell.textContent = String(country.year);
 

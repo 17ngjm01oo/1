@@ -18,7 +18,7 @@ http://127.0.0.1:8001
 
 ## データ更新方法
 
-公開サイトの閲覧者のブラウザから IMF API へ直接アクセスしません。表示用データは `data/weo/current-usd.json` の静的JSONを読み込みます。
+公開サイトの閲覧者のブラウザから IMF API へ直接アクセスしません。表示用データは `data/weo/current-prices.json` の静的JSONを読み込みます。
 
 IMF World Economic Outlook の本体データから静的JSONを更新する場合は、管理者が以下を実行してください。
 
@@ -29,10 +29,10 @@ npm run update-data
 生成されるファイル:
 
 ```text
-data/weo/current-usd.json
+data/weo/current-prices.json
 ```
 
-更新スクリプトは WEO Entire Dataset Excel から `NGDPD` と `NGDPDPC` を抽出し、サイト内部で使う共通JSON形式に変換します。
+更新スクリプトは WEO Entire Dataset Excel から `NGDPD`、`NGDPDPC`、`NGDP`、`NGDPPC` を抽出し、サイト内部で使う共通JSON形式に変換します。
 
 ブラウザ側の取得先は `src/config.js` の各 `seriesConfig.staticDataPath` で管理します。GitHub Pages などの静的ホスティングでは `/api/imf` やサーバー側proxyを使いません。
 
@@ -53,7 +53,7 @@ data/weo/current-usd.json
 ```js
 indicatorCode: "NGDPD",
 titleTemplate: "GDP, current prices",
-staticDataPath: "./data/weo/current-usd.json",
+staticDataPath: "./data/weo/current-prices.json",
 unitLabel: "Billions of U.S. dollars",
 ```
 

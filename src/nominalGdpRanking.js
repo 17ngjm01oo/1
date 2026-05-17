@@ -5,9 +5,9 @@ import { getFlagEmoji } from "./flags.js";
 import { initializeRankingFilters } from "./rankingFilters.js";
 import { getIndicatorSeriesMap } from "./seriesData.js";
 
-const nominalGdpDataUrl = new URL("../data/weo/current-usd.json", import.meta.url);
+const nominalGdpDataUrl = new URL("../data/weo/current-prices.json", import.meta.url);
 const rankingEndYear = 2026;
-const rankingTitleBase = "Nominal GDP Ranking";
+const rankingTitleBase = "GDP Ranking";
 const rankingTableTitle = document.querySelector("#ranking-table-title");
 const rankingTableBody = document.querySelector("#rankingTableBody");
 const rankingSummary = document.querySelector("#rankingSummary");
@@ -145,9 +145,9 @@ function renderRankingTable(rankingRows) {
     countryCell.textContent = country.name;
 
     const valueLink = document.createElement("a");
-    valueLink.href = `../../?country=${encodeURIComponent(country.code)}`;
+    valueLink.href = `../../countries/${country.slug}/gdp/`;
     valueLink.textContent = formatDisplayValue(country.value, displayScale);
-    valueLink.setAttribute("aria-label", `Open ${country.name} country data page`);
+    valueLink.setAttribute("aria-label", `Open ${country.name} GDP page`);
     valueCell.append(valueLink);
     yearCell.textContent = String(country.year);
 

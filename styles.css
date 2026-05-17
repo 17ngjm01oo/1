@@ -119,6 +119,10 @@ body {
   min-width: 0;
 }
 
+.indicator-title-group:only-child {
+  grid-column: 1 / -1;
+}
+
 .indicator-header h2 {
   margin: 0;
   color: var(--text);
@@ -883,10 +887,6 @@ h1 {
 
   .country-results {
     max-height: 240px;
-  }
-
-  .filter-panel-row {
-    grid-template-columns: 1fr;
   }
 
   .country-results[data-mode="search"] {

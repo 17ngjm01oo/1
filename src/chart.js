@@ -76,7 +76,8 @@ export function renderLineChart(canvas, { points, config, comparison = null }) {
               const value = formatNumber(context.parsed.y, displayScale.maximumFractionDigits);
               const prefix = displayScale.tooltipPrefix;
               const unit = displayScale.tooltipUnit ? ` ${displayScale.tooltipUnit}` : "";
-              const formattedValue = `${prefix}${value}${unit}`;
+              const suffix = displayScale.suffix ? ` ${displayScale.suffix}` : "";
+              const formattedValue = `${prefix}${value}${unit}${suffix}`;
 
               if (comparison?.points?.length) {
                 return `${context.dataset.label}: ${formattedValue}`;
@@ -176,7 +177,11 @@ function buildDataset({
 
 export function getDisplayScale(points, config) {
   if (config.valueScaleMode === "gdpMagnitude") {
-    return getGdpDisplayScale(points, config);
+    return getGdpDisplayScale(points);
+  }
+
+  if (config.valueScaleMode === "nationalCurrencyMagnitude") {
+    return getNationalCurrencyDisplayScale(points, config);
   }
 
   return {
@@ -185,11 +190,13 @@ export function getDisplayScale(points, config) {
     tooltipPrefix: config.tooltipPrefix ?? "",
     tooltipUnit: config.tooltipUnit ?? "",
     tickPrefix: config.tickPrefix ?? "",
+    suffix: config.suffix ?? "",
+    compactUnit: config.compactUnit ?? "",
     maximumFractionDigits: config.maximumFractionDigits ?? 1,
   };
 }
 
-function getGdpDisplayScale(points, config) {
+function getGdpDisplayScale(points) {
   const maxRawValue = Math.max(...points.map((point) => point.value));
 
   if (maxRawValue >= 1000) {
@@ -224,6 +231,45 @@ function getGdpDisplayScale(points, config) {
   };
 }
 
+function getNationalCurrencyDisplayScale(points, config) {
+  const currencyCode = config.currencyCode || "local currency";
+  const maxRawValue = Math.max(...points.map((point) => point.value));
+
+  if (maxRawValue >= 1000) {
+    return {
+      valueScale: 0.001,
+      unitLabel: `Trillions of ${currencyCode}`,
+      tooltipPrefix: "",
+      tooltipUnit: `trillion ${currencyCode}`,
+      tickPrefix: "",
+      compactUnit: `T ${currencyCode}`,
+      maximumFractionDigits: 2,
+    };
+  }
+
+  if (maxRawValue >= 1) {
+    return {
+      valueScale: 1,
+      unitLabel: `Billions of ${currencyCode}`,
+      tooltipPrefix: "",
+      tooltipUnit: `billion ${currencyCode}`,
+      tickPrefix: "",
+      compactUnit: `B ${currencyCode}`,
+      maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue),
+    };
+  }
+
+  return {
+    valueScale: 1000,
+    unitLabel: `Millions of ${currencyCode}`,
+    tooltipPrefix: "",
+    tooltipUnit: `million ${currencyCode}`,
+    tickPrefix: "",
+    compactUnit: `M ${currencyCode}`,
+    maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue * 1000),
+  };
+}
+
 function getMagnitudeFractionDigits(maxDisplayValue) {
   if (maxDisplayValue >= 100) {
     return 0;
@@ -245,6 +291,7 @@ function formatNumber(value, maximumFractionDigits = 1) {
 export function formatDisplayValue(value, displayScale) {
   const formattedValue = formatNumber(value * displayScale.valueScale, displayScale.maximumFractionDigits);
   const unit = displayScale.tooltipUnit ? ` ${displayScale.tooltipUnit}` : "";
+  const suffix = displayScale.suffix ? ` ${displayScale.suffix}` : "";
 
-  return `${displayScale.tooltipPrefix}${formattedValue}${unit}`;
+  return `${displayScale.tooltipPrefix}${formattedValue}${unit}${suffix}`;
 }

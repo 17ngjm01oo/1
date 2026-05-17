@@ -13,7 +13,7 @@ from xml.etree import ElementTree
 
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
-OUTPUT_PATH = ROOT_DIR / "data" / "weo" / "current-usd.json"
+OUTPUT_PATH = ROOT_DIR / "data" / "weo" / "current-prices.json"
 WEO_EXCEL_URL = (
     "https://data.imf.org/-/media/iData/External-Storage/Documents/"
     "2F78EE59F79143A7921E5E203D3AAA80/en/WEOApr2026all.xlsx"
@@ -23,9 +23,17 @@ DATASET_ID = "IMF.RES:WEO"
 START_YEAR = 1980
 END_YEAR = 2026
 TARGET_INDICATORS = {
+    "NGDP": {
+        "label": "GDP, current prices",
+        "description": "Gross domestic product (GDP), Current prices, domestic currency",
+    },
     "NGDPD": {
         "label": "GDP, current prices",
         "description": "Gross domestic product (GDP), Current prices, US dollar",
+    },
+    "NGDPPC": {
+        "label": "GDP per capita, current prices",
+        "description": "Gross domestic product (GDP), Current prices, Per capita, domestic currency",
     },
     "NGDPDPC": {
         "label": "GDP per capita, current prices",
@@ -40,6 +48,7 @@ GROUP_CODE_MAP = {
 SPREADSHEET_NS = "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}"
 REL_NS = "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}"
 PACKAGE_REL_NS = "{http://schemas.openxmlformats.org/package/2006/relationships}"
+_CURRENCY_CODES_BY_COUNTRY: dict[str, str] | None = None
 
 
 def main() -> None:
@@ -274,7 +283,7 @@ def add_series_row(
         "series": {},
     })
 
-    economy["series"][indicator_id] = {
+    series = {
         "seriesCode": get_column_value(header, cells, "SERIES_CODE"),
         "indicatorId": indicator_id,
         "indicator": get_column_value(header, cells, "INDICATOR"),
@@ -283,6 +292,32 @@ def add_series_row(
         "latestActualAnnualData": get_column_value(header, cells, "LATEST_ACTUAL_ANNUAL_DATA"),
         "values": values,
     }
+
+    if indicator_id in ("NGDP", "NGDPPC"):
+        currency_code = get_currency_code(economy_code)
+
+        if currency_code:
+            series["currencyCode"] = currency_code
+
+    economy["series"][indicator_id] = series
+
+
+def get_currency_code(economy_code: str) -> str:
+    global _CURRENCY_CODES_BY_COUNTRY
+
+    if _CURRENCY_CODES_BY_COUNTRY is None:
+        currency_file = ROOT_DIR / "src" / "currencyCodes.js"
+        currency_source = currency_file.read_text(encoding="utf-8")
+        _CURRENCY_CODES_BY_COUNTRY = {
+            code: currency_code
+            for code, currency_code in re.findall(
+                r'^\s*([A-Z0-9]+):\s*"([A-Z]{3})",',
+                currency_source,
+                flags=re.MULTILINE,
+            )
+        }
+
+    return _CURRENCY_CODES_BY_COUNTRY.get(economy_code, "")
 
 
 def get_column_value(header: list[str], cells: list[str], column_name: str) -> str:
