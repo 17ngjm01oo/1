@@ -5,12 +5,36 @@ const worldScope = { type: "world", id: "WORLD", label: "World" };
 export function initializeRankingFilters({ onScopeChange }) {
   const regionList = document.querySelector("#rankingRegionList");
   const categoryList = document.querySelector("#rankingCategoryList");
+  const regionPanel = document.querySelector("#ranking-region-heading")?.closest(".category-panel");
+  const categoryPanel = document.querySelector("#ranking-category-heading")?.closest(".category-panel");
 
   if (!regionList || !categoryList) {
     return worldScope;
   }
 
   let activeScope = worldScope;
+
+  const showOptionList = (type) => {
+    regionList.hidden = type !== "region";
+    categoryList.hidden = type !== "category";
+  };
+
+  const hideOptionLists = () => {
+    regionList.hidden = true;
+    categoryList.hidden = true;
+  };
+
+  const closeFilterPanels = (exceptPanel = null) => {
+    [regionPanel, categoryPanel].forEach((panel) => {
+      if (panel instanceof HTMLDetailsElement && panel !== exceptPanel) {
+        panel.open = false;
+      }
+    });
+
+    if (!exceptPanel) {
+      hideOptionLists();
+    }
+  };
 
   const updateButtons = () => {
     document.querySelectorAll("[data-ranking-scope-type]").forEach((button) => {
@@ -25,7 +49,28 @@ export function initializeRankingFilters({ onScopeChange }) {
     activeScope = scope;
     updateButtons();
     onScopeChange(activeScope);
+    closeFilterPanels();
   };
+
+  regionPanel?.addEventListener("toggle", () => {
+    if (regionPanel.open) {
+      closeFilterPanels(regionPanel);
+      showOptionList("region");
+      return;
+    }
+
+    regionList.hidden = true;
+  });
+
+  categoryPanel?.addEventListener("toggle", () => {
+    if (categoryPanel.open) {
+      closeFilterPanels(categoryPanel);
+      showOptionList("category");
+      return;
+    }
+
+    categoryList.hidden = true;
+  });
 
   regionList.innerHTML = "";
   categoryList.innerHTML = "";
@@ -63,7 +108,6 @@ function createScopeButton({ scope, onSelect }) {
   button.textContent = scope.label;
   button.addEventListener("click", () => {
     onSelect(scope);
-    button.closest("details")?.removeAttribute("open");
   });
 
   return button;

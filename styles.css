@@ -113,11 +113,25 @@ body {
   gap: 12px;
 }
 
+.indicator-title-group {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
 .indicator-header h2 {
   margin: 0;
   color: var(--text);
   font-size: clamp(1.25rem, 2.4vw, 1.65rem);
   line-height: 1.18;
+  letter-spacing: 0;
+}
+
+.indicator-currency {
+  margin: 0;
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 700;
   letter-spacing: 0;
 }
 
