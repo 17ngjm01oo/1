@@ -3,48 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nominal GDP and Nominal GDP per capita</title>
+    <title>Home</title>
     <link rel="stylesheet" href="./styles.css" />
-    <script type="module" src="./src/main.js"></script>
   </head>
   <body>
     <main class="page-shell">
       <section class="hub-section" aria-labelledby="country-hub-title">
         <header class="page-header">
-          <h1 id="country-hub-title" class="page-title">Nominal GDP and Nominal GDP per capita</h1>
-          <p class="subtitle">Choose a country to view IMF World Economic Outlook indicators.</p>
-          <nav class="site-nav" aria-label="Site navigation">
-            <a href="./rankings/nominal-gdp/">Nominal GDP Ranking</a>
+          <h1 id="country-hub-title" class="page-title">Home</h1>
+        </header>
+      </section>
+
+      <section class="ranking-card home-rankings-card" aria-labelledby="home-rankings-title">
+        <details class="category-panel">
+          <summary class="category-heading" id="home-rankings-title">Ranking</summary>
+          <nav class="site-nav home-ranking-links" aria-label="Ranking navigation">
+            <a href="./rankings/nominal-gdp/">GDP Ranking</a>
             <a href="./rankings/nominal-gdp-per-capita/">GDP per Capita Ranking</a>
           </nav>
-        </header>
-
-        <div class="country-search-panel">
-          <div class="search-input-wrap">
-            <input
-              id="countrySearchInput"
-              class="country-search-input"
-              type="search"
-              autocomplete="off"
-              placeholder="Search country or code&hellip;"
-              aria-controls="countrySearchResults"
-              role="combobox"
-              aria-autocomplete="list"
-              aria-expanded="false"
-            />
-          </div>
-          <div class="filter-panel-row">
-            <details class="category-panel" aria-labelledby="region-heading">
-              <summary class="category-heading" id="region-heading">Regions</summary>
-            </details>
-            <details class="category-panel" aria-labelledby="category-heading">
-              <summary class="category-heading" id="category-heading">Categories</summary>
-            </details>
-          </div>
-          <div class="category-list filter-option-list" id="regionList" hidden></div>
-          <div class="category-list filter-option-list" id="categoryList" hidden></div>
-          <div class="country-results" id="countrySearchResults" role="listbox" aria-label="Country search results" hidden></div>
-        </div>
+        </details>
       </section>
 
     </main>

@@ -43,6 +43,7 @@ body {
 .hub-section,
 .indicators-card,
 .ranking-card,
+.top-nav-card,
 .shared-notes {
   display: grid;
   min-width: 0;
@@ -254,6 +255,18 @@ body {
   border-radius: 0;
   background: transparent;
   box-shadow: none;
+}
+
+.home-rankings-card {
+  gap: 0;
+}
+
+.home-rankings-card .category-panel {
+  background: transparent;
+}
+
+.home-ranking-links {
+  padding: 0 12px 12px;
 }
 
 .site-nav {
@@ -837,6 +850,7 @@ h1 {
   .hub-section,
   .indicators-card,
   .ranking-card,
+  .top-nav-card,
   .shared-notes {
     gap: 16px;
     padding: 18px 14px;
