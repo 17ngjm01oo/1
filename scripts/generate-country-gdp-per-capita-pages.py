@@ -107,6 +107,26 @@ def render_page(country: dict[str, str]) -> str:
                 <h2 id="gdpPerCapita-title">Nominal GDP per capita</h2>
                 <p class="indicator-currency" id="gdpPerCapitaCurrency">Currency: USD</p>
               </div>
+              <div class="compare-control" data-series-id="gdpPerCapita">
+                <div class="compare-input-wrap">
+                  <input
+                    id="gdpPerCapitaCompareInput"
+                    class="compare-search-input"
+                    type="search"
+                    autocomplete="off"
+                    placeholder="Compare with..."
+                    aria-controls="gdpPerCapitaCompareResults"
+                    role="combobox"
+                    aria-autocomplete="list"
+                    aria-expanded="false"
+                  />
+                  <button class="compare-remove" id="gdpPerCapitaCompareRemove" type="button" hidden aria-label="Remove GDP per capita comparison">
+                    &times;
+                  </button>
+                </div>
+                <p class="compare-selected" id="gdpPerCapitaCompareSelected"></p>
+                <div class="country-results compare-results" id="gdpPerCapitaCompareResults" role="listbox" aria-label="GDP per capita comparison country results" hidden></div>
+              </div>
             </header>
 
             <div class="chart-card" id="gdpPerCapitaChartCard">
@@ -136,6 +156,25 @@ def render_page(country: dict[str, str]) -> str:
             <details class="data-table-toggle" id="gdpNationalPerCapitaTableToggle">
               <summary>Show data table</summary>
               <div class="data-table-wrap" id="gdpNationalPerCapitaTableWrap"></div>
+            </details>
+          </section>
+
+          <section class="indicator-block" aria-labelledby="realGdpPerCapita-title">
+            <header class="indicator-header">
+              <div class="indicator-title-group">
+                <h2 id="realGdpPerCapita-title">Real GDP per capita</h2>
+                <p class="indicator-currency" id="realGdpPerCapitaCurrency">Currency: local</p>
+              </div>
+            </header>
+
+            <div class="chart-card" id="realGdpPerCapitaChartCard">
+              <canvas id="realGdpPerCapitaChart" aria-label="Real GDP per capita in constant national currency line chart" role="img"></canvas>
+              <div class="chart-overlay" id="realGdpPerCapitaOverlay" aria-hidden="true"></div>
+            </div>
+
+            <details class="data-table-toggle" id="realGdpPerCapitaTableToggle">
+              <summary>Show data table</summary>
+              <div class="data-table-wrap" id="realGdpPerCapitaTableWrap"></div>
             </details>
           </section>
 

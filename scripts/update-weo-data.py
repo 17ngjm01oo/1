@@ -39,6 +39,14 @@ TARGET_INDICATORS = {
         "label": "GDP per capita, current prices",
         "description": "Gross domestic product (GDP), Current prices, Per capita, US dollar",
     },
+    "NGDP_R": {
+        "label": "Real GDP, constant prices",
+        "description": "Gross domestic product (GDP), Constant prices, domestic currency",
+    },
+    "NGDPRPC": {
+        "label": "Real GDP per capita, constant prices",
+        "description": "Gross domestic product (GDP), Constant prices, Per capita, domestic currency",
+    },
 }
 SHEET_NAMES = ("Countries", "Country Groups")
 GROUP_CODE_MAP = {
@@ -293,7 +301,7 @@ def add_series_row(
         "values": values,
     }
 
-    if indicator_id in ("NGDP", "NGDPPC"):
+    if indicator_id in ("NGDP", "NGDPPC", "NGDP_R", "NGDPRPC"):
         currency_code = get_currency_code(economy_code)
 
         if currency_code:

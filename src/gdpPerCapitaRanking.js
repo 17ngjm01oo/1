@@ -11,6 +11,7 @@ const rankingTitleBase = "GDP per Capita Ranking";
 const rankingTableTitle = document.querySelector("#ranking-table-title");
 const rankingTableBody = document.querySelector("#rankingTableBody");
 const rankingSummary = document.querySelector("#rankingSummary");
+const rootHref = document.body.dataset.rootHref ?? "../../";
 let allRankingRows = [];
 let activeScope = null;
 const displayScale = {
@@ -26,12 +27,7 @@ initializeRanking().catch((error) => {
 });
 
 async function initializeRanking() {
-  activeScope = initializeRankingFilters({
-    onScopeChange(scope) {
-      activeScope = scope;
-      renderScopedRanking();
-    },
-  });
+  activeScope = initializeRankingFilters();
 
   const response = await fetch(gdpPerCapitaDataUrl, {
     headers: {
@@ -147,7 +143,7 @@ function renderRankingTable(rankingRows) {
     countryCell.textContent = country.name;
 
     const valueLink = document.createElement("a");
-    valueLink.href = `../../countries/${country.slug}/gdp-per-capita/`;
+    valueLink.href = `${rootHref}countries/${country.slug}/gdp-per-capita/`;
     valueLink.textContent = formatDisplayValue(country.value, displayScale);
     valueLink.setAttribute("aria-label", `Open ${country.name} GDP per capita page`);
     valueCell.append(valueLink);

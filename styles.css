@@ -394,6 +394,9 @@ body {
 }
 
 .category-button {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
   min-height: 36px;
   padding: 7px 12px;
   border: 1px solid var(--border);

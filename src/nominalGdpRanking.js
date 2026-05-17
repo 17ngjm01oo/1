@@ -11,6 +11,7 @@ const rankingTitleBase = "GDP Ranking";
 const rankingTableTitle = document.querySelector("#ranking-table-title");
 const rankingTableBody = document.querySelector("#rankingTableBody");
 const rankingSummary = document.querySelector("#rankingSummary");
+const rootHref = document.body.dataset.rootHref ?? "../../";
 let allRankingRows = [];
 let activeScope = null;
 
@@ -20,12 +21,7 @@ initializeRanking().catch((error) => {
 });
 
 async function initializeRanking() {
-  activeScope = initializeRankingFilters({
-    onScopeChange(scope) {
-      activeScope = scope;
-      renderScopedRanking();
-    },
-  });
+  activeScope = initializeRankingFilters();
 
   const response = await fetch(nominalGdpDataUrl, {
     headers: {
@@ -145,8 +141,8 @@ function renderRankingTable(rankingRows) {
     countryCell.textContent = country.name;
 
     const valueLink = document.createElement("a");
-    valueLink.href = `../../countries/${country.slug}/gdp/`;
-    valueLink.textContent = formatDisplayValue(country.value, displayScale);
+    valueLink.href = `${rootHref}countries/${country.slug}/gdp/`;
+    valueLink.textContent = formatCompactGdpRankingValue(country.value, displayScale);
     valueLink.setAttribute("aria-label", `Open ${country.name} GDP page`);
     valueCell.append(valueLink);
     yearCell.textContent = String(country.year);
@@ -192,4 +188,23 @@ function normalizeNumericValue(value) {
   }
 
   return null;
+}
+
+function formatCompactGdpRankingValue(value, displayScale) {
+  const compactUnitByName = {
+    trillion: "T",
+    billion: "B",
+    million: "M",
+  };
+  const compactUnit = compactUnitByName[displayScale.tooltipUnit];
+
+  if (!compactUnit) {
+    return formatDisplayValue(value, displayScale);
+  }
+
+  const formattedValue = new Intl.NumberFormat("en-US", {
+    maximumFractionDigits: displayScale.maximumFractionDigits,
+  }).format(value * displayScale.valueScale);
+
+  return `${displayScale.tooltipPrefix}${formattedValue}${compactUnit}`;
 }

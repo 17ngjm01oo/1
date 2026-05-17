@@ -75,7 +75,11 @@ export function renderLineChart(canvas, { points, config, comparison = null }) {
               const year = context.label;
               const value = formatNumber(context.parsed.y, displayScale.maximumFractionDigits);
               const prefix = displayScale.tooltipPrefix;
-              const unit = displayScale.tooltipUnit ? ` ${displayScale.tooltipUnit}` : "";
+              const unit = displayScale.compactUnit
+                ? displayScale.compactUnit
+                : displayScale.tooltipUnit
+                  ? ` ${displayScale.tooltipUnit}`
+                  : "";
               const suffix = displayScale.suffix ? ` ${displayScale.suffix}` : "";
               const formattedValue = `${prefix}${value}${unit}${suffix}`;
 
@@ -206,6 +210,7 @@ function getGdpDisplayScale(points) {
       tooltipPrefix: "$",
       tooltipUnit: "trillion",
       tickPrefix: "$",
+      compactUnit: "T",
       maximumFractionDigits: 2,
     };
   }
@@ -217,6 +222,7 @@ function getGdpDisplayScale(points) {
       tooltipPrefix: "$",
       tooltipUnit: "billion",
       tickPrefix: "$",
+      compactUnit: "B",
       maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue),
     };
   }
@@ -227,6 +233,7 @@ function getGdpDisplayScale(points) {
     tooltipPrefix: "$",
     tooltipUnit: "million",
     tickPrefix: "$",
+    compactUnit: "M",
     maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue * 1000),
   };
 }

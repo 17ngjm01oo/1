@@ -1,8 +1,8 @@
 import { countryCategories, countryRegions } from "./countries.js";
 
-const worldScope = { type: "world", id: "WORLD", label: "World" };
+const worldScope = { type: "world", id: "WORLD", label: "World", slug: "world" };
 
-export function initializeRankingFilters({ onScopeChange }) {
+export function initializeRankingFilters() {
   const regionList = document.querySelector("#rankingRegionList");
   const categoryList = document.querySelector("#rankingCategoryList");
   const regionPanel = document.querySelector("#ranking-region-heading")?.closest(".category-panel");
@@ -12,7 +12,8 @@ export function initializeRankingFilters({ onScopeChange }) {
     return worldScope;
   }
 
-  let activeScope = worldScope;
+  const activeScope = getScopeFromPage();
+  const rankingBaseHref = document.body.dataset.rankingBaseHref ?? "./";
 
   const showOptionList = (type) => {
     regionList.hidden = type !== "region";
@@ -37,19 +38,12 @@ export function initializeRankingFilters({ onScopeChange }) {
   };
 
   const updateButtons = () => {
-    document.querySelectorAll("[data-ranking-scope-type]").forEach((button) => {
+    document.querySelectorAll("[data-ranking-scope-type]").forEach((link) => {
       const isActive =
-        button.dataset.rankingScopeType === activeScope.type &&
-        button.dataset.rankingScopeId === activeScope.id;
-      button.setAttribute("aria-pressed", String(isActive));
+        link.dataset.rankingScopeType === activeScope.type &&
+        link.dataset.rankingScopeId === activeScope.id;
+      link.setAttribute("aria-pressed", String(isActive));
     });
-  };
-
-  const selectScope = (scope) => {
-    activeScope = scope;
-    updateButtons();
-    onScopeChange(activeScope);
-    closeFilterPanels();
   };
 
   regionPanel?.addEventListener("toggle", () => {
@@ -75,22 +69,22 @@ export function initializeRankingFilters({ onScopeChange }) {
   regionList.innerHTML = "";
   categoryList.innerHTML = "";
 
-  regionList.append(createScopeButton({
+  regionList.append(createScopeLink({
     scope: worldScope,
-    onSelect: selectScope,
+    rankingBaseHref,
   }));
 
   countryRegions.forEach((region) => {
-    regionList.append(createScopeButton({
-      scope: { type: "region", id: region.id, label: region.label },
-      onSelect: selectScope,
+    regionList.append(createScopeLink({
+      scope: { type: "region", id: region.id, label: region.label, slug: slugify(region.label) },
+      rankingBaseHref,
     }));
   });
 
   countryCategories.forEach((category) => {
-    categoryList.append(createScopeButton({
-      scope: { type: "category", id: category.id, label: category.label },
-      onSelect: selectScope,
+    categoryList.append(createScopeLink({
+      scope: { type: "category", id: category.id, label: category.label, slug: slugify(category.label) },
+      rankingBaseHref,
     }));
   });
 
@@ -98,17 +92,34 @@ export function initializeRankingFilters({ onScopeChange }) {
   return activeScope;
 }
 
-function createScopeButton({ scope, onSelect }) {
-  const button = document.createElement("button");
-  button.className = "category-button";
-  button.type = "button";
-  button.dataset.rankingScopeType = scope.type;
-  button.dataset.rankingScopeId = scope.id;
-  button.setAttribute("aria-pressed", "false");
-  button.textContent = scope.label;
-  button.addEventListener("click", () => {
-    onSelect(scope);
-  });
+function createScopeLink({ scope, rankingBaseHref }) {
+  const link = document.createElement("a");
+  link.className = "category-button";
+  link.href = `${rankingBaseHref}${scope.slug}/`;
+  link.dataset.rankingScopeType = scope.type;
+  link.dataset.rankingScopeId = scope.id;
+  link.setAttribute("aria-pressed", "false");
+  link.textContent = scope.label;
 
-  return button;
+  return link;
+}
+
+function getScopeFromPage() {
+  const type = document.body.dataset.rankingScopeType;
+  const id = document.body.dataset.rankingScopeId;
+  const label = document.body.dataset.rankingScopeLabel;
+  const slug = document.body.dataset.rankingScopeSlug;
+
+  if (!type || !id || !label || !slug) {
+    return worldScope;
+  }
+
+  return { type, id, label, slug };
+}
+
+function slugify(value) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }

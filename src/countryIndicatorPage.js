@@ -1,6 +1,6 @@
 import { seriesConfigs } from "./config.js";
 import { countries } from "./countries.js";
-import { initializeCountrySelector } from "./countrySelector.js";
+import { filterCountries, formatCountryMetaText, initializeCountrySelector } from "./countrySelector.js";
 import { getCurrencyCode } from "./currencyCodes.js";
 import { getFlagEmoji } from "./flags.js";
 import { buildStaticDataRequestUrls, fetchStaticData } from "./staticData.js";
@@ -14,7 +14,7 @@ const pageDefinitions = {
     documentTitleMetric: "GDP",
     pathSegment: "gdp",
     relatedPathSegment: "gdp-per-capita",
-    seriesIds: ["gdp", "gdpNational"],
+    seriesIds: ["gdp", "gdpNational", "realGdp"],
     tableValueHeader: "GDP",
   },
   "gdp-per-capita": {
@@ -22,7 +22,7 @@ const pageDefinitions = {
     documentTitleMetric: "GDP per capita",
     pathSegment: "gdp-per-capita",
     relatedPathSegment: "gdp",
-    seriesIds: ["gdpPerCapita", "gdpNationalPerCapita"],
+    seriesIds: ["gdpPerCapita", "gdpNationalPerCapita", "realGdpPerCapita"],
     tableValueHeader: "GDP per capita",
   },
 };
@@ -31,6 +31,8 @@ const pageSeriesIds = new Set(pageDefinition.seriesIds);
 const pageSeriesConfigs = seriesConfigs.filter((seriesConfig) => pageSeriesIds.has(seriesConfig.id));
 const countryCode = document.body.dataset.countryCode;
 const selectedCountry = countries.find((country) => country.code === countryCode);
+const comparableSeriesIds = new Set(["gdp", "gdpPerCapita"]);
+const seriesRuntimeState = new Map();
 
 initializePage().catch((error) => {
   console.error(`[${pageDefinition.logPrefix}] Failed to initialize page.`, error);
@@ -57,6 +59,7 @@ async function initializePage() {
   );
 
   updateSeriesHeadings(countrySeriesConfigs);
+  initializeCompareSearches(countrySeriesConfigs);
 
   await Promise.all(countrySeriesConfigs.map((seriesConfig) => loadAndRenderSeries(seriesConfig)));
 }
@@ -70,7 +73,7 @@ function buildCountrySeriesConfig(seriesConfig, country) {
     ? getCurrencyCode(country.code)
     : seriesConfig.currencyCode;
   const currencyLabel = seriesConfig.usesCountryCurrency
-    ? `Currency: ${currencyCode || "N/A"}`
+    ? formatCountryCurrencyLabel(currencyCode, seriesConfig)
     : seriesConfig.currencyLabel;
 
   return {
@@ -86,12 +89,22 @@ function buildCountrySeriesConfig(seriesConfig, country) {
   };
 }
 
+function formatCountryCurrencyLabel(currencyCode, seriesConfig) {
+  const baseCurrency = currencyCode || "N/A";
+
+  if (seriesConfig.currencyBasisLabel) {
+    return `Currency: ${baseCurrency}, ${seriesConfig.currencyBasisLabel}`;
+  }
+
+  return `Currency: ${baseCurrency}`;
+}
+
 function getSeriesUnitLabel(seriesConfig, currencyCode) {
   if (!seriesConfig.usesCountryCurrency || !currencyCode) {
     return seriesConfig.unitLabel;
   }
 
-  if (seriesConfig.id === "gdpNationalPerCapita") {
+  if (seriesConfig.id === "gdpNationalPerCapita" || seriesConfig.id === "realGdpPerCapita") {
     return `${currencyCode} per person`;
   }
 
@@ -150,6 +163,50 @@ function updateSeriesHeadings(countrySeriesConfigs) {
   });
 }
 
+function initializeCompareSearches(countrySeriesConfigs) {
+  countrySeriesConfigs
+    .filter((seriesConfig) => comparableSeriesIds.has(seriesConfig.id))
+    .forEach((seriesConfig) => {
+      seriesRuntimeState.set(seriesConfig.id, {
+        baseConfig: pageSeriesConfigs.find((pageSeriesConfig) => pageSeriesConfig.id === seriesConfig.id),
+        mainConfig: seriesConfig,
+        mainPoints: [],
+        comparisonCountry: null,
+        comparisonPoints: [],
+        comparisonRequestId: 0,
+        comparisonMatches: [],
+        highlightedComparisonIndex: -1,
+        hasMainData: false,
+      });
+
+      const { input, removeButton } = getCompareElements(seriesConfig.id);
+
+      if (!input) {
+        return;
+      }
+
+      input.addEventListener("input", () => {
+        renderCompareResults(seriesConfig.id, input.value);
+      });
+
+      input.addEventListener("keydown", (event) => {
+        handleCompareSearchKeydown(event, seriesConfig.id);
+      });
+
+      input.addEventListener("focus", () => {
+        if (input.value.trim()) {
+          renderCompareResults(seriesConfig.id, input.value);
+        }
+      });
+
+      removeButton?.addEventListener("click", () => {
+        clearComparison(seriesConfig.id);
+      });
+
+      updateCompareAvailability(seriesConfig.id);
+    });
+}
+
 async function loadAndRenderSeries(seriesConfig) {
   const chartCard = document.querySelector(`#${seriesConfig.chartCardId}`);
   const overlayElement = document.querySelector(`#${seriesConfig.overlayId}`);
@@ -169,10 +226,16 @@ async function loadAndRenderSeries(seriesConfig) {
 
     const { data, url } = await fetchStaticData(seriesConfig);
     const points = transformSeriesData(data, seriesConfig);
+    const state = seriesRuntimeState.get(seriesConfig.id);
 
     if (points.length === 0) {
       clearLineChart(canvas);
       renderNoDataTable(seriesConfig);
+      if (state) {
+        state.mainPoints = [];
+        state.hasMainData = false;
+        updateCompareAvailability(seriesConfig.id);
+      }
       showChartOverlay({
         chartCard,
         overlayElement,
@@ -190,11 +253,22 @@ async function loadAndRenderSeries(seriesConfig) {
       points,
       config: seriesConfig,
     });
+    if (state) {
+      state.mainPoints = points;
+      state.hasMainData = true;
+      updateCompareAvailability(seriesConfig.id);
+    }
     renderDataTable(points, seriesConfig);
     hideChartOverlay(chartCard, overlayElement);
   } catch (error) {
     clearLineChart(canvas);
     renderNoDataTable(seriesConfig);
+    const state = seriesRuntimeState.get(seriesConfig.id);
+    if (state) {
+      state.mainPoints = [];
+      state.hasMainData = false;
+      updateCompareAvailability(seriesConfig.id);
+    }
     showChartOverlay({
       chartCard,
       overlayElement,
@@ -206,6 +280,300 @@ async function loadAndRenderSeries(seriesConfig) {
       error,
     });
   }
+}
+
+function renderCompareResults(seriesId, query) {
+  const state = seriesRuntimeState.get(seriesId);
+  const { input, results } = getCompareElements(seriesId);
+
+  if (!state || !results || !state.hasMainData || input?.disabled) {
+    hideCompareResults(seriesId);
+    return;
+  }
+
+  const normalizedQuery = query.trim();
+  results.innerHTML = "";
+
+  if (!normalizedQuery) {
+    hideCompareResults(seriesId);
+    return;
+  }
+
+  const matchingCountries = filterCountries(normalizedQuery).filter((country) => {
+    return country.code !== selectedCountry.code;
+  });
+
+  results.hidden = false;
+  input?.setAttribute("aria-expanded", "true");
+  state.comparisonMatches = matchingCountries;
+  state.highlightedComparisonIndex = matchingCountries.length > 0 ? 0 : -1;
+
+  if (matchingCountries.length === 0) {
+    const emptyElement = document.createElement("div");
+    emptyElement.className = "country-result-empty";
+    emptyElement.textContent = "No matching countries.";
+    results.append(emptyElement);
+    return;
+  }
+
+  matchingCountries.forEach((country, index) => {
+    const resultButton = document.createElement("button");
+    resultButton.className = "country-result";
+    resultButton.type = "button";
+    resultButton.setAttribute("role", "option");
+    resultButton.id = `${seriesId}-compare-result-${country.code}`;
+    resultButton.dataset.countryCode = country.code;
+    resultButton.setAttribute("aria-selected", String(index === state.highlightedComparisonIndex));
+    resultButton.addEventListener("click", () => {
+      selectComparisonCountry(seriesId, country);
+    });
+
+    const nameElement = document.createElement("span");
+    nameElement.className = "country-result-name";
+    nameElement.textContent = country.name;
+
+    const metaElement = document.createElement("span");
+    metaElement.className = "country-result-meta";
+    metaElement.textContent = formatCountryMetaText(country);
+
+    resultButton.append(nameElement, metaElement);
+    results.append(resultButton);
+  });
+
+  syncHighlightedCompareCountry(seriesId);
+}
+
+function handleCompareSearchKeydown(event, seriesId) {
+  const state = seriesRuntimeState.get(seriesId);
+  const { results } = getCompareElements(seriesId);
+  const hasOpenResults = state && results && !results.hidden && state.comparisonMatches.length > 0;
+
+  if (event.key === "Escape") {
+    hideCompareResults(seriesId);
+    return;
+  }
+
+  if (!state || !hasOpenResults) {
+    return;
+  }
+
+  if (event.key === "ArrowDown") {
+    event.preventDefault();
+    state.highlightedComparisonIndex = Math.min(
+      state.highlightedComparisonIndex + 1,
+      state.comparisonMatches.length - 1,
+    );
+    syncHighlightedCompareCountry(seriesId);
+    return;
+  }
+
+  if (event.key === "ArrowUp") {
+    event.preventDefault();
+    state.highlightedComparisonIndex = Math.max(state.highlightedComparisonIndex - 1, 0);
+    syncHighlightedCompareCountry(seriesId);
+    return;
+  }
+
+  if (event.key === "Enter") {
+    event.preventDefault();
+    const country = state.comparisonMatches[state.highlightedComparisonIndex] ?? state.comparisonMatches[0];
+
+    if (country) {
+      selectComparisonCountry(seriesId, country);
+    }
+  }
+}
+
+function syncHighlightedCompareCountry(seriesId) {
+  const state = seriesRuntimeState.get(seriesId);
+  const { input, results } = getCompareElements(seriesId);
+
+  if (!state || !results) {
+    return;
+  }
+
+  const resultButtons = Array.from(results.querySelectorAll(".country-result"));
+
+  resultButtons.forEach((button, index) => {
+    const isHighlighted = index === state.highlightedComparisonIndex;
+    button.classList.toggle("is-highlighted", isHighlighted);
+    button.setAttribute("aria-selected", String(isHighlighted));
+
+    if (isHighlighted) {
+      button.scrollIntoView({ block: "nearest" });
+    }
+  });
+
+  const highlightedButton = resultButtons[state.highlightedComparisonIndex];
+
+  if (input && highlightedButton) {
+    input.setAttribute("aria-activedescendant", highlightedButton.id);
+  } else if (input) {
+    input.removeAttribute("aria-activedescendant");
+  }
+}
+
+function selectComparisonCountry(seriesId, country) {
+  const state = seriesRuntimeState.get(seriesId);
+  const { input } = getCompareElements(seriesId);
+
+  if (!state) {
+    return;
+  }
+
+  state.comparisonCountry = country;
+  state.comparisonRequestId += 1;
+  state.comparisonPoints = [];
+
+  if (input) {
+    input.value = "";
+  }
+
+  hideCompareResults(seriesId);
+  updateCompareSelectionUi(seriesId);
+  loadComparisonSeries(seriesId, state.comparisonRequestId).catch((error) => {
+    updateCompareSelectionUi(seriesId, `Failed to load ${country.name} comparison.`);
+    renderMainSeriesOnly(seriesId);
+    console.error(`[${pageDefinition.logPrefix}] Failed to load comparison series.`, {
+      seriesId,
+      country,
+      error,
+    });
+  });
+}
+
+async function loadComparisonSeries(seriesId, requestId) {
+  const state = seriesRuntimeState.get(seriesId);
+
+  if (!state?.comparisonCountry || !state.baseConfig || !state.mainConfig) {
+    return;
+  }
+
+  const comparisonConfig = buildCountrySeriesConfig(state.baseConfig, state.comparisonCountry);
+  const { data } = await fetchStaticData(comparisonConfig);
+  const comparisonPoints = transformSeriesData(data, comparisonConfig);
+
+  if (requestId !== state.comparisonRequestId) {
+    return;
+  }
+
+  state.comparisonPoints = comparisonPoints;
+
+  if (comparisonPoints.length === 0) {
+    updateCompareSelectionUi(seriesId, `No data available for ${state.comparisonCountry.name}.`);
+    renderMainSeriesOnly(seriesId);
+    return;
+  }
+
+  const canvas = document.querySelector(`#${state.mainConfig.canvasId}`);
+  renderLineChart(canvas, {
+    points: state.mainPoints,
+    config: state.mainConfig,
+    comparison: {
+      countryName: state.comparisonCountry.name,
+      points: comparisonPoints,
+    },
+  });
+  updateCompareSelectionUi(seriesId);
+}
+
+function clearComparison(seriesId) {
+  const state = seriesRuntimeState.get(seriesId);
+  const { input } = getCompareElements(seriesId);
+
+  if (!state) {
+    return;
+  }
+
+  state.comparisonCountry = null;
+  state.comparisonPoints = [];
+  state.comparisonRequestId += 1;
+
+  if (input) {
+    input.value = "";
+  }
+
+  hideCompareResults(seriesId);
+  updateCompareSelectionUi(seriesId);
+  renderMainSeriesOnly(seriesId);
+}
+
+function renderMainSeriesOnly(seriesId) {
+  const state = seriesRuntimeState.get(seriesId);
+
+  if (!state?.mainConfig || !state.mainPoints.length) {
+    return;
+  }
+
+  const canvas = document.querySelector(`#${state.mainConfig.canvasId}`);
+  renderLineChart(canvas, {
+    points: state.mainPoints,
+    config: state.mainConfig,
+  });
+}
+
+function updateCompareAvailability(seriesId) {
+  const state = seriesRuntimeState.get(seriesId);
+  const { input } = getCompareElements(seriesId);
+
+  if (!input || !state) {
+    return;
+  }
+
+  input.disabled = !state.hasMainData;
+  input.placeholder = state.hasMainData ? "Compare with..." : "No data to compare";
+}
+
+function updateCompareSelectionUi(seriesId, errorMessage = "") {
+  const state = seriesRuntimeState.get(seriesId);
+  const { selected, removeButton } = getCompareElements(seriesId);
+
+  if (!state || !selected) {
+    return;
+  }
+
+  selected.classList.toggle("is-error", Boolean(errorMessage));
+
+  if (errorMessage) {
+    selected.textContent = errorMessage;
+  } else if (state.comparisonCountry) {
+    selected.textContent = `Comparing with ${state.comparisonCountry.name}`;
+  } else {
+    selected.textContent = "";
+  }
+
+  if (removeButton) {
+    removeButton.hidden = !state.comparisonCountry;
+  }
+}
+
+function hideCompareResults(seriesId) {
+  const state = seriesRuntimeState.get(seriesId);
+  const { input, results } = getCompareElements(seriesId);
+
+  if (results) {
+    results.hidden = true;
+    results.innerHTML = "";
+  }
+
+  if (state) {
+    state.comparisonMatches = [];
+    state.highlightedComparisonIndex = -1;
+  }
+
+  if (input) {
+    input.removeAttribute("aria-activedescendant");
+    input.setAttribute("aria-expanded", "false");
+  }
+}
+
+function getCompareElements(seriesId) {
+  return {
+    input: document.querySelector(`#${seriesId}CompareInput`),
+    results: document.querySelector(`#${seriesId}CompareResults`),
+    selected: document.querySelector(`#${seriesId}CompareSelected`),
+    removeButton: document.querySelector(`#${seriesId}CompareRemove`),
+  };
 }
 
 function clearDataTable(seriesConfig) {
