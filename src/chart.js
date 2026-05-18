@@ -82,7 +82,8 @@ export function renderLineChart(canvas, { points, config, comparison = null }) {
                 : displayScale.tooltipUnit
                   ? ` ${displayScale.tooltipUnit}`
                   : "";
-              const suffix = displayScale.suffix ? ` ${displayScale.suffix}` : "";
+              const suffixSpacing = displayScale.suffixSpacing ?? (displayScale.suffix ? " " : "");
+              const suffix = displayScale.suffix ? `${suffixSpacing}${displayScale.suffix}` : "";
               const formattedValue = `${prefix}${value}${unit}${suffix}`;
 
               if (comparison?.points?.length) {
@@ -116,7 +117,9 @@ export function renderLineChart(canvas, { points, config, comparison = null }) {
           },
           ticks: {
             callback(value) {
-              return `${displayScale.tickPrefix}${formatNumber(value, displayScale.maximumFractionDigits)}`;
+              const suffixSpacing = displayScale.suffixSpacing ?? (displayScale.suffix ? " " : "");
+              const suffix = displayScale.suffix ? `${suffixSpacing}${displayScale.suffix}` : "";
+              return `${displayScale.tickPrefix}${formatNumber(value, displayScale.maximumFractionDigits)}${suffix}`;
             },
             maxTicksLimit: isCompactViewport ? 5 : 8,
           },
@@ -201,6 +204,7 @@ export function getDisplayScale(points, config) {
     tooltipUnit: config.tooltipUnit ?? "",
     tickPrefix: config.tickPrefix ?? "",
     suffix: config.suffix ?? "",
+    suffixSpacing: config.suffixSpacing ?? " ",
     compactUnit: config.compactUnit ?? "",
     maximumFractionDigits: config.maximumFractionDigits ?? 1,
   };
@@ -343,7 +347,8 @@ function formatNumber(value, maximumFractionDigits = 1) {
 export function formatDisplayValue(value, displayScale) {
   const formattedValue = formatNumber(value * displayScale.valueScale, displayScale.maximumFractionDigits);
   const unit = displayScale.tooltipUnit ? ` ${displayScale.tooltipUnit}` : "";
-  const suffix = displayScale.suffix ? ` ${displayScale.suffix}` : "";
+  const suffixSpacing = displayScale.suffixSpacing ?? (displayScale.suffix ? " " : "");
+  const suffix = displayScale.suffix ? `${suffixSpacing}${displayScale.suffix}` : "";
 
   return `${displayScale.tooltipPrefix}${formattedValue}${unit}${suffix}`;
 }

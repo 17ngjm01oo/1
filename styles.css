@@ -865,7 +865,7 @@ h1 {
 @media (max-width: 640px) {
   .page-shell {
     max-width: none;
-    padding: 20px 14px;
+    padding: 20px 0;
   }
 
   .hub-section,
@@ -875,6 +875,9 @@ h1 {
   .shared-notes {
     gap: 16px;
     padding: 18px 14px;
+    border-right: 0;
+    border-left: 0;
+    border-radius: 0;
   }
 
   .indicators-section {

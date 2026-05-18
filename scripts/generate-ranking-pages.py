@@ -27,6 +27,14 @@ RANKING_TYPES = [
         "subtitle": "Countries ranked by their latest available GDP per capita value in the static IMF dataset.",
     },
     {
+        "directory": "real-gdp-growth",
+        "title": "Real GDP Growth Ranking by Country",
+        "nav_label": "Real GDP Growth Ranking",
+        "script": "realGdpGrowthRanking.js",
+        "table_title": "Real GDP Growth Ranking",
+        "subtitle": "Countries ranked by their latest available real GDP growth rate in the static IMF dataset.",
+    },
+    {
         "directory": "ppp",
         "title": "PPP Ranking by Country",
         "nav_label": "PPP Ranking",

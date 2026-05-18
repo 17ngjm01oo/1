@@ -23,6 +23,13 @@ const pageDefinitions = {
     seriesIds: ["gdpPerCapita", "gdpNationalPerCapita", "realGdpPerCapita"],
     tableValueHeader: "GDP per capita",
   },
+  "gdp-growth": {
+    logPrefix: "GDP growth page",
+    documentTitleMetric: "GDP Growth Rate",
+    pathSegment: "gdp-growth",
+    seriesIds: ["gdpGrowth"],
+    tableValueHeader: "GDP Growth Rate",
+  },
   ppp: {
     logPrefix: "PPP page",
     documentTitleMetric: "PPP",
@@ -41,6 +48,7 @@ const pageDefinitions = {
 const countryIndicatorLinks = [
   { pageKind: "gdp", href: "../gdp/", label: "View GDP" },
   { pageKind: "gdp-per-capita", href: "../gdp-per-capita/", label: "View GDP per capita" },
+  { pageKind: "gdp-growth", href: "../gdp-growth/", label: "View GDP Growth Rate" },
   { pageKind: "ppp", href: "../ppp/", label: "View PPP" },
   { pageKind: "ppp-per-capita", href: "../ppp-per-capita/", label: "View PPP per capita" },
 ];
@@ -50,7 +58,7 @@ const pageSeriesIds = new Set(pageDefinition.seriesIds);
 const pageSeriesConfigs = seriesConfigs.filter((seriesConfig) => pageSeriesIds.has(seriesConfig.id));
 const countryCode = document.body.dataset.countryCode;
 const selectedCountry = countries.find((country) => country.code === countryCode);
-const comparableSeriesIds = new Set(["gdp", "gdpPerCapita", "ppp", "pppPerCapita"]);
+const comparableSeriesIds = new Set(["gdp", "gdpPerCapita", "gdpGrowth", "ppp", "pppPerCapita"]);
 const seriesRuntimeState = new Map();
 
 initializePage().catch((error) => {

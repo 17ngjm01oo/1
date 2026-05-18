@@ -45,6 +45,10 @@ TARGET_INDICATORS = {
         "label": "Real GDP, constant prices",
         "description": "Gross domestic product (GDP), Constant prices, domestic currency",
     },
+    "NGDP_RPCH": {
+        "label": "GDP Growth Rate",
+        "description": "Gross domestic product (GDP), Constant prices, Percent change",
+    },
     "NGDPRPC": {
         "label": "Real GDP per capita, constant prices",
         "description": "Gross domestic product (GDP), Constant prices, Per capita, domestic currency",
