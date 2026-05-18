@@ -62,8 +62,8 @@ def render_page(country: dict[str, str]) -> str:
 
       <section class="hub-section" aria-labelledby="country-hub-title">
         <header class="page-header">
-          <h1 id="country-hub-title" class="page-title">PPP per Capita by Country</h1>
-          <p class="subtitle">Choose a country to view PPP per capita indicators.</p>
+          <h1 id="country-hub-title" class="page-title">PPP per Capita Chart by Country</h1>
+          <p class="subtitle">Select a country to view historical PPP per capita trends.</p>
           <p class="source-label">Source: IMF World Economic Outlook.</p>
         </header>
 

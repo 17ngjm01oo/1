@@ -62,8 +62,8 @@ def render_page(country: dict[str, str]) -> str:
 
       <section class="hub-section" aria-labelledby="country-hub-title">
         <header class="page-header">
-          <h1 id="country-hub-title" class="page-title">GDP Growth Rate by Country</h1>
-          <p class="subtitle">Choose a country to view GDP Growth Rate indicators.</p>
+          <h1 id="country-hub-title" class="page-title">GDP Growth Rate Chart by Country</h1>
+          <p class="subtitle">Select a country to view historical GDP growth rate trends.</p>
           <p class="source-label">Source: IMF World Economic Outlook.</p>
         </header>
 
