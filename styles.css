@@ -77,11 +77,22 @@ body {
   gap: 10px;
 }
 
+.top-nav-disclosure {
+  display: grid;
+  gap: 10px;
+}
+
 .top-nav-label {
   margin: 0;
   color: var(--muted);
-  font-size: 0.86rem;
+  cursor: pointer;
+  font-size: 1.15rem;
   font-weight: 700;
+}
+
+.top-nav-label::marker {
+  color: var(--muted);
+  font-size: 1.15rem;
 }
 
 .hub-section {
@@ -288,7 +299,7 @@ body {
 }
 
 .ranking-card > .shared-notes {
-  padding: 18px 0 0;
+  padding: 6px 0 0;
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -354,6 +365,7 @@ body {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
+  margin-top: 4px;
   min-width: 0;
 }
 
@@ -389,10 +401,14 @@ body {
 }
 
 .category-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
   margin: 0;
   padding: 10px 12px;
   color: var(--text);
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
   list-style: none;
@@ -404,10 +420,9 @@ body {
 
 .category-heading::after {
   content: "";
-  float: right;
+  flex: 0 0 auto;
   width: 8px;
   height: 8px;
-  margin-top: 5px;
   border-right: 2px solid var(--muted);
   border-bottom: 2px solid var(--muted);
   transform: rotate(45deg);
@@ -415,7 +430,6 @@ body {
 }
 
 .category-panel[open] .category-heading::after {
-  margin-top: 8px;
   transform: rotate(225deg);
 }
 
@@ -428,10 +442,7 @@ body {
 }
 
 .filter-option-list {
-  padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: #fbfcfd;
+  padding: 6px 0 0;
 }
 
 .filter-option-list[hidden] {
@@ -825,7 +836,7 @@ h1 {
 
 .ranking-table th,
 .ranking-table td {
-  padding: 11px 12px;
+  padding: 13px 12px;
   border-bottom: 1px solid var(--border);
   text-align: right;
   overflow-wrap: anywhere;
@@ -880,6 +891,36 @@ h1 {
 
 .ranking-table a:hover {
   text-decoration: underline;
+}
+
+.ranking-value {
+  display: grid;
+  gap: 6px;
+  justify-items: end;
+  min-width: 0;
+}
+
+.ranking-value-bar {
+  width: min(100%, 170px);
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(226, 115, 137, 0.14);
+}
+
+.ranking-value-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #e27389;
+}
+
+.ranking-value-bar[data-value-sign="negative"] {
+  background: rgba(103, 169, 219, 0.14);
+}
+
+.ranking-value-bar[data-value-sign="negative"] span {
+  background: #67a9db;
 }
 
 .ranking-flag {

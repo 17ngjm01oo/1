@@ -117,6 +117,7 @@ function updateTopRankingLinks() {
   renderEconomicRankingLinks(nav, {
     rootHref: "../../../",
     currentPageKind: pageKind,
+    highlightCurrent: false,
   });
 }
 

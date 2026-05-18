@@ -4,6 +4,7 @@ import { getDisplayScale, formatDisplayValue } from "./chart.js";
 import { getFlagEmoji } from "./flags.js";
 import { initializeRankingFilters } from "./rankingFilters.js";
 import { showRankingLoadError, updateRankingSummaryDisplay } from "./rankingSummary.js";
+import { appendRankingValueCell } from "./rankingValueBar.js";
 import "./rankingTopNav.js";
 import { getIndicatorSeriesMap } from "./seriesData.js";
 
@@ -143,11 +144,13 @@ function renderRankingTable(rankingRows) {
 
     countryCell.textContent = country.name;
 
-    const valueLink = document.createElement("a");
-    valueLink.href = `${rootHref}countries/${country.slug}/gdp/`;
-    valueLink.textContent = formatCompactGdpRankingValue(country.value, displayScale);
-    valueLink.setAttribute("aria-label", `Open ${country.name} GDP page`);
-    valueCell.append(valueLink);
+    appendRankingValueCell(valueCell, {
+      href: `${rootHref}countries/${country.slug}/gdp/`,
+      text: formatCompactGdpRankingValue(country.value, displayScale),
+      ariaLabel: `Open ${country.name} GDP page`,
+      value: country.value,
+      rankingRows,
+    });
     yearCell.textContent = String(country.year);
 
     row.append(rankCell, flagCell, countryCell, valueCell, yearCell);

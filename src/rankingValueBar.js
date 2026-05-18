@@ -1,0 +1,34 @@
+export function appendRankingValueCell(valueCell, { href, text, ariaLabel, value, rankingRows }) {
+  const valueLink = document.createElement("a");
+  valueLink.href = href;
+  valueLink.textContent = text;
+  valueLink.setAttribute("aria-label", ariaLabel);
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "ranking-value";
+
+  const track = document.createElement("div");
+  track.className = "ranking-value-bar";
+  track.dataset.valueSign = value < 0 ? "negative" : "positive";
+  track.setAttribute("aria-hidden", "true");
+
+  const fill = document.createElement("span");
+  fill.style.width = `${getValuePercentage(value, rankingRows)}%`;
+
+  track.append(fill);
+  wrapper.append(valueLink, track);
+  valueCell.append(wrapper);
+}
+
+function getValuePercentage(value, rankingRows) {
+  const totalValue = rankingRows
+    .map((row) => row.value)
+    .filter(Number.isFinite)
+    .reduce((total, rowValue) => total + Math.abs(rowValue), 0);
+
+  if (!Number.isFinite(value) || totalValue <= 0) {
+    return 0;
+  }
+
+  return Math.min(100, Math.max(0, (Math.abs(value) / totalValue) * 100));
+}

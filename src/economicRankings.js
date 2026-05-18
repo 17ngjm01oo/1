@@ -38,6 +38,7 @@ export function renderEconomicRankingLinks(
     currentPageKind = "",
     currentRankingDirectory = "",
     currentScopeSlug = "world",
+    highlightCurrent = true,
     replace = true,
   } = {},
 ) {
@@ -54,7 +55,10 @@ export function renderEconomicRankingLinks(
     link.href = `${rootHref}rankings/${ranking.directory}/${currentScopeSlug}/`;
     link.textContent = ranking.label;
 
-    if (ranking.countryPageKinds.includes(currentPageKind) || ranking.directory === currentRankingDirectory) {
+    if (
+      highlightCurrent &&
+      (ranking.countryPageKinds.includes(currentPageKind) || ranking.directory === currentRankingDirectory)
+    ) {
       link.className = "is-current";
       link.setAttribute("aria-current", "page");
     }
