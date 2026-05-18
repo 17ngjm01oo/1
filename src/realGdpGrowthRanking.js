@@ -3,6 +3,7 @@ import { filterCountriesByScope } from "./countryFilters.js";
 import { formatDisplayValue } from "./chart.js";
 import { getFlagEmoji } from "./flags.js";
 import { initializeRankingFilters } from "./rankingFilters.js";
+import { showRankingLoadError, updateRankingSummaryDisplay } from "./rankingSummary.js";
 import "./rankingTopNav.js";
 import { getIndicatorSeriesMap } from "./seriesData.js";
 
@@ -12,6 +13,7 @@ const rankingTitleBase = "Real GDP Growth Ranking";
 const rankingTableTitle = document.querySelector("#ranking-table-title");
 const rankingTableBody = document.querySelector("#rankingTableBody");
 const rankingSummary = document.querySelector("#rankingSummary");
+const rankingCount = document.querySelector("#rankingCount");
 const rootHref = document.body.dataset.rootHref ?? "../../";
 let allRankingRows = [];
 let activeScope = null;
@@ -77,7 +79,7 @@ function renderScopedRanking() {
   const rankingRows = filterRankingRows(allRankingRows, activeScope);
   updateRankingTitle(activeScope);
   renderRankingTable(rankingRows);
-  updateRankingSummary(rankingRows, activeScope);
+  updateRankingSummary(rankingRows);
 }
 
 function updateRankingTitle(scope) {
@@ -157,21 +159,19 @@ function renderRankingTable(rankingRows) {
   });
 }
 
-function updateRankingSummary(rankingRows, scope) {
-  if (!rankingSummary) {
-    return;
-  }
-
-  const scopeLabel = scope?.label ?? "World";
-  rankingSummary.textContent =
-    `Click a value to open that country's Real GDP Growth Rate chart. ${rankingRows.length} countries shown for ${scopeLabel}.`;
+function updateRankingSummary(rankingRows) {
+  updateRankingSummaryDisplay({
+    summaryElement: rankingSummary,
+    countElement: rankingCount,
+    rowCount: rankingRows.length,
+  });
 }
 
 function showRankingError() {
-  if (rankingSummary) {
-    rankingSummary.textContent = "Failed to load ranking data.";
-    rankingSummary.classList.add("is-error");
-  }
+  showRankingLoadError({
+    summaryElement: rankingSummary,
+    countElement: rankingCount,
+  });
 
   if (rankingTableBody) {
     rankingTableBody.innerHTML = "";

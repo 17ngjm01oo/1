@@ -290,7 +290,6 @@ body {
 .ranking-card > .shared-notes {
   padding: 18px 0 0;
   border: 0;
-  border-top: 1px solid var(--border);
   border-radius: 0;
   background: transparent;
   box-shadow: none;
@@ -800,6 +799,13 @@ h1 {
 
 .ranking-summary.is-error {
   color: var(--error);
+}
+
+.ranking-count {
+  margin: 0;
+  color: var(--accent);
+  font-size: 0.86rem;
+  font-weight: 700;
 }
 
 .ranking-table-wrap {

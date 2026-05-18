@@ -104,7 +104,7 @@ def render_page(country: dict[str, str]) -> str:
             <header class="indicator-header">
               <div class="indicator-title-group">
                 <h2 id="gdpGrowth-title">Real GDP Growth Rate</h2>
-                <p class="indicator-currency" id="gdpGrowthCurrency">Unit: percent</p>
+                <p class="indicator-currency" id="gdpGrowthCurrency">Unit: %</p>
               </div>
               <div class="compare-control" data-series-id="gdpGrowth">
                 <div class="compare-input-wrap">

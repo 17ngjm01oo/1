@@ -15,6 +15,11 @@ export const economicRankings = [
     countryPageKinds: ["gdp-growth"],
   },
   {
+    directory: "inflation-rate",
+    label: "Inflation Rate Ranking",
+    countryPageKinds: ["inflation-rate"],
+  },
+  {
     directory: "ppp",
     label: "PPP Ranking",
     countryPageKinds: ["ppp"],

@@ -49,6 +49,10 @@ TARGET_INDICATORS = {
         "label": "GDP Growth Rate",
         "description": "Gross domestic product (GDP), Constant prices, Percent change",
     },
+    "PCPIPCH": {
+        "label": "Inflation Rate",
+        "description": "Inflation, average consumer prices, Percent change",
+    },
     "NGDPRPC": {
         "label": "Real GDP per capita, constant prices",
         "description": "Gross domestic product (GDP), Constant prices, Per capita, domestic currency",
