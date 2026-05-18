@@ -1,6 +1,6 @@
 import { countries } from "./countries.js";
 import { filterCountriesByScope } from "./countryFilters.js";
-import { getDisplayScale, formatDisplayValue } from "./chart.js";
+import { formatCompactDisplayValue, getDisplayScale } from "./chart.js";
 import { getFlagEmoji } from "./flags.js";
 import { initializeRankingFilters } from "./rankingFilters.js";
 import { showRankingLoadError, updateRankingSummaryDisplay } from "./rankingSummary.js";
@@ -146,7 +146,7 @@ function renderRankingTable(rankingRows) {
 
     appendRankingValueCell(valueCell, {
       href: `${rootHref}countries/${country.slug}/gdp/`,
-      text: formatCompactGdpRankingValue(country.value, displayScale),
+      text: formatCompactDisplayValue(country.value, displayScale),
       ariaLabel: `Open ${country.name} GDP page`,
       value: country.value,
       rankingRows,
@@ -192,23 +192,4 @@ function normalizeNumericValue(value) {
   }
 
   return null;
-}
-
-function formatCompactGdpRankingValue(value, displayScale) {
-  const compactUnitByName = {
-    trillion: "T",
-    billion: "B",
-    million: "M",
-  };
-  const compactUnit = compactUnitByName[displayScale.tooltipUnit];
-
-  if (!compactUnit) {
-    return formatDisplayValue(value, displayScale);
-  }
-
-  const formattedValue = new Intl.NumberFormat("en-US", {
-    maximumFractionDigits: displayScale.maximumFractionDigits,
-  }).format(value * displayScale.valueScale);
-
-  return `${displayScale.tooltipPrefix}${formattedValue}${compactUnit}`;
 }

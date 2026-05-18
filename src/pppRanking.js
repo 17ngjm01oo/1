@@ -1,6 +1,6 @@
 import { countries } from "./countries.js";
 import { filterCountriesByScope } from "./countryFilters.js";
-import { getDisplayScale, formatDisplayValue } from "./chart.js";
+import { formatCompactDisplayValue, getDisplayScale } from "./chart.js";
 import { getFlagEmoji } from "./flags.js";
 import { initializeRankingFilters } from "./rankingFilters.js";
 import { showRankingLoadError, updateRankingSummaryDisplay } from "./rankingSummary.js";
@@ -146,7 +146,7 @@ function renderRankingTable(rankingRows) {
 
     appendRankingValueCell(valueCell, {
       href: `${rootHref}countries/${country.slug}/ppp/`,
-      text: formatCompactRankingValue(country.value, displayScale),
+      text: formatCompactDisplayValue(country.value, displayScale),
       ariaLabel: `Open ${country.name} PPP page`,
       value: country.value,
       rankingRows,
@@ -192,16 +192,4 @@ function normalizeNumericValue(value) {
   }
 
   return null;
-}
-
-function formatCompactRankingValue(value, displayScale) {
-  if (!displayScale.compactUnit) {
-    return formatDisplayValue(value, displayScale);
-  }
-
-  const formattedValue = new Intl.NumberFormat("en-US", {
-    maximumFractionDigits: displayScale.maximumFractionDigits,
-  }).format(value * displayScale.valueScale);
-
-  return `${displayScale.tooltipPrefix}${formattedValue}${displayScale.compactUnit}`;
 }

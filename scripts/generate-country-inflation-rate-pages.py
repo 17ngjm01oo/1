@@ -56,7 +56,11 @@ def render_page(country: dict[str, str]) -> str:
       <section class="top-nav-card" aria-label="Site navigation">
         <details class="top-nav-disclosure">
           <summary class="top-nav-label">Economic Rankings</summary>
-          <nav class="site-nav"></nav>
+          <nav class="site-nav" id="economicTopNav"></nav>
+        </details>
+        <details class="top-nav-disclosure">
+          <summary class="top-nav-label">Population Rankings</summary>
+          <nav class="site-nav" id="populationTopNav"></nav>
         </details>
       </section>
 
@@ -106,7 +110,7 @@ def render_page(country: dict[str, str]) -> str:
             <header class="indicator-header">
               <div class="indicator-title-group">
                 <h2 id="inflationRate-title">Inflation Rate</h2>
-                <p class="indicator-currency" id="inflationRateCurrency">Unit: %</p>
+                <p class="indicator-currency" id="inflationRateCurrency" hidden></p>
               </div>
               <div class="compare-control" data-series-id="inflationRate">
                 <div class="compare-input-wrap">

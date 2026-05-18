@@ -137,6 +137,10 @@ def render_page(ranking_type: dict[str, str], scope: dict[str, str], is_base_pag
           <summary class="top-nav-label">Economic Rankings</summary>
           <nav class="site-nav" id="rankingTopNav"></nav>
         </details>
+        <details class="top-nav-disclosure">
+          <summary class="top-nav-label">Population Rankings</summary>
+          <nav class="site-nav" id="populationTopNav"></nav>
+        </details>
       </section>
 
       <section class="hub-section" aria-labelledby="ranking-title">

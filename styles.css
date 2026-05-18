@@ -308,7 +308,7 @@ body {
 }
 
 .home-rankings-card {
-  gap: 0;
+  gap: 6px;
 }
 
 .home-rankings-card .category-panel {
@@ -764,6 +764,14 @@ h1 {
   background: #f4f6f8;
   color: var(--text);
   font-weight: 700;
+}
+
+.data-table thead th:first-child {
+  border-top-left-radius: 8px;
+}
+
+.data-table thead th:last-child {
+  border-top-right-radius: 8px;
 }
 
 .data-table tbody tr:last-child td {

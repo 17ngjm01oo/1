@@ -197,6 +197,10 @@ export function getDisplayScale(points, config) {
     return getNationalCurrencyDisplayScale(points, config);
   }
 
+  if (config.valueScaleMode === "populationMagnitude") {
+    return getPopulationDisplayScale(points);
+  }
+
   return {
     valueScale: config.valueScale ?? 1,
     unitLabel: config.unitLabel,
@@ -326,6 +330,60 @@ function getNationalCurrencyDisplayScale(points, config) {
   };
 }
 
+function getPopulationDisplayScale(points) {
+  const maxRawValue = Math.max(...points.map((point) => point.value));
+
+  if (maxRawValue >= 1000000) {
+    return {
+      valueScale: 0.000001,
+      unitLabel: "T people",
+      tooltipPrefix: "",
+      tooltipUnit: "trillion people",
+      tickPrefix: "",
+      compactUnit: "T",
+      maximumFractionDigits: 2,
+      currencyLabel: "",
+    };
+  }
+
+  if (maxRawValue >= 1000) {
+    return {
+      valueScale: 0.001,
+      unitLabel: "B people",
+      tooltipPrefix: "",
+      tooltipUnit: "billion people",
+      tickPrefix: "",
+      compactUnit: "B",
+      maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue * 0.001),
+      currencyLabel: "",
+    };
+  }
+
+  if (maxRawValue >= 1) {
+    return {
+      valueScale: 1,
+      unitLabel: "M people",
+      tooltipPrefix: "",
+      tooltipUnit: "million people",
+      tickPrefix: "",
+      compactUnit: "M",
+      maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue),
+      currencyLabel: "",
+    };
+  }
+
+  return {
+    valueScale: 1000000,
+    unitLabel: "People",
+    tooltipPrefix: "",
+    tooltipUnit: "",
+    tickPrefix: "",
+    compactUnit: "",
+    maximumFractionDigits: 0,
+    currencyLabel: "",
+  };
+}
+
 function getMagnitudeFractionDigits(maxDisplayValue) {
   if (maxDisplayValue >= 100) {
     return 0;
@@ -351,4 +409,14 @@ export function formatDisplayValue(value, displayScale) {
   const suffix = displayScale.suffix ? `${suffixSpacing}${displayScale.suffix}` : "";
 
   return `${displayScale.tooltipPrefix}${formattedValue}${unit}${suffix}`;
+}
+
+export function formatCompactDisplayValue(value, displayScale) {
+  if (!displayScale.compactUnit) {
+    return formatDisplayValue(value, displayScale);
+  }
+
+  const formattedValue = formatNumber(value * displayScale.valueScale, displayScale.maximumFractionDigits);
+
+  return `${displayScale.tooltipPrefix}${formattedValue}${displayScale.compactUnit}`;
 }

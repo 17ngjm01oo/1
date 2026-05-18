@@ -5,13 +5,15 @@ import { getCurrencyCode } from "./currencyCodes.js";
 import { getCurrencyDisplay } from "./currencyDisplay.js";
 import { renderEconomicRankingLinks } from "./economicRankings.js";
 import { getFlagEmoji } from "./flags.js";
+import { renderPopulationRankingLinks } from "./populationRankings.js";
 import { buildStaticDataRequestUrls, fetchStaticData } from "./staticData.js";
 import { transformSeriesData } from "./transform.js";
-import { clearLineChart, formatDisplayValue, getDisplayScale, renderLineChart } from "./chart.js";
+import { clearLineChart, formatCompactDisplayValue, getDisplayScale, renderLineChart } from "./chart.js";
 
 const pageDefinitions = {
   gdp: {
     logPrefix: "GDP page",
+    group: "economic",
     documentTitleMetric: "GDP",
     pathSegment: "gdp",
     seriesIds: ["gdp", "gdpNational", "realGdp"],
@@ -19,6 +21,7 @@ const pageDefinitions = {
   },
   "gdp-per-capita": {
     logPrefix: "GDP per capita page",
+    group: "economic",
     documentTitleMetric: "GDP per capita",
     pathSegment: "gdp-per-capita",
     seriesIds: ["gdpPerCapita", "gdpNationalPerCapita", "realGdpPerCapita"],
@@ -26,6 +29,7 @@ const pageDefinitions = {
   },
   "gdp-growth": {
     logPrefix: "GDP growth page",
+    group: "economic",
     documentTitleMetric: "GDP Growth Rate",
     pathSegment: "gdp-growth",
     seriesIds: ["gdpGrowth"],
@@ -33,13 +37,23 @@ const pageDefinitions = {
   },
   "inflation-rate": {
     logPrefix: "Inflation rate page",
+    group: "economic",
     documentTitleMetric: "Inflation Rate",
     pathSegment: "inflation-rate",
     seriesIds: ["inflationRate"],
     tableValueHeader: "Inflation Rate",
   },
+  population: {
+    logPrefix: "Population page",
+    group: "population",
+    documentTitleMetric: "Population",
+    pathSegment: "population",
+    seriesIds: ["population"],
+    tableValueHeader: "Population",
+  },
   ppp: {
     logPrefix: "PPP page",
+    group: "economic",
     documentTitleMetric: "PPP",
     pathSegment: "ppp",
     seriesIds: ["ppp"],
@@ -47,6 +61,7 @@ const pageDefinitions = {
   },
   "ppp-per-capita": {
     logPrefix: "PPP per capita page",
+    group: "economic",
     documentTitleMetric: "PPP per capita",
     pathSegment: "ppp-per-capita",
     seriesIds: ["pppPerCapita"],
@@ -61,13 +76,28 @@ const countryIndicatorLinks = [
   { pageKind: "ppp", href: "../ppp/", label: "PPP" },
   { pageKind: "ppp-per-capita", href: "../ppp-per-capita/", label: "PPP per capita" },
 ];
+const populationIndicatorLinks = [
+  { pageKind: "population", href: "../population/", label: "Population" },
+];
+const countryIndicatorLinksByGroup = {
+  economic: countryIndicatorLinks,
+  population: populationIndicatorLinks,
+};
 const pageKind = pageDefinitions[document.body.dataset.pageKind] ? document.body.dataset.pageKind : "gdp";
 const pageDefinition = pageDefinitions[pageKind];
 const pageSeriesIds = new Set(pageDefinition.seriesIds);
 const pageSeriesConfigs = seriesConfigs.filter((seriesConfig) => pageSeriesIds.has(seriesConfig.id));
 const countryCode = document.body.dataset.countryCode;
 const selectedCountry = countries.find((country) => country.code === countryCode);
-const comparableSeriesIds = new Set(["gdp", "gdpPerCapita", "gdpGrowth", "inflationRate", "ppp", "pppPerCapita"]);
+const comparableSeriesIds = new Set([
+  "gdp",
+  "gdpPerCapita",
+  "gdpGrowth",
+  "inflationRate",
+  "population",
+  "ppp",
+  "pppPerCapita",
+]);
 const seriesRuntimeState = new Map();
 
 initializePage().catch((error) => {
@@ -108,16 +138,15 @@ function navigateToCountry(country) {
 }
 
 function updateTopRankingLinks() {
-  const nav = document.querySelector(".top-nav-card .site-nav");
-
-  if (!nav) {
-    return;
-  }
-
-  renderEconomicRankingLinks(nav, {
+  renderEconomicRankingLinks(document.querySelector("#economicTopNav"), {
     rootHref: "../../../",
     currentPageKind: pageKind,
     highlightCurrent: false,
+  });
+
+  renderPopulationRankingLinks(document.querySelector("#populationTopNav"), {
+    rootHref: "../../../",
+    currentPageKind: pageKind,
   });
 }
 
@@ -203,7 +232,9 @@ function updateRelatedPageLinks() {
   }
 
   nav.innerHTML = "";
-  countryIndicatorLinks.forEach((linkConfig) => {
+  const relatedLinks = countryIndicatorLinksByGroup[pageDefinition.group] ?? [];
+
+  relatedLinks.forEach((linkConfig) => {
     const link = document.createElement("a");
     link.href = linkConfig.href;
     link.textContent = linkConfig.label;
@@ -226,7 +257,7 @@ function updateSeriesHeadings(countrySeriesConfigs) {
     }
 
     if (currencyElement) {
-      currencyElement.textContent = seriesConfig.currencyLabel ?? "";
+      setCurrencyLabel(currencyElement, seriesConfig.currencyLabel ?? "");
     }
 
     if (canvas) {
@@ -344,6 +375,7 @@ async function loadAndRenderSeries(seriesConfig) {
       points,
       config: seriesConfig,
     });
+    updateSeriesScaleLabel(seriesConfig, points);
     if (state) {
       state.mainPoints = points;
       state.hasMainData = true;
@@ -565,6 +597,7 @@ async function loadComparisonSeries(seriesId, requestId) {
       points: comparisonPoints,
     },
   });
+  updateSeriesScaleLabel(state.mainConfig, state.mainPoints, comparisonPoints);
   updateCompareSelectionUi(seriesId);
 }
 
@@ -601,6 +634,23 @@ function renderMainSeriesOnly(seriesId) {
     points: state.mainPoints,
     config: state.mainConfig,
   });
+  updateSeriesScaleLabel(state.mainConfig, state.mainPoints);
+}
+
+function updateSeriesScaleLabel(seriesConfig, points, comparisonPoints = []) {
+  const currencyElement = document.querySelector(`#${seriesConfig.id}Currency`);
+
+  if (!currencyElement) {
+    return;
+  }
+
+  const displayScale = getDisplayScale([...points, ...comparisonPoints], seriesConfig);
+  setCurrencyLabel(currencyElement, displayScale.currencyLabel ?? seriesConfig.currencyLabel ?? "");
+}
+
+function setCurrencyLabel(currencyElement, label) {
+  currencyElement.textContent = label;
+  currencyElement.hidden = !label;
 }
 
 function updateCompareAvailability(seriesId) {
@@ -756,15 +806,7 @@ function appendDataTablePointCells(row, point, displayScale) {
 }
 
 function formatDataTableValue(value, displayScale) {
-  if (displayScale.compactUnit) {
-    const formattedValue = new Intl.NumberFormat("en-US", {
-      maximumFractionDigits: displayScale.maximumFractionDigits,
-    }).format(value * displayScale.valueScale);
-
-    return `${displayScale.tooltipPrefix}${formattedValue}${displayScale.compactUnit}`;
-  }
-
-  return formatDisplayValue(value, displayScale);
+  return formatCompactDisplayValue(value, displayScale);
 }
 
 function showChartOverlay({ chartCard, overlayElement, message, state }) {

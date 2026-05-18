@@ -53,6 +53,10 @@ TARGET_INDICATORS = {
         "label": "Inflation Rate",
         "description": "Inflation, average consumer prices, Percent change",
     },
+    "LP": {
+        "label": "Population",
+        "description": "Population, Persons",
+    },
     "NGDPRPC": {
         "label": "Real GDP per capita, constant prices",
         "description": "Gross domestic product (GDP), Constant prices, Per capita, domestic currency",
