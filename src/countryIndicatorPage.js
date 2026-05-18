@@ -13,55 +13,37 @@ const pageDefinitions = {
     logPrefix: "GDP page",
     documentTitleMetric: "GDP",
     pathSegment: "gdp",
-    relatedPathSegment: "gdp-per-capita",
     seriesIds: ["gdp", "gdpNational", "realGdp"],
     tableValueHeader: "GDP",
-    relatedLinks: [
-      { href: "../gdp-per-capita/", label: "View GDP per capita" },
-      { href: "../ppp/", label: "View PPP" },
-      { href: "../ppp-per-capita/", label: "View PPP per capita" },
-    ],
   },
   "gdp-per-capita": {
     logPrefix: "GDP per capita page",
     documentTitleMetric: "GDP per capita",
     pathSegment: "gdp-per-capita",
-    relatedPathSegment: "gdp",
     seriesIds: ["gdpPerCapita", "gdpNationalPerCapita", "realGdpPerCapita"],
     tableValueHeader: "GDP per capita",
-    relatedLinks: [
-      { href: "../gdp/", label: "View GDP" },
-      { href: "../ppp/", label: "View PPP" },
-      { href: "../ppp-per-capita/", label: "View PPP per capita" },
-    ],
   },
   ppp: {
     logPrefix: "PPP page",
     documentTitleMetric: "PPP",
     pathSegment: "ppp",
-    relatedPathSegment: "ppp-per-capita",
     seriesIds: ["ppp"],
     tableValueHeader: "PPP",
-    relatedLinks: [
-      { href: "../gdp/", label: "View GDP" },
-      { href: "../gdp-per-capita/", label: "View GDP per capita" },
-      { href: "../ppp-per-capita/", label: "View PPP per capita" },
-    ],
   },
   "ppp-per-capita": {
     logPrefix: "PPP per capita page",
     documentTitleMetric: "PPP per capita",
     pathSegment: "ppp-per-capita",
-    relatedPathSegment: "ppp",
     seriesIds: ["pppPerCapita"],
     tableValueHeader: "PPP per capita",
-    relatedLinks: [
-      { href: "../gdp/", label: "View GDP" },
-      { href: "../gdp-per-capita/", label: "View GDP per capita" },
-      { href: "../ppp/", label: "View PPP" },
-    ],
   },
 };
+const countryIndicatorLinks = [
+  { pageKind: "gdp", href: "../gdp/", label: "View GDP" },
+  { pageKind: "gdp-per-capita", href: "../gdp-per-capita/", label: "View GDP per capita" },
+  { pageKind: "ppp", href: "../ppp/", label: "View PPP" },
+  { pageKind: "ppp-per-capita", href: "../ppp-per-capita/", label: "View PPP per capita" },
+];
 const pageKind = pageDefinitions[document.body.dataset.pageKind] ? document.body.dataset.pageKind : "gdp";
 const pageDefinition = pageDefinitions[pageKind];
 const pageSeriesIds = new Set(pageDefinition.seriesIds);
@@ -184,22 +166,21 @@ function updateCountryHeading(country) {
 function updateRelatedPageLinks() {
   const nav = document.querySelector("#countryRelatedPageNav");
 
-  if (nav) {
-    nav.innerHTML = "";
-    pageDefinition.relatedLinks.forEach((linkConfig) => {
-      const link = document.createElement("a");
-      link.href = linkConfig.href;
-      link.textContent = linkConfig.label;
-      nav.append(link);
-    });
+  if (!nav) {
     return;
   }
 
-  const backLink = document.querySelector("#countryRelatedPageLink") ?? document.querySelector("#countryGdpPageLink");
-
-  if (backLink) {
-    backLink.href = `../${pageDefinition.relatedPathSegment}/`;
-  }
+  nav.innerHTML = "";
+  countryIndicatorLinks.forEach((linkConfig) => {
+    const link = document.createElement("a");
+    link.href = linkConfig.href;
+    link.textContent = linkConfig.label;
+    if (linkConfig.pageKind === pageKind) {
+      link.className = "is-current";
+      link.setAttribute("aria-current", "page");
+    }
+    nav.append(link);
+  });
 }
 
 function updateSeriesHeadings(countrySeriesConfigs) {

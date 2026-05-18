@@ -298,6 +298,13 @@ body {
   background: #ffffff;
 }
 
+.site-nav a.is-current,
+.site-nav a[aria-current="page"] {
+  border-color: rgba(23, 107, 135, 0.45);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
 .country-search-panel {
   position: relative;
   display: grid;
@@ -536,6 +543,13 @@ h1 {
   margin: 0;
   color: var(--muted);
   font-size: 1.05rem;
+}
+
+.source-label {
+  margin: 0;
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 700;
 }
 
 .status-bar {

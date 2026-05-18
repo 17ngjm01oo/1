@@ -54,14 +54,14 @@ def render_page(country: dict[str, str]) -> str:
         <nav class="site-nav">
           <a href="../../../">Home</a>
           <a href="../../../rankings/nominal-gdp/world/">GDP Ranking</a>
-          <a href="../../../rankings/nominal-gdp-per-capita/world/">GDP per Capita Ranking</a>
         </nav>
       </section>
 
       <section class="hub-section" aria-labelledby="country-hub-title">
         <header class="page-header">
           <h1 id="country-hub-title" class="page-title">GDP by Country</h1>
-          <p class="subtitle">Choose a country to view GDP indicators from the IMF World Economic Outlook.</p>
+          <p class="subtitle">Choose a country to view GDP indicators.</p>
+          <p class="source-label">Source: IMF World Economic Outlook.</p>
         </header>
 
         <div class="country-search-panel">
@@ -96,9 +96,7 @@ def render_page(country: dict[str, str]) -> str:
         <div class="indicators-card">
           <header class="page-header country-data-header">
             <h1 id="country-data-title">{country_name}</h1>
-            <nav class="site-nav" id="countryRelatedPageNav" aria-label="Country page navigation">
-              <a id="countryRelatedPageLink" href="../gdp-per-capita/">View GDP per capita</a>
-            </nav>
+            <nav class="site-nav" id="countryRelatedPageNav" aria-label="Country page navigation"></nav>
           </header>
 
           <section class="indicator-block" aria-labelledby="gdp-title">
