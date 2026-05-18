@@ -4,10 +4,12 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import subprocess
 import tempfile
 import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 from xml.etree import ElementTree
 
@@ -79,14 +81,18 @@ def main() -> None:
     excel_path = args.input or download_weo_excel()
     result = build_normalized_weo_json(excel_path)
 
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(
-        json.dumps(result, ensure_ascii=False, separators=(",", ":")),
-        encoding="utf-8",
-    )
+    write_json(args.output, result)
 
     print(f"Wrote {format_path_for_log(args.output)}")
     print_summary(result)
+
+
+def write_json(output_path: Path, result: dict) -> None:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(
+        json.dumps(result, ensure_ascii=False, separators=(",", ":")),
+        encoding="utf-8",
+    )
 
 
 def download_weo_excel() -> Path:
@@ -95,10 +101,33 @@ def download_weo_excel() -> Path:
     request = Request(WEO_EXCEL_URL, headers={"User-Agent": "Codex WEO data updater"})
 
     print(f"Fetching {WEO_EXCEL_URL}")
-    with urlopen(request, timeout=120) as response:
-        output_path.write_bytes(response.read())
+    try:
+        with urlopen(request, timeout=120) as response:
+            output_path.write_bytes(response.read())
+    except HTTPError as error:
+        if error.code != 403:
+            raise
+
+        print("urllib received HTTP 403. Retrying with curl.")
+        download_weo_excel_with_curl(output_path)
 
     return output_path
+
+
+def download_weo_excel_with_curl(output_path: Path) -> None:
+    subprocess.run(
+        [
+            "curl",
+            "--fail",
+            "--location",
+            "--silent",
+            "--show-error",
+            "--output",
+            str(output_path),
+            WEO_EXCEL_URL,
+        ],
+        check=True,
+    )
 
 
 def build_normalized_weo_json(excel_path: Path) -> dict:

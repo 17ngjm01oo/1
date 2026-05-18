@@ -1,5 +1,6 @@
 {
   "scripts": {
-    "update-data": "python3 scripts/update-weo-data.py"
+    "update-data": "python3 scripts/update-weo-data.py",
+    "update-data:local": "python3 scripts/update-weo-data-from-local.py"
   }
 }
