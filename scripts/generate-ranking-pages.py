@@ -28,6 +28,24 @@ RANKING_TYPES = [
         "table_title": "GDP per Capita Ranking",
         "subtitle": "Countries ranked by their latest available GDP per capita value in the static IMF dataset.",
     },
+    {
+        "directory": "ppp",
+        "title": "PPP Ranking by Country",
+        "counterpart_directory": "ppp-per-capita",
+        "counterpart_label": "PPP per Capita Ranking",
+        "script": "pppRanking.js",
+        "table_title": "PPP Ranking",
+        "subtitle": "Countries ranked by their latest available PPP GDP value in the static IMF dataset.",
+    },
+    {
+        "directory": "ppp-per-capita",
+        "title": "PPP per Capita Ranking by Country",
+        "counterpart_directory": "ppp",
+        "counterpart_label": "PPP Ranking",
+        "script": "pppPerCapitaRanking.js",
+        "table_title": "PPP per Capita Ranking",
+        "subtitle": "Countries ranked by their latest available PPP GDP per capita value in the static IMF dataset.",
+    },
 ]
 
 

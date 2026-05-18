@@ -53,8 +53,8 @@ def render_page(country: dict[str, str]) -> str:
       <section class="top-nav-card" aria-label="Site navigation">
         <nav class="site-nav">
           <a href="../../../">Home</a>
-          <a href="../../../rankings/nominal-gdp/">GDP Ranking</a>
-          <a href="../../../rankings/nominal-gdp-per-capita/">GDP per Capita Ranking</a>
+          <a href="../../../rankings/nominal-gdp/world/">GDP Ranking</a>
+          <a href="../../../rankings/nominal-gdp-per-capita/world/">GDP per Capita Ranking</a>
         </nav>
       </section>
 
@@ -96,7 +96,7 @@ def render_page(country: dict[str, str]) -> str:
         <div class="indicators-card">
           <header class="page-header country-data-header">
             <h1 id="country-data-title">{country_name}</h1>
-            <nav class="site-nav" aria-label="Country page navigation">
+            <nav class="site-nav" id="countryRelatedPageNav" aria-label="Country page navigation">
               <a id="countryRelatedPageLink" href="../gdp-per-capita/">View GDP per capita</a>
             </nav>
           </header>

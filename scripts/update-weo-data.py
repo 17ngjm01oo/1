@@ -49,6 +49,14 @@ TARGET_INDICATORS = {
         "label": "Real GDP per capita, constant prices",
         "description": "Gross domestic product (GDP), Constant prices, Per capita, domestic currency",
     },
+    "PPPGDP": {
+        "label": "GDP, current prices, purchasing power parity",
+        "description": "Gross domestic product based on purchasing-power-parity (PPP), current international dollar",
+    },
+    "PPPPC": {
+        "label": "GDP per capita, current prices, purchasing power parity",
+        "description": "Gross domestic product based on purchasing-power-parity (PPP) per capita GDP, current international dollar",
+    },
 }
 SHEET_NAMES = ("Countries", "Country Groups")
 GROUP_CODE_MAP = {

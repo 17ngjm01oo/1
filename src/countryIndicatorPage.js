@@ -2,12 +2,12 @@ import { seriesConfigs } from "./config.js";
 import { countries } from "./countries.js";
 import { filterCountries, formatCountryMetaText, initializeCountrySelector } from "./countrySelector.js";
 import { getCurrencyCode } from "./currencyCodes.js";
+import { getCurrencyDisplay } from "./currencyDisplay.js";
 import { getFlagEmoji } from "./flags.js";
 import { buildStaticDataRequestUrls, fetchStaticData } from "./staticData.js";
 import { transformSeriesData } from "./transform.js";
 import { clearLineChart, formatDisplayValue, getDisplayScale, renderLineChart } from "./chart.js";
 
-const pageKind = document.body.dataset.pageKind === "gdp" ? "gdp" : "gdp-per-capita";
 const pageDefinitions = {
   gdp: {
     logPrefix: "GDP page",
@@ -16,6 +16,11 @@ const pageDefinitions = {
     relatedPathSegment: "gdp-per-capita",
     seriesIds: ["gdp", "gdpNational", "realGdp"],
     tableValueHeader: "GDP",
+    relatedLinks: [
+      { href: "../gdp-per-capita/", label: "View GDP per capita" },
+      { href: "../ppp/", label: "View PPP" },
+      { href: "../ppp-per-capita/", label: "View PPP per capita" },
+    ],
   },
   "gdp-per-capita": {
     logPrefix: "GDP per capita page",
@@ -24,14 +29,46 @@ const pageDefinitions = {
     relatedPathSegment: "gdp",
     seriesIds: ["gdpPerCapita", "gdpNationalPerCapita", "realGdpPerCapita"],
     tableValueHeader: "GDP per capita",
+    relatedLinks: [
+      { href: "../gdp/", label: "View GDP" },
+      { href: "../ppp/", label: "View PPP" },
+      { href: "../ppp-per-capita/", label: "View PPP per capita" },
+    ],
+  },
+  ppp: {
+    logPrefix: "PPP page",
+    documentTitleMetric: "PPP",
+    pathSegment: "ppp",
+    relatedPathSegment: "ppp-per-capita",
+    seriesIds: ["ppp"],
+    tableValueHeader: "PPP",
+    relatedLinks: [
+      { href: "../gdp/", label: "View GDP" },
+      { href: "../gdp-per-capita/", label: "View GDP per capita" },
+      { href: "../ppp-per-capita/", label: "View PPP per capita" },
+    ],
+  },
+  "ppp-per-capita": {
+    logPrefix: "PPP per capita page",
+    documentTitleMetric: "PPP per capita",
+    pathSegment: "ppp-per-capita",
+    relatedPathSegment: "ppp",
+    seriesIds: ["pppPerCapita"],
+    tableValueHeader: "PPP per capita",
+    relatedLinks: [
+      { href: "../gdp/", label: "View GDP" },
+      { href: "../gdp-per-capita/", label: "View GDP per capita" },
+      { href: "../ppp/", label: "View PPP" },
+    ],
   },
 };
+const pageKind = pageDefinitions[document.body.dataset.pageKind] ? document.body.dataset.pageKind : "gdp";
 const pageDefinition = pageDefinitions[pageKind];
 const pageSeriesIds = new Set(pageDefinition.seriesIds);
 const pageSeriesConfigs = seriesConfigs.filter((seriesConfig) => pageSeriesIds.has(seriesConfig.id));
 const countryCode = document.body.dataset.countryCode;
 const selectedCountry = countries.find((country) => country.code === countryCode);
-const comparableSeriesIds = new Set(["gdp", "gdpPerCapita"]);
+const comparableSeriesIds = new Set(["gdp", "gdpPerCapita", "ppp", "pppPerCapita"]);
 const seriesRuntimeState = new Map();
 
 initializePage().catch((error) => {
@@ -52,16 +89,18 @@ async function initializePage() {
     },
   });
   updateCountryHeading(selectedCountry);
-  updateRelatedPageLink(selectedCountry);
+  updateRelatedPageLinks();
 
   const countrySeriesConfigs = pageSeriesConfigs.map((seriesConfig) =>
     buildCountrySeriesConfig(seriesConfig, selectedCountry),
   );
+  const visibleSeriesConfigs = countrySeriesConfigs.filter(shouldShowSeriesConfig);
 
-  updateSeriesHeadings(countrySeriesConfigs);
-  initializeCompareSearches(countrySeriesConfigs);
+  updateSeriesVisibility(countrySeriesConfigs);
+  updateSeriesHeadings(visibleSeriesConfigs);
+  initializeCompareSearches(visibleSeriesConfigs);
 
-  await Promise.all(countrySeriesConfigs.map((seriesConfig) => loadAndRenderSeries(seriesConfig)));
+  await Promise.all(visibleSeriesConfigs.map((seriesConfig) => loadAndRenderSeries(seriesConfig)));
 }
 
 function navigateToCountry(country) {
@@ -75,6 +114,10 @@ function buildCountrySeriesConfig(seriesConfig, country) {
   const currencyLabel = seriesConfig.usesCountryCurrency
     ? formatCountryCurrencyLabel(currencyCode, seriesConfig)
     : seriesConfig.currencyLabel;
+  const currencyDisplay = getCurrencyDisplay({
+    ...seriesConfig,
+    currencyCode,
+  });
 
   return {
     ...seriesConfig,
@@ -83,9 +126,12 @@ function buildCountrySeriesConfig(seriesConfig, country) {
     countryName: country.name,
     chartTitle: seriesConfig.titleTemplate,
     currencyCode,
+    currencyDisplay,
     currencyLabel,
     unitLabel: getSeriesUnitLabel(seriesConfig, currencyCode),
-    suffix: seriesConfig.usesCountryCurrency && currencyCode ? currencyCode : seriesConfig.suffix,
+    tooltipPrefix: currencyDisplay.prefix || seriesConfig.tooltipPrefix,
+    tickPrefix: currencyDisplay.prefix || seriesConfig.tickPrefix,
+    suffix: seriesConfig.usesCountryCurrency ? currencyDisplay.suffix : seriesConfig.suffix,
   };
 }
 
@@ -135,11 +181,24 @@ function updateCountryHeading(country) {
   title.append(nameElement);
 }
 
-function updateRelatedPageLink(country) {
+function updateRelatedPageLinks() {
+  const nav = document.querySelector("#countryRelatedPageNav");
+
+  if (nav) {
+    nav.innerHTML = "";
+    pageDefinition.relatedLinks.forEach((linkConfig) => {
+      const link = document.createElement("a");
+      link.href = linkConfig.href;
+      link.textContent = linkConfig.label;
+      nav.append(link);
+    });
+    return;
+  }
+
   const backLink = document.querySelector("#countryRelatedPageLink") ?? document.querySelector("#countryGdpPageLink");
 
   if (backLink) {
-    backLink.href = `../../../countries/${country.slug}/${pageDefinition.relatedPathSegment}/`;
+    backLink.href = `../${pageDefinition.relatedPathSegment}/`;
   }
 }
 
@@ -161,6 +220,25 @@ function updateSeriesHeadings(countrySeriesConfigs) {
       canvas.setAttribute("aria-label", `${seriesConfig.countryName} ${seriesConfig.chartTitle} line chart`);
     }
   });
+}
+
+function updateSeriesVisibility(countrySeriesConfigs) {
+  countrySeriesConfigs.forEach((seriesConfig) => {
+    const titleElement = document.querySelector(`#${seriesConfig.id}-title`);
+    const indicatorBlock = titleElement?.closest(".indicator-block");
+
+    if (indicatorBlock) {
+      indicatorBlock.hidden = !shouldShowSeriesConfig(seriesConfig);
+    }
+  });
+}
+
+function shouldShowSeriesConfig(seriesConfig) {
+  return !(isNominalLocalCurrencySeries(seriesConfig) && seriesConfig.currencyCode === "USD");
+}
+
+function isNominalLocalCurrencySeries(seriesConfig) {
+  return seriesConfig.id === "gdpNational" || seriesConfig.id === "gdpNationalPerCapita";
 }
 
 function initializeCompareSearches(countrySeriesConfigs) {

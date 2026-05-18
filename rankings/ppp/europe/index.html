@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PPP Ranking by Country - Europe</title>
+    <link rel="stylesheet" href="../../../styles.css" />
+    <script type="module" src="../../../src/pppRanking.js"></script>
+  </head>
+  <body
+    data-root-href="../../../"
+    data-ranking-base-href="../"
+    data-ranking-scope-type="region"
+    data-ranking-scope-id="Europe"
+    data-ranking-scope-label="Europe"
+    data-ranking-scope-slug="europe"
+  >
+    <main class="page-shell ranking-page">
+      <section class="top-nav-card" aria-label="Site navigation">
+        <nav class="site-nav">
+          <a href="../../../">Home</a>
+          <a href="../../ppp-per-capita/europe/">PPP per Capita Ranking</a>
+        </nav>
+      </section>
+
+      <section class="hub-section" aria-labelledby="ranking-title">
+        <header class="page-header">
+          <h1 id="ranking-title" class="page-title">PPP Ranking by Country - Europe</h1>
+          <p class="subtitle">Countries ranked by their latest available PPP GDP value in the static IMF dataset.</p>
+        </header>
+
+        <div class="ranking-filter-panel">
+          <p class="filter-label">Filter by:</p>
+          <div class="filter-panel-row">
+            <details class="category-panel" aria-labelledby="ranking-region-heading">
+              <summary class="category-heading" id="ranking-region-heading">Regions</summary>
+            </details>
+            <details class="category-panel" aria-labelledby="ranking-category-heading">
+              <summary class="category-heading" id="ranking-category-heading">Categories</summary>
+            </details>
+          </div>
+          <div class="category-list filter-option-list" id="rankingRegionList" hidden></div>
+          <div class="category-list filter-option-list" id="rankingCategoryList" hidden></div>
+        </div>
+      </section>
+
+      <section class="ranking-card" aria-labelledby="ranking-table-title">
+        <header class="ranking-card-header">
+          <h2 id="ranking-table-title">PPP Ranking</h2>
+          <p id="rankingSummary" class="ranking-summary" aria-live="polite">Loading ranking data...</p>
+        </header>
+
+        <div class="ranking-table-wrap">
+          <table class="ranking-table">
+            <thead>
+              <tr>
+                <th scope="col">Rank</th>
+                <th scope="col">Flag</th>
+                <th scope="col">Country</th>
+                <th scope="col">Value</th>
+                <th scope="col">Year</th>
+              </tr>
+            </thead>
+            <tbody id="rankingTableBody"></tbody>
+          </table>
+        </div>
+
+        <footer class="shared-notes ranking-notes" aria-label="Ranking notes">
+          <p>Source: IMF World Economic Outlook.</p>
+          <p>Data may include IMF estimates and projections.</p>
+          <p>Countries with no available IMF data are excluded from the ranking.</p>
+        </footer>
+      </section>
+    </main>
+  </body>
+</html>

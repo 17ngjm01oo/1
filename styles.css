@@ -96,6 +96,10 @@ body {
   min-width: 0;
 }
 
+.indicator-block[hidden] {
+  display: none;
+}
+
 .country-data-header + .indicator-block {
   padding-top: 24px;
   border-top: 1px solid var(--border);

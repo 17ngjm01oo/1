@@ -1,3 +1,5 @@
+import { getCurrencyDisplay } from "./currencyDisplay.js";
+
 const chartInstances = new Map();
 const actualColor = "#176b87";
 const comparisonColor = "#475569";
@@ -184,6 +186,10 @@ export function getDisplayScale(points, config) {
     return getGdpDisplayScale(points);
   }
 
+  if (config.valueScaleMode === "internationalDollarMagnitude") {
+    return getInternationalDollarDisplayScale(points);
+  }
+
   if (config.valueScaleMode === "nationalCurrencyMagnitude") {
     return getNationalCurrencyDisplayScale(points, config);
   }
@@ -238,18 +244,57 @@ function getGdpDisplayScale(points) {
   };
 }
 
+function getInternationalDollarDisplayScale(points) {
+  const maxRawValue = Math.max(...points.map((point) => point.value));
+
+  if (maxRawValue >= 1000) {
+    return {
+      valueScale: 0.001,
+      unitLabel: "Trillions of international dollars",
+      tooltipPrefix: "$",
+      tooltipUnit: "trillion",
+      tickPrefix: "$",
+      compactUnit: "T",
+      maximumFractionDigits: 2,
+    };
+  }
+
+  if (maxRawValue >= 1) {
+    return {
+      valueScale: 1,
+      unitLabel: "Billions of international dollars",
+      tooltipPrefix: "$",
+      tooltipUnit: "billion",
+      tickPrefix: "$",
+      compactUnit: "B",
+      maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue),
+    };
+  }
+
+  return {
+    valueScale: 1000,
+    unitLabel: "Millions of international dollars",
+    tooltipPrefix: "$",
+    tooltipUnit: "million",
+    tickPrefix: "$",
+    compactUnit: "M",
+    maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue * 1000),
+  };
+}
+
 function getNationalCurrencyDisplayScale(points, config) {
   const currencyCode = config.currencyCode || "local currency";
+  const currencyDisplay = getCurrencyDisplay(config);
   const maxRawValue = Math.max(...points.map((point) => point.value));
 
   if (maxRawValue >= 1000) {
     return {
       valueScale: 0.001,
       unitLabel: `Trillions of ${currencyCode}`,
-      tooltipPrefix: "",
+      tooltipPrefix: currencyDisplay.prefix,
       tooltipUnit: `trillion ${currencyCode}`,
-      tickPrefix: "",
-      compactUnit: `T ${currencyCode}`,
+      tickPrefix: currencyDisplay.prefix,
+      compactUnit: `T${currencyDisplay.compactUnitSuffix}`,
       maximumFractionDigits: 2,
     };
   }
@@ -258,10 +303,10 @@ function getNationalCurrencyDisplayScale(points, config) {
     return {
       valueScale: 1,
       unitLabel: `Billions of ${currencyCode}`,
-      tooltipPrefix: "",
+      tooltipPrefix: currencyDisplay.prefix,
       tooltipUnit: `billion ${currencyCode}`,
-      tickPrefix: "",
-      compactUnit: `B ${currencyCode}`,
+      tickPrefix: currencyDisplay.prefix,
+      compactUnit: `B${currencyDisplay.compactUnitSuffix}`,
       maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue),
     };
   }
@@ -269,10 +314,10 @@ function getNationalCurrencyDisplayScale(points, config) {
   return {
     valueScale: 1000,
     unitLabel: `Millions of ${currencyCode}`,
-    tooltipPrefix: "",
+    tooltipPrefix: currencyDisplay.prefix,
     tooltipUnit: `million ${currencyCode}`,
-    tickPrefix: "",
-    compactUnit: `M ${currencyCode}`,
+    tickPrefix: currencyDisplay.prefix,
+    compactUnit: `M${currencyDisplay.compactUnitSuffix}`,
     maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue * 1000),
   };
 }
