@@ -126,6 +126,7 @@ def render_page(ranking_type: dict[str, str], scope: dict[str, str], is_base_pag
     </header>
     <main class="page-shell ranking-page">
       <section class="top-nav-card" aria-label="Site navigation">
+        <p class="top-nav-label">Economic Rankings:</p>
         <nav class="site-nav" id="rankingTopNav"></nav>
       </section>
 

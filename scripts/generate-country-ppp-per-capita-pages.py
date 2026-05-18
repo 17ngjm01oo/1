@@ -54,6 +54,7 @@ def render_page(country: dict[str, str]) -> str:
     </header>
     <main class="page-shell">
       <section class="top-nav-card" aria-label="Site navigation">
+        <p class="top-nav-label">Economic Rankings:</p>
         <nav class="site-nav"></nav>
       </section>
 
