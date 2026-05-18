@@ -146,7 +146,7 @@ function updateTopRankingLinks() {
 
   renderPopulationRankingLinks(document.querySelector("#populationTopNav"), {
     rootHref: "../../../",
-    currentPageKind: pageKind,
+    highlightCurrent: false,
   });
 }
 

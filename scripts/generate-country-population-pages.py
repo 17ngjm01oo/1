@@ -148,7 +148,6 @@ def render_page(country: dict[str, str]) -> str:
           <footer class="shared-notes" aria-label="Data notes">
             <p>Source: IMF World Economic Outlook.</p>
             <p>Values may include IMF estimates and projections.</p>
-            <p>Countries with no available IMF data show the standard no-data state.</p>
           </footer>
         </div>
       </section>

@@ -2,7 +2,6 @@ export const populationRankings = [
   {
     directory: "population",
     label: "Population Ranking",
-    countryPageKinds: ["population"],
   },
 ];
 
@@ -10,7 +9,6 @@ export function renderPopulationRankingLinks(
   nav,
   {
     rootHref = "./",
-    currentPageKind = "",
     currentRankingDirectory = "",
     currentScopeSlug = "world",
     highlightCurrent = true,
@@ -30,10 +28,7 @@ export function renderPopulationRankingLinks(
     link.href = `${rootHref}rankings/${ranking.directory}/${currentScopeSlug}/`;
     link.textContent = ranking.label;
 
-    if (
-      highlightCurrent &&
-      (ranking.countryPageKinds.includes(currentPageKind) || ranking.directory === currentRankingDirectory)
-    ) {
+    if (highlightCurrent && ranking.directory === currentRankingDirectory) {
       link.className = "is-current";
       link.setAttribute("aria-current", "page");
     }

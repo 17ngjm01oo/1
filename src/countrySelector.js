@@ -442,18 +442,50 @@ export function initializeCountrySelector({
 }
 
 export function filterCountries(query) {
-  const normalizedQuery = query.trim().toLowerCase();
+  const normalizedQuery = normalizeSearchText(query);
+  const compactQuery = compactSearchText(normalizedQuery);
 
   if (!normalizedQuery) {
     return [];
   }
 
   return countries.filter((country) => {
-    return (
-      country.name.toLowerCase().includes(normalizedQuery) ||
-      country.code.toLowerCase().includes(normalizedQuery)
-    );
+    return getCountrySearchTerms(country).some((term) => {
+      return term.includes(normalizedQuery) || compactSearchText(term).includes(compactQuery);
+    });
   });
+}
+
+function getCountrySearchTerms(country) {
+  const terms = [
+    country.name,
+    country.slug,
+    country.code,
+    ...(Array.isArray(country.aliases) ? country.aliases : []),
+  ];
+
+  return [...new Set(terms.flatMap(getSearchVariants).filter(Boolean))];
+}
+
+function normalizeSearchText(value) {
+  return String(value ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim()
+    .replace(/\s+/g, " ");
+}
+
+function getSearchVariants(value) {
+  const normalizedValue = normalizeSearchText(value);
+  const compactValue = compactSearchText(normalizedValue);
+
+  return normalizedValue === compactValue ? [normalizedValue] : [normalizedValue, compactValue];
+}
+
+function compactSearchText(value) {
+  return value.replace(/\s+/g, "");
 }
 
 export function sortCountriesByName(countryList) {

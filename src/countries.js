@@ -18,6 +18,7 @@ export const countryRegions = [
   { id: "Oceania", label: "Oceania" },
 ];
 
+// Country search also reads optional aliases arrays when they are added to a country entry.
 export const countries = [
   { code: "WEOWORLD", name: "World", slug: "world", region: "", categories: [], includeInRankings: false },
   { code: "USA", name: "United States", slug: "united-states", region: "North America", categories: ["G20", "G7", "OECD"] },
