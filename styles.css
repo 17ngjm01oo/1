@@ -31,6 +31,25 @@ body {
   color: var(--text);
 }
 
+.site-header {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 30px 24px 0;
+}
+
+.site-home-link {
+  color: var(--text);
+  font-size: 1.55rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-decoration: none;
+}
+
+.site-home-link:hover {
+  color: var(--accent);
+}
+
 .page-shell {
   display: grid;
   gap: 20px;
@@ -791,6 +810,11 @@ h1 {
   vertical-align: middle;
 }
 
+.ranking-table th:not(:last-child),
+.ranking-table td:not(:last-child) {
+  border-right: 1px solid var(--border);
+}
+
 .ranking-table th {
   background: #f4f6f8;
   color: var(--text);
@@ -800,6 +824,10 @@ h1 {
 .ranking-table th:nth-child(1),
 .ranking-table td:nth-child(1) {
   width: 64px;
+}
+
+.ranking-table tbody td {
+  font-weight: 700;
 }
 
 .ranking-table th:nth-child(2),
@@ -825,7 +853,6 @@ h1 {
 
 .ranking-table a {
   color: var(--accent);
-  font-weight: 700;
   text-decoration: none;
 }
 

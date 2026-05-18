@@ -3,6 +3,7 @@ import { countries } from "./countries.js";
 import { filterCountries, formatCountryMetaText, initializeCountrySelector } from "./countrySelector.js";
 import { getCurrencyCode } from "./currencyCodes.js";
 import { getCurrencyDisplay } from "./currencyDisplay.js";
+import { renderEconomicRankingLinks } from "./economicRankings.js";
 import { getFlagEmoji } from "./flags.js";
 import { buildStaticDataRequestUrls, fetchStaticData } from "./staticData.js";
 import { transformSeriesData } from "./transform.js";
@@ -46,11 +47,11 @@ const pageDefinitions = {
   },
 };
 const countryIndicatorLinks = [
-  { pageKind: "gdp", href: "../gdp/", label: "View GDP" },
-  { pageKind: "gdp-per-capita", href: "../gdp-per-capita/", label: "View GDP per capita" },
-  { pageKind: "gdp-growth", href: "../gdp-growth/", label: "View GDP Growth Rate" },
-  { pageKind: "ppp", href: "../ppp/", label: "View PPP" },
-  { pageKind: "ppp-per-capita", href: "../ppp-per-capita/", label: "View PPP per capita" },
+  { pageKind: "gdp", href: "../gdp/", label: "GDP" },
+  { pageKind: "gdp-per-capita", href: "../gdp-per-capita/", label: "GDP per capita" },
+  { pageKind: "gdp-growth", href: "../gdp-growth/", label: "GDP Growth Rate" },
+  { pageKind: "ppp", href: "../ppp/", label: "PPP" },
+  { pageKind: "ppp-per-capita", href: "../ppp-per-capita/", label: "PPP per capita" },
 ];
 const pageKind = pageDefinitions[document.body.dataset.pageKind] ? document.body.dataset.pageKind : "gdp";
 const pageDefinition = pageDefinitions[pageKind];
@@ -78,6 +79,7 @@ async function initializePage() {
       navigateToCountry(country);
     },
   });
+  updateTopRankingLinks();
   updateCountryHeading(selectedCountry);
   updateRelatedPageLinks();
 
@@ -95,6 +97,19 @@ async function initializePage() {
 
 function navigateToCountry(country) {
   window.location.href = `../../../countries/${country.slug}/${pageDefinition.pathSegment}/`;
+}
+
+function updateTopRankingLinks() {
+  const nav = document.querySelector(".top-nav-card .site-nav");
+
+  if (!nav) {
+    return;
+  }
+
+  renderEconomicRankingLinks(nav, {
+    rootHref: "../../../",
+    currentPageKind: pageKind,
+  });
 }
 
 function buildCountrySeriesConfig(seriesConfig, country) {

@@ -13,7 +13,6 @@ RANKING_TYPES = [
     {
         "directory": "nominal-gdp",
         "title": "GDP Ranking by Country",
-        "nav_label": "GDP Ranking",
         "script": "nominalGdpRanking.js",
         "table_title": "GDP Ranking",
         "subtitle": "Countries ranked by their latest available GDP value in the static IMF dataset.",
@@ -21,7 +20,6 @@ RANKING_TYPES = [
     {
         "directory": "nominal-gdp-per-capita",
         "title": "GDP per Capita Ranking by Country",
-        "nav_label": "GDP per Capita Ranking",
         "script": "gdpPerCapitaRanking.js",
         "table_title": "GDP per Capita Ranking",
         "subtitle": "Countries ranked by their latest available GDP per capita value in the static IMF dataset.",
@@ -29,7 +27,6 @@ RANKING_TYPES = [
     {
         "directory": "real-gdp-growth",
         "title": "Real GDP Growth Ranking by Country",
-        "nav_label": "Real GDP Growth Ranking",
         "script": "realGdpGrowthRanking.js",
         "table_title": "Real GDP Growth Ranking",
         "subtitle": "Countries ranked by their latest available real GDP growth rate in the static IMF dataset.",
@@ -37,7 +34,6 @@ RANKING_TYPES = [
     {
         "directory": "ppp",
         "title": "PPP Ranking by Country",
-        "nav_label": "PPP Ranking",
         "script": "pppRanking.js",
         "table_title": "PPP Ranking",
         "subtitle": "Countries ranked by their latest available PPP GDP value in the static IMF dataset.",
@@ -45,7 +41,6 @@ RANKING_TYPES = [
     {
         "directory": "ppp-per-capita",
         "title": "PPP per Capita Ranking by Country",
-        "nav_label": "PPP per Capita Ranking",
         "script": "pppPerCapitaRanking.js",
         "table_title": "PPP per Capita Ranking",
         "subtitle": "Countries ranked by their latest available PPP GDP per capita value in the static IMF dataset.",
@@ -106,7 +101,6 @@ def write_ranking_page(ranking_type: dict[str, str], scope: dict[str, str], is_b
 def render_page(ranking_type: dict[str, str], scope: dict[str, str], is_base_page: bool) -> str:
     root_href = "../../" if is_base_page else "../../../"
     ranking_base_href = "./" if is_base_page else "../"
-    ranking_nav = render_ranking_nav(ranking_type, scope, is_base_page, root_href)
     page_title = f"{ranking_type['title']} - {scope['label']}"
 
     return f"""<!doctype html>
@@ -120,17 +114,19 @@ def render_page(ranking_type: dict[str, str], scope: dict[str, str], is_base_pag
   </head>
   <body
     data-root-href="{root_href}"
+    data-ranking-directory="{escape(ranking_type["directory"])}"
     data-ranking-base-href="{ranking_base_href}"
     data-ranking-scope-type="{escape(scope["type"])}"
     data-ranking-scope-id="{escape(scope["id"])}"
     data-ranking-scope-label="{escape(scope["label"])}"
     data-ranking-scope-slug="{escape(scope["slug"])}"
   >
+    <header class="site-header">
+      <a class="site-home-link" href="{root_href}">HOME</a>
+    </header>
     <main class="page-shell ranking-page">
       <section class="top-nav-card" aria-label="Site navigation">
-        <nav class="site-nav">
-{ranking_nav}
-        </nav>
+        <nav class="site-nav" id="rankingTopNav"></nav>
       </section>
 
       <section class="hub-section" aria-labelledby="ranking-title">
@@ -185,40 +181,6 @@ def render_page(ranking_type: dict[str, str], scope: dict[str, str], is_base_pag
   </body>
 </html>
 """
-
-
-def render_ranking_nav(
-    current_ranking_type: dict[str, str],
-    scope: dict[str, str],
-    is_base_page: bool,
-    root_href: str,
-) -> str:
-    links = [f'          <a href="{root_href}">Home</a>']
-
-    for ranking_type in RANKING_TYPES:
-        is_current = ranking_type["directory"] == current_ranking_type["directory"]
-        href = build_ranking_nav_href(ranking_type, scope, is_base_page, is_current)
-        current_attributes = ' class="is-current" aria-current="page"' if is_current else ""
-        links.append(
-            f'          <a href="{href}"{current_attributes}>{escape(ranking_type["nav_label"])}</a>'
-        )
-
-    return "\n".join(links)
-
-
-def build_ranking_nav_href(
-    ranking_type: dict[str, str],
-    scope: dict[str, str],
-    is_base_page: bool,
-    is_current: bool,
-) -> str:
-    if is_current:
-        return "./"
-
-    if is_base_page:
-        return f"../{ranking_type['directory']}/world/"
-
-    return f"../../{ranking_type['directory']}/{scope['slug']}/"
 
 
 def slugify(value: str) -> str:

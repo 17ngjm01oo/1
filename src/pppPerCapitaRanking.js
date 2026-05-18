@@ -3,6 +3,7 @@ import { filterCountriesByScope } from "./countryFilters.js";
 import { formatDisplayValue } from "./chart.js";
 import { getFlagEmoji } from "./flags.js";
 import { initializeRankingFilters } from "./rankingFilters.js";
+import "./rankingTopNav.js";
 import { getIndicatorSeriesMap } from "./seriesData.js";
 
 const pppPerCapitaDataUrl = new URL("../data/weo/current-prices.json", import.meta.url);

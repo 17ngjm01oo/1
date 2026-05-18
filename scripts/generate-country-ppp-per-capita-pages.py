@@ -49,12 +49,12 @@ def render_page(country: dict[str, str]) -> str:
     <script type="module" src="../../../src/countryIndicatorPage.js"></script>
   </head>
   <body data-country-code="{country_code}" data-page-kind="ppp-per-capita">
+    <header class="site-header">
+      <a class="site-home-link" href="../../../">HOME</a>
+    </header>
     <main class="page-shell">
       <section class="top-nav-card" aria-label="Site navigation">
-        <nav class="site-nav">
-          <a href="../../../">Home</a>
-          <a href="../../../rankings/ppp-per-capita/world/">PPP per Capita Ranking</a>
-        </nav>
+        <nav class="site-nav"></nav>
       </section>
 
       <section class="hub-section" aria-labelledby="country-hub-title">
