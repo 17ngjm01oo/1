@@ -419,6 +419,8 @@ function renderCompareResults(seriesId, query) {
     return;
   }
 
+  placeCompareResultsElement(seriesId, "search");
+
   const matchingCountries = filterCountries(normalizedQuery).filter((country) => {
     return country.code !== selectedCountry.code;
   });
@@ -787,6 +789,7 @@ function hideCompareResults(seriesId) {
   if (results) {
     results.hidden = true;
     results.innerHTML = "";
+    placeCompareResultsElement(seriesId);
   }
 
   if (state) {
@@ -807,6 +810,29 @@ function getCompareElements(seriesId) {
     selected: document.querySelector(`#${seriesId}CompareSelected`),
     removeButton: document.querySelector(`#${seriesId}CompareRemove`),
   };
+}
+
+function placeCompareResultsElement(seriesId, mode) {
+  const { input, results } = getCompareElements(seriesId);
+  const inputWrap = input?.closest(".compare-input-wrap");
+  const control = input?.closest(".compare-control");
+
+  if (!results || !control) {
+    return;
+  }
+
+  if (mode === "search" && inputWrap) {
+    inputWrap.append(results);
+    return;
+  }
+
+  const selected = control.querySelector(".compare-selected");
+  if (selected) {
+    selected.after(results);
+    return;
+  }
+
+  control.append(results);
 }
 
 function clearDataTable(seriesConfig) {

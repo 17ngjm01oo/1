@@ -197,9 +197,7 @@ export function initializeCountrySelector({
     state.activeRegionId = null;
     updateRegionButtons();
     updateCategoryButtons();
-    resultsElement.hidden = false;
-    resultsElement.dataset.mode = "search";
-    searchInput.setAttribute("aria-expanded", "true");
+    setCountryResultsMode("search");
     renderCountryList(filterCountries(normalizedQuery), "No matching countries.");
   }
 
@@ -341,6 +339,7 @@ export function initializeCountrySelector({
     resultsElement.hidden = true;
     resultsElement.innerHTML = "";
     resultsElement.removeAttribute("data-mode");
+    placeCountryResultsElement();
     state.currentMatches = [];
     state.highlightedIndex = -1;
     searchInput.removeAttribute("aria-activedescendant");
@@ -356,6 +355,13 @@ export function initializeCountrySelector({
     const searchPanel = document.querySelector(searchPanelSelector);
 
     if (!searchPanel) {
+      return;
+    }
+
+    const searchInputWrap = searchPanel.querySelector(".search-input-wrap");
+
+    if (mode === "search" && searchInputWrap) {
+      searchInputWrap.append(resultsElement);
       return;
     }
 
@@ -443,15 +449,16 @@ export function initializeCountrySelector({
 
 export function filterCountries(query) {
   const normalizedQuery = normalizeSearchText(query);
-  const compactQuery = compactSearchText(normalizedQuery);
 
   if (!normalizedQuery) {
     return [];
   }
 
+  const queryVariants = getSearchVariants(normalizedQuery);
+
   return countries.filter((country) => {
     return getCountrySearchTerms(country).some((term) => {
-      return term.includes(normalizedQuery) || compactSearchText(term).includes(compactQuery);
+      return queryVariants.some((queryVariant) => matchesSearchTerm(term, queryVariant));
     });
   });
 }
@@ -475,6 +482,29 @@ function normalizeSearchText(value) {
     .replace(/[^a-z0-9]+/g, " ")
     .trim()
     .replace(/\s+/g, " ");
+}
+
+function stripLeadingThe(value) {
+  return value.replace(/^the\s+/, "").trim();
+}
+
+function matchesSearchTerm(term, query) {
+  const comparisons = [
+    [term, query],
+    [term, stripLeadingThe(query)],
+    [stripLeadingThe(term), query],
+    [stripLeadingThe(term), stripLeadingThe(query)],
+  ];
+
+  return comparisons.some(([searchTerm, searchQuery]) => {
+    if (!searchTerm || !searchQuery) {
+      return false;
+    }
+
+    const compactTerm = compactSearchText(searchTerm);
+    const compactQuery = compactSearchText(searchQuery);
+    return searchTerm.includes(searchQuery) || compactTerm.includes(compactQuery);
+  });
 }
 
 function getSearchVariants(value) {
