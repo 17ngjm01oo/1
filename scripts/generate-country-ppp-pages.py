@@ -61,7 +61,6 @@ def render_page(country: dict[str, str]) -> str:
         <header class="page-header">
           <h1 id="country-hub-title" class="page-title">PPP Chart by Country</h1>
           <p class="subtitle">Select a country to view historical PPP trends.</p>
-          <p class="source-label">Source: IMF World Economic Outlook.</p>
         </header>
 
         <div class="country-search-panel">

@@ -1,8 +1,17 @@
 export function appendRankingValueCell(valueCell, { href, text, ariaLabel, value, rankingRows }) {
   const valueLink = document.createElement("a");
   valueLink.href = href;
-  valueLink.textContent = text;
   valueLink.setAttribute("aria-label", ariaLabel);
+
+  const valueText = document.createElement("span");
+  valueText.textContent = text;
+
+  const valueArrow = document.createElement("span");
+  valueArrow.className = "ranking-value-link-arrow";
+  valueArrow.setAttribute("aria-hidden", "true");
+  valueArrow.textContent = "↗";
+
+  valueLink.append(valueText, valueArrow);
 
   const wrapper = document.createElement("div");
   wrapper.className = "ranking-value";
