@@ -83,12 +83,57 @@ body {
   gap: 8px;
 }
 
+.top-nav-group {
+  position: relative;
+  display: grid;
+  gap: 6px;
+  padding: 0 0 0 22px;
+}
+
+.top-nav-group::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  height: calc(0.72rem - 2px);
+  left: 7px;
+  width: 1px;
+  background: var(--border);
+}
+
 .top-nav-label {
   margin: 0;
   color: var(--muted);
   cursor: pointer;
   font-size: 1rem;
   font-weight: 700;
+}
+
+.top-nav-card > .top-nav-disclosure > .top-nav-label {
+  font-size: 1.12rem;
+}
+
+.top-nav-group > .top-nav-disclosure {
+  position: relative;
+}
+
+.top-nav-group > .top-nav-disclosure::before {
+  content: "";
+  position: absolute;
+  top: 0.72rem;
+  left: -15px;
+  width: 10px;
+  height: 1px;
+  background: var(--border);
+}
+
+.top-nav-group > .top-nav-disclosure:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 0.72rem;
+  bottom: calc(-6px - 0.72rem);
+  left: -15px;
+  width: 1px;
+  background: var(--border);
 }
 
 .top-nav-label::marker {
@@ -183,12 +228,22 @@ body {
   letter-spacing: 0;
 }
 
-.indicator-currency {
+.indicator-rank {
   margin: 0;
   color: var(--accent);
-  font-size: 0.82rem;
+  font-size: 0.94rem;
   font-weight: 700;
   letter-spacing: 0;
+}
+
+.indicator-rank a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.indicator-rank a:hover,
+.indicator-rank a:focus-visible {
+  text-decoration: underline;
 }
 
 .compare-control {
@@ -313,6 +368,12 @@ body {
 
 .home-rankings-card .category-panel {
   background: transparent;
+}
+
+.home-ranking-group {
+  display: grid;
+  gap: 6px;
+  padding: 0 0 10px 14px;
 }
 
 .home-ranking-links {
@@ -585,6 +646,10 @@ h1 {
   margin: 0;
 }
 
+.ranking-page-title {
+  font-size: clamp(1.35rem, 2.7vw, 1.9rem);
+}
+
 .subtitle {
   margin: 0;
   color: var(--muted);
@@ -840,7 +905,7 @@ h1 {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  font-size: 1rem;
+  font-size: 1.06rem;
 }
 
 .ranking-table th,
@@ -1070,7 +1135,7 @@ h1 {
   }
 
   .ranking-table {
-    font-size: 0.78rem;
+    font-size: 0.82rem;
   }
 
   .ranking-table th,
@@ -1109,6 +1174,10 @@ h1 {
 
   .page-title {
     font-size: clamp(1.38rem, 6.5vw, 1.75rem);
+  }
+
+  .ranking-page-title {
+    font-size: clamp(1.25rem, 5.8vw, 1.6rem);
   }
 
 }

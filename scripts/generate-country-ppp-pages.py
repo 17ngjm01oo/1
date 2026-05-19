@@ -5,6 +5,8 @@ import html
 import re
 from pathlib import Path
 
+from page_templates import render_rankings_top_nav
+
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 COUNTRIES_FILE = ROOT_DIR / "src" / "countries.js"
@@ -53,16 +55,7 @@ def render_page(country: dict[str, str]) -> str:
       <a class="site-home-link" href="../../../">HOME</a>
     </header>
     <main class="page-shell">
-      <section class="top-nav-card" aria-label="Site navigation">
-        <details class="top-nav-disclosure">
-          <summary class="top-nav-label">Economic Rankings</summary>
-          <nav class="site-nav" id="economicTopNav"></nav>
-        </details>
-        <details class="top-nav-disclosure">
-          <summary class="top-nav-label">Population Rankings</summary>
-          <nav class="site-nav" id="populationTopNav"></nav>
-        </details>
-      </section>
+{render_rankings_top_nav("economicTopNav")}
 
       <section class="hub-section" aria-labelledby="country-hub-title">
         <header class="page-header">
@@ -109,8 +102,7 @@ def render_page(country: dict[str, str]) -> str:
           <section class="indicator-block" aria-labelledby="ppp-title">
             <header class="indicator-header">
               <div class="indicator-title-group">
-                <h2 id="ppp-title">PPP GDP</h2>
-                <p class="indicator-currency" id="pppCurrency">Currency: international dollars</p>
+                <h2 id="ppp-title">PPP GDP - Int. $</h2>
               </div>
               <div class="compare-control" data-series-id="ppp">
                 <div class="compare-input-wrap">

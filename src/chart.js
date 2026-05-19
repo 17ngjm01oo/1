@@ -74,7 +74,6 @@ export function renderLineChart(canvas, { points, config, comparison = null }) {
           displayColors: false,
           callbacks: {
             label(context) {
-              const year = context.label;
               const value = formatNumber(context.parsed.y, displayScale.maximumFractionDigits);
               const prefix = displayScale.tooltipPrefix;
               const unit = displayScale.compactUnit
@@ -98,8 +97,7 @@ export function renderLineChart(canvas, { points, config, comparison = null }) {
       scales: {
         x: {
           title: {
-            display: true,
-            text: "Year",
+            display: false,
           },
           grid: {
             display: false,
@@ -112,14 +110,11 @@ export function renderLineChart(canvas, { points, config, comparison = null }) {
         },
         y: {
           title: {
-            display: true,
-            text: displayScale.unitLabel,
+            display: false,
           },
           ticks: {
             callback(value) {
-              const suffixSpacing = displayScale.suffixSpacing ?? (displayScale.suffix ? " " : "");
-              const suffix = displayScale.suffix ? `${suffixSpacing}${displayScale.suffix}` : "";
-              return `${displayScale.tickPrefix}${formatNumber(value, displayScale.maximumFractionDigits)}${suffix}`;
+              return formatAxisTickValue(value, displayScale);
             },
             maxTicksLimit: isCompactViewport ? 5 : 8,
           },
@@ -203,7 +198,6 @@ export function getDisplayScale(points, config) {
 
   return {
     valueScale: config.valueScale ?? 1,
-    unitLabel: config.unitLabel,
     tooltipPrefix: config.tooltipPrefix ?? "",
     tooltipUnit: config.tooltipUnit ?? "",
     tickPrefix: config.tickPrefix ?? "",
@@ -220,7 +214,6 @@ function getGdpDisplayScale(points) {
   if (maxRawValue >= 1000) {
     return {
       valueScale: 0.001,
-      unitLabel: "Trillions of U.S. dollars",
       tooltipPrefix: "$",
       tooltipUnit: "trillion",
       tickPrefix: "$",
@@ -232,7 +225,6 @@ function getGdpDisplayScale(points) {
   if (maxRawValue >= 1) {
     return {
       valueScale: 1,
-      unitLabel: "Billions of U.S. dollars",
       tooltipPrefix: "$",
       tooltipUnit: "billion",
       tickPrefix: "$",
@@ -243,7 +235,6 @@ function getGdpDisplayScale(points) {
 
   return {
     valueScale: 1000,
-    unitLabel: "Millions of U.S. dollars",
     tooltipPrefix: "$",
     tooltipUnit: "million",
     tickPrefix: "$",
@@ -258,7 +249,6 @@ function getInternationalDollarDisplayScale(points) {
   if (maxRawValue >= 1000) {
     return {
       valueScale: 0.001,
-      unitLabel: "Trillions of international dollars",
       tooltipPrefix: "$",
       tooltipUnit: "trillion",
       tickPrefix: "$",
@@ -270,7 +260,6 @@ function getInternationalDollarDisplayScale(points) {
   if (maxRawValue >= 1) {
     return {
       valueScale: 1,
-      unitLabel: "Billions of international dollars",
       tooltipPrefix: "$",
       tooltipUnit: "billion",
       tickPrefix: "$",
@@ -281,7 +270,6 @@ function getInternationalDollarDisplayScale(points) {
 
   return {
     valueScale: 1000,
-    unitLabel: "Millions of international dollars",
     tooltipPrefix: "$",
     tooltipUnit: "million",
     tickPrefix: "$",
@@ -298,7 +286,6 @@ function getNationalCurrencyDisplayScale(points, config) {
   if (maxRawValue >= 1000) {
     return {
       valueScale: 0.001,
-      unitLabel: `Trillions of ${currencyCode}`,
       tooltipPrefix: currencyDisplay.prefix,
       tooltipUnit: `trillion ${currencyCode}`,
       tickPrefix: currencyDisplay.prefix,
@@ -310,7 +297,6 @@ function getNationalCurrencyDisplayScale(points, config) {
   if (maxRawValue >= 1) {
     return {
       valueScale: 1,
-      unitLabel: `Billions of ${currencyCode}`,
       tooltipPrefix: currencyDisplay.prefix,
       tooltipUnit: `billion ${currencyCode}`,
       tickPrefix: currencyDisplay.prefix,
@@ -321,7 +307,6 @@ function getNationalCurrencyDisplayScale(points, config) {
 
   return {
     valueScale: 1000,
-    unitLabel: `Millions of ${currencyCode}`,
     tooltipPrefix: currencyDisplay.prefix,
     tooltipUnit: `million ${currencyCode}`,
     tickPrefix: currencyDisplay.prefix,
@@ -336,51 +321,43 @@ function getPopulationDisplayScale(points) {
   if (maxRawValue >= 1000000) {
     return {
       valueScale: 0.000001,
-      unitLabel: "T people",
       tooltipPrefix: "",
       tooltipUnit: "trillion people",
       tickPrefix: "",
       compactUnit: "T",
       maximumFractionDigits: 2,
-      currencyLabel: "",
     };
   }
 
   if (maxRawValue >= 1000) {
     return {
       valueScale: 0.001,
-      unitLabel: "B people",
       tooltipPrefix: "",
       tooltipUnit: "billion people",
       tickPrefix: "",
       compactUnit: "B",
       maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue * 0.001),
-      currencyLabel: "",
     };
   }
 
   if (maxRawValue >= 1) {
     return {
       valueScale: 1,
-      unitLabel: "M people",
       tooltipPrefix: "",
       tooltipUnit: "million people",
       tickPrefix: "",
       compactUnit: "M",
       maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue),
-      currencyLabel: "",
     };
   }
 
   return {
     valueScale: 1000000,
-    unitLabel: "People",
     tooltipPrefix: "",
     tooltipUnit: "",
     tickPrefix: "",
     compactUnit: "",
     maximumFractionDigits: 0,
-    currencyLabel: "",
   };
 }
 
@@ -400,6 +377,15 @@ function formatNumber(value, maximumFractionDigits = 1) {
   return new Intl.NumberFormat("en-US", {
     maximumFractionDigits,
   }).format(value);
+}
+
+function formatAxisTickValue(value, displayScale) {
+  const formattedValue = formatNumber(value, displayScale.maximumFractionDigits);
+  const compactUnit = displayScale.compactUnit ?? "";
+  const suffixSpacing = displayScale.suffixSpacing ?? (displayScale.suffix ? " " : "");
+  const suffix = displayScale.suffix ? `${suffixSpacing}${displayScale.suffix}` : "";
+
+  return `${displayScale.tickPrefix}${formattedValue}${compactUnit}${suffix}`;
 }
 
 export function formatDisplayValue(value, displayScale) {

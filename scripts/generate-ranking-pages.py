@@ -4,6 +4,8 @@ import html
 import re
 from pathlib import Path
 
+from page_templates import render_rankings_top_nav
+
 
 ROOT = Path(__file__).resolve().parents[1]
 COUNTRIES_JS = ROOT / "src" / "countries.js"
@@ -109,6 +111,7 @@ def render_page(ranking_type: dict[str, str], scope: dict[str, str], is_base_pag
     root_href = "../../" if is_base_page else "../../../"
     ranking_base_href = "./" if is_base_page else "../"
     page_title = f"{ranking_type['title']} - {scope['label']}"
+    heading_title = ranking_type["title"]
 
     return f"""<!doctype html>
 <html lang="en">
@@ -132,20 +135,11 @@ def render_page(ranking_type: dict[str, str], scope: dict[str, str], is_base_pag
       <a class="site-home-link" href="{root_href}">HOME</a>
     </header>
     <main class="page-shell ranking-page">
-      <section class="top-nav-card" aria-label="Site navigation">
-        <details class="top-nav-disclosure">
-          <summary class="top-nav-label">Economic Rankings</summary>
-          <nav class="site-nav" id="rankingTopNav"></nav>
-        </details>
-        <details class="top-nav-disclosure">
-          <summary class="top-nav-label">Population Rankings</summary>
-          <nav class="site-nav" id="populationTopNav"></nav>
-        </details>
-      </section>
+{render_rankings_top_nav("rankingTopNav")}
 
       <section class="hub-section" aria-labelledby="ranking-title">
         <header class="page-header">
-          <h1 id="ranking-title" class="page-title">{escape(page_title)}</h1>
+          <h1 id="ranking-title" class="page-title ranking-page-title">{escape(heading_title)}</h1>
           <p class="subtitle">{escape(ranking_type["subtitle"])}</p>
         </header>
 
@@ -173,15 +167,6 @@ def render_page(ranking_type: dict[str, str], scope: dict[str, str], is_base_pag
 
         <div class="ranking-table-wrap">
           <table class="ranking-table">
-            <thead>
-              <tr>
-                <th scope="col">Rank</th>
-                <th scope="col">Flag</th>
-                <th scope="col">Country</th>
-                <th scope="col">Value</th>
-                <th scope="col">Year</th>
-              </tr>
-            </thead>
             <tbody id="rankingTableBody"></tbody>
           </table>
         </div>

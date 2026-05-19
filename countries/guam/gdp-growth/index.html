@@ -15,12 +15,17 @@
     <main class="page-shell">
       <section class="top-nav-card" aria-label="Site navigation">
         <details class="top-nav-disclosure">
-          <summary class="top-nav-label">Economic Rankings</summary>
-          <nav class="site-nav" id="economicTopNav"></nav>
-        </details>
-        <details class="top-nav-disclosure">
-          <summary class="top-nav-label">Population Rankings</summary>
-          <nav class="site-nav" id="populationTopNav"></nav>
+          <summary class="top-nav-label">Country Rankings</summary>
+          <div class="top-nav-group">
+            <details class="top-nav-disclosure">
+              <summary class="top-nav-label">Economic Rankings</summary>
+              <nav class="site-nav" id="economicTopNav"></nav>
+            </details>
+            <details class="top-nav-disclosure">
+              <summary class="top-nav-label">Population Rankings</summary>
+              <nav class="site-nav" id="populationTopNav"></nav>
+            </details>
+          </div>
         </details>
       </section>
 
@@ -70,7 +75,6 @@
             <header class="indicator-header">
               <div class="indicator-title-group">
                 <h2 id="gdpGrowth-title">Real GDP Growth Rate</h2>
-                <p class="indicator-currency" id="gdpGrowthCurrency" hidden></p>
               </div>
               <div class="compare-control" data-series-id="gdpGrowth">
                 <div class="compare-input-wrap">

@@ -15,12 +15,17 @@
     <main class="page-shell">
       <section class="top-nav-card" aria-label="Site navigation">
         <details class="top-nav-disclosure">
-          <summary class="top-nav-label">Economic Rankings</summary>
-          <nav class="site-nav" id="economicTopNav"></nav>
-        </details>
-        <details class="top-nav-disclosure">
-          <summary class="top-nav-label">Population Rankings</summary>
-          <nav class="site-nav" id="populationTopNav"></nav>
+          <summary class="top-nav-label">Country Rankings</summary>
+          <div class="top-nav-group">
+            <details class="top-nav-disclosure">
+              <summary class="top-nav-label">Economic Rankings</summary>
+              <nav class="site-nav" id="economicTopNav"></nav>
+            </details>
+            <details class="top-nav-disclosure">
+              <summary class="top-nav-label">Population Rankings</summary>
+              <nav class="site-nav" id="populationTopNav"></nav>
+            </details>
+          </div>
         </details>
       </section>
 
@@ -69,8 +74,7 @@
           <section class="indicator-block" aria-labelledby="gdp-title">
             <header class="indicator-header">
               <div class="indicator-title-group">
-                <h2 id="gdp-title">Nominal GDP</h2>
-                <p class="indicator-currency" id="gdpCurrency">Currency: USD</p>
+                <h2 id="gdp-title">Nominal GDP - USD</h2>
               </div>
               <div class="compare-control" data-series-id="gdp">
                 <div class="compare-input-wrap">
@@ -109,7 +113,6 @@
             <header class="indicator-header">
               <div class="indicator-title-group">
                 <h2 id="gdpNational-title">Nominal GDP</h2>
-                <p class="indicator-currency" id="gdpNationalCurrency">Currency: local</p>
               </div>
             </header>
 
@@ -128,7 +131,6 @@
             <header class="indicator-header">
               <div class="indicator-title-group">
                 <h2 id="realGdp-title">Real GDP</h2>
-                <p class="indicator-currency" id="realGdpCurrency">Currency: local</p>
               </div>
             </header>
 

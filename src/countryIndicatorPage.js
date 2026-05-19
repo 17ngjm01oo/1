@@ -98,6 +98,16 @@ const comparableSeriesIds = new Set([
   "ppp",
   "pppPerCapita",
 ]);
+const rankedSeriesIds = new Set(comparableSeriesIds);
+const rankingDirectoryBySeriesId = {
+  gdp: "nominal-gdp",
+  gdpPerCapita: "nominal-gdp-per-capita",
+  gdpGrowth: "real-gdp-growth",
+  inflationRate: "inflation-rate",
+  population: "population",
+  ppp: "ppp",
+  pppPerCapita: "ppp-per-capita",
+};
 const seriesRuntimeState = new Map();
 
 initializePage().catch((error) => {
@@ -154,9 +164,6 @@ function buildCountrySeriesConfig(seriesConfig, country) {
   const currencyCode = seriesConfig.usesCountryCurrency
     ? getCurrencyCode(country.code)
     : seriesConfig.currencyCode;
-  const currencyLabel = seriesConfig.usesCountryCurrency
-    ? formatCountryCurrencyLabel(currencyCode, seriesConfig)
-    : seriesConfig.currencyLabel;
   const currencyDisplay = getCurrencyDisplay({
     ...seriesConfig,
     currencyCode,
@@ -167,37 +174,30 @@ function buildCountrySeriesConfig(seriesConfig, country) {
     staticDataPath: "../../../data/weo/current-prices.json",
     countryCode: country.code,
     countryName: country.name,
-    chartTitle: seriesConfig.titleTemplate,
+    chartTitle: getSeriesChartTitle(seriesConfig, currencyCode),
     currencyCode,
     currencyDisplay,
-    currencyLabel,
-    unitLabel: getSeriesUnitLabel(seriesConfig, currencyCode),
     tooltipPrefix: currencyDisplay.prefix || seriesConfig.tooltipPrefix,
     tickPrefix: currencyDisplay.prefix || seriesConfig.tickPrefix,
     suffix: seriesConfig.usesCountryCurrency ? currencyDisplay.suffix : seriesConfig.suffix,
   };
 }
 
-function formatCountryCurrencyLabel(currencyCode, seriesConfig) {
-  const baseCurrency = currencyCode || "N/A";
+function getSeriesChartTitle(seriesConfig, currencyCode) {
+  const title = seriesConfig.titleTemplate;
+  const isGdpCurrencySeries =
+    title.includes("GDP") &&
+    (seriesConfig.usesCountryCurrency || seriesConfig.currencyCode);
 
-  if (seriesConfig.currencyBasisLabel) {
-    return `Currency: ${baseCurrency}, ${seriesConfig.currencyBasisLabel}`;
+  if (!isGdpCurrencySeries || !currencyCode) {
+    return title;
   }
 
-  return `Currency: ${baseCurrency}`;
+  return `${title} - ${formatTitleCurrencyCode(currencyCode)}`;
 }
 
-function getSeriesUnitLabel(seriesConfig, currencyCode) {
-  if (!seriesConfig.usesCountryCurrency || !currencyCode) {
-    return seriesConfig.unitLabel;
-  }
-
-  if (seriesConfig.id === "gdpNationalPerCapita" || seriesConfig.id === "realGdpPerCapita") {
-    return `${currencyCode} per person`;
-  }
-
-  return seriesConfig.unitLabel;
+function formatTitleCurrencyCode(currencyCode) {
+  return currencyCode === "INT$" ? "Int. $" : currencyCode;
 }
 
 function updateCountryHeading(country) {
@@ -249,15 +249,10 @@ function updateRelatedPageLinks() {
 function updateSeriesHeadings(countrySeriesConfigs) {
   countrySeriesConfigs.forEach((seriesConfig) => {
     const titleElement = document.querySelector(`#${seriesConfig.id}-title`);
-    const currencyElement = document.querySelector(`#${seriesConfig.id}Currency`);
     const canvas = document.querySelector(`#${seriesConfig.canvasId}`);
 
     if (titleElement) {
       titleElement.textContent = seriesConfig.chartTitle;
-    }
-
-    if (currencyElement) {
-      setCurrencyLabel(currencyElement, seriesConfig.currencyLabel ?? "");
     }
 
     if (canvas) {
@@ -353,6 +348,7 @@ async function loadAndRenderSeries(seriesConfig) {
     if (points.length === 0) {
       clearLineChart(canvas);
       renderNoDataTable(seriesConfig);
+      updateGlobalRankLabel(seriesConfig, null);
       if (state) {
         state.mainPoints = [];
         state.hasMainData = false;
@@ -375,7 +371,7 @@ async function loadAndRenderSeries(seriesConfig) {
       points,
       config: seriesConfig,
     });
-    updateSeriesScaleLabel(seriesConfig, points);
+    updateGlobalRankLabel(seriesConfig, getGlobalRank(data, seriesConfig));
     if (state) {
       state.mainPoints = points;
       state.hasMainData = true;
@@ -386,6 +382,7 @@ async function loadAndRenderSeries(seriesConfig) {
   } catch (error) {
     clearLineChart(canvas);
     renderNoDataTable(seriesConfig);
+    updateGlobalRankLabel(seriesConfig, null);
     const state = seriesRuntimeState.get(seriesConfig.id);
     if (state) {
       state.mainPoints = [];
@@ -597,7 +594,6 @@ async function loadComparisonSeries(seriesId, requestId) {
       points: comparisonPoints,
     },
   });
-  updateSeriesScaleLabel(state.mainConfig, state.mainPoints, comparisonPoints);
   updateCompareSelectionUi(seriesId);
 }
 
@@ -634,23 +630,119 @@ function renderMainSeriesOnly(seriesId) {
     points: state.mainPoints,
     config: state.mainConfig,
   });
-  updateSeriesScaleLabel(state.mainConfig, state.mainPoints);
 }
 
-function updateSeriesScaleLabel(seriesConfig, points, comparisonPoints = []) {
-  const currencyElement = document.querySelector(`#${seriesConfig.id}Currency`);
+function updateGlobalRankLabel(seriesConfig, rank) {
+  const rankElement = getOrCreateGlobalRankElement(seriesConfig);
 
-  if (!currencyElement) {
+  if (!rankElement) {
     return;
   }
 
-  const displayScale = getDisplayScale([...points, ...comparisonPoints], seriesConfig);
-  setCurrencyLabel(currencyElement, displayScale.currencyLabel ?? seriesConfig.currencyLabel ?? "");
+  rankElement.innerHTML = "";
+
+  if (rank) {
+    const rankLink = document.createElement("a");
+    rankLink.href = getRankingHref(seriesConfig);
+    rankLink.textContent = `Global rank: #${rank} ↗`;
+    rankElement.append(rankLink);
+  }
+
+  rankElement.hidden = !rank;
 }
 
-function setCurrencyLabel(currencyElement, label) {
-  currencyElement.textContent = label;
-  currencyElement.hidden = !label;
+function getOrCreateGlobalRankElement(seriesConfig) {
+  if (!rankedSeriesIds.has(seriesConfig.id)) {
+    return null;
+  }
+
+  const titleElement = document.querySelector(`#${seriesConfig.id}-title`);
+  const titleGroup = titleElement?.closest(".indicator-title-group");
+
+  if (!titleElement || !titleGroup) {
+    return null;
+  }
+
+  const rankElementId = `${seriesConfig.id}GlobalRank`;
+  let rankElement = document.querySelector(`#${rankElementId}`);
+
+  if (!rankElement) {
+    rankElement = document.createElement("p");
+    rankElement.id = rankElementId;
+    rankElement.className = "indicator-rank";
+    rankElement.hidden = true;
+    titleElement.after(rankElement);
+  }
+
+  return rankElement;
+}
+
+function getRankingHref(seriesConfig) {
+  const rankingDirectory = rankingDirectoryBySeriesId[seriesConfig.id];
+  return rankingDirectory ? `../../../rankings/${rankingDirectory}/world/` : "../../../";
+}
+
+function getGlobalRank(data, seriesConfig) {
+  if (!rankedSeriesIds.has(seriesConfig.id) || selectedCountry.includeInRankings === false) {
+    return null;
+  }
+
+  const rankingRows = countries
+    .filter((country) => country.includeInRankings !== false)
+    .map((country) => {
+      const latestPoint = getLatestNumericPoint(
+        data?.economies?.[country.code]?.series?.[seriesConfig.indicatorCode]?.values,
+        seriesConfig,
+      );
+
+      return latestPoint ? { countryCode: country.code, value: latestPoint.value } : null;
+    })
+    .filter(Boolean)
+    .sort((rowA, rowB) => rowB.value - rowA.value);
+
+  const rowIndex = rankingRows.findIndex((row) => row.countryCode === selectedCountry.code);
+
+  return rowIndex >= 0 ? rowIndex + 1 : null;
+}
+
+function getLatestNumericPoint(series, seriesConfig) {
+  if (!series || typeof series !== "object" || Array.isArray(series)) {
+    return null;
+  }
+
+  const points = Object.entries(series)
+    .map(([yearKey, value]) => ({
+      year: Number.parseInt(yearKey, 10),
+      value: normalizeNumericValue(value),
+    }))
+    .filter(({ year, value }) => {
+      return (
+        Number.isInteger(year) &&
+        year >= seriesConfig.startYear &&
+        year <= seriesConfig.endYear &&
+        Number.isFinite(value)
+      );
+    })
+    .sort((pointA, pointB) => pointB.year - pointA.year);
+
+  return points[0] ?? null;
+}
+
+function normalizeNumericValue(value) {
+  if (value === null || value === undefined || value === "") {
+    return null;
+  }
+
+  if (typeof value === "number") {
+    return Number.isFinite(value) ? value : null;
+  }
+
+  if (typeof value === "string") {
+    const normalized = Number.parseFloat(value.replaceAll(",", ""));
+    return Number.isFinite(normalized) ? normalized : null;
+  }
+
+  return null;
 }
 
 function updateCompareAvailability(seriesId) {

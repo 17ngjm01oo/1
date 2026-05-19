@@ -22,18 +22,23 @@
     <main class="page-shell ranking-page">
       <section class="top-nav-card" aria-label="Site navigation">
         <details class="top-nav-disclosure">
-          <summary class="top-nav-label">Economic Rankings</summary>
-          <nav class="site-nav" id="rankingTopNav"></nav>
-        </details>
-        <details class="top-nav-disclosure">
-          <summary class="top-nav-label">Population Rankings</summary>
-          <nav class="site-nav" id="populationTopNav"></nav>
+          <summary class="top-nav-label">Country Rankings</summary>
+          <div class="top-nav-group">
+            <details class="top-nav-disclosure">
+              <summary class="top-nav-label">Economic Rankings</summary>
+              <nav class="site-nav" id="rankingTopNav"></nav>
+            </details>
+            <details class="top-nav-disclosure">
+              <summary class="top-nav-label">Population Rankings</summary>
+              <nav class="site-nav" id="populationTopNav"></nav>
+            </details>
+          </div>
         </details>
       </section>
 
       <section class="hub-section" aria-labelledby="ranking-title">
         <header class="page-header">
-          <h1 id="ranking-title" class="page-title">Inflation Rate Ranking by Country - OECD</h1>
+          <h1 id="ranking-title" class="page-title ranking-page-title">Inflation Rate Ranking by Country</h1>
           <p class="subtitle">Inflation rate is the annual percentage change in the consumer price index.</p>
         </header>
 
@@ -61,15 +66,6 @@
 
         <div class="ranking-table-wrap">
           <table class="ranking-table">
-            <thead>
-              <tr>
-                <th scope="col">Rank</th>
-                <th scope="col">Flag</th>
-                <th scope="col">Country</th>
-                <th scope="col">Value</th>
-                <th scope="col">Year</th>
-              </tr>
-            </thead>
             <tbody id="rankingTableBody"></tbody>
           </table>
         </div>
