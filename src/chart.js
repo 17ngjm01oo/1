@@ -209,7 +209,7 @@ export function getDisplayScale(points, config) {
 }
 
 function getGdpDisplayScale(points) {
-  const maxRawValue = Math.max(...points.map((point) => point.value));
+  const maxRawValue = Math.max(...points.map((point) => Math.abs(point.value)));
 
   if (maxRawValue >= 1000) {
     return {
@@ -244,7 +244,7 @@ function getGdpDisplayScale(points) {
 }
 
 function getInternationalDollarDisplayScale(points) {
-  const maxRawValue = Math.max(...points.map((point) => point.value));
+  const maxRawValue = Math.max(...points.map((point) => Math.abs(point.value)));
 
   if (maxRawValue >= 1000) {
     return {
@@ -281,7 +281,7 @@ function getInternationalDollarDisplayScale(points) {
 function getNationalCurrencyDisplayScale(points, config) {
   const currencyCode = config.currencyCode || "local currency";
   const currencyDisplay = getCurrencyDisplay(config);
-  const maxRawValue = Math.max(...points.map((point) => point.value));
+  const maxRawValue = Math.max(...points.map((point) => Math.abs(point.value)));
 
   if (maxRawValue >= 1000) {
     return {

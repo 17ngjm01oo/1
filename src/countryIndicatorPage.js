@@ -6,6 +6,7 @@ import { getCurrencyDisplay } from "./currencyDisplay.js";
 import { renderEconomicRankingLinks } from "./economicRankings.js";
 import { getFlagEmoji } from "./flags.js";
 import { renderPopulationRankingLinks } from "./populationRankings.js";
+import { renderTradeRankingLinks } from "./tradeRankings.js";
 import { buildStaticDataRequestUrls, fetchStaticData } from "./staticData.js";
 import { transformSeriesData } from "./transform.js";
 import { clearLineChart, formatCompactDisplayValue, getDisplayScale, renderLineChart } from "./chart.js";
@@ -51,6 +52,22 @@ const pageDefinitions = {
     seriesIds: ["population"],
     tableValueHeader: "Population",
   },
+  employment: {
+    logPrefix: "Employment page",
+    group: "population",
+    documentTitleMetric: "Employment",
+    pathSegment: "employment",
+    seriesIds: ["employment"],
+    tableValueHeader: "Employment",
+  },
+  "unemployment-rate": {
+    logPrefix: "Unemployment rate page",
+    group: "population",
+    documentTitleMetric: "Unemployment Rate",
+    pathSegment: "unemployment-rate",
+    seriesIds: ["unemploymentRate"],
+    tableValueHeader: "Unemployment Rate",
+  },
   ppp: {
     logPrefix: "PPP page",
     group: "economic",
@@ -67,6 +84,22 @@ const pageDefinitions = {
     seriesIds: ["pppPerCapita"],
     tableValueHeader: "PPP per capita",
   },
+  "current-account-balance": {
+    logPrefix: "Current account balance page",
+    group: "trade",
+    documentTitleMetric: "Current Account Balance",
+    pathSegment: "current-account-balance",
+    seriesIds: ["currentAccountBalance"],
+    tableValueHeader: "Current Account Balance",
+  },
+  "current-account-balance-percent-gdp": {
+    logPrefix: "Current account balance percent of GDP page",
+    group: "trade",
+    documentTitleMetric: "Current Account Balance Percent of GDP",
+    pathSegment: "current-account-balance-percent-gdp",
+    seriesIds: ["currentAccountBalancePercentGdp"],
+    tableValueHeader: "Current Account Balance Percent of GDP",
+  },
 };
 const countryIndicatorLinks = [
   { pageKind: "gdp", href: "../gdp/", label: "GDP" },
@@ -78,10 +111,21 @@ const countryIndicatorLinks = [
 ];
 const populationIndicatorLinks = [
   { pageKind: "population", href: "../population/", label: "Population" },
+  { pageKind: "employment", href: "../employment/", label: "Employment" },
+  { pageKind: "unemployment-rate", href: "../unemployment-rate/", label: "Unemployment Rate" },
+];
+const tradeIndicatorLinks = [
+  { pageKind: "current-account-balance", href: "../current-account-balance/", label: "Current Account Balance" },
+  {
+    pageKind: "current-account-balance-percent-gdp",
+    href: "../current-account-balance-percent-gdp/",
+    label: "Current Account Balance Percent of GDP",
+  },
 ];
 const countryIndicatorLinksByGroup = {
   economic: countryIndicatorLinks,
   population: populationIndicatorLinks,
+  trade: tradeIndicatorLinks,
 };
 const pageKind = pageDefinitions[document.body.dataset.pageKind] ? document.body.dataset.pageKind : "gdp";
 const pageDefinition = pageDefinitions[pageKind];
@@ -95,8 +139,12 @@ const comparableSeriesIds = new Set([
   "gdpGrowth",
   "inflationRate",
   "population",
+  "employment",
+  "unemploymentRate",
   "ppp",
   "pppPerCapita",
+  "currentAccountBalance",
+  "currentAccountBalancePercentGdp",
 ]);
 const rankedSeriesIds = new Set(comparableSeriesIds);
 const rankingDirectoryBySeriesId = {
@@ -105,8 +153,12 @@ const rankingDirectoryBySeriesId = {
   gdpGrowth: "real-gdp-growth",
   inflationRate: "inflation-rate",
   population: "population",
+  employment: "employment",
+  unemploymentRate: "unemployment-rate",
   ppp: "ppp",
   pppPerCapita: "ppp-per-capita",
+  currentAccountBalance: "current-account-balance",
+  currentAccountBalancePercentGdp: "current-account-balance-percent-gdp",
 };
 const seriesRuntimeState = new Map();
 
@@ -155,6 +207,11 @@ function updateTopRankingLinks() {
   });
 
   renderPopulationRankingLinks(document.querySelector("#populationTopNav"), {
+    rootHref: "../../../",
+    highlightCurrent: false,
+  });
+
+  renderTradeRankingLinks(document.querySelector("#tradeTopNav"), {
     rootHref: "../../../",
     highlightCurrent: false,
   });

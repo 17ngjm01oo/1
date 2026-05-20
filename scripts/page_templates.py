@@ -14,6 +14,10 @@ def render_rankings_top_nav(economic_nav_id: str) -> str:
               <summary class="top-nav-label">Population Rankings</summary>
               <nav class="site-nav" id="populationTopNav"></nav>
             </details>
+            <details class="top-nav-disclosure">
+              <summary class="top-nav-label">Trade Rankings</summary>
+              <nav class="site-nav" id="tradeTopNav"></nav>
+            </details>
           </div>
         </details>
       </section>"""

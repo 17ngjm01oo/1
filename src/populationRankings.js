@@ -3,6 +3,14 @@ export const populationRankings = [
     directory: "population",
     label: "Population Ranking",
   },
+  {
+    directory: "employment",
+    label: "Employment Ranking",
+  },
+  {
+    directory: "unemployment-rate",
+    label: "Unemployment Rate Ranking",
+  },
 ];
 
 export function renderPopulationRankingLinks(

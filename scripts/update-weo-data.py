@@ -57,6 +57,14 @@ TARGET_INDICATORS = {
         "label": "Population",
         "description": "Population, Persons",
     },
+    "LE": {
+        "label": "Employment",
+        "description": "Employment, Persons",
+    },
+    "LUR": {
+        "label": "Unemployment Rate",
+        "description": "Unemployment rate, Percent of total labor force",
+    },
     "NGDPRPC": {
         "label": "Real GDP per capita, constant prices",
         "description": "Gross domestic product (GDP), Constant prices, Per capita, domestic currency",
@@ -68,6 +76,14 @@ TARGET_INDICATORS = {
     "PPPPC": {
         "label": "GDP per capita, current prices, purchasing power parity",
         "description": "Gross domestic product based on purchasing-power-parity (PPP) per capita GDP, current international dollar",
+    },
+    "BCA": {
+        "label": "Current Account Balance",
+        "description": "Current account balance, US dollar",
+    },
+    "BCA_NGDPD": {
+        "label": "Current Account Balance Percent of GDP",
+        "description": "Current account balance, Percent of GDP",
     },
 }
 SHEET_NAMES = ("Countries", "Country Groups")
