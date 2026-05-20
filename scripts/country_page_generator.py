@@ -31,7 +31,8 @@ class CountryPageConfig:
     indicators: tuple[IndicatorBlockConfig, ...]
     related_nav_label: str = "Country page navigation"
     notes_label: str = "Chart notes"
-    data_note: str = "Data may include IMF estimates and projections."
+    source_note: str | None = None
+    data_note: str = ""
 
 
 def generate_country_pages(config: CountryPageConfig) -> None:
@@ -61,6 +62,7 @@ def render_country_page(country: dict[str, str], config: CountryPageConfig) -> s
     country_name = html.escape(country["name"])
     country_code = html.escape(country["code"])
     indicator_blocks = "\n\n".join(render_indicator_block(indicator) for indicator in config.indicators)
+    notes_markup = render_notes(config)
 
     return f"""<!doctype html>
 <html lang="en">
@@ -122,16 +124,22 @@ def render_country_page(country: dict[str, str], config: CountryPageConfig) -> s
 
 {indicator_blocks}
 
-          <footer class="shared-notes" aria-label="{html.escape(config.notes_label)}">
-            <p>Source: IMF World Economic Outlook.</p>
-            <p>{html.escape(config.data_note)}</p>
-          </footer>
+{notes_markup}
         </div>
       </section>
     </main>
   </body>
 </html>
 """
+
+
+def render_notes(config: CountryPageConfig) -> str:
+    notes = [note for note in (config.source_note, config.data_note) if note]
+    notes_markup = "\n".join(f"            <p>{html.escape(note)}</p>" for note in notes)
+
+    return f"""          <footer class="shared-notes" aria-label="{html.escape(config.notes_label)}">
+{notes_markup}
+          </footer>"""
 
 
 def render_indicator_block(indicator: IndicatorBlockConfig) -> str:

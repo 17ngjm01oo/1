@@ -101,6 +101,30 @@ const pageDefinitions = {
     seriesIds: ["currentAccountBalancePercentGdp"],
     tableValueHeader: "Current Account Balance Percent of GDP",
   },
+  "goods-exports": {
+    logPrefix: "Goods exports page",
+    group: "trade",
+    documentTitleMetric: "Goods Exports",
+    pathSegment: "goods-exports",
+    seriesIds: ["goodsExports"],
+    tableValueHeader: "Goods Exports",
+  },
+  "goods-imports": {
+    logPrefix: "Goods imports page",
+    group: "trade",
+    documentTitleMetric: "Goods Imports",
+    pathSegment: "goods-imports",
+    seriesIds: ["goodsImports"],
+    tableValueHeader: "Goods Imports",
+  },
+  "goods-trade-balance": {
+    logPrefix: "Goods trade balance page",
+    group: "trade",
+    documentTitleMetric: "Goods Trade Balance",
+    pathSegment: "goods-trade-balance",
+    seriesIds: ["goodsTradeBalance"],
+    tableValueHeader: "Goods Trade Balance",
+  },
   "government-gross-debt": {
     logPrefix: "Government gross debt page",
     group: "fiscal",
@@ -170,6 +194,9 @@ const tradeIndicatorLinks = [
     href: "../current-account-balance-percent-gdp/",
     label: "Current Account Balance Percent of GDP",
   },
+  { pageKind: "goods-exports", href: "../goods-exports/", label: "Goods Exports" },
+  { pageKind: "goods-imports", href: "../goods-imports/", label: "Goods Imports" },
+  { pageKind: "goods-trade-balance", href: "../goods-trade-balance/", label: "Goods Trade Balance" },
 ];
 const fiscalIndicatorLinks = [
   { pageKind: "government-gross-debt", href: "../government-gross-debt/", label: "Government Gross Debt" },
@@ -203,6 +230,9 @@ const comparableSeriesIds = new Set([
   "pppPerCapita",
   "currentAccountBalance",
   "currentAccountBalancePercentGdp",
+  "goodsExports",
+  "goodsImports",
+  "goodsTradeBalance",
   "governmentGrossDebt",
   "governmentNetDebt",
   "fiscalBalance",
@@ -223,6 +253,9 @@ const rankingDirectoryBySeriesId = {
   pppPerCapita: "ppp-per-capita",
   currentAccountBalance: "current-account-balance",
   currentAccountBalancePercentGdp: "current-account-balance-percent-gdp",
+  goodsExports: "goods-exports",
+  goodsImports: "goods-imports",
+  goodsTradeBalance: "goods-trade-balance",
   governmentGrossDebt: "government-gross-debt",
   governmentNetDebt: "government-net-debt",
   fiscalBalance: "fiscal-balance",
@@ -303,7 +336,7 @@ function buildCountrySeriesConfig(seriesConfig, country) {
 
   return {
     ...seriesConfig,
-    staticDataPath: "../../../data/weo/current-prices.json",
+    staticDataPath: getCountryPageStaticDataPath(seriesConfig),
     countryCode: country.code,
     countryName: country.name,
     chartTitle: getSeriesChartTitle(seriesConfig, currencyCode),
@@ -313,6 +346,14 @@ function buildCountrySeriesConfig(seriesConfig, country) {
     tickPrefix: currencyDisplay.prefix || seriesConfig.tickPrefix,
     suffix: seriesConfig.usesCountryCurrency ? currencyDisplay.suffix : seriesConfig.suffix,
   };
+}
+
+function getCountryPageStaticDataPath(seriesConfig) {
+  if (!seriesConfig.staticDataPath) {
+    throw new Error(`staticDataPath is required for ${seriesConfig.id}.`);
+  }
+
+  return seriesConfig.staticDataPath.replace(/^\.\//, "../../../");
 }
 
 function getSeriesChartTitle(seriesConfig, currencyCode) {

@@ -218,7 +218,6 @@ export const currencyCodesByCountry = {
   URY: "UYU",
   USA: "USD",
   UZB: "UZS",
-  UVK: "EUR",
   VAT: "EUR",
   VCT: "XCD",
   VEN: "VES",

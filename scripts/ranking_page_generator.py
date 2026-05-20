@@ -67,6 +67,14 @@ def render_ranking_page(ranking_type: dict[str, str], scope: dict[str, str], is_
     page_title = f"{ranking_type['title']} - {scope['label']}"
     subtitle = ranking_type.get("subtitle", "")
     subtitle_markup = f'\n          <p class="subtitle">{escape(subtitle)}</p>' if subtitle else ""
+    source_note = ranking_type.get("source_note", "")
+    data_note = ranking_type.get("data_note", "")
+    exclusion_note = ranking_type.get("exclusion_note", "")
+    notes_markup = "\n".join(
+        f"          <p>{escape(note)}</p>"
+        for note in (source_note, data_note, exclusion_note)
+        if note
+    )
 
     return f"""<!doctype html>
 <html lang="en">
@@ -126,9 +134,7 @@ def render_ranking_page(ranking_type: dict[str, str], scope: dict[str, str], is_
         </div>
 
         <footer class="shared-notes ranking-notes" aria-label="Ranking notes">
-          <p>Source: IMF World Economic Outlook.</p>
-          <p>Data may include IMF estimates and projections.</p>
-          <p>Countries with no available IMF data are excluded from the ranking.</p>
+{notes_markup}
         </footer>
       </section>
     </main>

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from data_source_notes import WEO_RANKING_NOTES
 from ranking_page_generator import generate_ranking_pages
 
 RANKING_TYPES = [
@@ -25,7 +26,7 @@ RANKING_TYPES = [
 
 
 def main() -> None:
-    generate_ranking_pages(RANKING_TYPES)
+    generate_ranking_pages([ranking_type | WEO_RANKING_NOTES for ranking_type in RANKING_TYPES])
 
 
 if __name__ == "__main__":

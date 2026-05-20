@@ -8,9 +8,6 @@ import { appendRankingValueCell } from "./rankingValueBar.js";
 import "./rankingTopNav.js";
 import { getIndicatorSeriesMap } from "./seriesData.js";
 
-const dataUrl = new URL("../data/weo/current-prices.json", import.meta.url);
-const rankingEndYear = 2026;
-
 export function initializeRankingPage(config) {
   const state = {
     allRankingRows: [],
@@ -26,6 +23,11 @@ export function initializeRankingPage(config) {
 async function initializeRanking(config, state) {
   state.activeScope = initializeRankingFilters();
 
+  if (!config.staticDataPath) {
+    throw new Error(`staticDataPath is required for ${config.logName} ranking.`);
+  }
+
+  const dataUrl = new URL(config.staticDataPath, import.meta.url);
   const response = await fetch(dataUrl, {
     headers: {
       Accept: "application/json",
@@ -51,7 +53,7 @@ function buildRankingRows(data, config) {
   return countries
     .filter((country) => country.includeInRankings !== false)
     .map((country) => {
-      const latestPoint = getLatestNumericPoint(valuesByCountry[country.code]);
+      const latestPoint = getLatestNumericPoint(valuesByCountry[country.code], config);
 
       if (!latestPoint) {
         return null;
@@ -91,7 +93,7 @@ function filterRankingRows(rankingRows, scope) {
   return rankingRows.filter((country) => scopedCountryCodes.has(country.code));
 }
 
-function getLatestNumericPoint(series) {
+function getLatestNumericPoint(series, config) {
   if (!series || typeof series !== "object" || Array.isArray(series)) {
     return null;
   }
@@ -102,7 +104,12 @@ function getLatestNumericPoint(series) {
       value: normalizeNumericValue(value),
     }))
     .filter(({ year, value }) => {
-      return Number.isInteger(year) && year <= rankingEndYear && Number.isFinite(value);
+      return (
+        Number.isInteger(year) &&
+        year <= (config.endYear ?? Number.POSITIVE_INFINITY) &&
+        year >= (config.startYear ?? Number.NEGATIVE_INFINITY) &&
+        Number.isFinite(value)
+      );
     })
     .sort((pointA, pointB) => pointB.year - pointA.year);
 

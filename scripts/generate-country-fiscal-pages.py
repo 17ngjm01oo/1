@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+from data_source_notes import WEO_COUNTRY_DATA_NOTE, WEO_COUNTRY_SOURCE_NOTE
 from country_page_generator import CountryPageConfig, IndicatorBlockConfig, generate_country_pages
 
 
-PERCENT_GDP_SUBTITLE = "Select a country to view historical trends. Values are measured as a percent of GDP."
+PERCENT_GDP_SUBTITLE = (
+    "Select a country to view historical trends. "
+    "Values are shown as a percentage of nominal GDP in local currency."
+)
 
 FISCAL_PAGE_CONFIGS = (
     CountryPageConfig(
@@ -13,6 +17,8 @@ FISCAL_PAGE_CONFIGS = (
         chart_title="Government Gross Debt Chart by Country",
         subtitle=PERCENT_GDP_SUBTITLE,
         generated_label="government gross debt",
+        source_note=WEO_COUNTRY_SOURCE_NOTE,
+        data_note=WEO_COUNTRY_DATA_NOTE,
         related_nav_label="Fiscal page navigation",
         indicators=(
             IndicatorBlockConfig(
@@ -29,6 +35,8 @@ FISCAL_PAGE_CONFIGS = (
         chart_title="Government Net Debt Chart by Country",
         subtitle=PERCENT_GDP_SUBTITLE,
         generated_label="government net debt",
+        source_note=WEO_COUNTRY_SOURCE_NOTE,
+        data_note=WEO_COUNTRY_DATA_NOTE,
         related_nav_label="Fiscal page navigation",
         indicators=(
             IndicatorBlockConfig(
@@ -45,6 +53,8 @@ FISCAL_PAGE_CONFIGS = (
         chart_title="Fiscal Balance Chart by Country",
         subtitle=PERCENT_GDP_SUBTITLE,
         generated_label="fiscal balance",
+        source_note=WEO_COUNTRY_SOURCE_NOTE,
+        data_note=WEO_COUNTRY_DATA_NOTE,
         related_nav_label="Fiscal page navigation",
         indicators=(
             IndicatorBlockConfig(
@@ -61,6 +71,8 @@ FISCAL_PAGE_CONFIGS = (
         chart_title="Primary Fiscal Balance Chart by Country",
         subtitle=PERCENT_GDP_SUBTITLE,
         generated_label="primary fiscal balance",
+        source_note=WEO_COUNTRY_SOURCE_NOTE,
+        data_note=WEO_COUNTRY_DATA_NOTE,
         related_nav_label="Fiscal page navigation",
         indicators=(
             IndicatorBlockConfig(
@@ -77,6 +89,8 @@ FISCAL_PAGE_CONFIGS = (
         chart_title="Government Revenue Chart by Country",
         subtitle=PERCENT_GDP_SUBTITLE,
         generated_label="government revenue",
+        source_note=WEO_COUNTRY_SOURCE_NOTE,
+        data_note=WEO_COUNTRY_DATA_NOTE,
         related_nav_label="Fiscal page navigation",
         indicators=(
             IndicatorBlockConfig(
@@ -93,6 +107,8 @@ FISCAL_PAGE_CONFIGS = (
         chart_title="Government Expenditure Chart by Country",
         subtitle=PERCENT_GDP_SUBTITLE,
         generated_label="government expenditure",
+        source_note=WEO_COUNTRY_SOURCE_NOTE,
+        data_note=WEO_COUNTRY_DATA_NOTE,
         related_nav_label="Fiscal page navigation",
         indicators=(
             IndicatorBlockConfig(

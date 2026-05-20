@@ -215,7 +215,7 @@ const imfCountryCodeToIso2 = {
   USA: "US",
   UKR: "UA",
   UZB: "UZ",
-  UVK: "XK",
+  KOS: "XK",
   URY: "UY",
   VAT: "VA",
   VCT: "VC",
@@ -234,7 +234,7 @@ const imfCountryCodeToIso2 = {
 };
 
 export function getFlagEmoji(countryCode) {
-  if (countryCode === "WEOWORLD") {
+  if (countryCode === "G001") {
     return "🌏";
   }
 

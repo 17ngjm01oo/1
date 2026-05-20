@@ -1,32 +1,32 @@
 export const economicRankings = [
   {
     directory: "nominal-gdp",
-    label: "GDP Ranking",
+    label: "GDP",
     countryPageKinds: ["gdp"],
   },
   {
     directory: "nominal-gdp-per-capita",
-    label: "GDP per Capita Ranking",
+    label: "GDP per Capita",
     countryPageKinds: ["gdp-per-capita"],
   },
   {
     directory: "real-gdp-growth",
-    label: "Real GDP Growth Ranking",
+    label: "Real GDP Growth",
     countryPageKinds: ["gdp-growth"],
   },
   {
     directory: "inflation-rate",
-    label: "Inflation Rate Ranking",
+    label: "Inflation Rate",
     countryPageKinds: ["inflation-rate"],
   },
   {
     directory: "ppp",
-    label: "PPP Ranking",
+    label: "PPP",
     countryPageKinds: ["ppp"],
   },
   {
     directory: "ppp-per-capita",
-    label: "PPP per Capita Ranking",
+    label: "PPP per Capita",
     countryPageKinds: ["ppp-per-capita"],
   },
 ];

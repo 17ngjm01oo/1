@@ -525,5 +525,5 @@ export function sortCountriesByName(countryList) {
 }
 
 export function formatCountryMetaText(country) {
-  return country.region ? `${country.region} - ${country.code}` : country.code;
+  return country.region ?? "";
 }

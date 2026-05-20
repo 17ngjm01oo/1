@@ -111,9 +111,7 @@ TARGET_INDICATORS = {
     },
 }
 SHEET_NAMES = ("Countries", "Country Groups")
-GROUP_CODE_MAP = {
-    "G001": "WEOWORLD",
-}
+GROUP_CODE_MAP = {}
 
 SPREADSHEET_NS = "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}"
 REL_NS = "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}"
@@ -452,7 +450,7 @@ def print_summary(result: dict) -> None:
     missing = result["diagnostics"]["missingTargetSeries"]
     print(f"Missing target series entries: {len(missing)}")
 
-    world = economies.get("WEOWORLD")
+    world = economies.get("G001")
     if world:
         print(f"World series present: {sorted(world['series'])}")
 

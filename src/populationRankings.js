@@ -1,15 +1,15 @@
 export const populationRankings = [
   {
     directory: "population",
-    label: "Population Ranking",
+    label: "Population",
   },
   {
     directory: "employment",
-    label: "Employment Ranking",
+    label: "Employment",
   },
   {
     directory: "unemployment-rate",
-    label: "Unemployment Rate Ranking",
+    label: "Unemployment Rate",
   },
 ];
 

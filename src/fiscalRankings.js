@@ -1,27 +1,27 @@
 export const fiscalRankings = [
   {
     directory: "government-gross-debt",
-    label: "Government Gross Debt Ranking",
+    label: "Government Gross Debt",
   },
   {
     directory: "government-net-debt",
-    label: "Government Net Debt Ranking",
+    label: "Government Net Debt",
   },
   {
     directory: "fiscal-balance",
-    label: "Fiscal Balance Ranking",
+    label: "Fiscal Balance",
   },
   {
     directory: "primary-fiscal-balance",
-    label: "Primary Fiscal Balance Ranking",
+    label: "Primary Fiscal Balance",
   },
   {
     directory: "government-revenue",
-    label: "Government Revenue Ranking",
+    label: "Government Revenue",
   },
   {
     directory: "government-expenditure",
-    label: "Government Expenditure Ranking",
+    label: "Government Expenditure",
   },
 ];
 
