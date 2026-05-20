@@ -116,9 +116,6 @@ def render_page(country: dict[str, str]) -> str:
                     aria-autocomplete="list"
                     aria-expanded="false"
                   />
-                  <button class="compare-remove" id="gdpCompareRemove" type="button" hidden aria-label="Remove GDP comparison">
-                    &times;
-                  </button>
                 </div>
                 <p class="compare-selected" id="gdpCompareSelected"></p>
                 <div class="country-results compare-results" id="gdpCompareResults" role="listbox" aria-label="GDP comparison country results" hidden></div>

@@ -296,7 +296,7 @@ function initializeCompareSearches(countrySeriesConfigs) {
         hasMainData: false,
       });
 
-      const { input, removeButton } = getCompareElements(seriesConfig.id);
+      const { input } = getCompareElements(seriesConfig.id);
 
       if (!input) {
         return;
@@ -314,10 +314,6 @@ function initializeCompareSearches(countrySeriesConfigs) {
         if (input.value.trim()) {
           renderCompareResults(seriesConfig.id, input.value);
         }
-      });
-
-      removeButton?.addEventListener("click", () => {
-        clearComparison(seriesConfig.id);
       });
 
       updateCompareAvailability(seriesConfig.id);
@@ -761,25 +757,45 @@ function updateCompareAvailability(seriesId) {
 
 function updateCompareSelectionUi(seriesId, errorMessage = "") {
   const state = seriesRuntimeState.get(seriesId);
-  const { selected, removeButton } = getCompareElements(seriesId);
+  const { selected } = getCompareElements(seriesId);
 
   if (!state || !selected) {
     return;
   }
 
   selected.classList.toggle("is-error", Boolean(errorMessage));
+  selected.innerHTML = "";
 
   if (errorMessage) {
-    selected.textContent = errorMessage;
+    selected.append(createCompareSelectionText(errorMessage));
   } else if (state.comparisonCountry) {
-    selected.textContent = `Comparing with ${state.comparisonCountry.name}`;
+    selected.append(createCompareSelectionText(`Comparing with ${state.comparisonCountry.name}`));
   } else {
-    selected.textContent = "";
+    return;
   }
 
-  if (removeButton) {
-    removeButton.hidden = !state.comparisonCountry;
+  if (state.comparisonCountry) {
+    selected.append(createCompareClearButton(seriesId, state.comparisonCountry.name));
   }
+}
+
+function createCompareSelectionText(text) {
+  const textElement = document.createElement("span");
+  textElement.className = "compare-selected-text";
+  textElement.textContent = text;
+  return textElement;
+}
+
+function createCompareClearButton(seriesId, countryName) {
+  const button = document.createElement("button");
+  button.className = "compare-clear-button";
+  button.type = "button";
+  button.textContent = "x";
+  button.setAttribute("aria-label", `Remove ${countryName} comparison`);
+  button.addEventListener("click", () => {
+    clearComparison(seriesId);
+  });
+  return button;
 }
 
 function hideCompareResults(seriesId) {
@@ -808,7 +824,6 @@ function getCompareElements(seriesId) {
     input: document.querySelector(`#${seriesId}CompareInput`),
     results: document.querySelector(`#${seriesId}CompareResults`),
     selected: document.querySelector(`#${seriesId}CompareSelected`),
-    removeButton: document.querySelector(`#${seriesId}CompareRemove`),
   };
 }
 
