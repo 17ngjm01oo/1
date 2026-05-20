@@ -84,7 +84,7 @@ function updateRankingTitle(config, scope) {
   }
 
   const scopeLabel = scope?.label ?? "World";
-  rankingTableTitle.textContent = `${config.rankingTitleBase} - ${scopeLabel}`;
+  rankingTableTitle.textContent = `Scope: ${scopeLabel}`;
 }
 
 function filterRankingRows(rankingRows, scope) {

@@ -188,6 +188,10 @@ export function getDisplayScale(points, config) {
     return getUsdMillionsDisplayScale(points);
   }
 
+  if (config.valueScaleMode === "usdMagnitude") {
+    return getUsdDisplayScale(points);
+  }
+
   if (config.valueScaleMode === "internationalDollarMagnitude") {
     return getInternationalDollarDisplayScale(points);
   }
@@ -279,6 +283,41 @@ function getUsdMillionsDisplayScale(points) {
     tickPrefix: "$",
     compactUnit: "M",
     maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue),
+  };
+}
+
+function getUsdDisplayScale(points) {
+  const maxRawValue = Math.max(...points.map((point) => Math.abs(point.value)));
+
+  if (maxRawValue >= 1000000000000) {
+    return {
+      valueScale: 0.000000000001,
+      tooltipPrefix: "$",
+      tooltipUnit: "trillion",
+      tickPrefix: "$",
+      compactUnit: "T",
+      maximumFractionDigits: 2,
+    };
+  }
+
+  if (maxRawValue >= 1000000000) {
+    return {
+      valueScale: 0.000000001,
+      tooltipPrefix: "$",
+      tooltipUnit: "billion",
+      tickPrefix: "$",
+      compactUnit: "B",
+      maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue * 0.000000001),
+    };
+  }
+
+  return {
+    valueScale: 0.000001,
+    tooltipPrefix: "$",
+    tooltipUnit: "million",
+    tickPrefix: "$",
+    compactUnit: "M",
+    maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue * 0.000001),
   };
 }
 

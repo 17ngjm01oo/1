@@ -173,6 +173,14 @@ const pageDefinitions = {
     seriesIds: ["governmentExpenditure"],
     tableValueHeader: "Government Expenditure",
   },
+  "total-reserves-including-gold": {
+    logPrefix: "Total reserves including gold page",
+    group: "fiscal",
+    documentTitleMetric: "Total Reserves Including Gold",
+    pathSegment: "total-reserves-including-gold",
+    seriesIds: ["totalReservesIncludingGold"],
+    tableValueHeader: "Total Reserves Including Gold",
+  },
 };
 const countryIndicatorLinks = [
   { pageKind: "gdp", href: "../gdp/", label: "GDP" },
@@ -205,6 +213,11 @@ const fiscalIndicatorLinks = [
   { pageKind: "primary-fiscal-balance", href: "../primary-fiscal-balance/", label: "Primary Fiscal Balance" },
   { pageKind: "government-revenue", href: "../government-revenue/", label: "Government Revenue" },
   { pageKind: "government-expenditure", href: "../government-expenditure/", label: "Government Expenditure" },
+  {
+    pageKind: "total-reserves-including-gold",
+    href: "../total-reserves-including-gold/",
+    label: "Total Reserves Including Gold",
+  },
 ];
 const countryIndicatorLinksByGroup = {
   economic: countryIndicatorLinks,
@@ -239,6 +252,7 @@ const comparableSeriesIds = new Set([
   "primaryFiscalBalance",
   "governmentRevenue",
   "governmentExpenditure",
+  "totalReservesIncludingGold",
 ]);
 const rankedSeriesIds = new Set(comparableSeriesIds);
 const rankingDirectoryBySeriesId = {
@@ -262,6 +276,7 @@ const rankingDirectoryBySeriesId = {
   primaryFiscalBalance: "primary-fiscal-balance",
   governmentRevenue: "government-revenue",
   governmentExpenditure: "government-expenditure",
+  totalReservesIncludingGold: "total-reserves-including-gold",
 };
 const seriesRuntimeState = new Map();
 

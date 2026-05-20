@@ -1,6 +1,6 @@
 import { dataSources } from "./dataSources.js";
 
-const { weoCurrentPrices, unctadGoodsTrade } = dataSources;
+const { weoCurrentPrices, unctadGoodsTrade, worldBankWdi } = dataSources;
 
 export const seriesConfigs = [
   {
@@ -322,5 +322,19 @@ export const seriesConfigs = [
     suffix: "%",
     suffixSpacing: "",
     maximumFractionDigits: 1,
+  },
+  {
+    id: "totalReservesIncludingGold",
+    canvasId: "totalReservesIncludingGoldChart",
+    chartCardId: "totalReservesIncludingGoldChartCard",
+    overlayId: "totalReservesIncludingGoldOverlay",
+    statusId: "totalReservesIncludingGoldStatus",
+    ...worldBankWdi,
+    indicatorCode: "FI.RES.TOTL.CD",
+    titleTemplate: "Total Reserves Including Gold",
+    currencyCode: "USD",
+    tooltipPrefix: "$",
+    valueScaleMode: "usdMagnitude",
+    maximumFractionDigits: 2,
   },
 ];

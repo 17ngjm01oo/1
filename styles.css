@@ -1083,17 +1083,13 @@ h1 {
   .shared-notes {
     gap: 16px;
     padding: 18px 14px;
-    border-right: 0;
-    border-left: 0;
-    border-radius: 0;
+    border-radius: 8px;
   }
 
   .top-nav-card {
     gap: 8px;
     padding: 12px 14px;
-    border-right: 0;
-    border-left: 0;
-    border-radius: 0;
+    border-radius: 8px;
   }
 
   .ranking-card {

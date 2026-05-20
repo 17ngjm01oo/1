@@ -19,4 +19,14 @@ export const dataSources = {
     endYear: 2025,
     subtitle: "UNCTADstat, 1948-2025",
   },
+  worldBankWdi: {
+    dataSource: "World Bank",
+    dataset: "World Development Indicators",
+    staticDataPath: "./data/world-bank/total-reserves.json",
+    rankingStaticDataPath: "../data/world-bank/total-reserves.json",
+    sourceUrl: "https://data.worldbank.org/indicator/FI.RES.TOTL.CD",
+    startYear: 1960,
+    endYear: 2024,
+    subtitle: "World Bank World Development Indicators, 1960-2024",
+  },
 };

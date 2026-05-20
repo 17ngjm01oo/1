@@ -23,6 +23,10 @@ export const fiscalRankings = [
     directory: "government-expenditure",
     label: "Government Expenditure",
   },
+  {
+    directory: "total-reserves-including-gold",
+    label: "Total Reserves Including Gold",
+  },
 ];
 
 export function renderFiscalRankingLinks(

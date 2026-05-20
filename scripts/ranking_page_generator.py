@@ -122,7 +122,7 @@ def render_ranking_page(ranking_type: dict[str, str], scope: dict[str, str], is_
 
       <section class="ranking-card" aria-labelledby="ranking-table-title">
         <header class="ranking-card-header">
-          <h2 id="ranking-table-title">{escape(ranking_type["table_title"])}</h2>
+          <h2 id="ranking-table-title">Scope: {escape(scope["label"])}</h2>
           <p id="rankingSummary" class="ranking-summary" aria-live="polite">Loading ranking data...</p>
           <p id="rankingCount" class="ranking-count" aria-live="polite"></p>
         </header>

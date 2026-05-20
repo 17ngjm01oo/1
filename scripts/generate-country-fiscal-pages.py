@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
-from data_source_notes import WEO_COUNTRY_DATA_NOTE, WEO_COUNTRY_SOURCE_NOTE
+from data_source_notes import WEO_COUNTRY_DATA_NOTE, WEO_COUNTRY_SOURCE_NOTE, WORLD_BANK_COUNTRY_SOURCE_NOTE
 from country_page_generator import CountryPageConfig, IndicatorBlockConfig, generate_country_pages
 
 
@@ -116,6 +116,23 @@ FISCAL_PAGE_CONFIGS = (
                 title="Government Expenditure",
                 canvas_label="Government expenditure line chart",
                 compare_label="Government Expenditure",
+            ),
+        ),
+    ),
+    CountryPageConfig(
+        page_kind="total-reserves-including-gold",
+        title_suffix="Total Reserves Including Gold",
+        chart_title="Total Reserves Including Gold Chart by Country",
+        subtitle="Select a country to view historical total reserves including gold trends. Values are shown in current U.S. dollars.",
+        generated_label="total reserves including gold",
+        source_note=WORLD_BANK_COUNTRY_SOURCE_NOTE,
+        related_nav_label="Fiscal page navigation",
+        indicators=(
+            IndicatorBlockConfig(
+                series_id="totalReservesIncludingGold",
+                title="Total Reserves Including Gold",
+                canvas_label="Total reserves including gold line chart",
+                compare_label="Total Reserves Including Gold",
             ),
         ),
     ),
