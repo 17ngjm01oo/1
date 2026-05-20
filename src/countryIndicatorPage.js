@@ -4,6 +4,7 @@ import { filterCountries, formatCountryMetaText, initializeCountrySelector } fro
 import { getCurrencyCode } from "./currencyCodes.js";
 import { getCurrencyDisplay } from "./currencyDisplay.js";
 import { renderEconomicRankingLinks } from "./economicRankings.js";
+import { renderFiscalRankingLinks } from "./fiscalRankings.js";
 import { getFlagEmoji } from "./flags.js";
 import { renderPopulationRankingLinks } from "./populationRankings.js";
 import { renderTradeRankingLinks } from "./tradeRankings.js";
@@ -100,6 +101,54 @@ const pageDefinitions = {
     seriesIds: ["currentAccountBalancePercentGdp"],
     tableValueHeader: "Current Account Balance Percent of GDP",
   },
+  "government-gross-debt": {
+    logPrefix: "Government gross debt page",
+    group: "fiscal",
+    documentTitleMetric: "Government Gross Debt",
+    pathSegment: "government-gross-debt",
+    seriesIds: ["governmentGrossDebt"],
+    tableValueHeader: "Government Gross Debt",
+  },
+  "government-net-debt": {
+    logPrefix: "Government net debt page",
+    group: "fiscal",
+    documentTitleMetric: "Government Net Debt",
+    pathSegment: "government-net-debt",
+    seriesIds: ["governmentNetDebt"],
+    tableValueHeader: "Government Net Debt",
+  },
+  "fiscal-balance": {
+    logPrefix: "Fiscal balance page",
+    group: "fiscal",
+    documentTitleMetric: "Fiscal Balance",
+    pathSegment: "fiscal-balance",
+    seriesIds: ["fiscalBalance"],
+    tableValueHeader: "Fiscal Balance",
+  },
+  "primary-fiscal-balance": {
+    logPrefix: "Primary fiscal balance page",
+    group: "fiscal",
+    documentTitleMetric: "Primary Fiscal Balance",
+    pathSegment: "primary-fiscal-balance",
+    seriesIds: ["primaryFiscalBalance"],
+    tableValueHeader: "Primary Fiscal Balance",
+  },
+  "government-revenue": {
+    logPrefix: "Government revenue page",
+    group: "fiscal",
+    documentTitleMetric: "Government Revenue",
+    pathSegment: "government-revenue",
+    seriesIds: ["governmentRevenue"],
+    tableValueHeader: "Government Revenue",
+  },
+  "government-expenditure": {
+    logPrefix: "Government expenditure page",
+    group: "fiscal",
+    documentTitleMetric: "Government Expenditure",
+    pathSegment: "government-expenditure",
+    seriesIds: ["governmentExpenditure"],
+    tableValueHeader: "Government Expenditure",
+  },
 };
 const countryIndicatorLinks = [
   { pageKind: "gdp", href: "../gdp/", label: "GDP" },
@@ -122,10 +171,19 @@ const tradeIndicatorLinks = [
     label: "Current Account Balance Percent of GDP",
   },
 ];
+const fiscalIndicatorLinks = [
+  { pageKind: "government-gross-debt", href: "../government-gross-debt/", label: "Government Gross Debt" },
+  { pageKind: "government-net-debt", href: "../government-net-debt/", label: "Government Net Debt" },
+  { pageKind: "fiscal-balance", href: "../fiscal-balance/", label: "Fiscal Balance" },
+  { pageKind: "primary-fiscal-balance", href: "../primary-fiscal-balance/", label: "Primary Fiscal Balance" },
+  { pageKind: "government-revenue", href: "../government-revenue/", label: "Government Revenue" },
+  { pageKind: "government-expenditure", href: "../government-expenditure/", label: "Government Expenditure" },
+];
 const countryIndicatorLinksByGroup = {
   economic: countryIndicatorLinks,
   population: populationIndicatorLinks,
   trade: tradeIndicatorLinks,
+  fiscal: fiscalIndicatorLinks,
 };
 const pageKind = pageDefinitions[document.body.dataset.pageKind] ? document.body.dataset.pageKind : "gdp";
 const pageDefinition = pageDefinitions[pageKind];
@@ -145,6 +203,12 @@ const comparableSeriesIds = new Set([
   "pppPerCapita",
   "currentAccountBalance",
   "currentAccountBalancePercentGdp",
+  "governmentGrossDebt",
+  "governmentNetDebt",
+  "fiscalBalance",
+  "primaryFiscalBalance",
+  "governmentRevenue",
+  "governmentExpenditure",
 ]);
 const rankedSeriesIds = new Set(comparableSeriesIds);
 const rankingDirectoryBySeriesId = {
@@ -159,6 +223,12 @@ const rankingDirectoryBySeriesId = {
   pppPerCapita: "ppp-per-capita",
   currentAccountBalance: "current-account-balance",
   currentAccountBalancePercentGdp: "current-account-balance-percent-gdp",
+  governmentGrossDebt: "government-gross-debt",
+  governmentNetDebt: "government-net-debt",
+  fiscalBalance: "fiscal-balance",
+  primaryFiscalBalance: "primary-fiscal-balance",
+  governmentRevenue: "government-revenue",
+  governmentExpenditure: "government-expenditure",
 };
 const seriesRuntimeState = new Map();
 
@@ -212,6 +282,11 @@ function updateTopRankingLinks() {
   });
 
   renderTradeRankingLinks(document.querySelector("#tradeTopNav"), {
+    rootHref: "../../../",
+    highlightCurrent: false,
+  });
+
+  renderFiscalRankingLinks(document.querySelector("#fiscalTopNav"), {
     rootHref: "../../../",
     highlightCurrent: false,
   });

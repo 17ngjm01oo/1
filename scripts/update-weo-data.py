@@ -85,6 +85,30 @@ TARGET_INDICATORS = {
         "label": "Current Account Balance Percent of GDP",
         "description": "Current account balance, Percent of GDP",
     },
+    "GGXWDG_NGDP": {
+        "label": "Government Gross Debt",
+        "description": "General government gross debt, Percent of GDP",
+    },
+    "GGXWDN_NGDP": {
+        "label": "Government Net Debt",
+        "description": "General government net debt, Percent of GDP",
+    },
+    "GGXCNL_NGDP": {
+        "label": "Fiscal Balance",
+        "description": "General government net lending/borrowing, Percent of GDP",
+    },
+    "GGXONLB_NGDP": {
+        "label": "Primary Fiscal Balance",
+        "description": "General government primary net lending/borrowing, Percent of GDP",
+    },
+    "GGR_NGDP": {
+        "label": "Government Revenue",
+        "description": "General government revenue, Percent of GDP",
+    },
+    "GGX_NGDP": {
+        "label": "Government Expenditure",
+        "description": "General government total expenditure, Percent of GDP",
+    },
 }
 SHEET_NAMES = ("Countries", "Country Groups")
 GROUP_CODE_MAP = {

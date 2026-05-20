@@ -1,4 +1,5 @@
 import { renderEconomicRankingLinks } from "./economicRankings.js";
+import { renderFiscalRankingLinks } from "./fiscalRankings.js";
 import { renderPopulationRankingLinks } from "./populationRankings.js";
 import { renderTradeRankingLinks } from "./tradeRankings.js";
 
@@ -15,6 +16,12 @@ renderPopulationRankingLinks(document.querySelector("#populationTopNav"), {
 });
 
 renderTradeRankingLinks(document.querySelector("#tradeTopNav"), {
+  rootHref: document.body.dataset.rootHref ?? "../../",
+  currentRankingDirectory: document.body.dataset.rankingDirectory ?? "",
+  currentScopeSlug: document.body.dataset.rankingScopeSlug ?? "world",
+});
+
+renderFiscalRankingLinks(document.querySelector("#fiscalTopNav"), {
   rootHref: document.body.dataset.rootHref ?? "../../",
   currentRankingDirectory: document.body.dataset.rankingDirectory ?? "",
   currentScopeSlug: document.body.dataset.rankingScopeSlug ?? "world",

@@ -1,4 +1,5 @@
 import { renderEconomicRankingLinks } from "./economicRankings.js";
+import { renderFiscalRankingLinks } from "./fiscalRankings.js";
 import { renderPopulationRankingLinks } from "./populationRankings.js";
 import { renderTradeRankingLinks } from "./tradeRankings.js";
 
@@ -11,5 +12,9 @@ renderPopulationRankingLinks(document.querySelector("#homePopulationRankings"), 
 });
 
 renderTradeRankingLinks(document.querySelector("#homeTradeRankings"), {
+  rootHref: "./",
+});
+
+renderFiscalRankingLinks(document.querySelector("#homeFiscalRankings"), {
   rootHref: "./",
 });

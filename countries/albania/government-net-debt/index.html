@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Albania Government Net Debt</title>
+    <link rel="stylesheet" href="../../../styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+    <script type="module" src="../../../src/countryIndicatorPage.js"></script>
+  </head>
+  <body data-country-code="ALB" data-page-kind="government-net-debt">
+    <header class="site-header">
+      <a class="site-home-link" href="../../../">HOME</a>
+    </header>
+    <main class="page-shell">
+      <section class="top-nav-card" aria-label="Site navigation">
+        <details class="top-nav-disclosure">
+          <summary class="top-nav-label">Country Rankings</summary>
+          <div class="top-nav-group">
+            <details class="top-nav-disclosure">
+              <summary class="top-nav-label">Economic Rankings</summary>
+              <nav class="site-nav" id="economicTopNav"></nav>
+            </details>
+            <details class="top-nav-disclosure">
+              <summary class="top-nav-label">Population Rankings</summary>
+              <nav class="site-nav" id="populationTopNav"></nav>
+            </details>
+            <details class="top-nav-disclosure">
+              <summary class="top-nav-label">Trade Rankings</summary>
+              <nav class="site-nav" id="tradeTopNav"></nav>
+            </details>
+            <details class="top-nav-disclosure">
+              <summary class="top-nav-label">Fiscal Rankings</summary>
+              <nav class="site-nav" id="fiscalTopNav"></nav>
+            </details>
+          </div>
+        </details>
+      </section>
+
+      <section class="hub-section" aria-labelledby="country-hub-title">
+        <header class="page-header">
+          <h1 id="country-hub-title" class="page-title">Government Net Debt Chart by Country</h1>
+          <p class="subtitle">Select a country to view historical trends. Values are measured as a percent of GDP.</p>
+        </header>
+
+        <div class="country-search-panel">
+          <div class="search-input-wrap">
+            <input
+              id="countrySearchInput"
+              class="country-search-input"
+              type="search"
+              autocomplete="off"
+              placeholder="Search country or code&hellip;"
+              aria-controls="countrySearchResults"
+              role="combobox"
+              aria-autocomplete="list"
+              aria-expanded="false"
+            />
+          </div>
+          <div class="filter-panel-row">
+            <details class="category-panel" aria-labelledby="region-heading">
+              <summary class="category-heading" id="region-heading">Regions</summary>
+            </details>
+            <details class="category-panel" aria-labelledby="category-heading">
+              <summary class="category-heading" id="category-heading">Categories</summary>
+            </details>
+          </div>
+          <div class="category-list filter-option-list" id="regionList" hidden></div>
+          <div class="category-list filter-option-list" id="categoryList" hidden></div>
+          <div class="country-results" id="countrySearchResults" role="listbox" aria-label="Country search results" hidden></div>
+        </div>
+      </section>
+
+      <section class="indicators-section" aria-labelledby="country-data-title">
+        <div class="indicators-card">
+          <header class="page-header country-data-header">
+            <h1 id="country-data-title">Albania</h1>
+            <nav class="site-nav" id="countryRelatedPageNav" aria-label="Fiscal page navigation"></nav>
+          </header>
+
+          <section class="indicator-block" aria-labelledby="governmentNetDebt-title">
+            <header class="indicator-header">
+              <div class="indicator-title-group">
+                <h2 id="governmentNetDebt-title">Government Net Debt</h2>
+              </div>
+              <div class="compare-control" data-series-id="governmentNetDebt">
+                <div class="compare-input-wrap">
+                  <input
+                    id="governmentNetDebtCompareInput"
+                    class="compare-search-input"
+                    type="search"
+                    autocomplete="off"
+                    placeholder="Compare with..."
+                    aria-controls="governmentNetDebtCompareResults"
+                    role="combobox"
+                    aria-autocomplete="list"
+                    aria-expanded="false"
+                  />
+                </div>
+                <p class="compare-selected" id="governmentNetDebtCompareSelected"></p>
+                <div class="country-results compare-results" id="governmentNetDebtCompareResults" role="listbox" aria-label="Government Net Debt comparison country results" hidden></div>
+              </div>
+            </header>
+
+            <div class="chart-card" id="governmentNetDebtChartCard">
+              <canvas id="governmentNetDebtChart" aria-label="Government net debt line chart" role="img"></canvas>
+              <div class="chart-overlay" id="governmentNetDebtOverlay" aria-hidden="true"></div>
+            </div>
+
+            <details class="data-table-toggle" id="governmentNetDebtTableToggle">
+              <summary>Show data table</summary>
+              <div class="data-table-wrap" id="governmentNetDebtTableWrap"></div>
+            </details>
+          </section>
+
+          <footer class="shared-notes" aria-label="Chart notes">
+            <p>Source: IMF World Economic Outlook.</p>
+            <p>Data may include IMF estimates and projections.</p>
+          </footer>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
