@@ -1,11 +1,11 @@
 export const environmentalRankings = [
   {
     directory: "agricultural-land-percent-of-land-area",
-    label: "Agricultural Land Percent of Land Area",
+    label: "Agricultural Land (% of Land Area)",
   },
   {
     directory: "forest-area-percent-of-land-area",
-    label: "Forest Area Percent of Land Area",
+    label: "Forest Area (% of Land Area)",
   },
 ];
 

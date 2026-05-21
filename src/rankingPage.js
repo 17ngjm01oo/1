@@ -119,6 +119,7 @@ function getLatestNumericPoint(series, config) {
 function renderRankingTable(config, rankingRows) {
   const rankingTableBody = document.querySelector("#rankingTableBody");
   const rootHref = document.body.dataset.rootHref ?? "../../";
+  const valueBarScale = getValueBarScale(rankingRows);
 
   if (!rankingTableBody) {
     return;
@@ -156,13 +157,32 @@ function renderRankingTable(config, rankingRows) {
       text: formatCompactDisplayValue(country.value, displayScale),
       ariaLabel: `Open ${country.name} ${config.linkAriaMetric} page`,
       value: country.value,
-      rankingRows,
+      valueBarScale,
     });
     yearCell.textContent = String(country.year);
 
     row.append(rankCell, flagCell, countryCell, valueCell, yearCell);
     rankingTableBody.append(row);
   });
+}
+
+function getValueBarScale(rankingRows) {
+  return rankingRows.reduce(
+    (scale, row) => {
+      if (!Number.isFinite(row.value)) {
+        return scale;
+      }
+
+      if (row.value < 0) {
+        scale.negativeMagnitude = Math.max(scale.negativeMagnitude, Math.abs(row.value));
+      } else {
+        scale.positiveMagnitude = Math.max(scale.positiveMagnitude, row.value);
+      }
+
+      return scale;
+    },
+    { negativeMagnitude: 0, positiveMagnitude: 0 },
+  );
 }
 
 function updateRankingSummary(rankingRows) {

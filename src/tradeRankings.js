@@ -5,7 +5,7 @@ export const tradeRankings = [
   },
   {
     directory: "current-account-balance-percent-gdp",
-    label: "Current Account Balance Percent of GDP",
+    label: "Current Account Balance (% of GDP)",
   },
   {
     directory: "goods-exports",

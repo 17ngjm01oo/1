@@ -53,14 +53,14 @@ DATASETS = {
         "sourceUrl": "https://databank.worldbank.org/source/world-development-indicators",
         "indicators": {
             "AG.LND.AGRI.ZS": {
-                "label": "Agricultural Land Percent of Land Area",
+                "label": "Agricultural Land (% of Land Area)",
                 "slug": "agricultural-land-percent-of-land-area",
                 "description": "Agricultural land, percent of land area",
                 "scale": "Units",
                 "unit": "%",
             },
             "AG.LND.FRST.ZS": {
-                "label": "Forest Area Percent of Land Area",
+                "label": "Forest Area (% of Land Area)",
                 "slug": "forest-area-percent-of-land-area",
                 "description": "Forest area, percent of land area",
                 "scale": "Units",

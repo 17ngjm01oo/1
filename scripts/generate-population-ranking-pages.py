@@ -8,14 +8,12 @@ RANKING_TYPES = [
         "directory": "population",
         "title": "Population Ranking by Country",
         "script": "populationRanking.js",
-        "table_title": "Population Ranking",
     },
     {
         **WORLD_BANK_RANKING_NOTES,
         "directory": "life-expectancy",
         "title": "Life Expectancy Ranking by Country",
         "script": "lifeExpectancyRanking.js",
-        "table_title": "Life Expectancy Ranking",
         "subtitle": "Life expectancy at birth is measured in years.",
     },
     {
@@ -23,20 +21,17 @@ RANKING_TYPES = [
         "directory": "fertility-rate",
         "title": "Fertility Rate Ranking by Country",
         "script": "fertilityRateRanking.js",
-        "table_title": "Fertility Rate Ranking",
         "subtitle": "Total fertility rate estimates the average number of children a woman would have over her lifetime, based on age-specific birth rates for ages 15-49.",
     },
     {
         "directory": "employment",
         "title": "Employment Ranking by Country",
         "script": "employmentRanking.js",
-        "table_title": "Employment Ranking",
     },
     {
         "directory": "unemployment-rate",
         "title": "Unemployment Rate Ranking by Country",
         "script": "unemploymentRateRanking.js",
-        "table_title": "Unemployment Rate Ranking",
     },
 ]
 

@@ -82,7 +82,7 @@ TARGET_INDICATORS = {
         "description": "Current account balance, US dollar",
     },
     "BCA_NGDPD": {
-        "label": "Current Account Balance Percent of GDP",
+        "label": "Current Account Balance (% of GDP)",
         "description": "Current account balance, Percent of GDP",
     },
     "GGXWDG_NGDP": {

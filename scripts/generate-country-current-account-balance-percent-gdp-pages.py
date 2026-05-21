@@ -9,8 +9,8 @@ def main() -> None:
     generate_country_pages(
         CountryPageConfig(
             page_kind="current-account-balance-percent-gdp",
-            title_suffix="Current Account Balance Percent of GDP",
-            chart_title="Current Account Balance Percent of GDP Chart by Country",
+            title_suffix="Current Account Balance (% of GDP)",
+            chart_title="Current Account Balance (% of GDP) Chart by Country",
             subtitle="Select a country to view historical current account balance percent of GDP trends.",
             generated_label="current account balance percent of GDP",
             source_note=WEO_COUNTRY_SOURCE_NOTE,
@@ -19,9 +19,9 @@ def main() -> None:
             indicators=(
                 IndicatorBlockConfig(
                     series_id="currentAccountBalancePercentGdp",
-                    title="Current Account Balance Percent of GDP",
+                    title="Current Account Balance (% of GDP)",
                     canvas_label="Current account balance percent of GDP line chart",
-                    compare_label="Current Account Balance Percent of GDP",
+                    compare_label="Current Account Balance (% of GDP)",
                 ),
             ),
         )

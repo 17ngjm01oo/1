@@ -9,17 +9,15 @@ RANKING_TYPES = [
     {
         **WORLD_BANK_RANKING_NOTES,
         "directory": "agricultural-land-percent-of-land-area",
-        "title": "Agricultural Land Percent of Land Area Ranking by Country",
+        "title": "Agricultural Land (% of Land Area) Ranking by Country",
         "script": "agriculturalLandPercentOfLandAreaRanking.js",
-        "table_title": "Agricultural Land Percent of Land Area Ranking",
         "subtitle": PERCENT_LAND_AREA_SUBTITLE,
     },
     {
         **WORLD_BANK_RANKING_NOTES,
         "directory": "forest-area-percent-of-land-area",
-        "title": "Forest Area Percent of Land Area Ranking by Country",
+        "title": "Forest Area (% of Land Area) Ranking by Country",
         "script": "forestAreaPercentOfLandAreaRanking.js",
-        "table_title": "Forest Area Percent of Land Area Ranking",
         "subtitle": PERCENT_LAND_AREA_SUBTITLE,
     },
 ]

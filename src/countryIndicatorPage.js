@@ -20,7 +20,6 @@ const pageDefinitions = {
     documentTitleMetric: "GDP",
     pathSegment: "gdp",
     seriesIds: ["gdp", "gdpNational", "realGdp"],
-    tableValueHeader: "GDP",
   },
   "gdp-per-capita": {
     logPrefix: "GDP per capita page",
@@ -28,7 +27,6 @@ const pageDefinitions = {
     documentTitleMetric: "GDP per capita",
     pathSegment: "gdp-per-capita",
     seriesIds: ["gdpPerCapita", "gdpNationalPerCapita", "realGdpPerCapita"],
-    tableValueHeader: "GDP per capita",
   },
   "gdp-growth": {
     logPrefix: "GDP growth page",
@@ -36,7 +34,6 @@ const pageDefinitions = {
     documentTitleMetric: "GDP Growth Rate",
     pathSegment: "gdp-growth",
     seriesIds: ["gdpGrowth"],
-    tableValueHeader: "GDP Growth Rate",
   },
   "inflation-rate": {
     logPrefix: "Inflation rate page",
@@ -44,7 +41,6 @@ const pageDefinitions = {
     documentTitleMetric: "Inflation Rate",
     pathSegment: "inflation-rate",
     seriesIds: ["inflationRate"],
-    tableValueHeader: "Inflation Rate",
   },
   population: {
     logPrefix: "Population page",
@@ -52,7 +48,6 @@ const pageDefinitions = {
     documentTitleMetric: "Population",
     pathSegment: "population",
     seriesIds: ["population"],
-    tableValueHeader: "Population",
   },
   employment: {
     logPrefix: "Employment page",
@@ -60,7 +55,6 @@ const pageDefinitions = {
     documentTitleMetric: "Employment",
     pathSegment: "employment",
     seriesIds: ["employment"],
-    tableValueHeader: "Employment",
   },
   "unemployment-rate": {
     logPrefix: "Unemployment rate page",
@@ -68,7 +62,6 @@ const pageDefinitions = {
     documentTitleMetric: "Unemployment Rate",
     pathSegment: "unemployment-rate",
     seriesIds: ["unemploymentRate"],
-    tableValueHeader: "Unemployment Rate",
   },
   "life-expectancy": {
     logPrefix: "Life expectancy page",
@@ -76,7 +69,6 @@ const pageDefinitions = {
     documentTitleMetric: "Life Expectancy",
     pathSegment: "life-expectancy",
     seriesIds: ["lifeExpectancy"],
-    tableValueHeader: "Life Expectancy",
   },
   "fertility-rate": {
     logPrefix: "Fertility rate page",
@@ -84,7 +76,6 @@ const pageDefinitions = {
     documentTitleMetric: "Fertility Rate",
     pathSegment: "fertility-rate",
     seriesIds: ["fertilityRate"],
-    tableValueHeader: "Fertility Rate",
   },
   ppp: {
     logPrefix: "PPP page",
@@ -92,7 +83,6 @@ const pageDefinitions = {
     documentTitleMetric: "PPP",
     pathSegment: "ppp",
     seriesIds: ["ppp"],
-    tableValueHeader: "PPP",
   },
   "ppp-per-capita": {
     logPrefix: "PPP per capita page",
@@ -100,7 +90,6 @@ const pageDefinitions = {
     documentTitleMetric: "PPP per capita",
     pathSegment: "ppp-per-capita",
     seriesIds: ["pppPerCapita"],
-    tableValueHeader: "PPP per capita",
   },
   "current-account-balance": {
     logPrefix: "Current account balance page",
@@ -108,15 +97,13 @@ const pageDefinitions = {
     documentTitleMetric: "Current Account Balance",
     pathSegment: "current-account-balance",
     seriesIds: ["currentAccountBalance"],
-    tableValueHeader: "Current Account Balance",
   },
   "current-account-balance-percent-gdp": {
     logPrefix: "Current account balance percent of GDP page",
     group: "trade",
-    documentTitleMetric: "Current Account Balance Percent of GDP",
+    documentTitleMetric: "Current Account Balance (% of GDP)",
     pathSegment: "current-account-balance-percent-gdp",
     seriesIds: ["currentAccountBalancePercentGdp"],
-    tableValueHeader: "Current Account Balance Percent of GDP",
   },
   "goods-exports": {
     logPrefix: "Goods exports page",
@@ -124,7 +111,6 @@ const pageDefinitions = {
     documentTitleMetric: "Goods Exports",
     pathSegment: "goods-exports",
     seriesIds: ["goodsExports"],
-    tableValueHeader: "Goods Exports",
   },
   "goods-imports": {
     logPrefix: "Goods imports page",
@@ -132,7 +118,6 @@ const pageDefinitions = {
     documentTitleMetric: "Goods Imports",
     pathSegment: "goods-imports",
     seriesIds: ["goodsImports"],
-    tableValueHeader: "Goods Imports",
   },
   "goods-trade-balance": {
     logPrefix: "Goods trade balance page",
@@ -140,7 +125,6 @@ const pageDefinitions = {
     documentTitleMetric: "Goods Trade Balance",
     pathSegment: "goods-trade-balance",
     seriesIds: ["goodsTradeBalance"],
-    tableValueHeader: "Goods Trade Balance",
   },
   "government-gross-debt": {
     logPrefix: "Government gross debt page",
@@ -148,7 +132,6 @@ const pageDefinitions = {
     documentTitleMetric: "Government Gross Debt",
     pathSegment: "government-gross-debt",
     seriesIds: ["governmentGrossDebt"],
-    tableValueHeader: "Government Gross Debt",
   },
   "government-net-debt": {
     logPrefix: "Government net debt page",
@@ -156,7 +139,6 @@ const pageDefinitions = {
     documentTitleMetric: "Government Net Debt",
     pathSegment: "government-net-debt",
     seriesIds: ["governmentNetDebt"],
-    tableValueHeader: "Government Net Debt",
   },
   "fiscal-balance": {
     logPrefix: "Fiscal balance page",
@@ -164,7 +146,6 @@ const pageDefinitions = {
     documentTitleMetric: "Fiscal Balance",
     pathSegment: "fiscal-balance",
     seriesIds: ["fiscalBalance"],
-    tableValueHeader: "Fiscal Balance",
   },
   "primary-fiscal-balance": {
     logPrefix: "Primary fiscal balance page",
@@ -172,7 +153,6 @@ const pageDefinitions = {
     documentTitleMetric: "Primary Fiscal Balance",
     pathSegment: "primary-fiscal-balance",
     seriesIds: ["primaryFiscalBalance"],
-    tableValueHeader: "Primary Fiscal Balance",
   },
   "government-revenue": {
     logPrefix: "Government revenue page",
@@ -180,7 +160,6 @@ const pageDefinitions = {
     documentTitleMetric: "Government Revenue",
     pathSegment: "government-revenue",
     seriesIds: ["governmentRevenue"],
-    tableValueHeader: "Government Revenue",
   },
   "government-expenditure": {
     logPrefix: "Government expenditure page",
@@ -188,7 +167,6 @@ const pageDefinitions = {
     documentTitleMetric: "Government Expenditure",
     pathSegment: "government-expenditure",
     seriesIds: ["governmentExpenditure"],
-    tableValueHeader: "Government Expenditure",
   },
   "total-reserves-including-gold": {
     logPrefix: "Total reserves including gold page",
@@ -196,23 +174,20 @@ const pageDefinitions = {
     documentTitleMetric: "Total Reserves Including Gold",
     pathSegment: "total-reserves-including-gold",
     seriesIds: ["totalReservesIncludingGold"],
-    tableValueHeader: "Total Reserves Including Gold",
   },
   "agricultural-land-percent-of-land-area": {
     logPrefix: "Agricultural land percent of land area page",
     group: "environmental",
-    documentTitleMetric: "Agricultural Land Percent of Land Area",
+    documentTitleMetric: "Agricultural Land (% of Land Area)",
     pathSegment: "agricultural-land-percent-of-land-area",
     seriesIds: ["agriculturalLandPercentOfLandArea"],
-    tableValueHeader: "Agricultural Land Percent of Land Area",
   },
   "forest-area-percent-of-land-area": {
     logPrefix: "Forest area percent of land area page",
     group: "environmental",
-    documentTitleMetric: "Forest Area Percent of Land Area",
+    documentTitleMetric: "Forest Area (% of Land Area)",
     pathSegment: "forest-area-percent-of-land-area",
     seriesIds: ["forestAreaPercentOfLandArea"],
-    tableValueHeader: "Forest Area Percent of Land Area",
   },
 };
 const countryIndicatorLinks = [
@@ -235,7 +210,7 @@ const tradeIndicatorLinks = [
   {
     pageKind: "current-account-balance-percent-gdp",
     href: "../current-account-balance-percent-gdp/",
-    label: "Current Account Balance Percent of GDP",
+    label: "Current Account Balance (% of GDP)",
   },
   { pageKind: "goods-exports", href: "../goods-exports/", label: "Goods Exports" },
   { pageKind: "goods-imports", href: "../goods-imports/", label: "Goods Imports" },
@@ -258,12 +233,12 @@ const environmentalIndicatorLinks = [
   {
     pageKind: "agricultural-land-percent-of-land-area",
     href: "../agricultural-land-percent-of-land-area/",
-    label: "Agricultural Land Percent of Land Area",
+    label: "Agricultural Land (% of Land Area)",
   },
   {
     pageKind: "forest-area-percent-of-land-area",
     href: "../forest-area-percent-of-land-area/",
-    label: "Forest Area Percent of Land Area",
+    label: "Forest Area (% of Land Area)",
   },
 ];
 const countryIndicatorLinksByGroup = {
@@ -1127,12 +1102,6 @@ function renderDataTable(points, seriesConfig) {
   const table = document.createElement("table");
   table.className = "data-table";
 
-  const thead = document.createElement("thead");
-  const headerRow = document.createElement("tr");
-  appendDataTableHeaders(headerRow);
-  appendDataTableHeaders(headerRow);
-  thead.append(headerRow);
-
   const tbody = document.createElement("tbody");
   const splitIndex = Math.ceil(sortedPoints.length / 2);
   const leftPoints = sortedPoints.slice(0, splitIndex);
@@ -1145,7 +1114,7 @@ function renderDataTable(points, seriesConfig) {
     tbody.append(row);
   }
 
-  table.append(thead, tbody);
+  table.append(tbody);
   tableWrap.append(table);
 }
 
@@ -1162,17 +1131,6 @@ function renderNoDataTable(seriesConfig) {
   noDataElement.className = "data-table-empty";
   noDataElement.textContent = "No data available";
   tableWrap.append(noDataElement);
-}
-
-function appendDataTableHeaders(row) {
-  const yearHeader = document.createElement("th");
-  yearHeader.scope = "col";
-  yearHeader.textContent = "Year";
-
-  const valueHeader = document.createElement("th");
-  valueHeader.scope = "col";
-  valueHeader.textContent = pageDefinition.tableValueHeader;
-  row.append(yearHeader, valueHeader);
 }
 
 function appendDataTablePointCells(row, point, displayScale) {

@@ -1,4 +1,4 @@
-export function appendRankingValueCell(valueCell, { href, text, ariaLabel, value, rankingRows }) {
+export function appendRankingValueCell(valueCell, { href, text, ariaLabel, value, valueBarScale }) {
   const valueLink = document.createElement("a");
   valueLink.href = href;
   valueLink.setAttribute("aria-label", ariaLabel);
@@ -22,20 +22,31 @@ export function appendRankingValueCell(valueCell, { href, text, ariaLabel, value
   track.setAttribute("aria-hidden", "true");
 
   const fill = document.createElement("span");
-  fill.style.width = `${getValuePercentage(value, rankingRows)}%`;
+  fill.style.width = `${getValuePercentage(value, valueBarScale)}%`;
 
   track.append(fill);
   wrapper.append(valueLink, track);
   valueCell.append(wrapper);
 }
 
-function getValuePercentage(value, rankingRows) {
-  const topValue = rankingRows.find((row) => Number.isFinite(row.value))?.value;
-  const topMagnitude = Math.abs(topValue ?? 0);
+function getValuePercentage(value, valueBarScale) {
+  const topMagnitude = getTopMagnitudeForSign(value, valueBarScale);
 
   if (!Number.isFinite(value) || topMagnitude <= 0) {
     return 0;
   }
 
   return Math.min(100, Math.max(0, (Math.abs(value) / topMagnitude) * 100));
+}
+
+function getTopMagnitudeForSign(value, valueBarScale) {
+  if (!Number.isFinite(value)) {
+    return 0;
+  }
+
+  if (value < 0) {
+    return valueBarScale?.negativeMagnitude ?? 0;
+  }
+
+  return valueBarScale?.positiveMagnitude ?? 0;
 }
