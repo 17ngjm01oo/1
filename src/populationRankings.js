@@ -4,6 +4,14 @@ export const populationRankings = [
     label: "Population",
   },
   {
+    directory: "life-expectancy",
+    label: "Life Expectancy",
+  },
+  {
+    directory: "fertility-rate",
+    label: "Fertility Rate",
+  },
+  {
     directory: "employment",
     label: "Employment",
   },

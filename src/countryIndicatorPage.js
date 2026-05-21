@@ -4,6 +4,7 @@ import { filterCountries, formatCountryMetaText, initializeCountrySelector } fro
 import { getCurrencyCode } from "./currencyCodes.js";
 import { getCurrencyDisplay } from "./currencyDisplay.js";
 import { renderEconomicRankingLinks } from "./economicRankings.js";
+import { renderEnvironmentalRankingLinks } from "./environmentalRankings.js";
 import { renderFiscalRankingLinks } from "./fiscalRankings.js";
 import { getFlagEmoji } from "./flags.js";
 import { renderPopulationRankingLinks } from "./populationRankings.js";
@@ -68,6 +69,22 @@ const pageDefinitions = {
     pathSegment: "unemployment-rate",
     seriesIds: ["unemploymentRate"],
     tableValueHeader: "Unemployment Rate",
+  },
+  "life-expectancy": {
+    logPrefix: "Life expectancy page",
+    group: "population",
+    documentTitleMetric: "Life Expectancy",
+    pathSegment: "life-expectancy",
+    seriesIds: ["lifeExpectancy"],
+    tableValueHeader: "Life Expectancy",
+  },
+  "fertility-rate": {
+    logPrefix: "Fertility rate page",
+    group: "population",
+    documentTitleMetric: "Fertility Rate",
+    pathSegment: "fertility-rate",
+    seriesIds: ["fertilityRate"],
+    tableValueHeader: "Fertility Rate",
   },
   ppp: {
     logPrefix: "PPP page",
@@ -181,6 +198,22 @@ const pageDefinitions = {
     seriesIds: ["totalReservesIncludingGold"],
     tableValueHeader: "Total Reserves Including Gold",
   },
+  "agricultural-land-percent-of-land-area": {
+    logPrefix: "Agricultural land percent of land area page",
+    group: "environmental",
+    documentTitleMetric: "Agricultural Land Percent of Land Area",
+    pathSegment: "agricultural-land-percent-of-land-area",
+    seriesIds: ["agriculturalLandPercentOfLandArea"],
+    tableValueHeader: "Agricultural Land Percent of Land Area",
+  },
+  "forest-area-percent-of-land-area": {
+    logPrefix: "Forest area percent of land area page",
+    group: "environmental",
+    documentTitleMetric: "Forest Area Percent of Land Area",
+    pathSegment: "forest-area-percent-of-land-area",
+    seriesIds: ["forestAreaPercentOfLandArea"],
+    tableValueHeader: "Forest Area Percent of Land Area",
+  },
 };
 const countryIndicatorLinks = [
   { pageKind: "gdp", href: "../gdp/", label: "GDP" },
@@ -192,6 +225,8 @@ const countryIndicatorLinks = [
 ];
 const populationIndicatorLinks = [
   { pageKind: "population", href: "../population/", label: "Population" },
+  { pageKind: "life-expectancy", href: "../life-expectancy/", label: "Life Expectancy" },
+  { pageKind: "fertility-rate", href: "../fertility-rate/", label: "Fertility Rate" },
   { pageKind: "employment", href: "../employment/", label: "Employment" },
   { pageKind: "unemployment-rate", href: "../unemployment-rate/", label: "Unemployment Rate" },
 ];
@@ -219,11 +254,24 @@ const fiscalIndicatorLinks = [
     label: "Total Reserves Including Gold",
   },
 ];
+const environmentalIndicatorLinks = [
+  {
+    pageKind: "agricultural-land-percent-of-land-area",
+    href: "../agricultural-land-percent-of-land-area/",
+    label: "Agricultural Land Percent of Land Area",
+  },
+  {
+    pageKind: "forest-area-percent-of-land-area",
+    href: "../forest-area-percent-of-land-area/",
+    label: "Forest Area Percent of Land Area",
+  },
+];
 const countryIndicatorLinksByGroup = {
   economic: countryIndicatorLinks,
   population: populationIndicatorLinks,
   trade: tradeIndicatorLinks,
   fiscal: fiscalIndicatorLinks,
+  environmental: environmentalIndicatorLinks,
 };
 const pageKind = pageDefinitions[document.body.dataset.pageKind] ? document.body.dataset.pageKind : "gdp";
 const pageDefinition = pageDefinitions[pageKind];
@@ -239,6 +287,8 @@ const comparableSeriesIds = new Set([
   "population",
   "employment",
   "unemploymentRate",
+  "lifeExpectancy",
+  "fertilityRate",
   "ppp",
   "pppPerCapita",
   "currentAccountBalance",
@@ -253,6 +303,8 @@ const comparableSeriesIds = new Set([
   "governmentRevenue",
   "governmentExpenditure",
   "totalReservesIncludingGold",
+  "agriculturalLandPercentOfLandArea",
+  "forestAreaPercentOfLandArea",
 ]);
 const rankedSeriesIds = new Set(comparableSeriesIds);
 const rankingDirectoryBySeriesId = {
@@ -263,6 +315,8 @@ const rankingDirectoryBySeriesId = {
   population: "population",
   employment: "employment",
   unemploymentRate: "unemployment-rate",
+  lifeExpectancy: "life-expectancy",
+  fertilityRate: "fertility-rate",
   ppp: "ppp",
   pppPerCapita: "ppp-per-capita",
   currentAccountBalance: "current-account-balance",
@@ -277,6 +331,8 @@ const rankingDirectoryBySeriesId = {
   governmentRevenue: "government-revenue",
   governmentExpenditure: "government-expenditure",
   totalReservesIncludingGold: "total-reserves-including-gold",
+  agriculturalLandPercentOfLandArea: "agricultural-land-percent-of-land-area",
+  forestAreaPercentOfLandArea: "forest-area-percent-of-land-area",
 };
 const seriesRuntimeState = new Map();
 
@@ -335,6 +391,11 @@ function updateTopRankingLinks() {
   });
 
   renderFiscalRankingLinks(document.querySelector("#fiscalTopNav"), {
+    rootHref: "../../../",
+    highlightCurrent: false,
+  });
+
+  renderEnvironmentalRankingLinks(document.querySelector("#environmentalTopNav"), {
     rootHref: "../../../",
     highlightCurrent: false,
   });

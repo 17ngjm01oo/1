@@ -1,6 +1,6 @@
 import { dataSources } from "./dataSources.js";
 
-const { weoCurrentPrices, unctadGoodsTrade, worldBankWdi } = dataSources;
+const { weoCurrentPrices, unctadGoodsTrade, worldBankWdi, worldBankPopulation, worldBankEnvironment } = dataSources;
 
 export const seriesConfigs = [
   {
@@ -120,6 +120,29 @@ export const seriesConfigs = [
     suffix: "%",
     suffixSpacing: "",
     maximumFractionDigits: 1,
+  },
+  {
+    id: "lifeExpectancy",
+    canvasId: "lifeExpectancyChart",
+    chartCardId: "lifeExpectancyChartCard",
+    overlayId: "lifeExpectancyOverlay",
+    statusId: "lifeExpectancyStatus",
+    ...worldBankPopulation,
+    indicatorCode: "SP.DYN.LE00.IN",
+    titleTemplate: "Life Expectancy",
+    tooltipUnit: "years",
+    maximumFractionDigits: 1,
+  },
+  {
+    id: "fertilityRate",
+    canvasId: "fertilityRateChart",
+    chartCardId: "fertilityRateChartCard",
+    overlayId: "fertilityRateOverlay",
+    statusId: "fertilityRateStatus",
+    ...worldBankPopulation,
+    indicatorCode: "SP.DYN.TFRT.IN",
+    titleTemplate: "Fertility Rate",
+    maximumFractionDigits: 2,
   },
   {
     id: "gdpNationalPerCapita",
@@ -336,5 +359,31 @@ export const seriesConfigs = [
     tooltipPrefix: "$",
     valueScaleMode: "usdMagnitude",
     maximumFractionDigits: 2,
+  },
+  {
+    id: "agriculturalLandPercentOfLandArea",
+    canvasId: "agriculturalLandPercentOfLandAreaChart",
+    chartCardId: "agriculturalLandPercentOfLandAreaChartCard",
+    overlayId: "agriculturalLandPercentOfLandAreaOverlay",
+    statusId: "agriculturalLandPercentOfLandAreaStatus",
+    ...worldBankEnvironment,
+    indicatorCode: "AG.LND.AGRI.ZS",
+    titleTemplate: "Agricultural Land Percent of Land Area",
+    suffix: "%",
+    suffixSpacing: "",
+    maximumFractionDigits: 1,
+  },
+  {
+    id: "forestAreaPercentOfLandArea",
+    canvasId: "forestAreaPercentOfLandAreaChart",
+    chartCardId: "forestAreaPercentOfLandAreaChartCard",
+    overlayId: "forestAreaPercentOfLandAreaOverlay",
+    statusId: "forestAreaPercentOfLandAreaStatus",
+    ...worldBankEnvironment,
+    indicatorCode: "AG.LND.FRST.ZS",
+    titleTemplate: "Forest Area Percent of Land Area",
+    suffix: "%",
+    suffixSpacing: "",
+    maximumFractionDigits: 1,
   },
 ];

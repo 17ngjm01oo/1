@@ -30,14 +30,12 @@ export function appendRankingValueCell(valueCell, { href, text, ariaLabel, value
 }
 
 function getValuePercentage(value, rankingRows) {
-  const totalValue = rankingRows
-    .map((row) => row.value)
-    .filter(Number.isFinite)
-    .reduce((total, rowValue) => total + Math.abs(rowValue), 0);
+  const topValue = rankingRows.find((row) => Number.isFinite(row.value))?.value;
+  const topMagnitude = Math.abs(topValue ?? 0);
 
-  if (!Number.isFinite(value) || totalValue <= 0) {
+  if (!Number.isFinite(value) || topMagnitude <= 0) {
     return 0;
   }
 
-  return Math.min(100, Math.max(0, (Math.abs(value) / totalValue) * 100));
+  return Math.min(100, Math.max(0, (Math.abs(value) / topMagnitude) * 100));
 }

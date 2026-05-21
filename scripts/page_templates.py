@@ -22,6 +22,10 @@ def render_rankings_top_nav(economic_nav_id: str) -> str:
               <summary class="top-nav-label">Fiscal</summary>
               <nav class="site-nav" id="fiscalTopNav"></nav>
             </details>
+            <details class="top-nav-disclosure">
+              <summary class="top-nav-label">Environmental</summary>
+              <nav class="site-nav" id="environmentalTopNav"></nav>
+            </details>
           </div>
         </details>
       </section>"""

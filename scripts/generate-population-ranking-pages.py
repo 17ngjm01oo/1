@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from data_source_notes import WEO_RANKING_NOTES
+from data_source_notes import WEO_RANKING_NOTES, WORLD_BANK_RANKING_NOTES
 from ranking_page_generator import generate_ranking_pages
 
 RANKING_TYPES = [
@@ -9,6 +9,22 @@ RANKING_TYPES = [
         "title": "Population Ranking by Country",
         "script": "populationRanking.js",
         "table_title": "Population Ranking",
+    },
+    {
+        **WORLD_BANK_RANKING_NOTES,
+        "directory": "life-expectancy",
+        "title": "Life Expectancy Ranking by Country",
+        "script": "lifeExpectancyRanking.js",
+        "table_title": "Life Expectancy Ranking",
+        "subtitle": "Life expectancy at birth is measured in years.",
+    },
+    {
+        **WORLD_BANK_RANKING_NOTES,
+        "directory": "fertility-rate",
+        "title": "Fertility Rate Ranking by Country",
+        "script": "fertilityRateRanking.js",
+        "table_title": "Fertility Rate Ranking",
+        "subtitle": "Total fertility rate estimates the average number of children a woman would have over her lifetime, based on age-specific birth rates for ages 15-49.",
     },
     {
         "directory": "employment",
@@ -26,7 +42,10 @@ RANKING_TYPES = [
 
 
 def main() -> None:
-    generate_ranking_pages([ranking_type | WEO_RANKING_NOTES for ranking_type in RANKING_TYPES])
+    generate_ranking_pages([
+        ranking_type if "source_note" in ranking_type else ranking_type | WEO_RANKING_NOTES
+        for ranking_type in RANKING_TYPES
+    ])
 
 
 if __name__ == "__main__":

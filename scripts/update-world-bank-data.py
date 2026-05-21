@@ -12,15 +12,61 @@ from urllib.request import Request, urlopen
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 COUNTRIES_JS = ROOT_DIR / "src" / "countries.js"
-OUTPUT_PATH = ROOT_DIR / "data" / "world-bank" / "total-reserves.json"
 API_BASE_URL = "https://api.worldbank.org/v2"
-SOURCE_URL = "https://data.worldbank.org/indicator/FI.RES.TOTL.CD"
 DATASET_ID = "World Development Indicators"
-TARGET_INDICATORS = {
-    "FI.RES.TOTL.CD": {
-        "label": "Total Reserves Including Gold",
-        "slug": "total-reserves-including-gold",
-        "description": "Total reserves including gold, current U.S. dollars",
+DATASETS = {
+    "total-reserves": {
+        "outputPath": ROOT_DIR / "data" / "world-bank" / "total-reserves.json",
+        "sourceUrl": "https://data.worldbank.org/indicator/FI.RES.TOTL.CD",
+        "indicators": {
+            "FI.RES.TOTL.CD": {
+                "label": "Total Reserves Including Gold",
+                "slug": "total-reserves-including-gold",
+                "description": "Total reserves including gold, current U.S. dollars",
+                "scale": "Units",
+                "unit": "US dollar",
+            },
+        },
+    },
+    "population-demographics": {
+        "outputPath": ROOT_DIR / "data" / "world-bank" / "population-demographics.json",
+        "sourceUrl": "https://databank.worldbank.org/source/world-development-indicators",
+        "indicators": {
+            "SP.DYN.LE00.IN": {
+                "label": "Life Expectancy",
+                "slug": "life-expectancy",
+                "description": "Life expectancy at birth, total, years",
+                "scale": "Units",
+                "unit": "Years",
+            },
+            "SP.DYN.TFRT.IN": {
+                "label": "Fertility Rate",
+                "slug": "fertility-rate",
+                "description": "Fertility rate, total",
+                "scale": "Units",
+                "unit": "",
+            },
+        },
+    },
+    "environment": {
+        "outputPath": ROOT_DIR / "data" / "world-bank" / "environment.json",
+        "sourceUrl": "https://databank.worldbank.org/source/world-development-indicators",
+        "indicators": {
+            "AG.LND.AGRI.ZS": {
+                "label": "Agricultural Land Percent of Land Area",
+                "slug": "agricultural-land-percent-of-land-area",
+                "description": "Agricultural land, percent of land area",
+                "scale": "Units",
+                "unit": "%",
+            },
+            "AG.LND.FRST.ZS": {
+                "label": "Forest Area Percent of Land Area",
+                "slug": "forest-area-percent-of-land-area",
+                "description": "Forest area, percent of land area",
+                "scale": "Units",
+                "unit": "%",
+            },
+        },
     },
 }
 
@@ -30,26 +76,35 @@ def main() -> None:
         description="Build normalized static JSON from World Bank World Development Indicators.",
     )
     parser.add_argument(
+        "--dataset",
+        choices=sorted(DATASETS),
+        default="total-reserves",
+        help="World Bank dataset bundle to build. Default: total-reserves.",
+    )
+    parser.add_argument(
         "--output",
         type=Path,
-        default=OUTPUT_PATH,
-        help=f"Output JSON path. Default: {OUTPUT_PATH.relative_to(ROOT_DIR)}",
+        help="Output JSON path. Defaults to the selected dataset bundle path.",
     )
     args = parser.parse_args()
 
-    result = build_normalized_world_bank_json()
-    write_json(args.output, result)
-    print(f"Wrote {format_path_for_log(args.output)}")
+    dataset_config = DATASETS[args.dataset]
+    output_path = args.output or dataset_config["outputPath"]
+    result = build_normalized_world_bank_json(dataset_config)
+    write_json(output_path, result)
+    print(f"Wrote {format_path_for_log(output_path)}")
     print_summary(result)
 
 
-def build_normalized_world_bank_json() -> dict:
+def build_normalized_world_bank_json(dataset_config: dict) -> dict:
     countries = parse_countries(COUNTRIES_JS.read_text(encoding="utf-8"))
     source_countries = fetch_world_bank_countries()
     source_country_labels = {country["id"]: country["name"] for country in source_countries}
-    indicator_rows = fetch_indicator_rows("FI.RES.TOTL.CD")
-    values_by_source_country = build_values_by_source_country(indicator_rows)
-    years = collect_years(values_by_source_country)
+    values_by_indicator = {
+        indicator_code: build_values_by_source_country(fetch_indicator_rows(indicator_code))
+        for indicator_code in dataset_config["indicators"]
+    }
+    years = collect_years(values_by_indicator)
     country_mapping, unmatched_countries = build_country_mapping(countries, source_country_labels)
     economies: dict[str, dict] = {}
     missing_target_series: list[dict] = []
@@ -60,7 +115,6 @@ def build_normalized_world_bank_json() -> dict:
         if not source_code:
             continue
 
-        values = values_by_source_country.get(source_code, {})
         economy = {
             "name": country["name"],
             "sourceCode": source_code,
@@ -68,23 +122,26 @@ def build_normalized_world_bank_json() -> dict:
             "series": {},
         }
 
-        if values:
-            economy["series"]["FI.RES.TOTL.CD"] = {
-                "seriesCode": f"{source_code}.FI.RES.TOTL.CD.A",
-                "indicatorId": "FI.RES.TOTL.CD",
-                "indicator": "Total reserves including gold, current U.S. dollars",
-                "scale": "Units",
-                "unit": "US dollar",
-                "latestActualAnnualData": max(values, key=int),
-                "values": values,
-            }
-        else:
-            missing_target_series.append({
-                "economyCode": country["code"],
-                "economyName": country["name"],
-                "sourceCode": source_code,
-                "indicatorId": "FI.RES.TOTL.CD",
-            })
+        for indicator_code, indicator in dataset_config["indicators"].items():
+            values = values_by_indicator[indicator_code].get(source_code, {})
+
+            if values:
+                economy["series"][indicator_code] = {
+                    "seriesCode": f"{source_code}.{indicator_code}.A",
+                    "indicatorId": indicator_code,
+                    "indicator": indicator["description"],
+                    "scale": indicator["scale"],
+                    "unit": indicator["unit"],
+                    "latestActualAnnualData": max(values, key=int),
+                    "values": values,
+                }
+            else:
+                missing_target_series.append({
+                    "economyCode": country["code"],
+                    "economyName": country["name"],
+                    "sourceCode": source_code,
+                    "indicatorId": indicator_code,
+                })
 
         if economy["series"]:
             economies[country["code"]] = economy
@@ -94,8 +151,11 @@ def build_normalized_world_bank_json() -> dict:
         "source": {
             "provider": "World Bank",
             "dataset": DATASET_ID,
-            "sourceUrl": SOURCE_URL,
-            "apiUrl": build_api_url("country/all/indicator/FI.RES.TOTL.CD", {"format": "json", "per_page": 20000}),
+            "sourceUrl": dataset_config["sourceUrl"],
+            "apiUrls": {
+                indicator_code: build_api_url(f"country/all/indicator/{indicator_code}", {"format": "json", "per_page": 20000})
+                for indicator_code in dataset_config["indicators"]
+            },
             "retrievedAt": datetime.now(timezone.utc).isoformat(),
         },
         "coverage": {
@@ -104,7 +164,7 @@ def build_normalized_world_bank_json() -> dict:
             "endYear": int(years[-1]) if years else None,
             "years": years,
         },
-        "indicators": TARGET_INDICATORS,
+        "indicators": dataset_config["indicators"],
         "economies": dict(sorted(economies.items())),
         "diagnostics": {
             "matchedCountries": len(country_mapping),
@@ -173,9 +233,10 @@ def build_values_by_source_country(rows: list[dict]) -> dict[str, dict[str, floa
     }
 
 
-def collect_years(values_by_source_country: dict[str, dict[str, float | int]]) -> list[str]:
+def collect_years(values_by_indicator: dict[str, dict[str, dict[str, float | int]]]) -> list[str]:
     years = {
         int(year)
+        for values_by_source_country in values_by_indicator.values()
         for values in values_by_source_country.values()
         for year in values
         if year.isdigit()
@@ -292,7 +353,7 @@ def print_summary(result: dict) -> None:
     economies = result["economies"]
     print(f"Economies: {len(economies)}")
 
-    for indicator_id in TARGET_INDICATORS:
+    for indicator_id in result["indicators"]:
         count = sum(1 for economy in economies.values() if indicator_id in economy["series"])
         print(f"{indicator_id}: {count} economies")
 

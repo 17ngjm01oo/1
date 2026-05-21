@@ -1,4 +1,5 @@
 import { renderEconomicRankingLinks } from "./economicRankings.js";
+import { renderEnvironmentalRankingLinks } from "./environmentalRankings.js";
 import { renderFiscalRankingLinks } from "./fiscalRankings.js";
 import { renderPopulationRankingLinks } from "./populationRankings.js";
 import { renderTradeRankingLinks } from "./tradeRankings.js";
@@ -16,5 +17,9 @@ renderTradeRankingLinks(document.querySelector("#homeTradeRankings"), {
 });
 
 renderFiscalRankingLinks(document.querySelector("#homeFiscalRankings"), {
+  rootHref: "./",
+});
+
+renderEnvironmentalRankingLinks(document.querySelector("#homeEnvironmentalRankings"), {
   rootHref: "./",
 });
