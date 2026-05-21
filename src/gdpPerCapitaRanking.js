@@ -9,9 +9,8 @@ initializeRankingPage({
   pagePathSegment: "gdp-per-capita",
   linkAriaMetric: "GDP per capita",
   displayScaleConfig: {
-    valueScale: 1,
-    tooltipPrefix: "$",
-    tooltipUnit: "",
+    currencyCode: "USD",
+    valueScaleMode: "currencyUnitsMagnitude",
     maximumFractionDigits: 0,
   },
 });

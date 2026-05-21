@@ -1,3 +1,19 @@
+const currencySymbols = {
+  "INT$": "$",
+  USD: "$",
+  EUR: "€",
+  JPY: "¥",
+  CNY: "¥",
+  GBP: "£",
+  INR: "₹",
+  AUD: "A$",
+  KRW: "₩",
+  RUB: "₽",
+  BRL: "R$",
+  TRY: "₺",
+  IDR: "Rp",
+};
+
 export function getCurrencyDisplay(config = {}) {
   if (config.currencyDisplay) {
     return {
@@ -7,7 +23,7 @@ export function getCurrencyDisplay(config = {}) {
     };
   }
 
-  if (!config.usesCountryCurrency || !config.currencyCode) {
+  if (!config.currencyCode) {
     return {
       prefix: config.tooltipPrefix ?? "",
       suffix: config.suffix ?? "",
@@ -15,9 +31,11 @@ export function getCurrencyDisplay(config = {}) {
     };
   }
 
-  if (config.currencyCode === "USD") {
+  const currencySymbol = currencySymbols[config.currencyCode];
+
+  if (currencySymbol) {
     return {
-      prefix: "$",
+      prefix: currencySymbol,
       suffix: "",
       compactUnitSuffix: "",
     };

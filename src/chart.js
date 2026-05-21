@@ -74,16 +74,10 @@ export function renderLineChart(canvas, { points, config, comparison = null }) {
           displayColors: false,
           callbacks: {
             label(context) {
-              const value = formatNumber(context.parsed.y, displayScale.maximumFractionDigits);
-              const prefix = displayScale.tooltipPrefix;
-              const unit = displayScale.compactUnit
-                ? displayScale.compactUnit
-                : displayScale.tooltipUnit
-                  ? ` ${displayScale.tooltipUnit}`
-                  : "";
-              const suffixSpacing = displayScale.suffixSpacing ?? (displayScale.suffix ? " " : "");
-              const suffix = displayScale.suffix ? `${suffixSpacing}${displayScale.suffix}` : "";
-              const formattedValue = `${prefix}${value}${unit}${suffix}`;
+              const rawValue = context.dataset.rawValues?.[context.dataIndex];
+              const formattedValue = Number.isFinite(rawValue)
+                ? formatCompactDisplayValue(rawValue, displayScale)
+                : formatAxisTickValue(context.parsed.y, displayScale);
 
               if (comparison?.points?.length) {
                 return `${context.dataset.label}: ${formattedValue}`;
@@ -165,6 +159,10 @@ function buildDataset({
       const value = valueByYear.get(Number(labelYear));
       return Number.isFinite(value) ? value * displayScale.valueScale : null;
     }),
+    rawValues: labels.map((labelYear) => {
+      const value = valueByYear.get(Number(labelYear));
+      return Number.isFinite(value) ? value : null;
+    }),
     borderColor: baseColor,
     backgroundColor: baseColor,
     borderWidth: isCompactViewport ? 2 : 3,
@@ -181,27 +179,38 @@ function buildDataset({
 
 export function getDisplayScale(points, config) {
   if (config.valueScaleMode === "gdpMagnitude") {
-    return getGdpDisplayScale(points);
+    return getCurrencyMagnitudeDisplayScale(points, { currencyCode: "USD", ...config }, magnitudeInputs.billions);
   }
 
   if (config.valueScaleMode === "usdMillionsMagnitude") {
-    return getUsdMillionsDisplayScale(points);
+    return getCurrencyMagnitudeDisplayScale(points, { currencyCode: "USD", ...config }, magnitudeInputs.millions);
   }
 
   if (config.valueScaleMode === "usdMagnitude") {
-    return getUsdDisplayScale(points);
+    return getCurrencyMagnitudeDisplayScale(points, { currencyCode: "USD", ...config }, magnitudeInputs.units);
+  }
+
+  if (config.valueScaleMode === "currencyUnitsMagnitude") {
+    return getCurrencyMagnitudeDisplayScale(points, config, magnitudeInputs.units, {
+      maximumFractionDigits: config.maximumFractionDigits ?? 0,
+      tooltipUnit: config.tooltipUnit ?? "",
+    });
   }
 
   if (config.valueScaleMode === "internationalDollarMagnitude") {
-    return getInternationalDollarDisplayScale(points);
+    return getCurrencyMagnitudeDisplayScale(points, { currencyCode: "INT$", ...config }, magnitudeInputs.billions);
   }
 
   if (config.valueScaleMode === "nationalCurrencyMagnitude") {
-    return getNationalCurrencyDisplayScale(points, config);
+    return getCurrencyMagnitudeDisplayScale(points, config, magnitudeInputs.billions);
   }
 
   if (config.valueScaleMode === "populationMagnitude") {
-    return getPopulationDisplayScale(points);
+    return getMagnitudeDisplayScale(points, magnitudeInputs.people, {
+      tooltipUnitSuffix: " people",
+      valueScale: 1000000,
+      maximumFractionDigits: 0,
+    });
   }
 
   return {
@@ -216,226 +225,98 @@ export function getDisplayScale(points, config) {
   };
 }
 
-function getGdpDisplayScale(points) {
-  const maxRawValue = Math.max(...points.map((point) => Math.abs(point.value)));
+const magnitudeInputs = {
+  billions: [
+    { threshold: 1000000, valueScale: 0.000001, compactUnit: "Q", fixedFractionDigits: 2 },
+    { threshold: 1000, valueScale: 0.001, compactUnit: "T", fixedFractionDigits: 2 },
+    { threshold: 1, valueScale: 1, compactUnit: "B" },
+    { threshold: Number.NEGATIVE_INFINITY, valueScale: 1000, compactUnit: "M" },
+  ],
+  millions: [
+    { threshold: 1000000000, valueScale: 0.000000001, compactUnit: "Q", fixedFractionDigits: 2 },
+    { threshold: 1000000, valueScale: 0.000001, compactUnit: "T", fixedFractionDigits: 2 },
+    { threshold: 1000, valueScale: 0.001, compactUnit: "B" },
+    { threshold: Number.NEGATIVE_INFINITY, valueScale: 1, compactUnit: "M" },
+  ],
+  units: [
+    { threshold: 1000000000000000, valueScale: 0.000000000000001, compactUnit: "Q", fixedFractionDigits: 2 },
+    { threshold: 1000000000000, valueScale: 0.000000000001, compactUnit: "T", fixedFractionDigits: 2 },
+    { threshold: 1000000000, valueScale: 0.000000001, compactUnit: "B" },
+    { threshold: 1000000, valueScale: 0.000001, compactUnit: "M" },
+  ],
+  people: [
+    { threshold: 1000000000, valueScale: 0.000000001, compactUnit: "Q", fixedFractionDigits: 2 },
+    { threshold: 1000000, valueScale: 0.000001, compactUnit: "T", fixedFractionDigits: 2 },
+    { threshold: 1000, valueScale: 0.001, compactUnit: "B" },
+    { threshold: 1, valueScale: 1, compactUnit: "M" },
+  ],
+};
 
-  if (maxRawValue >= 1000) {
-    return {
-      valueScale: 0.001,
-      tooltipPrefix: "$",
-      tooltipUnit: "trillion",
-      tickPrefix: "$",
-      compactUnit: "T",
-      maximumFractionDigits: 2,
-    };
-  }
-
-  if (maxRawValue >= 1) {
-    return {
-      valueScale: 1,
-      tooltipPrefix: "$",
-      tooltipUnit: "billion",
-      tickPrefix: "$",
-      compactUnit: "B",
-      maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue),
-    };
-  }
-
-  return {
-    valueScale: 1000,
-    tooltipPrefix: "$",
-    tooltipUnit: "million",
-    tickPrefix: "$",
-    compactUnit: "M",
-    maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue * 1000),
-  };
-}
-
-function getUsdMillionsDisplayScale(points) {
-  const maxRawValue = Math.max(...points.map((point) => Math.abs(point.value)));
-
-  if (maxRawValue >= 1000000) {
-    return {
-      valueScale: 0.000001,
-      tooltipPrefix: "$",
-      tooltipUnit: "trillion",
-      tickPrefix: "$",
-      compactUnit: "T",
-      maximumFractionDigits: 2,
-    };
-  }
-
-  if (maxRawValue >= 1000) {
-    return {
-      valueScale: 0.001,
-      tooltipPrefix: "$",
-      tooltipUnit: "billion",
-      tickPrefix: "$",
-      compactUnit: "B",
-      maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue * 0.001),
-    };
-  }
-
-  return {
-    valueScale: 1,
-    tooltipPrefix: "$",
-    tooltipUnit: "million",
-    tickPrefix: "$",
-    compactUnit: "M",
-    maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue),
-  };
-}
-
-function getUsdDisplayScale(points) {
-  const maxRawValue = Math.max(...points.map((point) => Math.abs(point.value)));
-
-  if (maxRawValue >= 1000000000000) {
-    return {
-      valueScale: 0.000000000001,
-      tooltipPrefix: "$",
-      tooltipUnit: "trillion",
-      tickPrefix: "$",
-      compactUnit: "T",
-      maximumFractionDigits: 2,
-    };
-  }
-
-  if (maxRawValue >= 1000000000) {
-    return {
-      valueScale: 0.000000001,
-      tooltipPrefix: "$",
-      tooltipUnit: "billion",
-      tickPrefix: "$",
-      compactUnit: "B",
-      maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue * 0.000000001),
-    };
-  }
-
-  return {
-    valueScale: 0.000001,
-    tooltipPrefix: "$",
-    tooltipUnit: "million",
-    tickPrefix: "$",
-    compactUnit: "M",
-    maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue * 0.000001),
-  };
-}
-
-function getInternationalDollarDisplayScale(points) {
-  const maxRawValue = Math.max(...points.map((point) => Math.abs(point.value)));
-
-  if (maxRawValue >= 1000) {
-    return {
-      valueScale: 0.001,
-      tooltipPrefix: "$",
-      tooltipUnit: "trillion",
-      tickPrefix: "$",
-      compactUnit: "T",
-      maximumFractionDigits: 2,
-    };
-  }
-
-  if (maxRawValue >= 1) {
-    return {
-      valueScale: 1,
-      tooltipPrefix: "$",
-      tooltipUnit: "billion",
-      tickPrefix: "$",
-      compactUnit: "B",
-      maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue),
-    };
-  }
-
-  return {
-    valueScale: 1000,
-    tooltipPrefix: "$",
-    tooltipUnit: "million",
-    tickPrefix: "$",
-    compactUnit: "M",
-    maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue * 1000),
-  };
-}
-
-function getNationalCurrencyDisplayScale(points, config) {
-  const currencyCode = config.currencyCode || "local currency";
+function getCurrencyMagnitudeDisplayScale(points, config, magnitudeSteps, fallback = {}) {
   const currencyDisplay = getCurrencyDisplay(config);
   const maxRawValue = Math.max(...points.map((point) => Math.abs(point.value)));
+  const magnitudeStep = magnitudeSteps.find((step) => maxRawValue >= step.threshold);
 
-  if (maxRawValue >= 1000) {
+  if (!magnitudeStep) {
     return {
-      valueScale: 0.001,
+      valueScale: config.valueScale ?? 1,
       tooltipPrefix: currencyDisplay.prefix,
-      tooltipUnit: `trillion ${currencyCode}`,
+      tooltipUnit: fallback.tooltipUnit ?? config.tooltipUnit ?? "",
       tickPrefix: currencyDisplay.prefix,
-      compactUnit: `T${currencyDisplay.compactUnitSuffix}`,
-      maximumFractionDigits: 2,
+      suffix: currencyDisplay.suffix,
+      suffixSpacing: config.suffixSpacing ?? " ",
+      compactUnit: "",
+      compactUnitSuffix: currencyDisplay.compactUnitSuffix,
+      adaptiveCompactSteps: magnitudeSteps,
+      adaptiveFallbackMaximumFractionDigits: fallback.maximumFractionDigits ?? config.maximumFractionDigits ?? 0,
+      maximumFractionDigits: fallback.maximumFractionDigits ?? config.maximumFractionDigits ?? 0,
     };
   }
 
-  if (maxRawValue >= 1) {
-    return {
-      valueScale: 1,
-      tooltipPrefix: currencyDisplay.prefix,
-      tooltipUnit: `billion ${currencyCode}`,
-      tickPrefix: currencyDisplay.prefix,
-      compactUnit: `B${currencyDisplay.compactUnitSuffix}`,
-      maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue),
-    };
-  }
+  const displayValue = maxRawValue * magnitudeStep.valueScale;
 
   return {
-    valueScale: 1000,
+    valueScale: magnitudeStep.valueScale,
     tooltipPrefix: currencyDisplay.prefix,
-    tooltipUnit: `million ${currencyCode}`,
     tickPrefix: currencyDisplay.prefix,
-    compactUnit: `M${currencyDisplay.compactUnitSuffix}`,
-    maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue * 1000),
+    suffix: "",
+    compactUnit: `${magnitudeStep.compactUnit}${currencyDisplay.compactUnitSuffix}`,
+    compactUnitSuffix: currencyDisplay.compactUnitSuffix,
+    adaptiveCompactSteps: magnitudeSteps,
+    adaptiveFallbackMaximumFractionDigits: fallback.maximumFractionDigits ?? config.maximumFractionDigits ?? 0,
+    maximumFractionDigits: magnitudeStep.fixedFractionDigits ?? getMagnitudeFractionDigits(displayValue),
   };
 }
 
-function getPopulationDisplayScale(points) {
-  const maxRawValue = Math.max(...points.map((point) => point.value));
+function getMagnitudeDisplayScale(points, magnitudeSteps, fallback = {}) {
+  const maxRawValue = Math.max(...points.map((point) => Math.abs(point.value)));
+  const magnitudeStep = magnitudeSteps.find((step) => maxRawValue >= step.threshold);
 
-  if (maxRawValue >= 1000000) {
+  if (!magnitudeStep) {
     return {
-      valueScale: 0.000001,
+      valueScale: fallback.valueScale ?? 1,
       tooltipPrefix: "",
-      tooltipUnit: "trillion people",
+      tooltipUnit: "",
       tickPrefix: "",
-      compactUnit: "T",
-      maximumFractionDigits: 2,
+      compactUnit: "",
+      adaptiveCompactSteps: magnitudeSteps,
+      adaptiveFallbackMaximumFractionDigits: fallback.maximumFractionDigits ?? 0,
+      maximumFractionDigits: fallback.maximumFractionDigits ?? 0,
     };
   }
 
-  if (maxRawValue >= 1000) {
-    return {
-      valueScale: 0.001,
-      tooltipPrefix: "",
-      tooltipUnit: "billion people",
-      tickPrefix: "",
-      compactUnit: "B",
-      maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue * 0.001),
-    };
-  }
-
-  if (maxRawValue >= 1) {
-    return {
-      valueScale: 1,
-      tooltipPrefix: "",
-      tooltipUnit: "million people",
-      tickPrefix: "",
-      compactUnit: "M",
-      maximumFractionDigits: getMagnitudeFractionDigits(maxRawValue),
-    };
-  }
+  const displayValue = maxRawValue * magnitudeStep.valueScale;
 
   return {
-    valueScale: 1000000,
+    valueScale: magnitudeStep.valueScale,
     tooltipPrefix: "",
-    tooltipUnit: "",
     tickPrefix: "",
-    compactUnit: "",
-    maximumFractionDigits: 0,
+    suffix: "",
+    compactUnit: `${magnitudeStep.compactUnit}${fallback.tooltipUnitSuffix ?? ""}`,
+    compactUnitSuffix: fallback.tooltipUnitSuffix ?? "",
+    adaptiveCompactSteps: magnitudeSteps,
+    adaptiveFallbackMaximumFractionDigits: fallback.maximumFractionDigits ?? 0,
+    maximumFractionDigits: magnitudeStep.fixedFractionDigits ?? getMagnitudeFractionDigits(displayValue),
   };
 }
 
@@ -458,6 +339,10 @@ function formatNumber(value, maximumFractionDigits = 1) {
 }
 
 function formatAxisTickValue(value, displayScale) {
+  if (displayScale.adaptiveCompactSteps) {
+    return formatAdaptiveCompactValue(value / displayScale.valueScale, displayScale);
+  }
+
   const formattedValue = formatNumber(value, displayScale.maximumFractionDigits);
   const compactUnit = displayScale.compactUnit ?? "";
   const suffixSpacing = displayScale.suffixSpacing ?? (displayScale.suffix ? " " : "");
@@ -476,6 +361,10 @@ export function formatDisplayValue(value, displayScale) {
 }
 
 export function formatCompactDisplayValue(value, displayScale) {
+  if (displayScale.adaptiveCompactSteps) {
+    return formatAdaptiveCompactValue(value, displayScale);
+  }
+
   if (!displayScale.compactUnit) {
     return formatDisplayValue(value, displayScale);
   }
@@ -483,4 +372,24 @@ export function formatCompactDisplayValue(value, displayScale) {
   const formattedValue = formatNumber(value * displayScale.valueScale, displayScale.maximumFractionDigits);
 
   return `${displayScale.tooltipPrefix}${formattedValue}${displayScale.compactUnit}`;
+}
+
+function formatAdaptiveCompactValue(value, displayScale) {
+  const magnitudeStep = displayScale.adaptiveCompactSteps.find((step) => Math.abs(value) >= step.threshold);
+
+  if (!magnitudeStep) {
+    const formattedValue = formatNumber(value, displayScale.adaptiveFallbackMaximumFractionDigits);
+    const unit = displayScale.tooltipUnit ? ` ${displayScale.tooltipUnit}` : "";
+    const suffixSpacing = displayScale.suffixSpacing ?? (displayScale.suffix ? " " : "");
+    const suffix = displayScale.suffix ? `${suffixSpacing}${displayScale.suffix}` : "";
+
+    return `${displayScale.tooltipPrefix}${formattedValue}${unit}${suffix}`;
+  }
+
+  const displayValue = value * magnitudeStep.valueScale;
+  const maximumFractionDigits = magnitudeStep.fixedFractionDigits ?? getMagnitudeFractionDigits(Math.abs(displayValue));
+  const formattedValue = formatNumber(displayValue, maximumFractionDigits);
+  const compactUnit = `${magnitudeStep.compactUnit}${displayScale.compactUnitSuffix ?? ""}`;
+
+  return `${displayScale.tooltipPrefix}${formattedValue}${compactUnit}`;
 }

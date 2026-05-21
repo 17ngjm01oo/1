@@ -9,9 +9,8 @@ initializeRankingPage({
   pagePathSegment: "ppp-per-capita",
   linkAriaMetric: "PPP per capita",
   displayScaleConfig: {
-    valueScale: 1,
-    tooltipPrefix: "$",
-    tooltipUnit: "",
+    currencyCode: "INT$",
+    valueScaleMode: "currencyUnitsMagnitude",
     maximumFractionDigits: 0,
   },
 });
