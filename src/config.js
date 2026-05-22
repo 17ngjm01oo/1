@@ -6,6 +6,7 @@ const {
   worldBankWdi,
   worldBankPopulation,
   worldBankEnvironment,
+  ciaWorldFactbook,
 } = dataSources;
 
 export const seriesConfigs = [
@@ -366,6 +367,16 @@ export const seriesConfigs = [
     currencyCode: "USD",
     valueScaleMode: "usdMagnitude",
     maximumFractionDigits: 2,
+  },
+  {
+    id: "area",
+    ...ciaWorldFactbook,
+    indicatorCode: "CIA.AREA.K2",
+    titleTemplate: "Area",
+    valueScaleMode: "areaMagnitude",
+    fallbackMaximumFractionDigits: 0,
+    fallbackSmallValueMaximumFractionDigits: 2,
+    fallbackSmallValueThreshold: 10,
   },
   {
     id: "agriculturalLandPercentOfLandArea",

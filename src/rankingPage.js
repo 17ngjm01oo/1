@@ -150,7 +150,22 @@ function renderRankingTable(config, rankingRows) {
     rankCell.textContent = String(index + 1);
     flagCell.className = "ranking-flag";
     flagCell.textContent = getFlagEmoji(country.code);
-    countryCell.textContent = country.name;
+    countryCell.className = "ranking-country";
+
+    const countryLink = document.createElement("a");
+    countryLink.href = `${rootHref}countries/${country.slug}/`;
+    countryLink.setAttribute("aria-label", `Open ${country.name} country page`);
+
+    const countryLinkText = document.createElement("span");
+    countryLinkText.textContent = country.name;
+
+    const countryLinkArrow = document.createElement("span");
+    countryLinkArrow.className = "ranking-value-link-arrow";
+    countryLinkArrow.setAttribute("aria-hidden", "true");
+    countryLinkArrow.textContent = "↗";
+
+    countryLink.append(countryLinkText, countryLinkArrow);
+    countryCell.append(countryLink);
 
     const pagePathSegment = config.pagePathSegment;
     appendRankingValueCell(valueCell, {

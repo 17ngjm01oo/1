@@ -7,7 +7,7 @@ function initializeHomePage() {
 
   initializeCountrySelector({
     onSelect(country) {
-      window.location.href = `./countries/${country.slug}/gdp/`;
+      window.location.href = `./countries/${country.slug}/`;
     },
   });
 }

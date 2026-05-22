@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aruba</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <script type="module" src="../../src/countryOverviewPage.js"></script>
+  </head>
+  <body data-country-code="ABW">
+    <header class="site-header">
+      <a class="site-home-link" href="../../">HOME</a>
+    </header>
+    <main class="page-shell">
+      <section class="top-nav-card" aria-label="Site navigation">
+        <details class="top-nav-disclosure">
+          <summary class="top-nav-label">Country Rankings</summary>
+          <div class="top-nav-group">
+            <details class="top-nav-disclosure">
+              <summary class="top-nav-label">Economic</summary>
+              <nav class="site-nav" id="economicTopNav"></nav>
+            </details>
+            <details class="top-nav-disclosure">
+              <summary class="top-nav-label">Population</summary>
+              <nav class="site-nav" id="populationTopNav"></nav>
+            </details>
+            <details class="top-nav-disclosure">
+              <summary class="top-nav-label">Environmental</summary>
+              <nav class="site-nav" id="environmentalTopNav"></nav>
+            </details>
+            <details class="top-nav-disclosure">
+              <summary class="top-nav-label">Trade</summary>
+              <nav class="site-nav" id="tradeTopNav"></nav>
+            </details>
+            <details class="top-nav-disclosure">
+              <summary class="top-nav-label">Fiscal</summary>
+              <nav class="site-nav" id="fiscalTopNav"></nav>
+            </details>
+          </div>
+        </details>
+      </section>
+
+      <section class="indicators-section" aria-labelledby="country-overview-title">
+        <div class="indicators-card">
+          <header class="page-header country-data-header">
+            <h1 id="country-overview-title">Aruba</h1>
+          </header>
+
+          <div class="country-overview-groups" id="countryOverviewGroups" aria-live="polite">
+            <p class="ranking-empty">Loading country data...</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
