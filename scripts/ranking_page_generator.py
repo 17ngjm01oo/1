@@ -4,7 +4,7 @@ import html
 import re
 from pathlib import Path
 
-from page_templates import render_rankings_top_nav, render_share_links
+from page_templates import render_rankings_top_nav
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -84,7 +84,6 @@ def render_ranking_page(ranking_type: dict[str, str], scope: dict[str, str], is_
     <title>{escape(page_title)}</title>
     <link rel="stylesheet" href="{root_href}styles.css" />
     <script type="module" src="{root_href}src/{ranking_type["script"]}"></script>
-    <script type="module" src="{root_href}src/shareButtons.js"></script>
   </head>
   <body
     data-root-href="{root_href}"
@@ -138,7 +137,6 @@ def render_ranking_page(ranking_type: dict[str, str], scope: dict[str, str], is_
 {notes_markup}
         </footer>
       </section>
-{render_share_links()}
     </main>
   </body>
 </html>

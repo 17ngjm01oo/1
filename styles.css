@@ -1035,68 +1035,6 @@ h1 {
   margin: 0;
 }
 
-.share-panel {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  min-width: 0;
-  padding: 8px 0 0;
-  color: var(--muted);
-}
-
-.share-label {
-  font-size: 0.88rem;
-  font-weight: 700;
-}
-
-.share-actions {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-
-.share-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  padding: 0;
-  border: 1px solid var(--border);
-  border-radius: 50%;
-  background: var(--surface);
-  color: var(--muted);
-  cursor: pointer;
-  line-height: 1;
-  text-decoration: none;
-  transition:
-    border-color 140ms ease,
-    color 140ms ease,
-    background-color 140ms ease;
-}
-
-.share-button:hover,
-.share-button:focus-visible {
-  border-color: var(--accent);
-  background: var(--accent-soft);
-  color: var(--accent);
-  outline: none;
-}
-
-.share-button svg {
-  width: 18px;
-  height: 18px;
-  fill: currentColor;
-}
-
-.share-status {
-  min-width: 44px;
-  color: var(--accent);
-  font-size: 0.82rem;
-  font-weight: 700;
-}
-
 @media (max-width: 640px) {
   .page-shell {
     gap: 10px;
@@ -1165,21 +1103,6 @@ h1 {
 
   .shared-notes {
     gap: 6px;
-  }
-
-  .share-panel {
-    flex-wrap: wrap;
-    gap: 8px;
-    padding-top: 6px;
-  }
-
-  .share-actions {
-    gap: 6px;
-  }
-
-  .share-button {
-    width: 32px;
-    height: 32px;
   }
 
   .country-results {
