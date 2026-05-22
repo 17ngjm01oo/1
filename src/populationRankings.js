@@ -6,6 +6,10 @@ export const populationRankings = [
     label: "Population",
   },
   {
+    directory: "population-density",
+    label: "Population Density",
+  },
+  {
     directory: "life-expectancy",
     label: "Life Expectancy",
   },

@@ -4,9 +4,7 @@ from data_source_notes import CIA_RANKING_NOTES, WORLD_BANK_RANKING_NOTES
 from ranking_page_generator import generate_ranking_pages
 
 PERCENT_LAND_AREA_SUBTITLE = "Values are shown as a percentage of land area."
-AREA_SUBTITLE = (
-    "Surface area includes land plus areas under inland bodies of water and some coastal waterways."
-)
+AREA_SUBTITLE = "Total area includes both land and water area."
 
 RANKING_TYPES = [
     {

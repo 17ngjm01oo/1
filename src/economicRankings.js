@@ -13,7 +13,7 @@ export const economicRankings = [
   },
   {
     directory: "real-gdp-growth",
-    label: "Real GDP Growth",
+    label: "GDP Growth Rate",
     countryPageKinds: ["gdp-growth"],
   },
   {

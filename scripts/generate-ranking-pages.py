@@ -18,9 +18,9 @@ RANKING_TYPES = [
     },
     {
         "directory": "real-gdp-growth",
-        "title": "Real GDP Growth Ranking by Country",
+        "title": "GDP Growth Rate Ranking by Country",
         "script": "realGdpGrowthRanking.js",
-        "subtitle": "Real GDP growth rate is the annual percentage change in real GDP in national currency.",
+        "subtitle": "GDP growth rate is the annual percentage change in GDP in national currency.",
     },
     {
         "directory": "inflation-rate",

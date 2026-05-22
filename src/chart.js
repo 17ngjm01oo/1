@@ -207,7 +207,6 @@ export function getDisplayScale(points, config) {
 
   if (config.valueScaleMode === "populationMagnitude") {
     return getMagnitudeDisplayScale(points, magnitudeInputs.people, {
-      tooltipUnitSuffix: " people",
       valueScale: 1000000,
       maximumFractionDigits: 0,
     });
@@ -218,6 +217,8 @@ export function getDisplayScale(points, config) {
       tooltipUnit: "km²",
       tooltipUnitSuffix: " km²",
       maximumFractionDigits: config.fallbackMaximumFractionDigits ?? 0,
+      smallValueMaximumFractionDigits: config.fallbackSmallValueMaximumFractionDigits ?? 2,
+      smallValueThreshold: config.fallbackSmallValueThreshold ?? 10,
     });
   }
 
@@ -310,7 +311,10 @@ function getMagnitudeDisplayScale(points, magnitudeSteps, fallback = {}) {
       suffixSpacing: fallback.suffixSpacing ?? " ",
       compactUnit: "",
       adaptiveCompactSteps: magnitudeSteps,
+      adaptiveFallbackValueScale: fallback.valueScale ?? 1,
       adaptiveFallbackMaximumFractionDigits: fallback.maximumFractionDigits ?? 0,
+      smallValueMaximumFractionDigits: fallback.smallValueMaximumFractionDigits,
+      smallValueThreshold: fallback.smallValueThreshold,
       maximumFractionDigits: fallback.maximumFractionDigits ?? 0,
     };
   }
@@ -325,7 +329,10 @@ function getMagnitudeDisplayScale(points, magnitudeSteps, fallback = {}) {
     compactUnit: `${magnitudeStep.compactUnit}${fallback.tooltipUnitSuffix ?? ""}`,
     compactUnitSuffix: fallback.tooltipUnitSuffix ?? "",
     adaptiveCompactSteps: magnitudeSteps,
+    adaptiveFallbackValueScale: fallback.valueScale ?? 1,
     adaptiveFallbackMaximumFractionDigits: fallback.maximumFractionDigits ?? 0,
+    smallValueMaximumFractionDigits: fallback.smallValueMaximumFractionDigits,
+    smallValueThreshold: fallback.smallValueThreshold,
     maximumFractionDigits: magnitudeStep.fixedFractionDigits ?? getMagnitudeFractionDigits(displayValue),
   };
 }
@@ -388,7 +395,8 @@ function formatAdaptiveCompactValue(value, displayScale) {
   const magnitudeStep = displayScale.adaptiveCompactSteps.find((step) => Math.abs(value) >= step.threshold);
 
   if (!magnitudeStep) {
-    const formattedValue = formatNumber(value, displayScale.adaptiveFallbackMaximumFractionDigits);
+    const fallbackValue = value * (displayScale.adaptiveFallbackValueScale ?? 1);
+    const formattedValue = formatNumber(fallbackValue, getAdaptiveFallbackFractionDigits(fallbackValue, displayScale));
     const unit = displayScale.tooltipUnit ? ` ${displayScale.tooltipUnit}` : "";
     const suffixSpacing = displayScale.suffixSpacing ?? (displayScale.suffix ? " " : "");
     const suffix = displayScale.suffix ? `${suffixSpacing}${displayScale.suffix}` : "";
@@ -402,4 +410,19 @@ function formatAdaptiveCompactValue(value, displayScale) {
   const compactUnit = `${magnitudeStep.compactUnit}${displayScale.compactUnitSuffix ?? ""}`;
 
   return `${displayScale.tooltipPrefix}${formattedValue}${compactUnit}`;
+}
+
+function getAdaptiveFallbackFractionDigits(value, displayScale) {
+  const defaultFractionDigits = displayScale.adaptiveFallbackMaximumFractionDigits;
+  const smallValueMaximumFractionDigits = displayScale.smallValueMaximumFractionDigits;
+
+  if (
+    smallValueMaximumFractionDigits != null
+    && value !== 0
+    && Math.abs(value) < (displayScale.smallValueThreshold ?? 10)
+  ) {
+    return smallValueMaximumFractionDigits;
+  }
+
+  return defaultFractionDigits;
 }

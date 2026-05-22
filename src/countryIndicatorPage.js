@@ -49,6 +49,13 @@ const pageDefinitions = {
     pathSegment: "population",
     seriesIds: ["population"],
   },
+  "population-density": {
+    logPrefix: "Population density page",
+    group: "population",
+    documentTitleMetric: "Population Density",
+    pathSegment: "population-density",
+    seriesIds: ["populationDensity"],
+  },
   employment: {
     logPrefix: "Employment page",
     group: "population",
@@ -200,6 +207,7 @@ const countryIndicatorLinks = [
 ];
 const populationIndicatorLinks = [
   { pageKind: "population", href: "../population/", label: "Population" },
+  { pageKind: "population-density", href: "../population-density/", label: "Population Density" },
   { pageKind: "life-expectancy", href: "../life-expectancy/", label: "Life Expectancy" },
   { pageKind: "fertility-rate", href: "../fertility-rate/", label: "Fertility Rate" },
   { pageKind: "employment", href: "../employment/", label: "Employment" },
@@ -248,6 +256,7 @@ const comparableSeriesIds = new Set([
   "gdpGrowth",
   "inflationRate",
   "population",
+  "populationDensity",
   "employment",
   "unemploymentRate",
   "lifeExpectancy",
@@ -276,6 +285,7 @@ const rankingDirectoryBySeriesId = {
   gdpGrowth: "real-gdp-growth",
   inflationRate: "inflation-rate",
   population: "population",
+  populationDensity: "population-density",
   employment: "employment",
   unemploymentRate: "unemployment-rate",
   lifeExpectancy: "life-expectancy",

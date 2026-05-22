@@ -14,5 +14,6 @@ initializeRankingPage({
     valueScaleMode: "areaMagnitude",
     maximumFractionDigits: 2,
     fallbackMaximumFractionDigits: 0,
+    fallbackSmallValueMaximumFractionDigits: 2,
   },
 });

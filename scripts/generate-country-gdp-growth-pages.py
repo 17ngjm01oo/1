@@ -9,7 +9,7 @@ def main() -> None:
     generate_country_pages(
         CountryPageConfig(
             page_kind="gdp-growth",
-            title_suffix="Real GDP Growth Rate",
+            title_suffix="GDP Growth Rate",
             chart_title="GDP Growth Rate Chart by Country",
             subtitle="Select a country to view historical GDP growth rate trends.",
             generated_label="GDP growth",
@@ -18,9 +18,9 @@ def main() -> None:
             indicators=(
                 IndicatorBlockConfig(
                     series_id="gdpGrowth",
-                    title="Real GDP Growth Rate",
-                    canvas_label="Real GDP Growth Rate line chart",
-                    compare_label="Real GDP Growth Rate",
+                    title="GDP Growth Rate",
+                    canvas_label="GDP Growth Rate line chart",
+                    compare_label="GDP Growth Rate",
                 ),
             ),
         )

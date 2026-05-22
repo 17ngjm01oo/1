@@ -52,6 +52,13 @@ DATASETS = {
                 "scale": "Units",
                 "unit": "",
             },
+            "EN.POP.DNST": {
+                "label": "Population Density",
+                "slug": "population-density",
+                "description": "Population density",
+                "scale": "Units",
+                "unit": "/km²",
+            },
         },
     },
     "environment": {

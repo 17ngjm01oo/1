@@ -5,7 +5,7 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
-from page_templates import render_rankings_top_nav
+from page_templates import render_rankings_top_nav, render_share_links
 
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
@@ -73,6 +73,7 @@ def render_country_page(country: dict[str, str], config: CountryPageConfig) -> s
     <link rel="stylesheet" href="../../../styles.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
     <script type="module" src="../../../src/countryIndicatorPage.js"></script>
+    <script type="module" src="../../../src/shareButtons.js"></script>
   </head>
   <body data-country-code="{country_code}" data-page-kind="{html.escape(config.page_kind)}">
     <header class="site-header">
@@ -127,6 +128,7 @@ def render_country_page(country: dict[str, str], config: CountryPageConfig) -> s
 {notes_markup}
         </div>
       </section>
+{render_share_links()}
     </main>
   </body>
 </html>

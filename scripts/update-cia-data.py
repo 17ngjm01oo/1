@@ -166,6 +166,7 @@ def fetch_factbook_profiles() -> list[dict]:
             "path": path,
             "names": get_profile_names(profile),
             "areaText": area_text,
+            "areaValue": get_area_value(profile),
         })
 
     return profiles
@@ -220,7 +221,7 @@ def combine_profiles(source_code: str, profile_by_id: dict[str, dict]) -> dict |
     if any(profile is None for profile in profiles):
         return None
 
-    area_values = [parse_sq_km(profile["areaText"]) for profile in profiles]
+    area_values = [profile.get("areaValue") if "areaValue" in profile else parse_sq_km(profile["areaText"]) for profile in profiles]
 
     if any(value is None for value in area_values):
         return None
@@ -263,10 +264,34 @@ def get_profile_names(profile: dict) -> list[str]:
 
 
 def get_area_total_text(profile: dict) -> str:
+    return get_area_entry_text(profile, "total")
+
+
+def get_area_value(profile: dict) -> float | int | None:
+    total_value = parse_sq_km(get_area_entry_text(profile, "total"))
+
+    if total_value != 0:
+        return total_value
+
+    land_value = parse_sq_km(get_area_entry_text(profile, "land"))
+    water_value = parse_sq_km(get_area_entry_text(profile, "water"))
+
+    if land_value is None and water_value is None:
+        return total_value
+
+    component_total = (land_value or 0) + (water_value or 0)
+
+    if component_total > 0:
+        return int(component_total) if float(component_total).is_integer() else component_total
+
+    return total_value
+
+
+def get_area_entry_text(profile: dict, entry_name: str) -> str:
     area = profile.get("Geography", {}).get("Area", {})
 
     for key, value in area.items():
-        if key.strip().lower() == "total" and isinstance(value, dict):
+        if key.strip().lower() == entry_name and isinstance(value, dict):
             return value.get("text", "")
 
     return ""

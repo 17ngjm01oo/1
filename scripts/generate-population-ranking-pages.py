@@ -11,6 +11,13 @@ RANKING_TYPES = [
     },
     {
         **WORLD_BANK_RANKING_NOTES,
+        "directory": "population-density",
+        "title": "Population Density Ranking by Country",
+        "script": "populationDensityRanking.js",
+        "subtitle": "Population density is shown per km².",
+    },
+    {
+        **WORLD_BANK_RANKING_NOTES,
         "directory": "life-expectancy",
         "title": "Life Expectancy Ranking by Country",
         "script": "lifeExpectancyRanking.js",

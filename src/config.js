@@ -1,6 +1,12 @@
 import { dataSources } from "./dataSources.js";
 
-const { weoCurrentPrices, unctadGoodsTrade, worldBankWdi, worldBankPopulation, worldBankEnvironment } = dataSources;
+const {
+  weoCurrentPrices,
+  unctadGoodsTrade,
+  worldBankWdi,
+  worldBankPopulation,
+  worldBankEnvironment,
+} = dataSources;
 
 export const seriesConfigs = [
   {
@@ -63,7 +69,7 @@ export const seriesConfigs = [
     statusId: "gdpGrowthStatus",
     ...weoCurrentPrices,
     indicatorCode: "NGDP_RPCH",
-    titleTemplate: "Real GDP Growth Rate",
+    titleTemplate: "GDP Growth Rate",
     suffix: "%",
     suffixSpacing: "",
     maximumFractionDigits: 1,
@@ -91,6 +97,18 @@ export const seriesConfigs = [
     indicatorCode: "LP",
     titleTemplate: "Population",
     valueScaleMode: "populationMagnitude",
+    maximumFractionDigits: 1,
+  },
+  {
+    id: "populationDensity",
+    canvasId: "populationDensityChart",
+    chartCardId: "populationDensityChartCard",
+    overlayId: "populationDensityOverlay",
+    statusId: "populationDensityStatus",
+    ...worldBankPopulation,
+    indicatorCode: "EN.POP.DNST",
+    titleTemplate: "Population Density",
+    tooltipUnit: "/km²",
     maximumFractionDigits: 1,
   },
   {
