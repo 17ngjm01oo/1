@@ -421,7 +421,7 @@ function getSeriesChartTitle(seriesConfig, currencyCode) {
 }
 
 function formatTitleCurrencyCode(currencyCode) {
-  return currencyCode === "INT$" ? "Int. $" : currencyCode;
+  return currencyCode;
 }
 
 function updateCountryHeading(country) {

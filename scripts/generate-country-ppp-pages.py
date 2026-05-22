@@ -18,7 +18,7 @@ def main() -> None:
             indicators=(
                 IndicatorBlockConfig(
                     series_id="ppp",
-                    title="PPP GDP - Int. $",
+                    title="PPP GDP - Int$",
                     canvas_label="PPP line chart",
                     compare_label="PPP",
                 ),

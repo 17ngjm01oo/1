@@ -198,7 +198,7 @@ export function getDisplayScale(points, config) {
   }
 
   if (config.valueScaleMode === "internationalDollarMagnitude") {
-    return getCurrencyMagnitudeDisplayScale(points, { currencyCode: "INT$", ...config }, magnitudeInputs.billions);
+    return getCurrencyMagnitudeDisplayScale(points, { currencyCode: "Int$", ...config }, magnitudeInputs.billions);
   }
 
   if (config.valueScaleMode === "nationalCurrencyMagnitude") {
