@@ -1,13 +1,9 @@
 import { formatCompactDisplayValue, getDisplayScale } from "./chart.js";
 import { seriesConfigs } from "./config.js";
 import { countries } from "./countries.js";
-import { renderEconomicRankingLinks } from "./economicRankings.js";
-import { renderEnvironmentalRankingLinks } from "./environmentalRankings.js";
-import { renderFiscalRankingLinks } from "./fiscalRankings.js";
+import { getCurrencyCode } from "./currencyCodes.js";
 import { getFlagEmoji } from "./flags.js";
-import { renderPopulationRankingLinks } from "./populationRankings.js";
 import { getIndicatorSeriesMap } from "./seriesData.js";
-import { renderTradeRankingLinks } from "./tradeRankings.js";
 
 const overviewGroups = [
   {
@@ -109,10 +105,17 @@ const overviewGroups = [
   },
 ];
 
+const overviewCategory = { id: "overview", title: "Overview" };
+const overviewCategories = [
+  overviewCategory,
+  ...overviewGroups.map(({ id, title }) => ({ id, title })),
+];
 const seriesConfigById = new Map(seriesConfigs.map((config) => [config.id, config]));
 const rankingCountries = countries.filter((country) => country.includeInRankings !== false);
 const countryCode = document.body.dataset.countryCode;
 const selectedCountry = countries.find((country) => country.code === countryCode);
+let activeCategoryId = overviewCategory.id;
+let loadedDataByPath = null;
 
 initializeCountryOverview().catch((error) => {
   console.error("[Country overview] Failed to initialize page.", error);
@@ -124,38 +127,11 @@ async function initializeCountryOverview() {
     throw new Error(`Country ${countryCode} was not found.`);
   }
 
-  updateTopRankingLinks();
   updateCountryHeading();
+  renderCategoryControls();
 
-  const dataByPath = await loadDataByPath(getRequiredStaticDataPaths());
-  renderOverview(dataByPath);
-}
-
-function updateTopRankingLinks() {
-  renderEconomicRankingLinks(document.querySelector("#economicTopNav"), {
-    rootHref: "../../",
-    highlightCurrent: false,
-  });
-
-  renderPopulationRankingLinks(document.querySelector("#populationTopNav"), {
-    rootHref: "../../",
-    highlightCurrent: false,
-  });
-
-  renderEnvironmentalRankingLinks(document.querySelector("#environmentalTopNav"), {
-    rootHref: "../../",
-    highlightCurrent: false,
-  });
-
-  renderTradeRankingLinks(document.querySelector("#tradeTopNav"), {
-    rootHref: "../../",
-    highlightCurrent: false,
-  });
-
-  renderFiscalRankingLinks(document.querySelector("#fiscalTopNav"), {
-    rootHref: "../../",
-    highlightCurrent: false,
-  });
+  loadedDataByPath = await loadDataByPath(getRequiredStaticDataPaths());
+  renderOverview();
 }
 
 function updateCountryHeading() {
@@ -177,6 +153,54 @@ function updateCountryHeading() {
   name.textContent = selectedCountry.name;
 
   heading.append(flag, name);
+}
+
+function renderCategoryControls() {
+  const header = document.querySelector(".country-data-header");
+
+  if (!header || header.querySelector(".country-overview-category-panel")) {
+    return;
+  }
+
+  const panel = document.createElement("div");
+  panel.className = "country-overview-category-panel";
+  panel.setAttribute("aria-label", "Country profile categories");
+
+  const label = document.createElement("p");
+  label.className = "country-overview-category-label";
+  label.textContent = "Categories";
+
+  const list = document.createElement("div");
+  list.className = "country-overview-category-list";
+  list.setAttribute("role", "tablist");
+  list.setAttribute("aria-label", "Country profile categories");
+
+  for (const category of overviewCategories) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "country-overview-category-button";
+    button.dataset.countryOverviewCategory = category.id;
+    button.setAttribute("role", "tab");
+    button.textContent = category.title;
+    button.addEventListener("click", () => {
+      activeCategoryId = category.id;
+      updateCategorySelection();
+      renderOverview();
+    });
+
+    list.append(button);
+  }
+
+  panel.append(label, list);
+  header.append(panel);
+  updateCategorySelection();
+}
+
+function updateCategorySelection() {
+  document.querySelectorAll("[data-country-overview-category]").forEach((button) => {
+    const isActive = button.dataset.countryOverviewCategory === activeCategoryId;
+    button.setAttribute("aria-selected", String(isActive));
+  });
 }
 
 function getRequiredStaticDataPaths() {
@@ -209,27 +233,94 @@ async function loadDataByPath(staticDataPaths) {
   return new Map(entries);
 }
 
-function renderOverview(dataByPath) {
+function renderOverview() {
   const container = document.querySelector("#countryOverviewGroups");
-  if (!container) {
+  if (!container || !loadedDataByPath) {
     return;
   }
 
   container.innerHTML = "";
+  container.classList.toggle("is-overview", isOverviewActive());
+  container.append(renderActiveCategoryHeading());
 
-  for (const group of overviewGroups) {
-    container.append(renderGroup(group, dataByPath));
+  if (isOverviewActive()) {
+    container.append(renderBasicInformationSection());
+  }
+
+  for (const group of getActiveGroups()) {
+    container.append(renderGroup(group, loadedDataByPath, { showHeading: isOverviewActive() }));
   }
 }
 
-function renderGroup(group, dataByPath) {
+function renderActiveCategoryHeading() {
+  const heading = document.createElement("h2");
+  heading.className = "country-overview-active-title";
+  heading.textContent = getActiveCategory().title;
+  return heading;
+}
+
+function getActiveCategory() {
+  return overviewCategories.find((category) => category.id === activeCategoryId) ?? overviewCategory;
+}
+
+function getActiveGroups() {
+  if (isOverviewActive()) {
+    return overviewGroups;
+  }
+
+  return overviewGroups.filter((group) => group.id === activeCategoryId);
+}
+
+function isOverviewActive() {
+  return activeCategoryId === overviewCategory.id;
+}
+
+function renderBasicInformationSection() {
   const section = document.createElement("section");
-  section.className = "country-overview-section";
-  section.setAttribute("aria-labelledby", `${group.id}-overview-title`);
+  section.className = "country-overview-section country-basic-information";
+  section.setAttribute("aria-labelledby", "country-basic-information-title");
 
   const heading = document.createElement("h2");
-  heading.id = `${group.id}-overview-title`;
-  heading.textContent = group.title;
+  heading.id = "country-basic-information-title";
+  heading.textContent = "Basic Information";
+
+  const grid = document.createElement("dl");
+  grid.className = "country-basic-information-grid";
+
+  getBasicInformationItems().forEach((item) => {
+    const term = document.createElement("dt");
+    term.textContent = item.label;
+
+    const description = document.createElement("dd");
+    description.textContent = item.value;
+
+    grid.append(term, description);
+  });
+
+  section.append(heading, grid);
+  return section;
+}
+
+function getBasicInformationItems() {
+  return [
+    { label: "Official Name", value: selectedCountry.officialName ?? "" },
+    { label: "Region", value: selectedCountry.region ?? "" },
+    { label: "Currency", value: getCurrencyCode(selectedCountry.code) },
+  ];
+}
+
+function renderGroup(group, dataByPath, { showHeading = true } = {}) {
+  const section = document.createElement("section");
+  section.className = "country-overview-section";
+
+  if (showHeading) {
+    section.setAttribute("aria-labelledby", `${group.id}-overview-title`);
+
+    const heading = document.createElement("h2");
+    heading.id = `${group.id}-overview-title`;
+    heading.textContent = group.title;
+    section.append(heading);
+  }
 
   const tableWrap = document.createElement("div");
   tableWrap.className = "country-overview-table-wrap";
@@ -244,7 +335,7 @@ function renderGroup(group, dataByPath) {
 
   table.append(tbody);
   tableWrap.append(table);
-  section.append(heading, tableWrap);
+  section.append(tableWrap);
 
   return section;
 }
@@ -258,55 +349,51 @@ function renderIndicatorRow(indicator, dataByPath) {
   const labelCell = document.createElement("th");
   const valueCell = document.createElement("td");
   const rankCell = document.createElement("td");
+  const yearCell = document.createElement("td");
 
   labelCell.scope = "row";
-  labelCell.append(buildIndicatorLink(indicator, config));
+  labelCell.textContent = config.titleTemplate;
   valueCell.className = "country-overview-value";
   rankCell.className = "country-overview-rank";
+  yearCell.className = "country-overview-year";
 
   if (countryRow) {
     const displayScale = getDisplayScale([{ year: countryRow.year, value: countryRow.value }], config);
-    valueCell.append(
-      document.createTextNode(formatCompactDisplayValue(countryRow.value, displayScale)),
-      buildMutedText(` (${countryRow.year})`),
-    );
-    rankCell.append(
-      document.createTextNode(String(countryRow.rank)),
-      buildMutedText(` / ${rankingRows.length}`),
-    );
+    valueCell.append(buildValueLink(indicator, formatCompactDisplayValue(countryRow.value, displayScale)));
+    rankCell.append(buildRankingLink(indicator, `${countryRow.rank} / ${rankingRows.length}`));
+    yearCell.textContent = String(countryRow.year);
   } else {
     valueCell.textContent = "No data";
     rankCell.textContent = "-";
+    yearCell.textContent = "-";
   }
 
-  row.append(labelCell, valueCell, rankCell);
+  row.append(labelCell, valueCell, rankCell, yearCell);
   return row;
 }
 
-function buildMutedText(text) {
-  const element = document.createElement("span");
-  element.className = "country-overview-muted";
-  element.textContent = text;
-  return element;
+function buildValueLink(indicator, text) {
+  if (!indicator.pagePathSegment) {
+    return document.createTextNode(text);
+  }
+
+  const link = document.createElement("a");
+  link.href = `./${indicator.pagePathSegment}/`;
+  appendLinkContent(link, text);
+  return link;
 }
 
-function buildIndicatorLink(indicator, config) {
+function buildRankingLink(indicator, text) {
   const link = document.createElement("a");
-  const href = indicator.pagePathSegment
-    ? `./${indicator.pagePathSegment}/`
-    : `../../rankings/${indicator.rankingDirectory}/world/`;
-
-  link.href = href;
-  const linkText = document.createElement("span");
-  linkText.textContent = config.titleTemplate;
-
-  const linkArrow = document.createElement("span");
-  linkArrow.className = "ranking-value-link-arrow";
-  linkArrow.setAttribute("aria-hidden", "true");
-  linkArrow.textContent = "↗";
-
-  link.append(linkText, linkArrow);
+  link.href = `../../rankings/${indicator.rankingDirectory}/world/`;
+  appendLinkContent(link, text);
   return link;
+}
+
+function appendLinkContent(link, text) {
+  const linkText = document.createElement("span");
+  linkText.textContent = text;
+  link.append(linkText);
 }
 
 function buildRankingRows(data, config) {

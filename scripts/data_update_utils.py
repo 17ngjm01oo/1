@@ -30,10 +30,14 @@ def parse_countries(source: str) -> list[dict]:
             "externalIds": parse_external_ids(body),
         }
         slug = extract_string_property(body, "slug")
+        official_name = extract_string_property(body, "officialName")
         aliases = parse_string_list_property(body, "aliases")
 
         if slug:
             country["slug"] = slug
+
+        if official_name:
+            country["officialName"] = official_name
 
         if aliases:
             country["aliases"] = aliases

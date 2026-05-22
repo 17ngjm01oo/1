@@ -466,6 +466,7 @@ export function filterCountries(query) {
 function getCountrySearchTerms(country) {
   const terms = [
     country.name,
+    country.officialName,
     country.slug,
     country.code,
     ...(Array.isArray(country.aliases) ? country.aliases : []),

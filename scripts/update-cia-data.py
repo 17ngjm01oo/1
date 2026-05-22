@@ -204,7 +204,7 @@ def get_profile_for_country(country: dict, profile_by_id: dict[str, dict], profi
 
     matches: dict[str, dict] = {}
 
-    for name in [country["name"], *country.get("aliases", [])]:
+    for name in [country["name"], country.get("officialName", ""), *country.get("aliases", [])]:
         for profile in profile_by_name.get(normalize_name(name), []):
             matches[profile["sourceCode"]] = profile
 
