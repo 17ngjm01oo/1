@@ -1,11 +1,21 @@
 from __future__ import annotations
 
-from data_source_notes import WORLD_BANK_RANKING_NOTES
+from data_source_notes import CIA_RANKING_NOTES, WORLD_BANK_RANKING_NOTES
 from ranking_page_generator import generate_ranking_pages
 
 PERCENT_LAND_AREA_SUBTITLE = "Values are shown as a percentage of land area."
+AREA_SUBTITLE = (
+    "Surface area includes land plus areas under inland bodies of water and some coastal waterways."
+)
 
 RANKING_TYPES = [
+    {
+        **CIA_RANKING_NOTES,
+        "directory": "area",
+        "title": "Area Ranking by Country",
+        "script": "areaRanking.js",
+        "subtitle": AREA_SUBTITLE,
+    },
     {
         **WORLD_BANK_RANKING_NOTES,
         "directory": "agricultural-land-percent-of-land-area",

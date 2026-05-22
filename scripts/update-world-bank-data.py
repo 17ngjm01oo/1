@@ -3,15 +3,21 @@ from __future__ import annotations
 
 import argparse
 import json
-import re
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
+from data_update_utils import (
+    format_path_for_log,
+    get_external_id,
+    load_countries,
+    normalize_number,
+    print_data_source_summary,
+    write_json,
+)
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
-COUNTRIES_JS = ROOT_DIR / "src" / "countries.js"
 API_BASE_URL = "https://api.worldbank.org/v2"
 DATASET_ID = "World Development Indicators"
 DATASETS = {
@@ -97,7 +103,7 @@ def main() -> None:
 
 
 def build_normalized_world_bank_json(dataset_config: dict) -> dict:
-    countries = parse_countries(COUNTRIES_JS.read_text(encoding="utf-8"))
+    countries = load_countries()
     source_countries = fetch_world_bank_countries()
     source_country_labels = {country["id"]: country["name"] for country in source_countries}
     values_by_indicator = {
@@ -282,92 +288,8 @@ def build_country_mapping(
     return mapping, unmatched
 
 
-def parse_countries(source: str) -> list[dict]:
-    countries: list[dict] = []
-
-    for match in re.finditer(r"^\s*\{(?P<body>.+)\},?\s*$", source, flags=re.MULTILINE):
-        body = match.group("body")
-        code = extract_string_property(body, "code")
-        name = extract_string_property(body, "name")
-        slug = extract_string_property(body, "slug")
-
-        if not code or not name or not slug:
-            continue
-
-        countries.append({
-            "code": code,
-            "name": name,
-            "slug": slug,
-            "externalIds": parse_external_ids(body),
-        })
-
-    return countries
-
-
-def extract_string_property(source: str, property_name: str) -> str | None:
-    match = re.search(rf'{property_name}:\s*"([^"]+)"', source)
-    return match.group(1) if match else None
-
-
-def parse_external_ids(source: str) -> dict[str, dict[str, str]]:
-    external_ids: dict[str, dict[str, str]] = {}
-
-    for provider, body in re.findall(r"(\w+):\s*\{\s*([^{}]+?)\s*\}", source):
-        pairs = dict(re.findall(r'(\w+):\s*"([^"]+)"', body))
-
-        if pairs:
-            external_ids[provider] = pairs
-
-    return external_ids
-
-
-def get_external_id(country: dict, provider: str, key: str) -> str | None:
-    value = country.get("externalIds", {}).get(provider, {}).get(key)
-    return value if value else None
-
-
-def normalize_number(value: object) -> float | int | None:
-    if value in (None, ""):
-        return None
-
-    try:
-        number = float(value)
-    except (TypeError, ValueError):
-        return None
-
-    if number.is_integer():
-        return int(number)
-
-    return number
-
-
-def write_json(output_path: Path, result: dict) -> None:
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(
-        json.dumps(result, ensure_ascii=False, separators=(",", ":")),
-        encoding="utf-8",
-    )
-
-
 def print_summary(result: dict) -> None:
-    economies = result["economies"]
-    print(f"Economies: {len(economies)}")
-
-    for indicator_id in result["indicators"]:
-        count = sum(1 for economy in economies.values() if indicator_id in economy["series"])
-        print(f"{indicator_id}: {count} economies")
-
-    diagnostics = result["diagnostics"]
-    print(f"Matched countries: {diagnostics['matchedCountries']}")
-    print(f"Unmatched countries: {len(diagnostics['unmatchedCountries'])}")
-    print(f"Missing target series entries: {len(diagnostics['missingTargetSeries'])}")
-
-
-def format_path_for_log(path: Path) -> str:
-    try:
-        return str(path.relative_to(ROOT_DIR))
-    except ValueError:
-        return str(path)
+    print_data_source_summary(result)
 
 
 if __name__ == "__main__":

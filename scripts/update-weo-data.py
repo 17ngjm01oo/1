@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import argparse
-import json
 import re
 import subprocess
 import tempfile
@@ -12,6 +11,8 @@ from pathlib import Path
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 from xml.etree import ElementTree
+
+from data_update_utils import format_path_for_log, normalize_number, write_json
 
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
@@ -143,14 +144,6 @@ def main() -> None:
 
     print(f"Wrote {format_path_for_log(args.output)}")
     print_summary(result)
-
-
-def write_json(output_path: Path, result: dict) -> None:
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(
-        json.dumps(result, ensure_ascii=False, separators=(",", ":")),
-        encoding="utf-8",
-    )
 
 
 def download_weo_excel() -> Path:
@@ -424,21 +417,6 @@ def get_column_value(header: list[str], cells: list[str], column_name: str) -> s
     return cells[index] if index < len(cells) else ""
 
 
-def normalize_number(value: str) -> float | int | None:
-    if not value:
-        return None
-
-    try:
-        number = float(value)
-    except ValueError:
-        return None
-
-    if number.is_integer():
-        return int(number)
-
-    return number
-
-
 def print_summary(result: dict) -> None:
     economies = result["economies"]
     print(f"Economies: {len(economies)}")
@@ -453,13 +431,6 @@ def print_summary(result: dict) -> None:
     world = economies.get("G001")
     if world:
         print(f"World series present: {sorted(world['series'])}")
-
-
-def format_path_for_log(path: Path) -> str:
-    try:
-        return str(path.relative_to(ROOT_DIR))
-    except ValueError:
-        return str(path)
 
 
 if __name__ == "__main__":

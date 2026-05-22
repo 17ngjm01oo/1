@@ -152,8 +152,9 @@ function renderRankingTable(config, rankingRows) {
     flagCell.textContent = getFlagEmoji(country.code);
     countryCell.textContent = country.name;
 
+    const pagePathSegment = config.pagePathSegment;
     appendRankingValueCell(valueCell, {
-      href: `${rootHref}countries/${country.slug}/${config.pagePathSegment}/`,
+      href: pagePathSegment ? `${rootHref}countries/${country.slug}/${pagePathSegment}/` : "",
       text: formatCompactDisplayValue(country.value, displayScale),
       ariaLabel: `Open ${country.name} ${config.linkAriaMetric} page`,
       value: country.value,

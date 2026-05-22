@@ -213,6 +213,14 @@ export function getDisplayScale(points, config) {
     });
   }
 
+  if (config.valueScaleMode === "areaMagnitude") {
+    return getMagnitudeDisplayScale(points, magnitudeInputs.units, {
+      tooltipUnit: "km²",
+      tooltipUnitSuffix: " km²",
+      maximumFractionDigits: config.fallbackMaximumFractionDigits ?? 0,
+    });
+  }
+
   return {
     valueScale: config.valueScale ?? 1,
     tooltipPrefix: config.tooltipPrefix ?? "",
@@ -296,8 +304,10 @@ function getMagnitudeDisplayScale(points, magnitudeSteps, fallback = {}) {
     return {
       valueScale: fallback.valueScale ?? 1,
       tooltipPrefix: "",
-      tooltipUnit: "",
+      tooltipUnit: fallback.tooltipUnit ?? "",
       tickPrefix: "",
+      suffix: fallback.suffix ?? "",
+      suffixSpacing: fallback.suffixSpacing ?? " ",
       compactUnit: "",
       adaptiveCompactSteps: magnitudeSteps,
       adaptiveFallbackMaximumFractionDigits: fallback.maximumFractionDigits ?? 0,

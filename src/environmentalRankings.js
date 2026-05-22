@@ -1,13 +1,23 @@
+import { getCountryIndicatorLinks, renderRankingLinks } from "./rankingLinks.js";
+
 export const environmentalRankings = [
   {
-    directory: "agricultural-land-percent-of-land-area",
-    label: "Agricultural Land (% of Land Area)",
+    directory: "area",
+    label: "Area",
   },
   {
     directory: "forest-area-percent-of-land-area",
     label: "Forest Area (% of Land Area)",
+    countryPageKind: "forest-area-percent-of-land-area",
+  },
+  {
+    directory: "agricultural-land-percent-of-land-area",
+    label: "Agricultural Land (% of Land Area)",
+    countryPageKind: "agricultural-land-percent-of-land-area",
   },
 ];
+
+export const environmentalIndicatorLinks = getCountryIndicatorLinks(environmentalRankings);
 
 export function renderEnvironmentalRankingLinks(
   nav,
@@ -19,24 +29,11 @@ export function renderEnvironmentalRankingLinks(
     replace = true,
   } = {},
 ) {
-  if (!nav) {
-    return;
-  }
-
-  if (replace) {
-    nav.innerHTML = "";
-  }
-
-  environmentalRankings.forEach((ranking) => {
-    const link = document.createElement("a");
-    link.href = `${rootHref}rankings/${ranking.directory}/${currentScopeSlug}/`;
-    link.textContent = ranking.label;
-
-    if (highlightCurrent && ranking.directory === currentRankingDirectory) {
-      link.className = "is-current";
-      link.setAttribute("aria-current", "page");
-    }
-
-    nav.append(link);
+  renderRankingLinks(nav, environmentalRankings, {
+    rootHref,
+    currentRankingDirectory,
+    currentScopeSlug,
+    highlightCurrent,
+    replace,
   });
 }

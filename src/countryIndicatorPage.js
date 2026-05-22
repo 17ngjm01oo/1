@@ -4,7 +4,7 @@ import { filterCountries, formatCountryMetaText, initializeCountrySelector } fro
 import { getCurrencyCode } from "./currencyCodes.js";
 import { getCurrencyDisplay } from "./currencyDisplay.js";
 import { renderEconomicRankingLinks } from "./economicRankings.js";
-import { renderEnvironmentalRankingLinks } from "./environmentalRankings.js";
+import { environmentalIndicatorLinks, renderEnvironmentalRankingLinks } from "./environmentalRankings.js";
 import { renderFiscalRankingLinks } from "./fiscalRankings.js";
 import { getFlagEmoji } from "./flags.js";
 import { renderPopulationRankingLinks } from "./populationRankings.js";
@@ -227,18 +227,6 @@ const fiscalIndicatorLinks = [
     pageKind: "total-reserves-including-gold",
     href: "../total-reserves-including-gold/",
     label: "Total Reserves Including Gold",
-  },
-];
-const environmentalIndicatorLinks = [
-  {
-    pageKind: "agricultural-land-percent-of-land-area",
-    href: "../agricultural-land-percent-of-land-area/",
-    label: "Agricultural Land (% of Land Area)",
-  },
-  {
-    pageKind: "forest-area-percent-of-land-area",
-    href: "../forest-area-percent-of-land-area/",
-    label: "Forest Area (% of Land Area)",
   },
 ];
 const countryIndicatorLinksByGroup = {

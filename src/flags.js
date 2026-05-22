@@ -1,4 +1,4 @@
-const imfCountryCodeToIso2 = {
+const countryCodeToIso2 = {
   ABW: "AW",
   AIA: "AI",
   AGO: "AO",
@@ -190,6 +190,7 @@ const imfCountryCodeToIso2 = {
   SMR: "SM",
   SPM: "PM",
   SUR: "SR",
+  SXM: "SX",
   SVK: "SK",
   SVN: "SI",
   SWE: "SE",
@@ -238,7 +239,7 @@ export function getFlagEmoji(countryCode) {
     return "🌏";
   }
 
-  const iso2Code = imfCountryCodeToIso2[countryCode];
+  const iso2Code = countryCodeToIso2[countryCode];
 
   if (!iso2Code) {
     return "";

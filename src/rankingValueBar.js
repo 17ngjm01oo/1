@@ -1,17 +1,23 @@
 export function appendRankingValueCell(valueCell, { href, text, ariaLabel, value, valueBarScale }) {
-  const valueLink = document.createElement("a");
-  valueLink.href = href;
-  valueLink.setAttribute("aria-label", ariaLabel);
+  const valueElement = href ? document.createElement("a") : document.createElement("span");
+
+  if (href) {
+    valueElement.href = href;
+    valueElement.setAttribute("aria-label", ariaLabel);
+  }
 
   const valueText = document.createElement("span");
   valueText.textContent = text;
 
-  const valueArrow = document.createElement("span");
-  valueArrow.className = "ranking-value-link-arrow";
-  valueArrow.setAttribute("aria-hidden", "true");
-  valueArrow.textContent = "↗";
+  valueElement.append(valueText);
 
-  valueLink.append(valueText, valueArrow);
+  if (href) {
+    const valueArrow = document.createElement("span");
+    valueArrow.className = "ranking-value-link-arrow";
+    valueArrow.setAttribute("aria-hidden", "true");
+    valueArrow.textContent = "↗";
+    valueElement.append(valueArrow);
+  }
 
   const wrapper = document.createElement("div");
   wrapper.className = "ranking-value";
@@ -25,7 +31,7 @@ export function appendRankingValueCell(valueCell, { href, text, ariaLabel, value
   fill.style.width = `${getValuePercentage(value, valueBarScale)}%`;
 
   track.append(fill);
-  wrapper.append(valueLink, track);
+  wrapper.append(valueElement, track);
   valueCell.append(wrapper);
 }
 

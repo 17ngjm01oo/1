@@ -14,3 +14,9 @@ WORLD_BANK_RANKING_NOTES = {
 }
 
 WORLD_BANK_COUNTRY_SOURCE_NOTE = "Source: World Bank World Development Indicators."
+
+CIA_RANKING_NOTES = {
+    "source_note": "Source: CIA World Factbook.",
+    "data_note": "",
+    "exclusion_note": "Countries with no available CIA World Factbook data are excluded from the ranking.",
+}
