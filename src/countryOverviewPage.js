@@ -4,6 +4,7 @@ import { countries } from "./countries.js";
 import { getCountryCurrencyDisplay } from "./currencyCodes.js";
 import { getFlagEmoji } from "./flags.js";
 import { getIndicatorSeriesMap } from "./seriesData.js";
+import { renderWorldMap } from "./worldMap.js";
 import "./rankingTopNav.js";
 
 const overviewGroups = [
@@ -129,6 +130,7 @@ async function initializeCountryOverview() {
   }
 
   updateCountryHeading();
+  renderCountryMap();
   renderCategoryControls();
 
   loadedDataByPath = await loadDataByPath(getRequiredStaticDataPaths());
@@ -154,6 +156,35 @@ function updateCountryHeading() {
   name.textContent = selectedCountry.name;
 
   heading.append(flag, name);
+}
+
+function renderCountryMap() {
+  const header = document.querySelector(".country-data-header");
+
+  if (!header || header.querySelector(".country-overview-map")) {
+    return;
+  }
+
+  const map = document.createElement("div");
+  map.className = "world-map country-overview-map";
+  map.id = "countryOverviewMap";
+  map.setAttribute("aria-label", `${selectedCountry.name} map`);
+  map.setAttribute("aria-live", "polite");
+
+  const loading = document.createElement("p");
+  loading.className = "world-map-loading";
+  loading.textContent = "Loading map...";
+
+  map.append(loading);
+  header.append(map);
+
+  renderWorldMap({
+    containerSelector: "#countryOverviewMap",
+    dataUrl: `${document.body.dataset.rootHref ?? "../../"}data/geo/countries-110m.json`,
+    countryList: countries.filter((country) => country.slug),
+    rootHref: document.body.dataset.rootHref ?? "../../",
+    focusCountryCode: selectedCountry.code,
+  });
 }
 
 function renderCategoryControls() {

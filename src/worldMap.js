@@ -1,13 +1,33 @@
-import { geoEqualEarth, geoGraticule10, geoPath } from "https://cdn.jsdelivr.net/npm/d3-geo@3/+esm";
+import { geoEqualEarth, geoPath } from "https://cdn.jsdelivr.net/npm/d3-geo@3/+esm";
 import { feature } from "https://cdn.jsdelivr.net/npm/topojson-client@3/+esm";
+import { getFlagEmoji } from "./flags.js";
 
 const MAP_WIDTH = 960;
 const MAP_HEIGHT = 420;
-const MAP_PADDING = 18;
+const MAP_PADDING = -18;
+const REGION_COLORS = {
+  Asia: "#D8BF5A",
+  Europe: "#857CB8",
+  Africa: "#C18458",
+  "North America": "#5A91C9",
+  "South America": "#6E9F74",
+  Oceania: "#C97874",
+};
+const REGION_FOCUS_BOUNDS = {
+  Asia: [40, -8, 155, 58],
+  Europe: [-25, 34, 60, 72],
+  Africa: [-17, -34, 53, 35],
+  "North America": [-172, 7, -52, 72],
+  "South America": [-82, -39, -34, 14],
+  Oceania: [112, -45, 180, -2],
+};
 
 export async function renderWorldMap({
   containerSelector = "#worldMap",
   dataUrl = "../data/geo/countries-110m.json",
+  countryList = [],
+  rootHref = "../",
+  focusCountryCode = "",
 } = {}) {
   const container = document.querySelector(containerSelector);
 
@@ -17,29 +37,97 @@ export async function renderWorldMap({
 
   try {
     const topology = await fetchTopology(dataUrl);
-    const countries = feature(topology, topology.objects.countries);
-    const projection = geoEqualEarth().fitExtent(
-      [
-        [MAP_PADDING, MAP_PADDING],
-        [MAP_WIDTH - MAP_PADDING, MAP_HEIGHT - MAP_PADDING],
-      ],
-      countries,
-    );
-    const path = geoPath(projection);
+    const mapCountries = feature(topology, topology.objects.countries);
+    const countryLookup = buildCountryLookup(countryList, rootHref);
     const svg = createSvg();
+    const tooltip = createMapTooltip();
 
-    appendPath(svg, path({ type: "Sphere" }), "world-map-sphere");
-    appendPath(svg, path(geoGraticule10()), "world-map-graticule");
+    container.replaceChildren(svg, tooltip);
+    renderMapPaths({ svg, tooltip, container, mapCountries, countryLookup, focusCountryCode });
 
-    for (const country of countries.features) {
-      appendPath(svg, path(country), "world-map-country");
-    }
-
-    container.replaceChildren(svg);
+    return {
+      focusRegion(regionId) {
+        hideMapTooltip(tooltip);
+        renderMapPaths({ svg, tooltip, container, mapCountries, countryLookup, regionId });
+      },
+      focusCountry(countryCode) {
+        hideMapTooltip(tooltip);
+        renderMapPaths({ svg, tooltip, container, mapCountries, countryLookup, focusCountryCode: countryCode });
+      },
+    };
   } catch (error) {
     console.error("[World map] Failed to render map.", error);
     container.replaceChildren(createMapError());
   }
+}
+
+function renderMapPaths({
+  svg,
+  tooltip,
+  container,
+  mapCountries,
+  countryLookup,
+  regionId = "",
+  focusCountryCode = "",
+}) {
+  const projection = geoEqualEarth().fitExtent(
+    [
+      [MAP_PADDING, MAP_PADDING],
+      [MAP_WIDTH - MAP_PADDING, MAP_HEIGHT - MAP_PADDING],
+    ],
+    getCountryFocusGeometry(focusCountryCode, mapCountries, countryLookup) ?? getFocusGeometry(regionId) ?? mapCountries,
+  );
+  const path = geoPath(projection);
+
+  svg.replaceChildren();
+  appendPath(svg, path({ type: "Sphere" }), "world-map-sphere");
+
+  for (const country of mapCountries.features) {
+    const mapId = normalizeMapId(country.id);
+    const mapName = country.properties?.name ?? "";
+    const countryRecord = countryLookup.byId.get(mapId) ?? countryLookup.byName.get(normalizeName(mapName));
+    const countryPath = appendPath(svg, path(country), "world-map-country");
+
+    if (countryPath && countryRecord) {
+      colorCountryPath(countryPath, countryRecord.country);
+      makeCountryPathClickable(countryPath, countryRecord, mapName, container, tooltip);
+    }
+  }
+}
+
+function getCountryFocusGeometry(countryCode, mapCountries, countryLookup) {
+  if (!countryCode) {
+    return null;
+  }
+
+  return mapCountries.features.find((country) => {
+    const mapId = normalizeMapId(country.id);
+    const mapName = country.properties?.name ?? "";
+    const countryRecord = countryLookup.byId.get(mapId) ?? countryLookup.byName.get(normalizeName(mapName));
+    return countryRecord?.country.code === countryCode;
+  }) ?? null;
+}
+
+function getFocusGeometry(regionId) {
+  const bounds = REGION_FOCUS_BOUNDS[regionId];
+
+  if (!bounds) {
+    return null;
+  }
+
+  return createBoundsPoints(bounds);
+}
+
+function createBoundsPoints([west, south, east, north]) {
+  return {
+    type: "MultiPoint",
+    coordinates: [
+      [west, south],
+      [east, south],
+      [east, north],
+      [west, north],
+    ],
+  };
 }
 
 async function fetchTopology(dataUrl) {
@@ -64,13 +152,163 @@ function createSvg() {
 
 function appendPath(svg, pathData, className) {
   if (!pathData) {
-    return;
+    return null;
   }
 
   const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
   path.setAttribute("class", className);
   path.setAttribute("d", pathData);
   svg.append(path);
+  return path;
+}
+
+function buildCountryLookup(countryList, rootHref) {
+  return countryList.reduce((lookup, country) => {
+    const mapId = normalizeMapId(country.externalIds?.unctad?.m49);
+
+    if (!country.slug) {
+      return lookup;
+    }
+
+    const href = `${rootHref}countries/${country.slug}/`;
+    const record = { country, href };
+
+    if (mapId) {
+      lookup.byId.set(mapId, record);
+    }
+
+    [country.name, country.officialName, ...(country.aliases ?? [])].forEach((name) => {
+      const normalizedName = normalizeName(name);
+
+      if (normalizedName) {
+        lookup.byName.set(normalizedName, record);
+      }
+    });
+
+    return lookup;
+  }, { byId: new Map(), byName: new Map() });
+}
+
+function colorCountryPath(path, country) {
+  const color = REGION_COLORS[country.region?.trim()];
+
+  if (color) {
+    path.style.setProperty("--world-map-country-fill", color);
+  }
+}
+
+function normalizeMapId(mapId) {
+  return mapId === undefined || mapId === null
+    ? ""
+    : String(mapId).padStart(3, "0");
+}
+
+function normalizeName(name) {
+  return typeof name === "string"
+    ? name.trim().toLowerCase()
+    : "";
+}
+
+function makeCountryPathClickable(path, countryRecord, mapName = "country", container, tooltip) {
+  const { country, href } = countryRecord;
+  const countryName = country.name || mapName;
+
+  path.classList.add("is-clickable");
+  path.setAttribute("role", "link");
+  path.setAttribute("tabindex", "0");
+  path.setAttribute("aria-label", `Open ${countryName} country page`);
+  path.addEventListener("mouseenter", (event) => {
+    showMapTooltip(tooltip, container, country, event);
+  });
+  path.addEventListener("mousemove", (event) => {
+    positionMapTooltip(tooltip, container, event);
+  });
+  path.addEventListener("mouseleave", () => {
+    hideMapTooltip(tooltip);
+  });
+  path.addEventListener("focus", () => {
+    showMapTooltip(tooltip, container, country, null, path);
+  });
+  path.addEventListener("blur", () => {
+    hideMapTooltip(tooltip);
+  });
+  path.addEventListener("click", () => {
+    window.location.href = href;
+  });
+  path.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") {
+      return;
+    }
+
+    event.preventDefault();
+    window.location.href = href;
+  });
+}
+
+function createMapTooltip() {
+  const tooltip = document.createElement("div");
+  tooltip.className = "world-map-tooltip";
+  tooltip.hidden = true;
+
+  const flag = document.createElement("span");
+  flag.className = "world-map-tooltip-flag";
+
+  const name = document.createElement("span");
+  name.className = "world-map-tooltip-name";
+
+  tooltip.append(flag, name);
+  return tooltip;
+}
+
+function showMapTooltip(tooltip, container, country, event = null, path = null) {
+  tooltip.querySelector(".world-map-tooltip-flag").textContent = getFlagEmoji(country.code);
+  tooltip.querySelector(".world-map-tooltip-name").textContent = country.name;
+  tooltip.hidden = false;
+
+  if (event) {
+    positionMapTooltip(tooltip, container, event);
+    return;
+  }
+
+  if (path) {
+    positionMapTooltipAtElement(tooltip, container, path);
+  }
+}
+
+function hideMapTooltip(tooltip) {
+  tooltip.hidden = true;
+}
+
+function positionMapTooltip(tooltip, container, event) {
+  const containerRect = container.getBoundingClientRect();
+  setMapTooltipPosition(
+    tooltip,
+    container,
+    event.clientX - containerRect.left,
+    event.clientY - containerRect.top,
+  );
+}
+
+function positionMapTooltipAtElement(tooltip, container, element) {
+  const containerRect = container.getBoundingClientRect();
+  const elementRect = element.getBoundingClientRect();
+  setMapTooltipPosition(
+    tooltip,
+    container,
+    elementRect.left + elementRect.width / 2 - containerRect.left,
+    elementRect.top + elementRect.height / 2 - containerRect.top,
+  );
+}
+
+function setMapTooltipPosition(tooltip, container, x, y) {
+  const offset = 14;
+  const maxLeft = container.clientWidth - tooltip.offsetWidth - offset;
+  const maxTop = container.clientHeight - tooltip.offsetHeight - offset;
+  const left = Math.min(Math.max(x + offset, offset), Math.max(maxLeft, offset));
+  const top = Math.min(Math.max(y + offset, offset), Math.max(maxTop, offset));
+
+  tooltip.style.left = `${left}px`;
+  tooltip.style.top = `${top}px`;
 }
 
 function createMapError() {

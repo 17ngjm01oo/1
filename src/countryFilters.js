@@ -1,12 +1,5 @@
 export function countryBelongsToRegion(country, regionId) {
-  if (!country.region) {
-    return false;
-  }
-
-  return country.region
-    .split("/")
-    .map((region) => region.trim())
-    .includes(regionId);
+  return country.region?.trim() === regionId;
 }
 
 export function filterCountriesByScope(countryList, scope) {

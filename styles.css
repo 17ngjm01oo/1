@@ -675,37 +675,23 @@ body {
   min-width: 0;
 }
 
-.world-map-card {
-  display: grid;
-  gap: 12px;
+.world-map-section {
   padding: var(--card-padding);
   border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--card);
   box-shadow: var(--shadow);
-}
-
-.world-map-header {
-  display: grid;
-  gap: 4px;
-}
-
-.world-map-header h2 {
-  margin: 0;
-  color: var(--text);
-  font-size: clamp(1.25rem, 2.4vw, 1.65rem);
-  line-height: 1.18;
-  letter-spacing: 0;
+  min-width: 0;
 }
 
 .world-map {
+  position: relative;
   width: 100%;
   min-width: 0;
-  aspect-ratio: 16 / 7;
+  aspect-ratio: 16 / 8.5;
   overflow: hidden;
-  border: 1px solid var(--border);
   border-radius: 8px;
-  background: #f8fafc;
+  background: #ffffff;
 }
 
 .world-map-svg {
@@ -715,20 +701,58 @@ body {
 }
 
 .world-map-sphere {
-  fill: #eef5f8;
-}
-
-.world-map-graticule {
-  fill: none;
-  stroke: rgba(112, 128, 144, 0.2);
-  stroke-width: 0.7;
+  fill: #d3e7f4;
 }
 
 .world-map-country {
-  fill: #ffffff;
+  fill: var(--world-map-country-fill, #ffffff);
   stroke: var(--border);
   stroke-width: 0.65;
   vector-effect: non-scaling-stroke;
+}
+
+.world-map-country.is-clickable {
+  cursor: pointer;
+}
+
+.world-map-country.is-clickable:hover,
+.world-map-country.is-clickable:focus-visible {
+  opacity: 0.78;
+  outline: none;
+}
+
+.world-map-tooltip {
+  position: absolute;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  max-width: min(220px, calc(100% - 28px));
+  padding: 7px 10px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.14);
+  color: var(--text);
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1.15;
+  pointer-events: none;
+  transform: translateZ(0);
+}
+
+.world-map-tooltip[hidden] {
+  display: none;
+}
+
+.world-map-tooltip-flag {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.world-map-tooltip-name {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .world-map-loading,
@@ -1424,7 +1448,7 @@ h1 {
   }
 
   .hub-section,
-  .world-map-card,
+  .world-map-section,
   .indicators-card,
   .ranking-card,
   .shared-notes {
@@ -1444,7 +1468,7 @@ h1 {
   }
 
   .world-map {
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 16 / 8;
   }
 
   .indicators-section {
@@ -1453,6 +1477,30 @@ h1 {
 
   .country-data-header h1 {
     font-size: clamp(1.65rem, 7.6vw, 2.1rem);
+  }
+
+  .country-overview-table th,
+  .country-overview-table td {
+    padding: 10px 8px;
+    text-align: left;
+  }
+
+  .country-overview-table th {
+    width: 34%;
+  }
+
+  .country-overview-value {
+    width: 24%;
+  }
+
+  .country-overview-rank {
+    width: 28%;
+    text-align: left;
+  }
+
+  .country-overview-year {
+    width: 14%;
+    text-align: left;
   }
 
   .indicator-block {

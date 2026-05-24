@@ -6,37 +6,34 @@ import "./rankingTopNav.js";
 
 const rootHref = document.body.dataset.rootHref ?? "../";
 const profileCountries = countries.filter((country) => country.slug);
+const hubCountries = profileCountries.filter((country) => country.code !== "G001");
 const countElement = document.querySelector("#countryHubCount");
 
-renderWorldMap({
+const worldMap = await renderWorldMap({
   dataUrl: `${rootHref}data/geo/countries-110m.json`,
+  countryList: hubCountries,
+  rootHref,
 });
 
 initializeCountrySelector({
-  countryPool: profileCountries,
+  countryPool: hubCountries,
   showAllCountries: true,
   inlineSearchResults: true,
   highlightFirstResult: false,
   sortCountryResults(countryList) {
     return [...countryList].sort((countryA, countryB) => {
-      if (countryA.code === "G001") {
-        return -1;
-      }
-
-      if (countryB.code === "G001") {
-        return 1;
-      }
-
       return countryA.name.localeCompare(countryB.name, "en", { sensitivity: "base" });
     });
   },
   getCountryHref(country) {
     return `${rootHref}countries/${country.slug}/`;
   },
-  onResultsChange({ rowCount }) {
+  onResultsChange({ rowCount, activeRegionId }) {
     if (countElement) {
       countElement.textContent = `Countries shown: ${rowCount}`;
     }
+
+    worldMap?.focusRegion(activeRegionId);
   },
   renderCountryResultContent(country, { activateRegion }) {
     const flag = document.createElement("span");
@@ -50,7 +47,7 @@ initializeCountrySelector({
     const region = document.createElement("span");
     region.className = "country-hub-result-region";
     region.textContent = country.region || "-";
-    const regionId = country.region?.split("/")[0]?.trim();
+    const regionId = country.region?.trim();
 
     if (regionId) {
       region.setAttribute("role", "button");

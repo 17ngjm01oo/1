@@ -12,10 +12,10 @@ export const countryCategories = [
 export const countryRegions = [
   { id: "Asia", label: "Asia" },
   { id: "Europe", label: "Europe" },
+  { id: "Oceania", label: "Oceania" },
   { id: "North America", label: "North America" },
   { id: "South America", label: "South America" },
   { id: "Africa", label: "Africa" },
-  { id: "Oceania", label: "Oceania" },
 ];
 
 // Country search also reads officialName and optional aliases arrays.
@@ -59,7 +59,7 @@ export const countries = [
   { code: "KOR", name: "South Korea", slug: "south-korea", externalIds: { weo: { countryId: "KOR" }, unctad: { m49: "410" }, worldBank: { countryId: "KOR" } }, aliases: ["ROK"], officialName: "Republic of Korea", capital: "Seoul", region: "Asia", categories: ["G20", "OECD"] },
   { code: "PRK", name: "North Korea", slug: "north-korea", externalIds: { unctad: { m49: "408" }, worldBank: { countryId: "PRK" } }, aliases: ["DPRK"], officialName: "Democratic People's Republic of Korea", capital: "Pyongyang", region: "Asia", categories: [] },
   { code: "IDN", name: "Indonesia", slug: "indonesia", externalIds: { weo: { countryId: "IDN" }, unctad: { m49: "360" }, worldBank: { countryId: "IDN" } }, aliases: [], officialName: "Republic of Indonesia", capital: "Jakarta", region: "Asia", categories: ["G20", "ASEAN", "BRICS"] },
-  { code: "TUR", name: "Türkiye", slug: "turkiye", externalIds: { weo: { countryId: "TUR" }, unctad: { m49: "792" }, worldBank: { countryId: "TUR" } }, aliases: ["Turkey"], officialName: "Republic of Türkiye", capital: "Ankara", region: "Europe / Asia", categories: ["G20", "NATO", "OECD"] },
+  { code: "TUR", name: "Türkiye", slug: "turkiye", externalIds: { weo: { countryId: "TUR" }, unctad: { m49: "792" }, worldBank: { countryId: "TUR" } }, aliases: ["Turkey"], officialName: "Republic of Türkiye", capital: "Ankara", region: "Asia", categories: ["G20", "NATO", "OECD"] },
   { code: "IND", name: "India", slug: "india", externalIds: { weo: { countryId: "IND" }, unctad: { m49: "356" }, worldBank: { countryId: "IND" } }, aliases: [], officialName: "Republic of India", capital: "New Delhi", region: "Asia", categories: ["G20", "BRICS"] },
   { code: "LKA", name: "Sri Lanka", slug: "sri-lanka", externalIds: { weo: { countryId: "LKA" }, unctad: { m49: "144" }, worldBank: { countryId: "LKA" } }, aliases: ["Ceylon"], officialName: "Democratic Socialist Republic of Sri Lanka", capital: "Sri Jayawardenepura Kotte", region: "Asia", categories: [] },
   { code: "MDV", name: "Maldives", slug: "maldives", externalIds: { weo: { countryId: "MDV" }, unctad: { m49: "462" }, worldBank: { countryId: "MDV" } }, aliases: [], officialName: "Republic of Maldives", capital: "Malé", region: "Asia", categories: [] },
@@ -137,7 +137,7 @@ export const countries = [
   { code: "PRY", name: "Paraguay", slug: "paraguay", externalIds: { weo: { countryId: "PRY" }, unctad: { m49: "600" }, worldBank: { countryId: "PRY" } }, aliases: [], officialName: "Republic of Paraguay", capital: "Asunción", region: "South America", categories: [] },
   { code: "URY", name: "Uruguay", slug: "uruguay", externalIds: { weo: { countryId: "URY" }, unctad: { m49: "858" }, worldBank: { countryId: "URY" } }, aliases: [], officialName: "Oriental Republic of Uruguay", capital: "Montevideo", region: "South America", categories: [] },
   { code: "PER", name: "Peru", slug: "peru", externalIds: { weo: { countryId: "PER" }, unctad: { m49: "604" }, worldBank: { countryId: "PER" } }, aliases: [], officialName: "Republic of Peru", capital: "Lima", region: "South America", categories: [] },
-  { code: "RUS", name: "Russia", slug: "russia", externalIds: { weo: { countryId: "RUS" }, unctad: { m49: "643" }, worldBank: { countryId: "RUS" } }, aliases: [], officialName: "Russian Federation", capital: "Moscow", region: "Europe / Asia", categories: ["G20", "BRICS"] },
+  { code: "RUS", name: "Russia", slug: "russia", externalIds: { weo: { countryId: "RUS" }, unctad: { m49: "643" }, worldBank: { countryId: "RUS" } }, aliases: [], officialName: "Russian Federation", capital: "Moscow", region: "Europe", categories: ["G20", "BRICS"] },
   { code: "ZAF", name: "South Africa", slug: "south-africa", externalIds: { weo: { countryId: "ZAF" }, unctad: { m49: "710" }, worldBank: { countryId: "ZAF" } }, aliases: [], officialName: "Republic of South Africa", capital: "Pretoria", region: "Africa", categories: ["G20", "AU", "BRICS"] },
   { code: "CHL", name: "Chile", slug: "chile", externalIds: { weo: { countryId: "CHL" }, unctad: { m49: "152" }, worldBank: { countryId: "CHL" } }, aliases: [], officialName: "Republic of Chile", capital: "Santiago", region: "South America", categories: ["OECD"] },
   { code: "COL", name: "Colombia", slug: "colombia", externalIds: { weo: { countryId: "COL" }, unctad: { m49: "170" }, worldBank: { countryId: "COL" } }, aliases: [], officialName: "Republic of Colombia", capital: "Bogotá", region: "South America", categories: ["OECD"] },
