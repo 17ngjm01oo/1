@@ -80,6 +80,38 @@ body {
   padding: 18px 22px;
 }
 
+.country-hub-nav-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.28em;
+  width: max-content;
+  max-width: 100%;
+  color: var(--muted);
+  font-size: 1.12rem;
+  font-weight: 700;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.country-hub-nav-link::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 0;
+  height: 0;
+  border-top: 0.32em solid transparent;
+  border-bottom: 0.32em solid transparent;
+  border-left: 0.42em solid currentColor;
+  transform: translateY(0.02em);
+}
+
+.country-hub-nav-link:hover {
+  color: var(--muted);
+}
+
+.country-hub-nav-link[aria-current="page"] {
+  color: var(--muted);
+}
+
 .top-nav-disclosure {
   display: grid;
   gap: 8px;
@@ -103,15 +135,34 @@ body {
 }
 
 .top-nav-label {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.28em;
   margin: 0;
   color: var(--muted);
   cursor: pointer;
   font-size: 1rem;
   font-weight: 700;
+  list-style: none;
 }
 
 .top-nav-card > .top-nav-disclosure > .top-nav-label {
   font-size: 1.12rem;
+}
+
+.top-nav-label::-webkit-details-marker {
+  display: none;
+}
+
+.top-nav-label::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 0;
+  height: 0;
+  border-top: 0.32em solid transparent;
+  border-bottom: 0.32em solid transparent;
+  border-left: 0.42em solid currentColor;
+  transform: translateY(0.02em);
 }
 
 .top-nav-group > .top-nav-disclosure {
@@ -139,8 +190,7 @@ body {
 }
 
 .top-nav-label::marker {
-  color: var(--muted);
-  font-size: 1rem;
+  content: "";
 }
 
 .hub-section {
@@ -169,6 +219,27 @@ body {
 
 .country-name {
   min-width: 0;
+}
+
+.country-profile-link {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.22em;
+  margin-left: 8px;
+  max-width: 100%;
+  color: var(--accent);
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.country-profile-link:hover,
+.country-profile-link:focus-visible {
+  color: var(--accent);
+  text-decoration: underline;
 }
 
 .indicators-card {
@@ -261,8 +332,6 @@ body {
 
 .country-overview-active-title {
   margin: 0;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--border);
   color: var(--text);
   font-size: clamp(1.35rem, 2.6vw, 1.8rem);
   line-height: 1.18;
@@ -275,33 +344,17 @@ body {
   min-width: 0;
 }
 
-.country-overview-section + .country-overview-section {
-  padding-top: 24px;
-  border-top: 1px solid var(--border);
-}
-
-.country-overview-groups.is-overview .country-overview-section + .country-overview-section {
-  border-top: 0;
-}
-
 .country-overview-section h2 {
   margin: 0;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--border);
   color: var(--text);
   font-size: clamp(1.25rem, 2.4vw, 1.65rem);
   line-height: 1.18;
   letter-spacing: 0;
 }
 
-.country-overview-groups.is-overview .country-overview-section h2 {
-  padding-bottom: 0;
-  border-bottom: 0;
-}
-
 .country-basic-information-grid {
   display: grid;
-  grid-template-columns: minmax(130px, 34%) minmax(0, 1fr);
+  grid-template-columns: max-content minmax(0, 1fr);
   margin: 0;
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -322,6 +375,7 @@ body {
   border-right: 1px solid var(--border);
   background: #f8fafc;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .country-basic-information-grid dd {
@@ -774,6 +828,54 @@ body {
   display: none;
 }
 
+.country-hub-results {
+  max-height: none;
+}
+
+.country-hub-results[data-mode="search"] {
+  position: static;
+  box-shadow: none;
+}
+
+.country-hub-results .country-result {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr) minmax(120px, 28%);
+  align-items: center;
+  gap: 0;
+  padding: 0;
+  font-size: 1.06rem;
+}
+
+.country-hub-results .country-result > span {
+  min-width: 0;
+  padding: 13px 12px;
+  overflow-wrap: anywhere;
+}
+
+.country-hub-results .country-result > span:not(:last-child) {
+  border-right: 1px solid var(--border);
+}
+
+.country-hub-result-flag {
+  font-size: 1.35em;
+  line-height: 1;
+  text-align: center;
+}
+
+.country-hub-result-name,
+.country-hub-result-region {
+  font-weight: 700;
+}
+
+.country-hub-result-name {
+  color: var(--accent);
+}
+
+.country-hub-result-region {
+  color: var(--text);
+  text-align: right;
+}
+
 .country-result {
   display: flex;
   flex-wrap: wrap;
@@ -789,6 +891,7 @@ body {
   color: var(--text);
   font: inherit;
   text-align: left;
+  text-decoration: none;
   cursor: pointer;
 }
 

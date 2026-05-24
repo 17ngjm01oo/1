@@ -1,7 +1,7 @@
 import { formatCompactDisplayValue, getDisplayScale } from "./chart.js";
 import { seriesConfigs } from "./config.js";
 import { countries } from "./countries.js";
-import { getCurrencyCode } from "./currencyCodes.js";
+import { getCountryCurrencyDisplay } from "./currencyCodes.js";
 import { getFlagEmoji } from "./flags.js";
 import { getIndicatorSeriesMap } from "./seriesData.js";
 
@@ -240,7 +240,6 @@ function renderOverview() {
   }
 
   container.innerHTML = "";
-  container.classList.toggle("is-overview", isOverviewActive());
   container.append(renderActiveCategoryHeading());
 
   if (isOverviewActive()) {
@@ -278,11 +277,7 @@ function isOverviewActive() {
 function renderBasicInformationSection() {
   const section = document.createElement("section");
   section.className = "country-overview-section country-basic-information";
-  section.setAttribute("aria-labelledby", "country-basic-information-title");
-
-  const heading = document.createElement("h2");
-  heading.id = "country-basic-information-title";
-  heading.textContent = "Basic Information";
+  section.setAttribute("aria-label", "Basic Information");
 
   const grid = document.createElement("dl");
   grid.className = "country-basic-information-grid";
@@ -297,15 +292,16 @@ function renderBasicInformationSection() {
     grid.append(term, description);
   });
 
-  section.append(heading, grid);
+  section.append(grid);
   return section;
 }
 
 function getBasicInformationItems() {
   return [
     { label: "Official Name", value: selectedCountry.officialName ?? "" },
+    { label: "Capital", value: selectedCountry.capital ?? "" },
     { label: "Region", value: selectedCountry.region ?? "" },
-    { label: "Currency", value: getCurrencyCode(selectedCountry.code) },
+    { label: "Currency", value: getCountryCurrencyDisplay(selectedCountry.code) },
   ];
 }
 
@@ -363,8 +359,8 @@ function renderIndicatorRow(indicator, dataByPath) {
     rankCell.append(buildRankingLink(indicator, `${countryRow.rank} / ${rankingRows.length}`));
     yearCell.textContent = String(countryRow.year);
   } else {
-    valueCell.textContent = "No data";
-    rankCell.textContent = "-";
+    valueCell.append(buildMissingValueLink(indicator, "No data"));
+    rankCell.append(buildRankingLink(indicator, "-"));
     yearCell.textContent = "-";
   }
 
@@ -381,6 +377,12 @@ function buildValueLink(indicator, text) {
   link.href = `./${indicator.pagePathSegment}/`;
   appendLinkContent(link, text);
   return link;
+}
+
+function buildMissingValueLink(indicator, text) {
+  return indicator.pagePathSegment
+    ? buildValueLink(indicator, text)
+    : buildRankingLink(indicator, text);
 }
 
 function buildRankingLink(indicator, text) {

@@ -98,7 +98,7 @@ def render_ranking_page(ranking_type: dict[str, str], scope: dict[str, str], is_
       <a class="site-home-link" href="{root_href}">HOME</a>
     </header>
     <main class="page-shell ranking-page">
-{render_rankings_top_nav("rankingTopNav")}
+{render_rankings_top_nav("rankingTopNav", root_href)}
 
       <section class="hub-section" aria-labelledby="ranking-title">
         <header class="page-header">

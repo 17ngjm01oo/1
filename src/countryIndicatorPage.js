@@ -8,6 +8,7 @@ import { environmentalIndicatorLinks, renderEnvironmentalRankingLinks } from "./
 import { renderFiscalRankingLinks } from "./fiscalRankings.js";
 import { getFlagEmoji } from "./flags.js";
 import { renderPopulationRankingLinks } from "./populationRankings.js";
+import { renderCountryHubLink } from "./siteNavigation.js";
 import { renderTradeRankingLinks } from "./tradeRankings.js";
 import { buildStaticDataRequestUrls, fetchStaticData } from "./staticData.js";
 import { transformSeriesData } from "./transform.js";
@@ -347,6 +348,8 @@ function navigateToCountry(country) {
 }
 
 function updateTopRankingLinks() {
+  renderCountryHubLink({ rootHref: "../../../" });
+
   renderEconomicRankingLinks(document.querySelector("#economicTopNav"), {
     rootHref: "../../../",
     currentPageKind: pageKind,
@@ -443,7 +446,19 @@ function updateCountryHeading(country) {
   const nameElement = document.createElement("span");
   nameElement.className = "country-name";
   nameElement.textContent = country.name;
-  title.append(nameElement);
+
+  const profileLink = document.createElement("a");
+  profileLink.className = "country-profile-link";
+  profileLink.href = "../";
+  profileLink.append(document.createTextNode("Country Profile"));
+
+  const profileLinkArrow = document.createElement("span");
+  profileLinkArrow.className = "ranking-value-link-arrow";
+  profileLinkArrow.setAttribute("aria-hidden", "true");
+  profileLinkArrow.textContent = "↗";
+  profileLink.append(profileLinkArrow);
+
+  title.append(nameElement, profileLink);
 }
 
 function updateRelatedPageLinks() {

@@ -4,6 +4,13 @@ import { countryBelongsToRegion } from "./countryFilters.js";
 export function initializeCountrySelector({
   selectedCountry = null,
   onSelect,
+  countryPool = countries,
+  showAllCountries = false,
+  getCountryHref = null,
+  inlineSearchResults = false,
+  renderCountryResultContent = null,
+  highlightFirstResult = true,
+  sortCountryResults = sortCountriesByName,
   searchInputSelector = "#countrySearchInput",
   resultsSelector = "#countrySearchResults",
   regionListSelector = "#regionList",
@@ -65,6 +72,10 @@ export function initializeCountrySelector({
     hideFilterOptionList("region");
 
     if (state.activeRegionId) {
+      if (showAllCountries) {
+        return;
+      }
+
       state.activeRegionId = null;
       updateRegionButtons();
       hideCountryResults();
@@ -81,6 +92,10 @@ export function initializeCountrySelector({
     hideFilterOptionList("category");
 
     if (state.activeCategoryId) {
+      if (showAllCountries) {
+        return;
+      }
+
       state.activeCategoryId = null;
       updateCategoryButtons();
       hideCountryResults();
@@ -89,6 +104,10 @@ export function initializeCountrySelector({
 
   renderRegions();
   renderCategories();
+
+  if (showAllCountries) {
+    renderAllCountries();
+  }
 
   function renderRegions() {
     if (!regionList) {
@@ -148,7 +167,11 @@ export function initializeCountrySelector({
     updateCategoryButtons();
 
     if (!state.activeRegionId) {
-      hideCountryResults();
+      if (showAllCountries) {
+        renderAllCountries();
+      } else {
+        hideCountryResults();
+      }
       return;
     }
 
@@ -171,7 +194,11 @@ export function initializeCountrySelector({
     updateCategoryButtons();
 
     if (!state.activeCategoryId) {
-      hideCountryResults();
+      if (showAllCountries) {
+        renderAllCountries();
+      } else {
+        hideCountryResults();
+      }
       return;
     }
 
@@ -187,6 +214,8 @@ export function initializeCountrySelector({
         renderRegionCountries(state.activeRegionId);
       } else if (state.activeCategoryId) {
         renderCategoryCountries(state.activeCategoryId);
+      } else if (showAllCountries) {
+        renderAllCountries();
       } else {
         hideCountryResults();
       }
@@ -198,20 +227,25 @@ export function initializeCountrySelector({
     updateRegionButtons();
     updateCategoryButtons();
     setCountryResultsMode("search");
-    renderCountryList(filterCountries(normalizedQuery), "No matching countries.");
+    renderCountryList(filterCountryList(countryPool, normalizedQuery), "No matching countries.");
+  }
+
+  function renderAllCountries() {
+    setCountryResultsMode("all");
+    renderCountryList(sortCountryResults(countryPool), "No countries available.");
   }
 
   function renderRegionCountries(regionId) {
-    const matchingCountries = sortCountriesByName(
-      countries.filter((country) => countryBelongsToRegion(country, regionId)),
+    const matchingCountries = sortCountryResults(
+      countryPool.filter((country) => countryBelongsToRegion(country, regionId)),
     );
     setCountryResultsMode("region");
     renderCountryList(matchingCountries, "No countries in this region.");
   }
 
   function renderCategoryCountries(categoryId) {
-    const matchingCountries = sortCountriesByName(
-      countries.filter((country) => country.categories?.includes(categoryId)),
+    const matchingCountries = sortCountryResults(
+      countryPool.filter((country) => country.categories?.includes(categoryId)),
     );
     setCountryResultsMode("category");
     renderCountryList(matchingCountries, "No countries in this category.");
@@ -222,7 +256,7 @@ export function initializeCountrySelector({
     resultsElement.hidden = false;
     searchInput.setAttribute("aria-expanded", "true");
     state.currentMatches = matchingCountries;
-    state.highlightedIndex = matchingCountries.length > 0 ? 0 : -1;
+    state.highlightedIndex = highlightFirstResult && matchingCountries.length > 0 ? 0 : -1;
 
     if (matchingCountries.length === 0) {
       const emptyElement = document.createElement("div");
@@ -233,27 +267,41 @@ export function initializeCountrySelector({
     }
 
     matchingCountries.forEach((country, index) => {
-      const resultButton = document.createElement("button");
+      const resultButton = getCountryHref ? document.createElement("a") : document.createElement("button");
       resultButton.className = "country-result";
-      resultButton.type = "button";
+      if (getCountryHref) {
+        resultButton.href = getCountryHref(country);
+      } else {
+        resultButton.type = "button";
+      }
       resultButton.setAttribute("role", "option");
       resultButton.id = `country-result-${country.code}`;
       resultButton.dataset.countryCode = country.code;
       resultButton.setAttribute("aria-selected", String(index === state.highlightedIndex));
       resultButton.dataset.isActiveCountry = String(country.code === state.selectedCountry?.code);
-      resultButton.addEventListener("click", () => {
+      resultButton.addEventListener("click", (event) => {
+        if (getCountryHref && !onSelect) {
+          return;
+        }
+
+        event.preventDefault();
         selectCountry(country);
       });
 
-      const nameElement = document.createElement("span");
-      nameElement.className = "country-result-name";
-      nameElement.textContent = country.name;
+      if (renderCountryResultContent) {
+        resultButton.append(...renderCountryResultContent(country));
+      } else {
+        const nameElement = document.createElement("span");
+        nameElement.className = "country-result-name";
+        nameElement.textContent = country.name;
 
-      const metaElement = document.createElement("span");
-      metaElement.className = "country-result-meta";
-      metaElement.textContent = formatCountryMetaText(country);
+        const metaElement = document.createElement("span");
+        metaElement.className = "country-result-meta";
+        metaElement.textContent = formatCountryMetaText(country);
 
-      resultButton.append(nameElement, metaElement);
+        resultButton.append(nameElement, metaElement);
+      }
+
       resultsElement.append(resultButton);
     });
 
@@ -310,7 +358,12 @@ export function initializeCountrySelector({
     updateCategoryButtons();
     closeFilterPanels();
     hideCountryResults();
-    onSelect?.(country);
+
+    if (onSelect) {
+      onSelect(country);
+    } else if (getCountryHref) {
+      window.location.href = getCountryHref(country);
+    }
   }
 
   function syncHighlightedCountry() {
@@ -358,6 +411,11 @@ export function initializeCountrySelector({
       return;
     }
 
+    if (inlineSearchResults) {
+      searchPanel.append(resultsElement);
+      return;
+    }
+
     const searchInputWrap = searchPanel.querySelector(".search-input-wrap");
 
     if (mode === "search" && searchInputWrap) {
@@ -365,11 +423,11 @@ export function initializeCountrySelector({
       return;
     }
 
-    if (mode === "region" || mode === "category") {
+    if (mode === "region" || mode === "category" || mode === "all" || mode === "search") {
       const optionList = document.querySelector(mode === "region" ? regionListSelector : categoryListSelector);
       const filterPanelRow = document.querySelector(filterPanelRowSelector);
 
-      if (optionList && !optionList.hidden) {
+      if (mode !== "all" && optionList && !optionList.hidden) {
         optionList.after(resultsElement);
         return;
       }
@@ -448,6 +506,10 @@ export function initializeCountrySelector({
 }
 
 export function filterCountries(query) {
+  return filterCountryList(countries, query);
+}
+
+export function filterCountryList(countryList, query) {
   const normalizedQuery = normalizeSearchText(query);
 
   if (!normalizedQuery) {
@@ -456,7 +518,7 @@ export function filterCountries(query) {
 
   const queryVariants = getSearchVariants(normalizedQuery);
 
-  return countries.filter((country) => {
+  return countryList.filter((country) => {
     return getCountrySearchTerms(country).some((term) => {
       return queryVariants.some((queryVariant) => matchesSearchTerm(term, queryVariant));
     });

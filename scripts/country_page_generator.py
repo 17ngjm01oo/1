@@ -79,7 +79,7 @@ def render_country_page(country: dict[str, str], config: CountryPageConfig) -> s
       <a class="site-home-link" href="../../../">HOME</a>
     </header>
     <main class="page-shell">
-{render_rankings_top_nav("economicTopNav")}
+{render_rankings_top_nav("economicTopNav", "../../../")}
 
       <section class="hub-section" aria-labelledby="country-hub-title">
         <header class="page-header">
@@ -94,7 +94,7 @@ def render_country_page(country: dict[str, str], config: CountryPageConfig) -> s
               class="country-search-input"
               type="search"
               autocomplete="off"
-              placeholder="Search country or code&hellip;"
+              placeholder="Search a country&hellip;"
               aria-controls="countrySearchResults"
               role="combobox"
               aria-autocomplete="list"

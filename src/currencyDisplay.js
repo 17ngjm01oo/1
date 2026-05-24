@@ -1,54 +1,4 @@
-const currencySymbols = {
-  "Int$": "$",
-  USD: "$",
-  CAD: "$",
-  AUD: "$",
-  NZD: "$",
-  MXN: "$",
-  ARS: "$",
-  COP: "$",
-  CLP: "$",
-  DOP: "$",
-  BRL: "R$",
-  NIO: "C$",
-  EUR: "€",
-  GBP: "£",
-  SEK: "kr ",
-  NOK: "kr ",
-  DKK: "kr ",
-  ISK: "kr ",
-  RUB: "₽",
-  TWD: "$",
-  JPY: "¥",
-  CNY: "¥",
-  HKD: "$",
-  MOP: "$",
-  KRW: "₩",
-  KPW: "₩",
-  MNT: "₮",
-  PHP: "₱",
-  VND: "₫",
-  KHR: "៛",
-  LAK: "₭",
-  THB: "฿",
-  SGD: "$",
-  BND: "$",
-  MYR: "RM",
-  IDR: "Rp",
-  INR: "₹",
-  BDT: "৳",
-  EGP: "E£",
-  TRY: "₺",
-  ILS: "₪",
-  ZAR: "R",
-  NGN: "₦",
-  KZT: "₸",
-  UAH: "₴",
-  AOA: "Kz ",
-  ETB: "Br ",
-  GHS: "₵",
-  CRC: "₡",
-}
+import { getCurrencySymbol } from "./currencyCodes.js";
 
 export function getCurrencyDisplay(config = {}) {
   if (config.currencyDisplay) {
@@ -67,7 +17,7 @@ export function getCurrencyDisplay(config = {}) {
     };
   }
 
-  const currencySymbol = currencySymbols[config.currencyCode];
+  const currencySymbol = getCurrencySymbol(config.currencyCode);
 
   if (currencySymbol) {
     return {
