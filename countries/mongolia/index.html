@@ -7,11 +7,40 @@
     <link rel="stylesheet" href="../../styles.css" />
     <script type="module" src="../../src/countryOverviewPage.js"></script>
   </head>
-  <body data-country-code="MNG">
+  <body data-country-code="MNG" data-root-href="../../">
     <header class="site-header">
       <a class="site-home-link" href="../../">HOME</a>
     </header>
     <main class="page-shell">
+      <section class="top-nav-card" aria-label="Site navigation">
+        <a class="country-hub-nav-link" href="../../countries/">Countries</a>
+        <details class="top-nav-disclosure">
+          <summary class="top-nav-label">Country Rankings</summary>
+          <div class="top-nav-group">
+            <details class="top-nav-disclosure">
+              <summary class="top-nav-label">Economic</summary>
+              <nav class="site-nav" id="rankingTopNav"></nav>
+            </details>
+            <details class="top-nav-disclosure">
+              <summary class="top-nav-label">Population</summary>
+              <nav class="site-nav" id="populationTopNav"></nav>
+            </details>
+            <details class="top-nav-disclosure">
+              <summary class="top-nav-label">Environmental</summary>
+              <nav class="site-nav" id="environmentalTopNav"></nav>
+            </details>
+            <details class="top-nav-disclosure">
+              <summary class="top-nav-label">Trade</summary>
+              <nav class="site-nav" id="tradeTopNav"></nav>
+            </details>
+            <details class="top-nav-disclosure">
+              <summary class="top-nav-label">Fiscal</summary>
+              <nav class="site-nav" id="fiscalTopNav"></nav>
+            </details>
+          </div>
+        </details>
+      </section>
+
       <section class="indicators-section" aria-labelledby="country-overview-title">
         <div class="indicators-card">
           <header class="page-header country-data-header">

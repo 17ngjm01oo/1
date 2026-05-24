@@ -3,13 +3,9 @@ import { countries } from "./countries.js";
 import { filterCountries, formatCountryMetaText, initializeCountrySelector } from "./countrySelector.js";
 import { getCurrencyCode } from "./currencyCodes.js";
 import { getCurrencyDisplay } from "./currencyDisplay.js";
-import { renderEconomicRankingLinks } from "./economicRankings.js";
-import { environmentalIndicatorLinks, renderEnvironmentalRankingLinks } from "./environmentalRankings.js";
-import { renderFiscalRankingLinks } from "./fiscalRankings.js";
+import { environmentalIndicatorLinks } from "./environmentalRankings.js";
 import { getFlagEmoji } from "./flags.js";
-import { renderPopulationRankingLinks } from "./populationRankings.js";
-import { renderCountryHubLink } from "./siteNavigation.js";
-import { renderTradeRankingLinks } from "./tradeRankings.js";
+import { renderTopNavigationLinks } from "./siteNavigation.js";
 import { buildStaticDataRequestUrls, fetchStaticData } from "./staticData.js";
 import { transformSeriesData } from "./transform.js";
 import { clearLineChart, formatCompactDisplayValue, getDisplayScale, renderLineChart } from "./chart.js";
@@ -348,31 +344,10 @@ function navigateToCountry(country) {
 }
 
 function updateTopRankingLinks() {
-  renderCountryHubLink({ rootHref: "../../../" });
-
-  renderEconomicRankingLinks(document.querySelector("#economicTopNav"), {
+  renderTopNavigationLinks({
     rootHref: "../../../",
+    economicNavSelector: "#economicTopNav",
     currentPageKind: pageKind,
-    highlightCurrent: false,
-  });
-
-  renderPopulationRankingLinks(document.querySelector("#populationTopNav"), {
-    rootHref: "../../../",
-    highlightCurrent: false,
-  });
-
-  renderTradeRankingLinks(document.querySelector("#tradeTopNav"), {
-    rootHref: "../../../",
-    highlightCurrent: false,
-  });
-
-  renderFiscalRankingLinks(document.querySelector("#fiscalTopNav"), {
-    rootHref: "../../../",
-    highlightCurrent: false,
-  });
-
-  renderEnvironmentalRankingLinks(document.querySelector("#environmentalTopNav"), {
-    rootHref: "../../../",
     highlightCurrent: false,
   });
 }

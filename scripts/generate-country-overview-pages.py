@@ -3,6 +3,7 @@ from __future__ import annotations
 import html
 
 from country_page_generator import COUNTRIES_FILE, OUTPUT_DIR, parse_countries
+from page_templates import render_rankings_top_nav
 
 
 def generate_country_overview_pages() -> None:
@@ -29,11 +30,13 @@ def render_country_overview_page(country: dict[str, str]) -> str:
     <link rel="stylesheet" href="../../styles.css" />
     <script type="module" src="../../src/countryOverviewPage.js"></script>
   </head>
-  <body data-country-code="{country_code}">
+  <body data-country-code="{country_code}" data-root-href="../../">
     <header class="site-header">
       <a class="site-home-link" href="../../">HOME</a>
     </header>
     <main class="page-shell">
+{render_rankings_top_nav("rankingTopNav", "../../")}
+
       <section class="indicators-section" aria-labelledby="country-overview-title">
         <div class="indicators-card">
           <header class="page-header country-data-header">

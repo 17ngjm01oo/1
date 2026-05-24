@@ -4,6 +4,7 @@ import { countries } from "./countries.js";
 import { getCountryCurrencyDisplay } from "./currencyCodes.js";
 import { getFlagEmoji } from "./flags.js";
 import { getIndicatorSeriesMap } from "./seriesData.js";
+import "./rankingTopNav.js";
 
 const overviewGroups = [
   {

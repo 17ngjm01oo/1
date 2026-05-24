@@ -830,6 +830,12 @@ body {
 
 .country-hub-results {
   max-height: none;
+  overflow: visible;
+}
+
+body[data-page-kind="country-hub"] .country-hub-results {
+  max-height: none;
+  overflow: visible;
 }
 
 .country-hub-results[data-mode="search"] {
