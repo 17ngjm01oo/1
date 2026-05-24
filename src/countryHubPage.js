@@ -1,10 +1,16 @@
 import { countries } from "./countries.js";
 import { initializeCountrySelector } from "./countrySelector.js";
 import { getFlagEmoji } from "./flags.js";
+import { renderWorldMap } from "./worldMap.js";
 import "./rankingTopNav.js";
 
 const rootHref = document.body.dataset.rootHref ?? "../";
 const profileCountries = countries.filter((country) => country.slug);
+const countElement = document.querySelector("#countryHubCount");
+
+renderWorldMap({
+  dataUrl: `${rootHref}data/geo/countries-110m.json`,
+});
 
 initializeCountrySelector({
   countryPool: profileCountries,
@@ -27,7 +33,12 @@ initializeCountrySelector({
   getCountryHref(country) {
     return `${rootHref}countries/${country.slug}/`;
   },
-  renderCountryResultContent(country) {
+  onResultsChange({ rowCount }) {
+    if (countElement) {
+      countElement.textContent = `Countries shown: ${rowCount}`;
+    }
+  },
+  renderCountryResultContent(country, { activateRegion }) {
     const flag = document.createElement("span");
     flag.className = "country-hub-result-flag";
     flag.textContent = getFlagEmoji(country.code);
@@ -39,6 +50,27 @@ initializeCountrySelector({
     const region = document.createElement("span");
     region.className = "country-hub-result-region";
     region.textContent = country.region || "-";
+    const regionId = country.region?.split("/")[0]?.trim();
+
+    if (regionId) {
+      region.setAttribute("role", "button");
+      region.setAttribute("tabindex", "0");
+      region.setAttribute("aria-label", `Show ${regionId} countries`);
+      region.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        activateRegion(regionId);
+      });
+      region.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") {
+          return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+        activateRegion(regionId);
+      });
+    }
 
     return [flag, name, region];
   },

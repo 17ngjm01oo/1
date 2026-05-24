@@ -18,6 +18,7 @@ export function initializeCountrySelector({
   panelSelector = ".category-panel",
   filterPanelRowSelector = ".filter-panel-row",
   searchPanelSelector = ".country-search-panel",
+  onResultsChange = null,
 } = {}) {
   const searchInput = document.querySelector(searchInputSelector);
   const resultsElement = document.querySelector(resultsSelector);
@@ -43,10 +44,7 @@ export function initializeCountrySelector({
   }
 
   searchInput.addEventListener("input", () => {
-    state.activeCategoryId = null;
-    state.activeRegionId = null;
-    updateRegionButtons();
-    updateCategoryButtons();
+    clearActiveFilters();
     closeFilterPanels();
     renderCountryResults(searchInput.value);
   });
@@ -76,8 +74,7 @@ export function initializeCountrySelector({
         return;
       }
 
-      state.activeRegionId = null;
-      updateRegionButtons();
+      setActiveFilters({ categoryId: state.activeCategoryId });
       hideCountryResults();
     }
   });
@@ -96,8 +93,7 @@ export function initializeCountrySelector({
         return;
       }
 
-      state.activeCategoryId = null;
-      updateCategoryButtons();
+      setActiveFilters({ regionId: state.activeRegionId });
       hideCountryResults();
     }
   });
@@ -115,6 +111,19 @@ export function initializeCountrySelector({
     }
 
     regionList.innerHTML = "";
+
+    if (showAllCountries) {
+      const worldButton = document.createElement("button");
+      worldButton.className = "category-button region-button";
+      worldButton.type = "button";
+      worldButton.dataset.regionId = "WORLD";
+      worldButton.setAttribute("aria-pressed", "true");
+      worldButton.textContent = "World";
+      worldButton.addEventListener("click", () => {
+        activateWorld();
+      });
+      regionList.append(worldButton);
+    }
 
     countryRegions.forEach((region) => {
       const regionButton = document.createElement("button");
@@ -153,18 +162,13 @@ export function initializeCountrySelector({
 
   function toggleRegion(regionId) {
     if (searchInput.value.trim()) {
-      state.activeRegionId = null;
-      state.activeCategoryId = null;
-      updateRegionButtons();
-      updateCategoryButtons();
+      clearActiveFilters();
       renderCountryResults(searchInput.value);
       return;
     }
 
-    state.activeCategoryId = null;
-    state.activeRegionId = state.activeRegionId === regionId ? null : regionId;
-    updateRegionButtons();
-    updateCategoryButtons();
+    const nextRegionId = state.activeRegionId === regionId ? null : regionId;
+    setActiveFilters({ regionId: nextRegionId });
 
     if (!state.activeRegionId) {
       if (showAllCountries) {
@@ -178,20 +182,32 @@ export function initializeCountrySelector({
     renderRegionCountries(state.activeRegionId);
   }
 
+  function activateWorld() {
+    searchInput.value = "";
+    setActiveFilters();
+    renderAllCountries();
+  }
+
+  function activateRegion(regionId) {
+    if (!regionId) {
+      return;
+    }
+
+    searchInput.value = "";
+    setActiveFilters({ regionId });
+    closeFilterPanels();
+    renderRegionCountries(regionId);
+  }
+
   function toggleCategory(categoryId) {
     if (searchInput.value.trim()) {
-      state.activeCategoryId = null;
-      state.activeRegionId = null;
-      updateRegionButtons();
-      updateCategoryButtons();
+      clearActiveFilters();
       renderCountryResults(searchInput.value);
       return;
     }
 
-    state.activeRegionId = null;
-    state.activeCategoryId = state.activeCategoryId === categoryId ? null : categoryId;
-    updateRegionButtons();
-    updateCategoryButtons();
+    const nextCategoryId = state.activeCategoryId === categoryId ? null : categoryId;
+    setActiveFilters({ categoryId: nextCategoryId });
 
     if (!state.activeCategoryId) {
       if (showAllCountries) {
@@ -222,10 +238,7 @@ export function initializeCountrySelector({
       return;
     }
 
-    state.activeCategoryId = null;
-    state.activeRegionId = null;
-    updateRegionButtons();
-    updateCategoryButtons();
+    clearActiveFilters();
     setCountryResultsMode("search");
     renderCountryList(filterCountryList(countryPool, normalizedQuery), "No matching countries.");
   }
@@ -251,12 +264,30 @@ export function initializeCountrySelector({
     renderCountryList(matchingCountries, "No countries in this category.");
   }
 
+  function clearActiveFilters() {
+    setActiveFilters();
+  }
+
+  function setActiveFilters({ regionId = null, categoryId = null } = {}) {
+    state.activeRegionId = regionId;
+    state.activeCategoryId = categoryId;
+    updateRegionButtons();
+    updateCategoryButtons();
+  }
+
   function renderCountryList(matchingCountries, emptyMessage) {
     resultsElement.innerHTML = "";
     resultsElement.hidden = false;
     searchInput.setAttribute("aria-expanded", "true");
     state.currentMatches = matchingCountries;
     state.highlightedIndex = highlightFirstResult && matchingCountries.length > 0 ? 0 : -1;
+    onResultsChange?.({
+      rowCount: matchingCountries.length,
+      mode: resultsElement.dataset.mode ?? "",
+      activeRegionId: state.activeRegionId,
+      activeCategoryId: state.activeCategoryId,
+      query: searchInput.value.trim(),
+    });
 
     if (matchingCountries.length === 0) {
       const emptyElement = document.createElement("div");
@@ -289,7 +320,7 @@ export function initializeCountrySelector({
       });
 
       if (renderCountryResultContent) {
-        resultButton.append(...renderCountryResultContent(country));
+        resultButton.append(...renderCountryResultContent(country, { activateRegion }));
       } else {
         const nameElement = document.createElement("span");
         nameElement.className = "country-result-name";
@@ -312,10 +343,7 @@ export function initializeCountrySelector({
     const hasOpenResults = !resultsElement.hidden && state.currentMatches.length > 0;
 
     if (event.key === "Escape") {
-      state.activeCategoryId = null;
-      state.activeRegionId = null;
-      updateRegionButtons();
-      updateCategoryButtons();
+      clearActiveFilters();
       closeFilterPanels();
       hideCountryResults();
       return;
@@ -352,10 +380,7 @@ export function initializeCountrySelector({
   function selectCountry(country) {
     state.selectedCountry = country;
     searchInput.value = "";
-    state.activeCategoryId = null;
-    state.activeRegionId = null;
-    updateRegionButtons();
-    updateCategoryButtons();
+    clearActiveFilters();
     closeFilterPanels();
     hideCountryResults();
 
@@ -443,7 +468,11 @@ export function initializeCountrySelector({
 
   function updateRegionButtons() {
     document.querySelectorAll(".region-button").forEach((button) => {
-      button.setAttribute("aria-pressed", String(button.dataset.regionId === state.activeRegionId));
+      const isWorldButton = button.dataset.regionId === "WORLD";
+      const isPressed = isWorldButton
+        ? showAllCountries && !state.activeRegionId && !state.activeCategoryId && !searchInput.value.trim()
+        : button.dataset.regionId === state.activeRegionId;
+      button.setAttribute("aria-pressed", String(isPressed));
     });
   }
 
@@ -495,10 +524,7 @@ export function initializeCountrySelector({
       state.selectedCountry = country;
     },
     close() {
-      state.activeCategoryId = null;
-      state.activeRegionId = null;
-      updateRegionButtons();
-      updateCategoryButtons();
+      clearActiveFilters();
       closeFilterPanels();
       hideCountryResults();
     },
