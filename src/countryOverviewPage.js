@@ -118,6 +118,7 @@ const countryCode = document.body.dataset.countryCode;
 const selectedCountry = countries.find((country) => country.code === countryCode);
 let activeCategoryId = overviewCategory.id;
 let loadedDataByPath = null;
+const compactCountryMapMedia = window.matchMedia("(max-width: 640px)");
 
 initializeCountryOverview().catch((error) => {
   console.error("[Country overview] Failed to initialize page.", error);
@@ -132,6 +133,7 @@ async function initializeCountryOverview() {
   updateCountryHeading();
   renderCountryMap();
   renderCategoryControls();
+  initializeCountryMapLayout();
 
   loadedDataByPath = await loadDataByPath(getRequiredStaticDataPaths());
   renderOverview();
@@ -160,13 +162,10 @@ function updateCountryHeading() {
 
 function renderCountryMap() {
   const header = document.querySelector(".country-data-header");
-  const card = header?.closest(".indicators-card");
 
   if (!header || header.querySelector(".country-overview-map")) {
     return;
   }
-
-  card?.classList.add("has-country-overview-map");
 
   const map = document.createElement("div");
   map.className = "world-map country-overview-map";
@@ -229,6 +228,38 @@ function renderCategoryControls() {
   panel.append(label, list);
   header.append(panel);
   updateCategorySelection();
+}
+
+function initializeCountryMapLayout() {
+  updateCountryMapLayout();
+  compactCountryMapMedia.addEventListener("change", updateCountryMapLayout);
+}
+
+function updateCountryMapLayout() {
+  const section = document.querySelector(".indicators-section");
+  const header = document.querySelector(".country-data-header");
+  const card = document.querySelector(".indicators-card");
+  const map = document.querySelector(".country-overview-map");
+  const panel = document.querySelector(".country-overview-category-panel");
+  const groups = document.querySelector(".country-overview-groups");
+
+  if (!section || !header || !card || !map || !panel || !groups) {
+    return;
+  }
+
+  if (compactCountryMapMedia.matches) {
+    header.classList.add("country-overview-header-card");
+    map.classList.add("country-overview-standalone-map");
+    section.insertBefore(header, card);
+    section.insertBefore(map, card);
+    card.insertBefore(panel, groups);
+    return;
+  }
+
+  header.classList.remove("country-overview-header-card");
+  map.classList.remove("country-overview-standalone-map");
+  card.insertBefore(header, card.firstElementChild);
+  header.append(map, panel);
 }
 
 function updateCategorySelection() {

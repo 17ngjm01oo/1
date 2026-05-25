@@ -1479,19 +1479,23 @@ h1 {
     font-size: clamp(1.65rem, 7.6vw, 2.1rem);
   }
 
-  .indicators-card.has-country-overview-map {
-    padding-right: 0;
-    padding-left: 0;
-    border: 0;
-    border-radius: 0;
-    box-shadow: none;
+  .country-overview-header-card,
+  .country-overview-standalone-map {
+    padding: 18px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    box-shadow: 0 18px 40px rgba(23, 32, 42, 0.08);
   }
 
-  .has-country-overview-map .country-data-header h1,
-  .has-country-overview-map .country-overview-category-panel,
-  .has-country-overview-map .country-overview-groups {
-    margin-right: 14px;
-    margin-left: 14px;
+  .country-overview-standalone-map {
+    padding: 0;
+  }
+
+  .country-overview-standalone-map + .indicators-card .country-overview-category-panel {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
   }
 
   .country-overview-table th,
