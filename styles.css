@@ -1497,6 +1497,10 @@ h1 {
     display: contents;
   }
 
+  .country-overview-layout {
+    gap: 0;
+  }
+
   .country-overview-card > .country-data-header,
   .country-overview-card > .country-overview-map,
   .country-overview-card > .country-overview-content {
@@ -1507,10 +1511,22 @@ h1 {
     box-shadow: 0 18px 40px rgba(23, 32, 42, 0.08);
   }
 
+  .country-overview-card > .country-data-header {
+    border-bottom: 0;
+    border-radius: 8px 8px 0 0;
+    box-shadow: none;
+  }
+
   .country-overview-card > .country-overview-map {
     padding: 0;
     border: 0;
+    border-radius: 0;
     box-shadow: none;
+  }
+
+  .country-overview-card > .country-overview-content {
+    border-top: 0;
+    border-radius: 0 0 8px 8px;
   }
 
   .country-overview-content {

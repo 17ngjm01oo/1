@@ -232,17 +232,19 @@ function renderCategoryControls() {
 function prepareCountryOverviewLayout() {
   const header = document.querySelector(".country-data-header");
   const card = header?.closest(".indicators-card");
+  const section = card?.closest(".indicators-section");
   const map = document.querySelector(".country-overview-map");
   const panel = document.querySelector(".country-overview-category-panel");
   const groups = document.querySelector(".country-overview-groups");
 
-  if (!header || !card || !map || !panel || !groups || card.querySelector(".country-overview-content")) {
+  if (!section || !header || !card || !map || !panel || !groups || card.querySelector(".country-overview-content")) {
     return;
   }
 
   const content = document.createElement("div");
   content.className = "country-overview-content";
 
+  section.classList.add("country-overview-layout");
   card.classList.add("country-overview-card");
   header.after(map, content);
   content.append(panel, groups);
