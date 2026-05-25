@@ -183,7 +183,7 @@ function renderCountryMap() {
 
   renderWorldMap({
     containerSelector: "#countryOverviewMap",
-    dataUrl: `${document.body.dataset.rootHref ?? "../../"}data/geo/countries-110m.json`,
+    dataUrl: `${document.body.dataset.rootHref ?? "../../"}data/geo/countries-50m.json`,
     countryList: countries.filter((country) => country.slug),
     rootHref: document.body.dataset.rootHref ?? "../../",
     focusCountryCode: selectedCountry.code,

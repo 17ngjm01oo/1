@@ -1482,19 +1482,16 @@ h1 {
   .indicators-card.has-country-overview-map {
     padding-right: 0;
     padding-left: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
   }
 
-  .has-country-overview-map .country-data-header,
+  .has-country-overview-map .country-data-header h1,
+  .has-country-overview-map .country-overview-category-panel,
   .has-country-overview-map .country-overview-groups {
     margin-right: 14px;
     margin-left: 14px;
-  }
-
-  .has-country-overview-map .country-overview-map {
-    width: calc(100% + 28px);
-    margin-right: -14px;
-    margin-left: -14px;
-    border-radius: 0;
   }
 
   .country-overview-table th,

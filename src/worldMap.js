@@ -24,7 +24,7 @@ const REGION_FOCUS_BOUNDS = {
 
 export async function renderWorldMap({
   containerSelector = "#worldMap",
-  dataUrl = "../data/geo/countries-110m.json",
+  dataUrl = "../data/geo/countries-50m.json",
   countryList = [],
   rootHref = "../",
   focusCountryCode = "",
