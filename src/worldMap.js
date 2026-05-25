@@ -23,6 +23,12 @@ const REGION_FOCUS_BOUNDS = {
   "South America": [-82, -39, -34, 14],
   Oceania: [112, -45, 180, -2],
 };
+const COUNTRY_FOCUS_BOUNDS = {
+  USA: [-126, 23, -65, 51],
+  FRA: [-6, 41, 10, 52],
+  RUS: [18, 40, 66, 72],
+  NZL: [165, -48, 180, -33],
+};
 
 export async function renderWorldMap({
   containerSelector = "#worldMap",
@@ -99,6 +105,12 @@ function renderMapPaths({
 function getCountryFocusGeometry(countryCode, mapCountries, countryLookup) {
   if (!countryCode) {
     return null;
+  }
+
+  const bounds = COUNTRY_FOCUS_BOUNDS[countryCode];
+
+  if (bounds) {
+    return createBoundsPoints(bounds);
   }
 
   return mapCountries.features.find((country) => {
