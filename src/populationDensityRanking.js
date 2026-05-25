@@ -7,11 +7,10 @@ initializeRankingPage({
   indicatorCode: "EN.POP.DNST",
   startYear: dataSources.worldBankPopulation.startYear,
   endYear: dataSources.worldBankPopulation.endYear,
-  rankingTitleBase: "Population Density Ranking",
+  rankingTitleBase: "Population Density (/km²) Ranking",
   pagePathSegment: "population-density",
-  linkAriaMetric: "Population Density",
+  linkAriaMetric: "Population Density (/km²)",
   displayScaleConfig: {
-    tooltipUnit: "/km²",
     maximumFractionDigits: 1,
   },
 });

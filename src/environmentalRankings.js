@@ -3,7 +3,7 @@ import { getCountryIndicatorLinks, renderRankingLinks } from "./rankingLinks.js"
 export const environmentalRankings = [
   {
     directory: "area",
-    label: "Area",
+    label: "Area (km²)",
   },
   {
     directory: "forest-area-percent-of-land-area",

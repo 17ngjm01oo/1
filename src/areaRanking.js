@@ -7,9 +7,9 @@ initializeRankingPage({
   indicatorCode: "CIA.AREA.K2",
   startYear: dataSources.ciaWorldFactbook.startYear,
   endYear: dataSources.ciaWorldFactbook.endYear,
-  rankingTitleBase: "Area Ranking",
+  rankingTitleBase: "Area (km²) Ranking",
   pagePathSegment: null,
-  linkAriaMetric: "Area",
+  linkAriaMetric: "Area (km²)",
   displayScaleConfig: {
     valueScaleMode: "areaMagnitude",
     maximumFractionDigits: 2,

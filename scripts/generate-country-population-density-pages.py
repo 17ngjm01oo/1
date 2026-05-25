@@ -9,8 +9,8 @@ def main() -> None:
     generate_country_pages(
         CountryPageConfig(
             page_kind="population-density",
-            title_suffix="Population Density",
-            chart_title="Population Density Chart by Country",
+            title_suffix="Population Density (/km²)",
+            chart_title="Population Density (/km²) Chart by Country",
             subtitle="Select a country to view historical population density trends.",
             generated_label="population density",
             source_note=WORLD_BANK_COUNTRY_SOURCE_NOTE,
@@ -20,9 +20,9 @@ def main() -> None:
             indicators=(
                 IndicatorBlockConfig(
                     series_id="populationDensity",
-                    title="Population Density",
+                    title="Population Density (/km²)",
                     canvas_label="Population density line chart",
-                    compare_label="Population Density",
+                    compare_label="Population Density (/km²)",
                 ),
             ),
         )

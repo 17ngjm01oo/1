@@ -49,7 +49,7 @@ const pageDefinitions = {
   "population-density": {
     logPrefix: "Population density page",
     group: "population",
-    documentTitleMetric: "Population Density",
+    documentTitleMetric: "Population Density (/km²)",
     pathSegment: "population-density",
     seriesIds: ["populationDensity"],
   },
@@ -204,7 +204,7 @@ const countryIndicatorLinks = [
 ];
 const populationIndicatorLinks = [
   { pageKind: "population", href: "../population/", label: "Population" },
-  { pageKind: "population-density", href: "../population-density/", label: "Population Density" },
+  { pageKind: "population-density", href: "../population-density/", label: "Population Density (/km²)" },
   { pageKind: "life-expectancy", href: "../life-expectancy/", label: "Life Expectancy" },
   { pageKind: "fertility-rate", href: "../fertility-rate/", label: "Fertility Rate" },
   { pageKind: "employment", href: "../employment/", label: "Employment" },

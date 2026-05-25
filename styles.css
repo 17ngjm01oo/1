@@ -1479,6 +1479,24 @@ h1 {
     font-size: clamp(1.65rem, 7.6vw, 2.1rem);
   }
 
+  .indicators-card.has-country-overview-map {
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  .has-country-overview-map .country-data-header,
+  .has-country-overview-map .country-overview-groups {
+    margin-right: 14px;
+    margin-left: 14px;
+  }
+
+  .has-country-overview-map .country-overview-map {
+    width: calc(100% + 28px);
+    margin-right: -14px;
+    margin-left: -14px;
+    border-radius: 0;
+  }
+
   .country-overview-table th,
   .country-overview-table td {
     padding: 10px 8px;

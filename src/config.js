@@ -108,8 +108,7 @@ export const seriesConfigs = [
     statusId: "populationDensityStatus",
     ...worldBankPopulation,
     indicatorCode: "EN.POP.DNST",
-    titleTemplate: "Population Density",
-    tooltipUnit: "/km²",
+    titleTemplate: "Population Density (/km²)",
     maximumFractionDigits: 1,
   },
   {
@@ -372,7 +371,7 @@ export const seriesConfigs = [
     id: "area",
     ...ciaWorldFactbook,
     indicatorCode: "CIA.AREA.K2",
-    titleTemplate: "Area",
+    titleTemplate: "Area (km²)",
     valueScaleMode: "areaMagnitude",
     fallbackMaximumFractionDigits: 0,
     fallbackSmallValueMaximumFractionDigits: 2,

@@ -160,10 +160,13 @@ function updateCountryHeading() {
 
 function renderCountryMap() {
   const header = document.querySelector(".country-data-header");
+  const card = header?.closest(".indicators-card");
 
   if (!header || header.querySelector(".country-overview-map")) {
     return;
   }
+
+  card?.classList.add("has-country-overview-map");
 
   const map = document.createElement("div");
   map.className = "world-map country-overview-map";

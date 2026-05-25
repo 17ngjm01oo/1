@@ -214,8 +214,6 @@ export function getDisplayScale(points, config) {
 
   if (config.valueScaleMode === "areaMagnitude") {
     return getMagnitudeDisplayScale(points, magnitudeInputs.units, {
-      tooltipUnit: "km²",
-      tooltipUnitSuffix: " km²",
       maximumFractionDigits: config.fallbackMaximumFractionDigits ?? 0,
       smallValueMaximumFractionDigits: config.fallbackSmallValueMaximumFractionDigits ?? 2,
       smallValueThreshold: config.fallbackSmallValueThreshold ?? 10,
