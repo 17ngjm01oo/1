@@ -35,7 +35,7 @@ def render_country_overview_page(country: dict[str, str]) -> str:
       <a class="site-home-link" href="../../">HOME</a>
     </header>
     <main class="page-shell">
-{render_rankings_top_nav("rankingTopNav", "../../")}
+{render_rankings_top_nav()}
 
       <section class="indicators-section" aria-labelledby="country-overview-title">
         <div class="indicators-card">

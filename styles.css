@@ -704,15 +704,6 @@ body {
   min-width: 0;
 }
 
-.world-map-section {
-  padding: var(--card-padding);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--card);
-  box-shadow: var(--shadow);
-  min-width: 0;
-}
-
 .world-map {
   position: relative;
   width: 100%;
@@ -721,6 +712,12 @@ body {
   overflow: hidden;
   border-radius: 8px;
   background: #ffffff;
+}
+
+body[data-page-kind="country-hub"] .hub-section > .world-map {
+  width: auto;
+  margin: -28px -28px 0;
+  border-radius: 8px 8px 0 0;
 }
 
 .world-map-svg {
@@ -1517,9 +1514,8 @@ h1 {
     aspect-ratio: 16 / 8;
   }
 
-  .world-map-section {
-    padding: 0;
-    border: 0;
+  body[data-page-kind="country-hub"] .hub-section > .world-map {
+    margin: -18px -14px 0;
   }
 
   .indicators-section {

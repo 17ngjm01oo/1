@@ -79,7 +79,7 @@ def render_country_page(country: dict[str, str], config: CountryPageConfig) -> s
       <a class="site-home-link" href="../../../">HOME</a>
     </header>
     <main class="page-shell">
-{render_rankings_top_nav("economicTopNav", "../../../")}
+{render_rankings_top_nav()}
 
       <section class="hub-section" aria-labelledby="country-hub-title">
         <header class="page-header">

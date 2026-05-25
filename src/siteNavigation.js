@@ -4,24 +4,14 @@ import { renderFiscalRankingLinks } from "./fiscalRankings.js";
 import { renderPopulationRankingLinks } from "./populationRankings.js";
 import { renderTradeRankingLinks } from "./tradeRankings.js";
 
-export function renderCountryHubLink({ rootHref = "./" } = {}) {
+export function renderSiteHubLinks({ rootHref = "./" } = {}) {
   const navCards = document.querySelectorAll(".top-nav-card");
 
   navCards.forEach((navCard) => {
-    if (navCard.querySelector(".country-hub-nav-link")) {
-      return;
-    }
-
-    const link = document.createElement("a");
-    link.className = "country-hub-nav-link";
-    link.href = `${rootHref}countries/`;
-    link.textContent = "Countries";
-
-    if (isCountryHubPage()) {
-      link.setAttribute("aria-current", "page");
-    }
-
-    navCard.prepend(link);
+    navCard.replaceChildren(
+      createSiteHubLink(`${rootHref}countries/`, "Countries", isCountryHubPage()),
+      createSiteHubLink(`${rootHref}rankings/`, "Rankings", isRankingsPage()),
+    );
   });
 }
 
@@ -33,7 +23,7 @@ export function renderTopNavigationLinks({
   currentPageKind = "",
   highlightCurrent = true,
 } = {}) {
-  renderCountryHubLink({ rootHref });
+  renderSiteHubLinks({ rootHref });
 
   renderEconomicRankingLinks(document.querySelector(economicNavSelector), {
     rootHref,
@@ -74,4 +64,21 @@ export function renderTopNavigationLinks({
 
 function isCountryHubPage() {
   return document.body.dataset.pageKind === "country-hub";
+}
+
+function isRankingsPage() {
+  return document.body.dataset.pageKind === "rankings-hub" || Boolean(document.body.dataset.rankingDirectory);
+}
+
+function createSiteHubLink(href, label, isCurrentPage) {
+  const link = document.createElement("a");
+  link.className = "country-hub-nav-link";
+  link.href = href;
+  link.textContent = label;
+
+  if (isCurrentPage) {
+    link.setAttribute("aria-current", "page");
+  }
+
+  return link;
 }
