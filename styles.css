@@ -197,6 +197,22 @@ body {
   gap: 20px;
 }
 
+.rankings-hub-groups {
+  display: grid;
+  gap: 22px;
+}
+
+.rankings-hub-group {
+  display: grid;
+  gap: 10px;
+}
+
+.rankings-hub-group h2 {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
 .indicators-section {
   display: grid;
   gap: var(--section-gap-compact);
