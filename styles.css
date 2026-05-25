@@ -1485,6 +1485,11 @@ h1 {
     aspect-ratio: 16 / 8;
   }
 
+  .world-map-section {
+    padding: 0;
+    border: 0;
+  }
+
   .indicators-section {
     gap: 8px;
   }
