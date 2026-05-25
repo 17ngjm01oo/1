@@ -1505,6 +1505,7 @@ h1 {
 
   .country-overview-card > .country-overview-map {
     padding: 0;
+    box-shadow: none;
   }
 
   .country-overview-content {
