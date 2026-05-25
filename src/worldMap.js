@@ -34,6 +34,11 @@ const COUNTRY_FOCUS_BOUNDS = {
   KIR: [170, 0, 177, 5],
   TUV: [176, -11, 180, -5],
   GUF: [-55, 2, -51, 6],
+  GLP: [-63, 15, -60, 18],
+  MTQ: [-62.5, 13.5, -59.5, 16.5],
+  MAF: [-64.5, 16.5, -61.5, 19.5],
+  MYT: [43.5, -14.5, 46.5, -11.5],
+  REU: [53.5, -22.5, 56.5, -19.5],
   NZL: [165, -48, 180, -33],
 };
 
@@ -43,6 +48,7 @@ export async function renderWorldMap({
   rootHref = "../",
   dataUrl = `${rootHref}${MAP_DATA_PATH}`,
   focusCountryCode = "",
+  defaultZoom = 1,
 } = {}) {
   const container = document.querySelector(containerSelector);
 
@@ -58,12 +64,12 @@ export async function renderWorldMap({
     const tooltip = createMapTooltip();
 
     container.replaceChildren(svg, tooltip);
-    renderMapPaths({ svg, tooltip, container, mapCountries, countryLookup, focusCountryCode });
+    renderMapPaths({ svg, tooltip, container, mapCountries, countryLookup, focusCountryCode, defaultZoom });
 
     return {
       focusRegion(regionId) {
         hideMapTooltip(tooltip);
-        renderMapPaths({ svg, tooltip, container, mapCountries, countryLookup, regionId });
+        renderMapPaths({ svg, tooltip, container, mapCountries, countryLookup, regionId, defaultZoom });
       },
       focusCountry(countryCode) {
         hideMapTooltip(tooltip);
@@ -84,6 +90,7 @@ function renderMapPaths({
   countryLookup,
   regionId = "",
   focusCountryCode = "",
+  defaultZoom = 1,
 }) {
   const projection = geoEqualEarth().fitExtent(
     [
@@ -92,6 +99,11 @@ function renderMapPaths({
     ],
     getCountryFocusGeometry(focusCountryCode, mapCountries, countryLookup) ?? getFocusGeometry(regionId) ?? mapCountries,
   );
+
+  if (!focusCountryCode && !regionId && defaultZoom !== 1) {
+    projection.scale(projection.scale() * defaultZoom);
+  }
+
   const path = geoPath(projection);
 
   svg.replaceChildren();

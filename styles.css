@@ -76,7 +76,8 @@ body {
 }
 
 .top-nav-card {
-  gap: 8px;
+  grid-template-columns: repeat(2, max-content);
+  gap: 22px;
   padding: 18px 22px;
 }
 
@@ -209,8 +210,33 @@ body {
 
 .rankings-hub-group h2 {
   margin: 0;
-  color: var(--muted);
-  font-size: 1rem;
+  color: var(--text);
+  font-size: 1.24rem;
+}
+
+body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav {
+  display: grid;
+  justify-items: start;
+  gap: 0;
+}
+
+body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a {
+  display: block;
+  width: 100%;
+  padding: 0;
+  padding-block: 10px;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
+  color: var(--accent);
+  font-size: 1.06rem;
+}
+
+body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
+  border-bottom-color: var(--border);
+  background: transparent;
+  text-decoration: underline;
 }
 
 .indicators-section {
@@ -984,7 +1010,7 @@ body[data-page-kind="country-hub"] .country-hub-results {
 
 .country-hub-results .country-result {
   display: grid;
-  grid-template-columns: 58px minmax(0, 1fr) minmax(120px, 28%);
+  grid-template-columns: 58px minmax(0, 1fr) minmax(150px, 32%);
   align-items: stretch;
   gap: 0;
   padding: 0;
@@ -1005,6 +1031,10 @@ body[data-page-kind="country-hub"] .country-hub-results {
 .country-hub-result-name,
 .country-hub-result-region {
   font-weight: 700;
+}
+
+.country-hub-result-region {
+  white-space: nowrap;
 }
 
 .country-hub-result-name {
@@ -1501,7 +1531,7 @@ h1 {
   }
 
   .top-nav-card {
-    gap: 8px;
+    gap: 18px;
     padding: 12px 14px;
     border-radius: 8px;
   }
@@ -1670,7 +1700,7 @@ h1 {
   }
 
   .country-hub-results .country-result {
-    grid-template-columns: 38px minmax(0, 1fr) minmax(82px, 28%);
+    grid-template-columns: 38px minmax(0, 1fr) minmax(112px, 36%);
   }
 
   .ranking-table td:nth-child(1) {

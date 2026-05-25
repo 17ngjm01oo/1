@@ -106,6 +106,28 @@ def render_ranking_page(ranking_type: dict[str, str], scope: dict[str, str], is_
         </header>
 
         <div class="ranking-filter-panel">
+          <div class="country-search-panel ranking-country-search-panel">
+            <div class="search-input-wrap">
+              <input
+                id="rankingCountrySearchInput"
+                class="country-search-input"
+                type="search"
+                autocomplete="off"
+                placeholder="Search a country&hellip;"
+                aria-controls="rankingCountrySearchResults"
+                role="combobox"
+                aria-autocomplete="list"
+                aria-expanded="false"
+              />
+              <div
+                class="country-results"
+                id="rankingCountrySearchResults"
+                role="listbox"
+                aria-label="Country search results"
+                hidden
+              ></div>
+            </div>
+          </div>
           <p class="filter-label">Filter by:</p>
           <div class="filter-panel-row">
             <details class="category-panel" aria-labelledby="ranking-region-heading">

@@ -19,6 +19,7 @@ export function initializeCountrySelector({
   filterPanelRowSelector = ".filter-panel-row",
   searchPanelSelector = ".country-search-panel",
   onResultsChange = null,
+  closePanelsOnFilterSelect = false,
 } = {}) {
   const searchInput = document.querySelector(searchInputSelector);
   const resultsElement = document.querySelector(resultsSelector);
@@ -169,6 +170,7 @@ export function initializeCountrySelector({
 
     const nextRegionId = state.activeRegionId === regionId ? null : regionId;
     setActiveFilters({ regionId: nextRegionId });
+    closeFilterPanelsAfterSelection();
 
     if (!state.activeRegionId) {
       if (showAllCountries) {
@@ -185,6 +187,7 @@ export function initializeCountrySelector({
   function activateWorld() {
     searchInput.value = "";
     setActiveFilters();
+    closeFilterPanelsAfterSelection();
     renderAllCountries();
   }
 
@@ -208,6 +211,7 @@ export function initializeCountrySelector({
 
     const nextCategoryId = state.activeCategoryId === categoryId ? null : categoryId;
     setActiveFilters({ categoryId: nextCategoryId });
+    closeFilterPanelsAfterSelection();
 
     if (!state.activeCategoryId) {
       if (showAllCountries) {
@@ -219,6 +223,12 @@ export function initializeCountrySelector({
     }
 
     renderCategoryCountries(state.activeCategoryId);
+  }
+
+  function closeFilterPanelsAfterSelection() {
+    if (closePanelsOnFilterSelect) {
+      closeFilterPanels();
+    }
   }
 
   function renderCountryResults(query) {

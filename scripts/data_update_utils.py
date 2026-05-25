@@ -31,7 +31,7 @@ def parse_countries(source: str) -> list[dict]:
         }
         slug = extract_string_property(body, "slug")
         official_name = extract_string_property(body, "officialName")
-        capital = extract_string_property(body, "capital")
+        capitals = parse_string_list_property(body, "capitals")
         aliases = parse_string_list_property(body, "aliases")
 
         if slug:
@@ -40,8 +40,8 @@ def parse_countries(source: str) -> list[dict]:
         if official_name:
             country["officialName"] = official_name
 
-        if capital:
-            country["capital"] = capital
+        if capitals:
+            country["capitals"] = capitals
 
         if aliases:
             country["aliases"] = aliases

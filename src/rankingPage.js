@@ -1,5 +1,6 @@
 import { countries } from "./countries.js";
 import { filterCountriesByScope } from "./countryFilters.js";
+import { initializeCountrySelector } from "./countrySelector.js";
 import { formatCompactDisplayValue, getDisplayScale } from "./chart.js";
 import { getFlagEmoji } from "./flags.js";
 import { initializeRankingFilters } from "./rankingFilters.js";
@@ -9,6 +10,8 @@ import "./rankingTopNav.js";
 import { getIndicatorSeriesMap } from "./seriesData.js";
 
 export function initializeRankingPage(config) {
+  initializeRankingCountrySearch(config);
+
   const state = {
     allRankingRows: [],
     activeScope: null,
@@ -17,6 +20,22 @@ export function initializeRankingPage(config) {
   initializeRanking(config, state).catch((error) => {
     console.error(`[Ranking] Failed to initialize ${config.logName} ranking.`, error);
     showRankingError();
+  });
+}
+
+function initializeRankingCountrySearch(config) {
+  const rootHref = document.body.dataset.rootHref ?? "../../";
+  const pagePathSegment = config.pagePathSegment;
+
+  initializeCountrySelector({
+    countryPool: countries.filter((country) => country.slug && country.code !== "G001"),
+    getCountryHref(country) {
+      const indicatorPath = pagePathSegment ? `${pagePathSegment}/` : "";
+      return `${rootHref}countries/${country.slug}/${indicatorPath}`;
+    },
+    searchInputSelector: "#rankingCountrySearchInput",
+    resultsSelector: "#rankingCountrySearchResults",
+    searchPanelSelector: ".ranking-country-search-panel",
   });
 }
 

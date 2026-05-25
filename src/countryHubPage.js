@@ -12,6 +12,7 @@ const countElement = document.querySelector("#countryHubCount");
 const worldMap = await renderWorldMap({
   countryList: hubCountries,
   rootHref,
+  defaultZoom: 1.10,
 });
 
 initializeCountrySelector({
@@ -19,6 +20,7 @@ initializeCountrySelector({
   showAllCountries: true,
   inlineSearchResults: true,
   highlightFirstResult: false,
+  closePanelsOnFilterSelect: true,
   sortCountryResults(countryList) {
     return [...countryList].sort((countryA, countryB) => {
       return countryA.name.localeCompare(countryB.name, "en", { sensitivity: "base" });
