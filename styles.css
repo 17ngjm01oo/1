@@ -226,7 +226,6 @@ body {
   display: inline-flex;
   align-items: baseline;
   gap: 0.22em;
-  margin-left: 8px;
   max-width: 100%;
   color: var(--accent);
   font-size: 0.92rem;
@@ -234,6 +233,11 @@ body {
   line-height: 1.2;
   text-decoration: none;
   overflow-wrap: anywhere;
+}
+
+#country-data-title + .country-profile-link {
+  justify-self: start;
+  margin-bottom: -8px;
 }
 
 .country-profile-link:hover,
@@ -1505,6 +1509,7 @@ h1 {
 
   .country-overview-card > .country-overview-map {
     padding: 0;
+    border: 0;
     box-shadow: none;
   }
 

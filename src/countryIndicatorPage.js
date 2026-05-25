@@ -402,6 +402,7 @@ function formatTitleCurrencyCode(currencyCode) {
 
 function updateCountryHeading(country) {
   const title = document.querySelector("#country-data-title");
+  const relatedPageNav = document.querySelector("#countryRelatedPageNav");
 
   if (!title) {
     return;
@@ -433,7 +434,13 @@ function updateCountryHeading(country) {
   profileLinkArrow.textContent = "↗";
   profileLink.append(profileLinkArrow);
 
-  title.append(nameElement, profileLink);
+  title.append(nameElement);
+
+  if (relatedPageNav) {
+    relatedPageNav.before(profileLink);
+  } else {
+    title.append(profileLink);
+  }
 }
 
 function updateRelatedPageLinks() {
