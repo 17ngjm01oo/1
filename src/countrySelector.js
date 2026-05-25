@@ -240,7 +240,7 @@ export function initializeCountrySelector({
 
     clearActiveFilters();
     setCountryResultsMode("search");
-    renderCountryList(filterCountryList(countryPool, normalizedQuery), "No matching countries.");
+    renderCountryList(filterCountryList(countryPool, normalizedQuery), "No matches found.");
   }
 
   function renderAllCountries() {

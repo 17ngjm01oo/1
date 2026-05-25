@@ -36,7 +36,7 @@ initializeCountrySelector({
   },
   renderCountryResultContent(country, { activateRegion }) {
     const flag = document.createElement("span");
-    flag.className = "country-hub-result-flag";
+    flag.className = "ranking-flag country-hub-result-flag";
     flag.textContent = getFlagEmoji(country.code);
 
     const name = document.createElement("span");

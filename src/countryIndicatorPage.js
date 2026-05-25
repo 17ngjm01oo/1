@@ -648,7 +648,7 @@ function renderCompareResults(seriesId, query) {
   if (matchingCountries.length === 0) {
     const emptyElement = document.createElement("div");
     emptyElement.className = "country-result-empty";
-    emptyElement.textContent = "No matching countries.";
+    emptyElement.textContent = "No matches found.";
     results.append(emptyElement);
     return;
   }

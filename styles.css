@@ -269,7 +269,6 @@ body {
   gap: 8px;
   margin-top: 12px;
   padding-top: 14px;
-  border-top: 1px solid var(--border);
 }
 
 .country-overview-category-label {
@@ -924,17 +923,22 @@ body {
   color: var(--accent);
 }
 
-.country-results {
-  display: grid;
-  gap: 0;
+.country-results,
+.ranking-table-wrap {
   min-width: 0;
-  max-height: 280px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  max-width: 100%;
   padding: 0;
   border: 1px solid var(--border);
   border-radius: 8px;
   background: #fbfcfd;
+}
+
+.country-results {
+  display: grid;
+  gap: 0;
+  max-height: 280px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .country-results[data-mode="search"] {
@@ -971,25 +975,17 @@ body[data-page-kind="country-hub"] .country-hub-results {
   align-items: stretch;
   gap: 0;
   padding: 0;
-  font-size: 1.06rem;
+  border-bottom: 0;
 }
 
 .country-hub-results .country-result > span {
   display: flex;
   align-items: center;
   min-width: 0;
-  padding: 13px 12px;
-  overflow-wrap: anywhere;
-}
-
-.country-hub-results .country-result > span:not(:last-child) {
-  border-right: 1px solid var(--border);
 }
 
 .country-hub-result-flag {
   justify-content: center;
-  font-size: 1.65em;
-  line-height: 1;
   text-align: center;
 }
 
@@ -1337,29 +1333,34 @@ h1 {
 }
 
 .ranking-table-wrap {
-  max-width: 100%;
   overflow-x: visible;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: #fbfcfd;
+}
+
+.ranking-table,
+.country-hub-results .country-result {
+  font-size: 1.06rem;
 }
 
 .ranking-table {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  font-size: 1.06rem;
 }
 
-.ranking-table td {
+.ranking-table td,
+.country-hub-results .country-result > span {
   padding: 13px 12px;
   border-bottom: 1px solid var(--border);
-  text-align: right;
   overflow-wrap: anywhere;
   vertical-align: middle;
 }
 
-.ranking-table td:not(:last-child) {
+.ranking-table td {
+  text-align: right;
+}
+
+.ranking-table td:not(:last-child),
+.country-hub-results .country-result > span:not(:last-child) {
   border-right: 1px solid var(--border);
 }
 
@@ -1385,7 +1386,8 @@ h1 {
   width: 78px;
 }
 
-.ranking-table tbody tr:last-child td {
+.ranking-table tbody tr:last-child td,
+.country-hub-results .country-result:last-child > span {
   border-bottom: 0;
 }
 
@@ -1439,7 +1441,8 @@ h1 {
   background: #67a9db;
 }
 
-.ranking-flag {
+.ranking-flag,
+.country-hub-result-flag {
   font-size: 1.32rem;
   line-height: 1;
 }
@@ -1644,12 +1647,18 @@ h1 {
     word-break: normal;
   }
 
-  .ranking-table {
+  .ranking-table,
+  .country-hub-results .country-result {
     font-size: 0.82rem;
   }
 
-  .ranking-table td {
+  .ranking-table td,
+  .country-hub-results .country-result > span {
     padding: 8px 5px;
+  }
+
+  .country-hub-results .country-result {
+    grid-template-columns: 38px minmax(0, 1fr) minmax(82px, 28%);
   }
 
   .ranking-table td:nth-child(1) {

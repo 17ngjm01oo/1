@@ -8,7 +8,7 @@ const MAP_PADDING = -18;
 const MAP_DATA_PATH = "data/geo/countries-50m.json";
 const hoverTooltipMedia = window.matchMedia("(hover: hover) and (pointer: fine)");
 const REGION_COLORS = {
-  Asia: "#D8BF5A",
+  Asia: "#C2A947",
   Europe: "#857CB8",
   Africa: "#C18458",
   "North America": "#5A91C9",
@@ -24,9 +24,16 @@ const REGION_FOCUS_BOUNDS = {
   Oceania: [112, -45, 180, -2],
 };
 const COUNTRY_FOCUS_BOUNDS = {
-  USA: [-126, 23, -65, 51],
+  USA: [-172, 7, -52, 72],
   FRA: [-6, 41, 10, 52],
-  RUS: [18, 40, 66, 72],
+  ESP: [-10, 35, 5, 44],
+  PRT: [-10, 36, -6, 43],
+  NLD: [3, 50, 8, 54],
+  RUS: [18, 40, 106, 72],
+  FJI: [175, -22, 180, -12],
+  KIR: [170, 0, 177, 5],
+  TUV: [176, -11, 180, -5],
+  GUF: [-55, 2, -51, 6],
   NZL: [165, -48, 180, -33],
 };
 
