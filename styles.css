@@ -759,6 +759,20 @@ body {
   display: none;
 }
 
+@media (hover: none), (pointer: coarse) {
+  .world-map-country.is-clickable {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .world-map-country.is-clickable:focus {
+    outline: none;
+  }
+
+  .world-map-tooltip {
+    display: none;
+  }
+}
+
 .world-map-tooltip-flag {
   font-size: 1.25rem;
   line-height: 1;
@@ -1462,7 +1476,6 @@ h1 {
   }
 
   .hub-section,
-  .world-map-section,
   .indicators-card,
   .ranking-card,
   .shared-notes {

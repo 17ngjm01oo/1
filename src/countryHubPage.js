@@ -10,7 +10,6 @@ const hubCountries = profileCountries.filter((country) => country.code !== "G001
 const countElement = document.querySelector("#countryHubCount");
 
 const worldMap = await renderWorldMap({
-  dataUrl: `${rootHref}data/geo/countries-50m.json`,
   countryList: hubCountries,
   rootHref,
 });

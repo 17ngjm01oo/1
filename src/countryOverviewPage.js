@@ -130,9 +130,9 @@ async function initializeCountryOverview() {
   }
 
   updateCountryHeading();
+  prepareCountryOverviewLayout();
   renderCountryMap();
   renderCategoryControls();
-  prepareCountryOverviewLayout();
 
   loadedDataByPath = await loadDataByPath(getRequiredStaticDataPaths());
   renderOverview();
@@ -161,8 +161,9 @@ function updateCountryHeading() {
 
 function renderCountryMap() {
   const header = document.querySelector(".country-data-header");
+  const card = header?.closest(".country-overview-card");
 
-  if (!header || document.querySelector(".country-overview-map")) {
+  if (!header || !card || card.querySelector(".country-overview-map")) {
     return;
   }
 
@@ -177,11 +178,10 @@ function renderCountryMap() {
   loading.textContent = "Loading map...";
 
   map.append(loading);
-  header.append(map);
+  header.after(map);
 
   renderWorldMap({
     containerSelector: "#countryOverviewMap",
-    dataUrl: `${document.body.dataset.rootHref ?? "../../"}data/geo/countries-50m.json`,
     countryList: countries.filter((country) => country.slug),
     rootHref: document.body.dataset.rootHref ?? "../../",
     focusCountryCode: selectedCountry.code,
@@ -189,9 +189,9 @@ function renderCountryMap() {
 }
 
 function renderCategoryControls() {
-  const header = document.querySelector(".country-data-header");
+  const content = document.querySelector(".country-overview-content");
 
-  if (!header || header.querySelector(".country-overview-category-panel")) {
+  if (!content || content.querySelector(".country-overview-category-panel")) {
     return;
   }
 
@@ -225,7 +225,7 @@ function renderCategoryControls() {
   }
 
   panel.append(label, list);
-  header.append(panel);
+  content.prepend(panel);
   updateCategorySelection();
 }
 
@@ -233,11 +233,9 @@ function prepareCountryOverviewLayout() {
   const header = document.querySelector(".country-data-header");
   const card = header?.closest(".indicators-card");
   const section = card?.closest(".indicators-section");
-  const map = document.querySelector(".country-overview-map");
-  const panel = document.querySelector(".country-overview-category-panel");
   const groups = document.querySelector(".country-overview-groups");
 
-  if (!section || !header || !card || !map || !panel || !groups || card.querySelector(".country-overview-content")) {
+  if (!section || !header || !card || !groups || card.querySelector(".country-overview-content")) {
     return;
   }
 
@@ -246,8 +244,8 @@ function prepareCountryOverviewLayout() {
 
   section.classList.add("country-overview-layout");
   card.classList.add("country-overview-card");
-  header.after(map, content);
-  content.append(panel, groups);
+  header.after(content);
+  content.append(groups);
 }
 
 function updateCategorySelection() {

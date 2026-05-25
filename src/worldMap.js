@@ -5,6 +5,8 @@ import { getFlagEmoji } from "./flags.js";
 const MAP_WIDTH = 960;
 const MAP_HEIGHT = 420;
 const MAP_PADDING = -18;
+const MAP_DATA_PATH = "data/geo/countries-50m.json";
+const hoverTooltipMedia = window.matchMedia("(hover: hover) and (pointer: fine)");
 const REGION_COLORS = {
   Asia: "#D8BF5A",
   Europe: "#857CB8",
@@ -24,9 +26,9 @@ const REGION_FOCUS_BOUNDS = {
 
 export async function renderWorldMap({
   containerSelector = "#worldMap",
-  dataUrl = "../data/geo/countries-50m.json",
   countryList = [],
   rootHref = "../",
+  dataUrl = `${rootHref}${MAP_DATA_PATH}`,
   focusCountryCode = "",
 } = {}) {
   const container = document.querySelector(containerSelector);
@@ -83,9 +85,8 @@ function renderMapPaths({
   appendPath(svg, path({ type: "Sphere" }), "world-map-sphere");
 
   for (const country of mapCountries.features) {
-    const mapId = normalizeMapId(country.id);
     const mapName = country.properties?.name ?? "";
-    const countryRecord = countryLookup.byId.get(mapId) ?? countryLookup.byName.get(normalizeName(mapName));
+    const countryRecord = findCountryRecord(country, countryLookup);
     const countryPath = appendPath(svg, path(country), "world-map-country");
 
     if (countryPath && countryRecord) {
@@ -101,9 +102,7 @@ function getCountryFocusGeometry(countryCode, mapCountries, countryLookup) {
   }
 
   return mapCountries.features.find((country) => {
-    const mapId = normalizeMapId(country.id);
-    const mapName = country.properties?.name ?? "";
-    const countryRecord = countryLookup.byId.get(mapId) ?? countryLookup.byName.get(normalizeName(mapName));
+    const countryRecord = findCountryRecord(country, countryLookup);
     return countryRecord?.country.code === countryCode;
   }) ?? null;
 }
@@ -189,6 +188,11 @@ function buildCountryLookup(countryList, rootHref) {
   }, { byId: new Map(), byName: new Map() });
 }
 
+function findCountryRecord(mapCountry, countryLookup) {
+  return countryLookup.byId.get(normalizeMapId(mapCountry.id))
+    ?? countryLookup.byName.get(normalizeName(mapCountry.properties?.name));
+}
+
 function colorCountryPath(path, country) {
   const color = REGION_COLORS[country.region?.trim()];
 
@@ -218,15 +222,28 @@ function makeCountryPathClickable(path, countryRecord, mapName = "country", cont
   path.setAttribute("tabindex", "0");
   path.setAttribute("aria-label", `Open ${countryName} country page`);
   path.addEventListener("mouseenter", (event) => {
+    if (!canShowMapTooltip()) {
+      return;
+    }
+
     showMapTooltip(tooltip, container, country, event);
   });
   path.addEventListener("mousemove", (event) => {
+    if (!canShowMapTooltip() || tooltip.hidden) {
+      return;
+    }
+
     positionMapTooltip(tooltip, container, event);
   });
   path.addEventListener("mouseleave", () => {
     hideMapTooltip(tooltip);
   });
   path.addEventListener("focus", () => {
+    if (!canShowMapTooltip()) {
+      hideMapTooltip(tooltip);
+      return;
+    }
+
     showMapTooltip(tooltip, container, country, null, path);
   });
   path.addEventListener("blur", () => {
@@ -243,6 +260,10 @@ function makeCountryPathClickable(path, countryRecord, mapName = "country", cont
     event.preventDefault();
     window.location.href = href;
   });
+}
+
+function canShowMapTooltip() {
+  return hoverTooltipMedia.matches;
 }
 
 function createMapTooltip() {
