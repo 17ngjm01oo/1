@@ -246,8 +246,18 @@ body {
   gap: 26px;
 }
 
+.country-overview-card {
+  gap: 8px;
+}
+
 .country-data-header {
   padding-bottom: 4px;
+}
+
+.country-overview-content {
+  display: grid;
+  gap: 26px;
+  min-width: 0;
 }
 
 .country-overview-category-panel {
@@ -1479,8 +1489,13 @@ h1 {
     font-size: clamp(1.65rem, 7.6vw, 2.1rem);
   }
 
-  .country-overview-header-card,
-  .country-overview-standalone-map {
+  .country-overview-card {
+    display: contents;
+  }
+
+  .country-overview-card > .country-data-header,
+  .country-overview-card > .country-overview-map,
+  .country-overview-card > .country-overview-content {
     padding: 18px 14px;
     border: 1px solid var(--border);
     border-radius: 8px;
@@ -1488,11 +1503,15 @@ h1 {
     box-shadow: 0 18px 40px rgba(23, 32, 42, 0.08);
   }
 
-  .country-overview-standalone-map {
+  .country-overview-card > .country-overview-map {
     padding: 0;
   }
 
-  .country-overview-standalone-map + .indicators-card .country-overview-category-panel {
+  .country-overview-content {
+    gap: 16px;
+  }
+
+  .country-overview-content .country-overview-category-panel {
     margin-top: 0;
     padding-top: 0;
     border-top: 0;

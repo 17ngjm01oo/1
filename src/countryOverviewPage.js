@@ -118,7 +118,6 @@ const countryCode = document.body.dataset.countryCode;
 const selectedCountry = countries.find((country) => country.code === countryCode);
 let activeCategoryId = overviewCategory.id;
 let loadedDataByPath = null;
-const compactCountryMapMedia = window.matchMedia("(max-width: 640px)");
 
 initializeCountryOverview().catch((error) => {
   console.error("[Country overview] Failed to initialize page.", error);
@@ -133,7 +132,7 @@ async function initializeCountryOverview() {
   updateCountryHeading();
   renderCountryMap();
   renderCategoryControls();
-  initializeCountryMapLayout();
+  prepareCountryOverviewLayout();
 
   loadedDataByPath = await loadDataByPath(getRequiredStaticDataPaths());
   renderOverview();
@@ -163,7 +162,7 @@ function updateCountryHeading() {
 function renderCountryMap() {
   const header = document.querySelector(".country-data-header");
 
-  if (!header || header.querySelector(".country-overview-map")) {
+  if (!header || document.querySelector(".country-overview-map")) {
     return;
   }
 
@@ -230,36 +229,23 @@ function renderCategoryControls() {
   updateCategorySelection();
 }
 
-function initializeCountryMapLayout() {
-  updateCountryMapLayout();
-  compactCountryMapMedia.addEventListener("change", updateCountryMapLayout);
-}
-
-function updateCountryMapLayout() {
-  const section = document.querySelector(".indicators-section");
+function prepareCountryOverviewLayout() {
   const header = document.querySelector(".country-data-header");
-  const card = document.querySelector(".indicators-card");
+  const card = header?.closest(".indicators-card");
   const map = document.querySelector(".country-overview-map");
   const panel = document.querySelector(".country-overview-category-panel");
   const groups = document.querySelector(".country-overview-groups");
 
-  if (!section || !header || !card || !map || !panel || !groups) {
+  if (!header || !card || !map || !panel || !groups || card.querySelector(".country-overview-content")) {
     return;
   }
 
-  if (compactCountryMapMedia.matches) {
-    header.classList.add("country-overview-header-card");
-    map.classList.add("country-overview-standalone-map");
-    section.insertBefore(header, card);
-    section.insertBefore(map, card);
-    card.insertBefore(panel, groups);
-    return;
-  }
+  const content = document.createElement("div");
+  content.className = "country-overview-content";
 
-  header.classList.remove("country-overview-header-card");
-  map.classList.remove("country-overview-standalone-map");
-  card.insertBefore(header, card.firstElementChild);
-  header.append(map, panel);
+  card.classList.add("country-overview-card");
+  header.after(map, content);
+  content.append(panel, groups);
 }
 
 function updateCategorySelection() {
