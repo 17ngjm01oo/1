@@ -26,6 +26,10 @@ body {
   overflow-x: hidden;
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
@@ -146,12 +150,12 @@ body {
   color: #4b5968;
 }
 
-.home-entry-icon.globe-icon {
-  background: #edf3f6;
+.home-entry-icon.flag-icon {
+  background: #f2f3f4;
 }
 
 .home-entry-icon.trophy-icon {
-  background: #f1f2f4;
+  background: #f4f4f4;
 }
 
 .home-entry-icon svg {
@@ -161,55 +165,59 @@ body {
 }
 
 .home-entry-icon .pixel-shadow {
-  fill: #d3dbe1;
+  fill: #d4d6d8;
 }
 
-.home-entry-icon .pixel-globe-outline {
-  fill: #52677a;
+.home-entry-icon .pixel-flag-outline {
+  fill: #303438;
 }
 
-.home-entry-icon .pixel-globe-ocean {
-  fill: #7397ae;
+.home-entry-icon .pixel-flag-pole {
+  fill: #70757a;
 }
 
-.home-entry-icon .pixel-globe-light {
-  fill: #aac3d1;
+.home-entry-icon .pixel-flag-finial {
+  fill: #555a5f;
 }
 
-.home-entry-icon .pixel-globe-land {
-  fill: #607b70;
+.home-entry-icon .pixel-flag-fabric {
+  fill: #a1a5a9;
 }
 
-.home-entry-icon .pixel-globe-depth {
-  fill: rgba(47, 72, 87, 0.25);
+.home-entry-icon .pixel-flag-light {
+  fill: #dce0e3;
+}
+
+.home-entry-icon .pixel-flag-shadow {
+  fill: #74797e;
 }
 
 .home-entry-icon .pixel-trophy-outline {
-  fill: #5b6670;
+  fill: #303336;
 }
 
 .home-entry-icon .pixel-trophy-cup {
-  fill: #a9a18b;
+  fill: #999da1;
 }
 
 .home-entry-icon .pixel-trophy-handle {
-  fill: #817c6d;
+  fill: #72767b;
 }
 
 .home-entry-icon .pixel-trophy-light {
-  fill: #d9d4c7;
+  fill: #e3e5e7;
 }
 
 .home-entry-icon .pixel-trophy-mid {
-  fill: #968f7b;
+  fill: #b8bcc0;
 }
 
 .home-entry-icon .pixel-trophy-shadow {
-  fill: #756f61;
+  fill: #5a5e63;
 }
 
 .home-entry-icon .pixel-trophy-rim {
-  fill: #c4bda9;
+  fill: #cdd0d3;
 }
 
 .home-entry-copy {
