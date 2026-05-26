@@ -277,8 +277,8 @@ const comparableSeriesIds = new Set([
 ]);
 const rankedSeriesIds = new Set(comparableSeriesIds);
 const rankingDirectoryBySeriesId = {
-  gdp: "nominal-gdp",
-  gdpPerCapita: "nominal-gdp-per-capita",
+  gdp: "gdp",
+  gdpPerCapita: "gdp-per-capita",
   gdpGrowth: "real-gdp-growth",
   inflationRate: "inflation-rate",
   population: "population",

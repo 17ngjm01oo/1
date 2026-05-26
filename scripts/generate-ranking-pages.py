@@ -5,13 +5,13 @@ from ranking_page_generator import generate_ranking_pages
 
 RANKING_TYPES = [
     {
-        "directory": "nominal-gdp",
+        "directory": "gdp",
         "title": "GDP Ranking by Country",
         "script": "nominalGdpRanking.js",
         "subtitle": "GDP is nominal GDP measured in U.S. dollars.",
     },
     {
-        "directory": "nominal-gdp-per-capita",
+        "directory": "gdp-per-capita",
         "title": "GDP per Capita Ranking by Country",
         "script": "gdpPerCapitaRanking.js",
         "subtitle": "GDP per capita is nominal GDP in U.S. dollars divided by population.",

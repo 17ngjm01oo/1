@@ -746,6 +746,13 @@ body[data-page-kind="country-hub"] .hub-section > .world-map {
   border-radius: 8px 8px 0 0;
 }
 
+.world-map-instruction {
+  margin: -10px 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
 .world-map-svg {
   display: block;
   width: 100%;
@@ -1542,6 +1549,10 @@ h1 {
 
   body[data-page-kind="country-hub"] .hub-section > .world-map {
     margin: -18px -14px 0;
+  }
+
+  .world-map-instruction {
+    margin-block: -8px;
   }
 
   .indicators-section {

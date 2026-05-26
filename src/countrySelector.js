@@ -20,6 +20,7 @@ export function initializeCountrySelector({
   searchPanelSelector = ".country-search-panel",
   onResultsChange = null,
   closePanelsOnFilterSelect = false,
+  resetToAllCountriesOnNavigate = false,
 } = {}) {
   const searchInput = document.querySelector(searchInputSelector);
   const resultsElement = document.querySelector(resultsSelector);
@@ -322,6 +323,9 @@ export function initializeCountrySelector({
       resultButton.dataset.isActiveCountry = String(country.code === state.selectedCountry?.code);
       resultButton.addEventListener("click", (event) => {
         if (getCountryHref && !onSelect) {
+          if (resetToAllCountriesOnNavigate && isSameTabNavigation(event)) {
+            resetToAllCountries();
+          }
           return;
         }
 
@@ -392,13 +396,29 @@ export function initializeCountrySelector({
     searchInput.value = "";
     clearActiveFilters();
     closeFilterPanels();
-    hideCountryResults();
+
+    if (resetToAllCountriesOnNavigate && getCountryHref) {
+      renderAllCountries();
+    } else {
+      hideCountryResults();
+    }
 
     if (onSelect) {
       onSelect(country);
     } else if (getCountryHref) {
       window.location.href = getCountryHref(country);
     }
+  }
+
+  function resetToAllCountries() {
+    searchInput.value = "";
+    clearActiveFilters();
+    closeFilterPanels();
+    renderAllCountries();
+  }
+
+  function isSameTabNavigation(event) {
+    return event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
   }
 
   function syncHighlightedCountry() {

@@ -21,6 +21,7 @@ initializeCountrySelector({
   inlineSearchResults: true,
   highlightFirstResult: false,
   closePanelsOnFilterSelect: true,
+  resetToAllCountriesOnNavigate: true,
   sortCountryResults(countryList) {
     return [...countryList].sort((countryA, countryB) => {
       return countryA.name.localeCompare(countryB.name, "en", { sensitivity: "base" });

@@ -2,12 +2,12 @@ import { renderRankingLinks } from "./rankingLinks.js";
 
 export const economicRankings = [
   {
-    directory: "nominal-gdp",
+    directory: "gdp",
     label: "GDP",
     countryPageKinds: ["gdp"],
   },
   {
-    directory: "nominal-gdp-per-capita",
+    directory: "gdp-per-capita",
     label: "GDP per Capita",
     countryPageKinds: ["gdp-per-capita"],
   },
