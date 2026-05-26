@@ -9,7 +9,7 @@
   --accent-soft: rgba(23, 107, 135, 0.12);
   --error: #9f2f2f;
   --error-bg: #fff0f0;
-  --section-gap: 12px;
+  --section-gap: 8px;
   --section-gap-compact: 8px;
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -65,6 +65,7 @@ body {
 .indicators-card,
 .ranking-card,
 .top-nav-card,
+.site-footer-card,
 .shared-notes {
   display: grid;
   min-width: 0;
@@ -79,6 +80,76 @@ body {
   grid-template-columns: repeat(2, max-content);
   gap: 22px;
   padding: 18px 22px;
+}
+
+.site-footer-card {
+  padding: 8px 22px;
+}
+
+.site-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 0;
+}
+
+.site-footer-link {
+  padding: 9px 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.site-footer-link + .site-footer-link::before {
+  content: "|";
+  margin: 0 12px;
+  color: var(--border);
+}
+
+.site-footer-link:hover,
+.site-footer-link:focus-visible {
+  text-decoration: underline;
+}
+
+.legal-content {
+  display: grid;
+  gap: 34px;
+  max-width: 760px;
+  line-height: 1.7;
+}
+
+.legal-content section {
+  display: grid;
+  gap: 16px;
+}
+
+.legal-content h2,
+.legal-content h3,
+.legal-content p,
+.legal-content ul {
+  margin: 0;
+}
+
+.legal-content h2 {
+  font-size: 1.45rem;
+}
+
+.legal-content h3 {
+  margin-top: 10px;
+  font-size: 1.12rem;
+}
+
+.legal-content ul {
+  padding-left: 24px;
+}
+
+.legal-content a {
+  color: var(--accent);
+  overflow-wrap: anywhere;
+}
+
+.source-list li + li {
+  margin-top: 8px;
 }
 
 .country-hub-nav-link {
@@ -1554,6 +1625,7 @@ h1 {
   .hub-section,
   .indicators-card,
   .ranking-card,
+  .site-footer-card,
   .shared-notes {
     gap: 16px;
     padding: 18px 14px;
@@ -1564,6 +1636,10 @@ h1 {
     gap: 18px;
     padding: 12px 14px;
     border-radius: 8px;
+  }
+
+  .site-footer-card {
+    padding: 4px 14px;
   }
 
   .ranking-card {

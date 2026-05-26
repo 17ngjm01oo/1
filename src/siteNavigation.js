@@ -4,6 +4,11 @@ import { renderFiscalRankingLinks } from "./fiscalRankings.js";
 import { renderPopulationRankingLinks } from "./populationRankings.js";
 import { renderTradeRankingLinks } from "./tradeRankings.js";
 
+const footerLinks = [
+  { path: "about/", label: "About & Sources" },
+  { path: "disclaimer-privacy-policy/", label: "Disclaimer & Privacy Policy" },
+];
+
 export function renderSiteHubLinks({ rootHref = "./" } = {}) {
   const navCards = document.querySelectorAll(".top-nav-card");
 
@@ -15,6 +20,36 @@ export function renderSiteHubLinks({ rootHref = "./" } = {}) {
   });
 }
 
+export function renderSiteFooter({ rootHref = "./" } = {}) {
+  const pageShell = document.querySelector("main.page-shell");
+
+  if (!pageShell) {
+    return;
+  }
+
+  let footer = pageShell.querySelector(".site-footer-card");
+  if (!footer) {
+    footer = document.createElement("footer");
+    footer.className = "site-footer-card";
+    footer.setAttribute("aria-label", "Site information");
+    pageShell.append(footer);
+  }
+
+  const nav = document.createElement("nav");
+  nav.className = "site-footer-nav";
+  nav.setAttribute("aria-label", "Site information links");
+
+  footerLinks.forEach(({ path, label }) => {
+    const link = document.createElement("a");
+    link.className = "site-footer-link";
+    link.href = `${rootHref}${path}`;
+    link.textContent = label;
+    nav.append(link);
+  });
+
+  footer.replaceChildren(nav);
+}
+
 export function renderTopNavigationLinks({
   rootHref = "./",
   economicNavSelector = "#rankingTopNav",
@@ -24,6 +59,7 @@ export function renderTopNavigationLinks({
   highlightCurrent = true,
 } = {}) {
   renderSiteHubLinks({ rootHref });
+  renderSiteFooter({ rootHref });
 
   renderEconomicRankingLinks(document.querySelector(economicNavSelector), {
     rootHref,

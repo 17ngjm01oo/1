@@ -61,6 +61,7 @@ export function renderLineChart(canvas, { points, config, comparison = null }) {
       plugins: {
         legend: {
           display: Boolean(comparison?.points?.length),
+          onClick() {},
           labels: {
             boxWidth: 14,
             boxHeight: 3,
