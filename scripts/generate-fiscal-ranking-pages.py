@@ -44,8 +44,8 @@ RANKING_TYPES = [
     },
     {
         **WORLD_BANK_RANKING_NOTES,
-        "directory": "total-reserves-including-gold",
-        "title": "Total Reserves Including Gold Ranking by Country",
+        "directory": "total-reserves",
+        "title": "Total Reserves Ranking by Country",
         "script": "totalReservesIncludingGoldRanking.js",
         "subtitle": "Total reserves including gold are measured in current U.S. dollars.",
     },

@@ -11,7 +11,6 @@ initializeRankingPage({
   pagePathSegment: "life-expectancy",
   linkAriaMetric: "Life Expectancy",
   displayScaleConfig: {
-    tooltipUnit: "years",
     maximumFractionDigits: 1,
   },
 });

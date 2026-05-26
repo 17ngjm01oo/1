@@ -26,8 +26,8 @@ DATASETS = {
         "sourceUrl": "https://data.worldbank.org/indicator/FI.RES.TOTL.CD",
         "indicators": {
             "FI.RES.TOTL.CD": {
-                "label": "Total Reserves Including Gold",
-                "slug": "total-reserves-including-gold",
+                "label": "Total Reserves",
+                "slug": "total-reserves",
                 "description": "Total reserves including gold, current U.S. dollars",
                 "scale": "Units",
                 "unit": "US dollar",
@@ -41,9 +41,9 @@ DATASETS = {
             "SP.DYN.LE00.IN": {
                 "label": "Life Expectancy",
                 "slug": "life-expectancy",
-                "description": "Life expectancy at birth, total, years",
+                "description": "Life expectancy at birth, total",
                 "scale": "Units",
-                "unit": "Years",
+                "unit": "",
             },
             "SP.DYN.TFRT.IN": {
                 "label": "Fertility Rate",
@@ -66,15 +66,15 @@ DATASETS = {
         "sourceUrl": "https://databank.worldbank.org/source/world-development-indicators",
         "indicators": {
             "AG.LND.AGRI.ZS": {
-                "label": "Agricultural Land (% of Land Area)",
-                "slug": "agricultural-land-percent-of-land-area",
+                "label": "Agricultural Land",
+                "slug": "agricultural-land",
                 "description": "Agricultural land, percent of land area",
                 "scale": "Units",
                 "unit": "%",
             },
             "AG.LND.FRST.ZS": {
-                "label": "Forest Area (% of Land Area)",
-                "slug": "forest-area-percent-of-land-area",
+                "label": "Forest Area",
+                "slug": "forest-area",
                 "description": "Forest area, percent of land area",
                 "scale": "Units",
                 "unit": "%",

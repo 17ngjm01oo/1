@@ -39,13 +39,13 @@ const overviewGroups = [
       { seriesId: "area", rankingDirectory: "area" },
       {
         seriesId: "forestAreaPercentOfLandArea",
-        rankingDirectory: "forest-area-percent-of-land-area",
-        pagePathSegment: "forest-area-percent-of-land-area",
+        rankingDirectory: "forest-area",
+        pagePathSegment: "forest-area",
       },
       {
         seriesId: "agriculturalLandPercentOfLandArea",
-        rankingDirectory: "agricultural-land-percent-of-land-area",
-        pagePathSegment: "agricultural-land-percent-of-land-area",
+        rankingDirectory: "agricultural-land",
+        pagePathSegment: "agricultural-land",
       },
     ],
   },
@@ -100,8 +100,8 @@ const overviewGroups = [
       },
       {
         seriesId: "totalReservesIncludingGold",
-        rankingDirectory: "total-reserves-including-gold",
-        pagePathSegment: "total-reserves-including-gold",
+        rankingDirectory: "total-reserves",
+        pagePathSegment: "total-reserves",
       },
     ],
   },

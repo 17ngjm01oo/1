@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vatican City Total Reserves</title>
+    <link rel="stylesheet" href="../../../styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+    <script type="module" src="../../../src/countryIndicatorPage.js"></script>
+  </head>
+  <body data-country-code="VAT" data-page-kind="total-reserves">
+    <header class="site-header">
+      <a class="site-home-link" href="../../../">HOME</a>
+    </header>
+    <main class="page-shell">
+      <section class="top-nav-card" aria-label="Site navigation"></section>
+
+      <section class="hub-section" aria-labelledby="country-hub-title">
+        <header class="page-header">
+          <h1 id="country-hub-title" class="page-title">Total Reserves Chart by Country</h1>
+          <p class="subtitle">Select a country to view historical total reserves including gold trends. Values are shown in current U.S. dollars.</p>
+        </header>
+
+        <div class="country-search-panel">
+          <div class="search-input-wrap">
+            <input
+              id="countrySearchInput"
+              class="country-search-input"
+              type="search"
+              autocomplete="off"
+              placeholder="Search a country&hellip;"
+              aria-controls="countrySearchResults"
+              role="combobox"
+              aria-autocomplete="list"
+              aria-expanded="false"
+            />
+            <div class="country-results" id="countrySearchResults" role="listbox" aria-label="Country search results" hidden></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="indicators-section" aria-labelledby="country-data-title">
+        <div class="indicators-card">
+          <header class="page-header country-data-header">
+            <h1 id="country-data-title">Vatican City</h1>
+            <nav class="site-nav" id="countryRelatedPageNav" aria-label="Fiscal page navigation"></nav>
+          </header>
+
+          <section class="indicator-block" aria-labelledby="totalReservesIncludingGold-title">
+            <header class="indicator-header">
+              <div class="indicator-title-group">
+                <h2 id="totalReservesIncludingGold-title">Total Reserves</h2>
+              </div>
+              <div class="compare-control" data-series-id="totalReservesIncludingGold">
+                <div class="compare-input-wrap">
+                  <input
+                    id="totalReservesIncludingGoldCompareInput"
+                    class="compare-search-input"
+                    type="search"
+                    autocomplete="off"
+                    placeholder="Compare with..."
+                    aria-controls="totalReservesIncludingGoldCompareResults"
+                    role="combobox"
+                    aria-autocomplete="list"
+                    aria-expanded="false"
+                  />
+                </div>
+                <p class="compare-selected" id="totalReservesIncludingGoldCompareSelected"></p>
+                <div class="country-results compare-results" id="totalReservesIncludingGoldCompareResults" role="listbox" aria-label="Total Reserves comparison country results" hidden></div>
+              </div>
+            </header>
+
+            <div class="chart-card" id="totalReservesIncludingGoldChartCard">
+              <canvas id="totalReservesIncludingGoldChart" aria-label="Total reserves including gold line chart" role="img"></canvas>
+              <div class="chart-overlay" id="totalReservesIncludingGoldOverlay" aria-hidden="true"></div>
+            </div>
+
+            <details class="data-table-toggle" id="totalReservesIncludingGoldTableToggle">
+              <summary>Show data table</summary>
+              <div class="data-table-wrap" id="totalReservesIncludingGoldTableWrap"></div>
+            </details>
+          </section>
+
+          <footer class="shared-notes" aria-label="Chart notes">
+            <p>Source: World Bank World Development Indicators.</p>
+          </footer>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

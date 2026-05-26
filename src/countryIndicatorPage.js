@@ -172,25 +172,25 @@ const pageDefinitions = {
     pathSegment: "government-expenditure",
     seriesIds: ["governmentExpenditure"],
   },
-  "total-reserves-including-gold": {
+  "total-reserves": {
     logPrefix: "Total reserves including gold page",
     group: "fiscal",
-    documentTitleMetric: "Total Reserves Including Gold",
-    pathSegment: "total-reserves-including-gold",
+    documentTitleMetric: "Total Reserves",
+    pathSegment: "total-reserves",
     seriesIds: ["totalReservesIncludingGold"],
   },
-  "agricultural-land-percent-of-land-area": {
+  "agricultural-land": {
     logPrefix: "Agricultural land percent of land area page",
     group: "environmental",
-    documentTitleMetric: "Agricultural Land (% of Land Area)",
-    pathSegment: "agricultural-land-percent-of-land-area",
+    documentTitleMetric: "Agricultural Land",
+    pathSegment: "agricultural-land",
     seriesIds: ["agriculturalLandPercentOfLandArea"],
   },
-  "forest-area-percent-of-land-area": {
+  "forest-area": {
     logPrefix: "Forest area percent of land area page",
     group: "environmental",
-    documentTitleMetric: "Forest Area (% of Land Area)",
-    pathSegment: "forest-area-percent-of-land-area",
+    documentTitleMetric: "Forest Area",
+    pathSegment: "forest-area",
     seriesIds: ["forestAreaPercentOfLandArea"],
   },
 };
@@ -229,9 +229,9 @@ const fiscalIndicatorLinks = [
   { pageKind: "government-revenue", href: "../government-revenue/", label: "Government Revenue" },
   { pageKind: "government-expenditure", href: "../government-expenditure/", label: "Government Expenditure" },
   {
-    pageKind: "total-reserves-including-gold",
-    href: "../total-reserves-including-gold/",
-    label: "Total Reserves Including Gold",
+    pageKind: "total-reserves",
+    href: "../total-reserves/",
+    label: "Total Reserves",
   },
 ];
 const countryIndicatorLinksByGroup = {
@@ -300,9 +300,9 @@ const rankingDirectoryBySeriesId = {
   primaryFiscalBalance: "primary-fiscal-balance",
   governmentRevenue: "government-revenue",
   governmentExpenditure: "government-expenditure",
-  totalReservesIncludingGold: "total-reserves-including-gold",
-  agriculturalLandPercentOfLandArea: "agricultural-land-percent-of-land-area",
-  forestAreaPercentOfLandArea: "forest-area-percent-of-land-area",
+  totalReservesIncludingGold: "total-reserves",
+  agriculturalLandPercentOfLandArea: "agricultural-land",
+  forestAreaPercentOfLandArea: "forest-area",
 };
 const seriesRuntimeState = new Map();
 
@@ -325,7 +325,6 @@ async function initializePage() {
   });
   updateTopRankingLinks();
   updateCountryHeading(selectedCountry);
-  updateRelatedPageLinks();
 
   const countrySeriesConfigs = pageSeriesConfigs.map((seriesConfig) =>
     buildCountrySeriesConfig(seriesConfig, selectedCountry),
@@ -336,6 +335,7 @@ async function initializePage() {
   updateSeriesHeadings(visibleSeriesConfigs);
   initializeCompareSearches(visibleSeriesConfigs);
 
+  await updateRelatedPageLinks();
   await Promise.all(visibleSeriesConfigs.map((seriesConfig) => loadAndRenderSeries(seriesConfig)));
 }
 
@@ -387,6 +387,12 @@ function getSeriesChartTitle(seriesConfig, currencyCode) {
   const title = seriesConfig.titleTemplate;
   if (seriesConfig.id === "populationDensity") {
     return `${title} - /km²`;
+  }
+  if (
+    seriesConfig.id === "agriculturalLandPercentOfLandArea" ||
+    seriesConfig.id === "forestAreaPercentOfLandArea"
+  ) {
+    return `${title} - % of Land Area`;
   }
 
   const isGdpCurrencySeries =
@@ -451,7 +457,7 @@ function updateCountryHeading(country) {
   }
 }
 
-function updateRelatedPageLinks() {
+async function updateRelatedPageLinks() {
   const nav = document.querySelector("#countryRelatedPageNav");
 
   if (!nav) {
@@ -461,7 +467,11 @@ function updateRelatedPageLinks() {
   nav.innerHTML = "";
   const relatedLinks = countryIndicatorLinksByGroup[pageDefinition.group] ?? [];
 
-  relatedLinks.forEach((linkConfig) => {
+  for (const linkConfig of relatedLinks) {
+    if (linkConfig.pageKind !== pageKind && !(await doesIndicatorPageHaveData(linkConfig.pageKind))) {
+      continue;
+    }
+
     const link = document.createElement("a");
     link.href = linkConfig.href;
     link.textContent = linkConfig.label;
@@ -470,7 +480,36 @@ function updateRelatedPageLinks() {
       link.setAttribute("aria-current", "page");
     }
     nav.append(link);
-  });
+  }
+}
+
+async function doesIndicatorPageHaveData(targetPageKind) {
+  const targetPageDefinition = pageDefinitions[targetPageKind];
+  if (!targetPageDefinition) {
+    return true;
+  }
+
+  const targetSeriesConfigs = seriesConfigs
+    .filter((seriesConfig) => targetPageDefinition.seriesIds.includes(seriesConfig.id))
+    .map((seriesConfig) => buildCountrySeriesConfig(seriesConfig, selectedCountry))
+    .filter(shouldShowSeriesConfig);
+
+  try {
+    for (const seriesConfig of targetSeriesConfigs) {
+      const { data } = await fetchStaticData(seriesConfig);
+      if (transformSeriesData(data, seriesConfig).length > 0) {
+        return true;
+      }
+    }
+  } catch (error) {
+    console.error(`[${pageDefinition.logPrefix}] Failed to check related indicator availability.`, {
+      targetPageKind,
+      error,
+    });
+    return true;
+  }
+
+  return false;
 }
 
 function updateSeriesHeadings(countrySeriesConfigs) {

@@ -26,8 +26,8 @@ export const fiscalRankings = [
     label: "Government Expenditure",
   },
   {
-    directory: "total-reserves-including-gold",
-    label: "Total Reserves Including Gold",
+    directory: "total-reserves",
+    label: "Total Reserves",
   },
 ];
 

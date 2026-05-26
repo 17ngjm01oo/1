@@ -21,7 +21,7 @@ RANKING_TYPES = [
         "directory": "life-expectancy",
         "title": "Life Expectancy Ranking by Country",
         "script": "lifeExpectancyRanking.js",
-        "subtitle": "Life expectancy at birth is measured in years.",
+        "subtitle": "Life expectancy at birth.",
     },
     {
         **WORLD_BANK_RANKING_NOTES,

@@ -7,9 +7,9 @@ initializeRankingPage({
   indicatorCode: "AG.LND.AGRI.ZS",
   startYear: dataSources.worldBankEnvironment.startYear,
   endYear: dataSources.worldBankEnvironment.endYear,
-  rankingTitleBase: "Agricultural Land (% of Land Area) Ranking",
-  pagePathSegment: "agricultural-land-percent-of-land-area",
-  linkAriaMetric: "Agricultural Land (% of Land Area)",
+  rankingTitleBase: "Agricultural Land Ranking",
+  pagePathSegment: "agricultural-land",
+  linkAriaMetric: "Agricultural Land",
   displayScaleConfig: {
     suffix: "%",
     suffixSpacing: "",

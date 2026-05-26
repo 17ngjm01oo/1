@@ -9,9 +9,9 @@ ENVIRONMENTAL_SUBTITLE = "Select a country to view historical environmental indi
 
 ENVIRONMENTAL_PAGE_CONFIGS = (
     CountryPageConfig(
-        page_kind="agricultural-land-percent-of-land-area",
-        title_suffix="Agricultural Land (% of Land Area)",
-        chart_title="Agricultural Land (% of Land Area) Chart by Country",
+        page_kind="agricultural-land",
+        title_suffix="Agricultural Land",
+        chart_title="Agricultural Land Chart by Country",
         subtitle=ENVIRONMENTAL_SUBTITLE,
         generated_label="agricultural land percent of land area",
         source_note=WORLD_BANK_COUNTRY_SOURCE_NOTE,
@@ -19,16 +19,16 @@ ENVIRONMENTAL_PAGE_CONFIGS = (
         indicators=(
             IndicatorBlockConfig(
                 series_id="agriculturalLandPercentOfLandArea",
-                title="Agricultural Land (% of Land Area)",
+                title="Agricultural Land - % of Land Area",
                 canvas_label="Agricultural land percent of land area line chart",
-                compare_label="Agricultural Land (% of Land Area)",
+                compare_label="Agricultural Land",
             ),
         ),
     ),
     CountryPageConfig(
-        page_kind="forest-area-percent-of-land-area",
-        title_suffix="Forest Area (% of Land Area)",
-        chart_title="Forest Area (% of Land Area) Chart by Country",
+        page_kind="forest-area",
+        title_suffix="Forest Area",
+        chart_title="Forest Area Chart by Country",
         subtitle=ENVIRONMENTAL_SUBTITLE,
         generated_label="forest area percent of land area",
         source_note=WORLD_BANK_COUNTRY_SOURCE_NOTE,
@@ -36,9 +36,9 @@ ENVIRONMENTAL_PAGE_CONFIGS = (
         indicators=(
             IndicatorBlockConfig(
                 series_id="forestAreaPercentOfLandArea",
-                title="Forest Area (% of Land Area)",
+                title="Forest Area - % of Land Area",
                 canvas_label="Forest area percent of land area line chart",
-                compare_label="Forest Area (% of Land Area)",
+                compare_label="Forest Area",
             ),
         ),
     ),

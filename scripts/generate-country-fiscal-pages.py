@@ -120,9 +120,9 @@ FISCAL_PAGE_CONFIGS = (
         ),
     ),
     CountryPageConfig(
-        page_kind="total-reserves-including-gold",
-        title_suffix="Total Reserves Including Gold",
-        chart_title="Total Reserves Including Gold Chart by Country",
+        page_kind="total-reserves",
+        title_suffix="Total Reserves",
+        chart_title="Total Reserves Chart by Country",
         subtitle="Select a country to view historical total reserves including gold trends. Values are shown in current U.S. dollars.",
         generated_label="total reserves including gold",
         source_note=WORLD_BANK_COUNTRY_SOURCE_NOTE,
@@ -130,9 +130,9 @@ FISCAL_PAGE_CONFIGS = (
         indicators=(
             IndicatorBlockConfig(
                 series_id="totalReservesIncludingGold",
-                title="Total Reserves Including Gold",
+                title="Total Reserves",
                 canvas_label="Total reserves including gold line chart",
-                compare_label="Total Reserves Including Gold",
+                compare_label="Total Reserves",
             ),
         ),
     ),

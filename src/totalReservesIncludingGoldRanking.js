@@ -7,9 +7,9 @@ initializeRankingPage({
   indicatorCode: "FI.RES.TOTL.CD",
   startYear: dataSources.worldBankWdi.startYear,
   endYear: dataSources.worldBankWdi.endYear,
-  rankingTitleBase: "Total Reserves Including Gold Ranking",
-  pagePathSegment: "total-reserves-including-gold",
-  linkAriaMetric: "Total Reserves Including Gold",
+  rankingTitleBase: "Total Reserves Ranking",
+  pagePathSegment: "total-reserves",
+  linkAriaMetric: "Total Reserves",
   displayScaleConfig: {
     valueScaleMode: "usdMagnitude",
   },

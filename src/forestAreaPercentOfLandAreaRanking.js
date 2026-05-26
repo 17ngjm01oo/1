@@ -7,9 +7,9 @@ initializeRankingPage({
   indicatorCode: "AG.LND.FRST.ZS",
   startYear: dataSources.worldBankEnvironment.startYear,
   endYear: dataSources.worldBankEnvironment.endYear,
-  rankingTitleBase: "Forest Area (% of Land Area) Ranking",
-  pagePathSegment: "forest-area-percent-of-land-area",
-  linkAriaMetric: "Forest Area (% of Land Area)",
+  rankingTitleBase: "Forest Area Ranking",
+  pagePathSegment: "forest-area",
+  linkAriaMetric: "Forest Area",
   displayScaleConfig: {
     suffix: "%",
     suffixSpacing: "",
