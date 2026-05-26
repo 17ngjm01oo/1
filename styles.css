@@ -1540,10 +1540,6 @@ h1 {
     gap: 8px;
   }
 
-  .world-map {
-    aspect-ratio: 16 / 8;
-  }
-
   body[data-page-kind="country-hub"] .hub-section > .world-map {
     margin: -18px -14px 0;
   }
