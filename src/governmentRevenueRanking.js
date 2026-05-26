@@ -6,7 +6,6 @@ initializeRankingPage({
   staticDataPath: dataSources.weoCurrentPrices.rankingStaticDataPath,
   indicatorCode: "GGR_NGDP",
   rankingTitleBase: "Government Revenue Ranking",
-  pagePathSegment: "government-revenue",
   linkAriaMetric: "Government Revenue",
   displayScaleConfig: {
     suffix: "%",

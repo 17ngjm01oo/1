@@ -6,7 +6,6 @@ initializeRankingPage({
   staticDataPath: dataSources.weoCurrentPrices.rankingStaticDataPath,
   indicatorCode: "LP",
   rankingTitleBase: "Population Ranking",
-  pagePathSegment: "population",
   linkAriaMetric: "Population",
   displayScaleConfig: {
     valueScaleMode: "populationMagnitude",

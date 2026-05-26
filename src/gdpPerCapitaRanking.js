@@ -6,7 +6,6 @@ initializeRankingPage({
   staticDataPath: dataSources.weoCurrentPrices.rankingStaticDataPath,
   indicatorCode: "NGDPDPC",
   rankingTitleBase: "GDP per Capita Ranking",
-  pagePathSegment: "gdp-per-capita",
   linkAriaMetric: "GDP per capita",
   displayScaleConfig: {
     currencyCode: "USD",

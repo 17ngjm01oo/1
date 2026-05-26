@@ -8,7 +8,6 @@ initializeRankingPage({
   startYear: dataSources.worldBankPopulation.startYear,
   endYear: dataSources.worldBankPopulation.endYear,
   rankingTitleBase: "Population Density Ranking",
-  pagePathSegment: "population-density",
   linkAriaMetric: "Population Density",
   displayScaleConfig: {
     maximumFractionDigits: 1,

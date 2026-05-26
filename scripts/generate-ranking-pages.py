@@ -29,14 +29,14 @@ RANKING_TYPES = [
         "subtitle": "Inflation rate is the annual percentage change in the consumer price index.",
     },
     {
-        "directory": "ppp",
-        "title": "PPP Ranking by Country",
+        "directory": "ppp-gdp",
+        "title": "PPP GDP Ranking by Country",
         "script": "pppRanking.js",
         "subtitle": "PPP GDP is GDP measured in international dollars.",
     },
     {
-        "directory": "ppp-per-capita",
-        "title": "PPP per Capita Ranking by Country",
+        "directory": "ppp-gdp-per-capita",
+        "title": "PPP GDP per Capita Ranking by Country",
         "script": "pppPerCapitaRanking.js",
         "subtitle": "PPP per capita is PPP GDP in international dollars divided by population.",
     },

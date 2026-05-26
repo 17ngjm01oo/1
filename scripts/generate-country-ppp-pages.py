@@ -8,9 +8,9 @@ from country_page_generator import CountryPageConfig, IndicatorBlockConfig, gene
 def main() -> None:
     generate_country_pages(
         CountryPageConfig(
-            page_kind="ppp",
-            title_suffix="PPP",
-            chart_title="PPP Chart by Country",
+            page_kind="ppp-gdp",
+            title_suffix="PPP GDP",
+            chart_title="PPP GDP Chart by Country",
             subtitle="Select a country to view historical PPP trends.",
             generated_label="PPP",
             source_note=WEO_COUNTRY_SOURCE_NOTE,

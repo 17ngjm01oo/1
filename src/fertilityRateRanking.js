@@ -8,7 +8,6 @@ initializeRankingPage({
   startYear: dataSources.worldBankPopulation.startYear,
   endYear: dataSources.worldBankPopulation.endYear,
   rankingTitleBase: "Fertility Rate Ranking",
-  pagePathSegment: "fertility-rate",
   linkAriaMetric: "Fertility Rate",
   displayScaleConfig: {
     maximumFractionDigits: 2,

@@ -5,8 +5,7 @@ initializeRankingPage({
   logName: "PPP",
   staticDataPath: dataSources.weoCurrentPrices.rankingStaticDataPath,
   indicatorCode: "PPPGDP",
-  rankingTitleBase: "PPP Ranking",
-  pagePathSegment: "ppp",
+  rankingTitleBase: "PPP GDP Ranking",
   linkAriaMetric: "PPP",
   displayScaleConfig: {
     valueScaleMode: "internationalDollarMagnitude",

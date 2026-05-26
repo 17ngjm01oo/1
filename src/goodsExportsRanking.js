@@ -8,7 +8,6 @@ initializeRankingPage({
   startYear: 1948,
   endYear: 2025,
   rankingTitleBase: "Goods Exports Ranking",
-  pagePathSegment: "goods-exports",
   linkAriaMetric: "Goods Exports",
   displayScaleConfig: {
     valueScaleMode: "usdMillionsMagnitude",

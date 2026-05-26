@@ -8,7 +8,6 @@ initializeRankingPage({
   startYear: dataSources.worldBankPopulation.startYear,
   endYear: dataSources.worldBankPopulation.endYear,
   rankingTitleBase: "Life Expectancy Ranking",
-  pagePathSegment: "life-expectancy",
   linkAriaMetric: "Life Expectancy",
   displayScaleConfig: {
     maximumFractionDigits: 1,

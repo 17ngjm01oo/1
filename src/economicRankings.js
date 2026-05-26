@@ -1,37 +1,45 @@
-import { renderRankingLinks } from "./rankingLinks.js";
+import { getCountryIndicatorLinks, renderRankingLinks } from "./rankingLinks.js";
 
 export const economicRankings = [
   {
+    seriesId: "gdp",
     directory: "gdp",
     label: "GDP",
-    countryPageKinds: ["gdp"],
+    countryPageKind: "gdp",
   },
   {
+    seriesId: "gdpPerCapita",
     directory: "gdp-per-capita",
     label: "GDP per Capita",
-    countryPageKinds: ["gdp-per-capita"],
+    countryPageKind: "gdp-per-capita",
   },
   {
+    seriesId: "gdpGrowth",
     directory: "gdp-growth",
     label: "GDP Growth",
-    countryPageKinds: ["gdp-growth"],
+    countryPageKind: "gdp-growth",
   },
   {
+    seriesId: "inflationRate",
     directory: "inflation-rate",
     label: "Inflation Rate",
-    countryPageKinds: ["inflation-rate"],
+    countryPageKind: "inflation-rate",
   },
   {
-    directory: "ppp",
-    label: "PPP",
-    countryPageKinds: ["ppp"],
+    seriesId: "ppp",
+    directory: "ppp-gdp",
+    label: "PPP GDP",
+    countryPageKind: "ppp-gdp",
   },
   {
-    directory: "ppp-per-capita",
-    label: "PPP per Capita",
-    countryPageKinds: ["ppp-per-capita"],
+    seriesId: "pppPerCapita",
+    directory: "ppp-gdp-per-capita",
+    label: "PPP GDP per Capita",
+    countryPageKind: "ppp-gdp-per-capita",
   },
 ];
+
+export const economicIndicatorLinks = getCountryIndicatorLinks(economicRankings);
 
 export function renderEconomicRankingLinks(
   nav,

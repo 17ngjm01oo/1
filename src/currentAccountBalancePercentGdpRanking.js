@@ -6,7 +6,6 @@ initializeRankingPage({
   staticDataPath: dataSources.weoCurrentPrices.rankingStaticDataPath,
   indicatorCode: "BCA_NGDPD",
   rankingTitleBase: "Current Account Balance (% of GDP) Ranking",
-  pagePathSegment: "current-account-balance-percent-gdp",
   linkAriaMetric: "Current Account Balance (% of GDP)",
   displayScaleConfig: {
     suffix: "%",

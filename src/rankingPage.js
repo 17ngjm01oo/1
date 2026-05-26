@@ -25,7 +25,7 @@ export function initializeRankingPage(config) {
 
 function initializeRankingCountrySearch(config) {
   const rootHref = document.body.dataset.rootHref ?? "../../";
-  const pagePathSegment = config.pagePathSegment;
+  const pagePathSegment = getCountryPagePathSegment(config);
 
   initializeCountrySelector({
     countryPool: countries.filter((country) => country.slug && country.code !== "G001"),
@@ -37,6 +37,10 @@ function initializeRankingCountrySearch(config) {
     resultsSelector: "#rankingCountrySearchResults",
     searchPanelSelector: ".ranking-country-search-panel",
   });
+}
+
+function getCountryPagePathSegment(config) {
+  return config.hasCountryIndicatorPage === false ? "" : document.body.dataset.rankingDirectory ?? "";
 }
 
 async function initializeRanking(config, state) {
@@ -186,7 +190,7 @@ function renderRankingTable(config, rankingRows) {
     countryLink.append(countryLinkText, countryLinkArrow);
     countryCell.append(countryLink);
 
-    const pagePathSegment = config.pagePathSegment;
+    const pagePathSegment = getCountryPagePathSegment(config);
     appendRankingValueCell(valueCell, {
       href: pagePathSegment ? `${rootHref}countries/${country.slug}/${pagePathSegment}/` : "",
       text: formatCompactDisplayValue(country.value, displayScale),

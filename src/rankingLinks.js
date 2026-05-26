@@ -41,7 +41,7 @@ function isCurrentRankingLink(ranking, { currentPageKind, currentRankingDirector
     return false;
   }
 
-  return ranking.countryPageKind === currentPageKind || Boolean(ranking.countryPageKinds?.includes(currentPageKind));
+  return ranking.countryPageKind === currentPageKind;
 }
 
 export function getCountryIndicatorLinks(rankings) {

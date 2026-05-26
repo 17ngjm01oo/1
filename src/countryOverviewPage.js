@@ -2,108 +2,49 @@ import { formatCompactDisplayValue, getDisplayScale } from "./chart.js";
 import { seriesConfigs } from "./config.js";
 import { countries } from "./countries.js";
 import { getCountryCurrencyDisplay } from "./currencyCodes.js";
+import { economicRankings } from "./economicRankings.js";
+import { environmentalRankings } from "./environmentalRankings.js";
+import { fiscalRankings } from "./fiscalRankings.js";
 import { getFlagEmoji } from "./flags.js";
+import { populationRankings } from "./populationRankings.js";
 import { getIndicatorSeriesMap } from "./seriesData.js";
+import { tradeRankings } from "./tradeRankings.js";
 import { renderWorldMap } from "./worldMap.js";
 import "./rankingTopNav.js";
+
+function buildOverviewIndicators(rankings) {
+  return rankings.map(({ seriesId, directory, countryPageKind }) => ({
+    seriesId,
+    rankingDirectory: directory,
+    ...(countryPageKind ? { pagePathSegment: countryPageKind } : {}),
+  }));
+}
 
 const overviewGroups = [
   {
     id: "economy",
     title: "Economy",
-    indicators: [
-      { seriesId: "gdp", rankingDirectory: "gdp", pagePathSegment: "gdp" },
-      { seriesId: "gdpPerCapita", rankingDirectory: "gdp-per-capita", pagePathSegment: "gdp-per-capita" },
-      { seriesId: "gdpGrowth", rankingDirectory: "gdp-growth", pagePathSegment: "gdp-growth" },
-      { seriesId: "inflationRate", rankingDirectory: "inflation-rate", pagePathSegment: "inflation-rate" },
-      { seriesId: "ppp", rankingDirectory: "ppp", pagePathSegment: "ppp" },
-      { seriesId: "pppPerCapita", rankingDirectory: "ppp-per-capita", pagePathSegment: "ppp-per-capita" },
-    ],
+    indicators: buildOverviewIndicators(economicRankings),
   },
   {
     id: "population",
     title: "Population",
-    indicators: [
-      { seriesId: "population", rankingDirectory: "population", pagePathSegment: "population" },
-      { seriesId: "populationDensity", rankingDirectory: "population-density", pagePathSegment: "population-density" },
-      { seriesId: "lifeExpectancy", rankingDirectory: "life-expectancy", pagePathSegment: "life-expectancy" },
-      { seriesId: "fertilityRate", rankingDirectory: "fertility-rate", pagePathSegment: "fertility-rate" },
-      { seriesId: "employment", rankingDirectory: "employment", pagePathSegment: "employment" },
-      { seriesId: "unemploymentRate", rankingDirectory: "unemployment-rate", pagePathSegment: "unemployment-rate" },
-    ],
+    indicators: buildOverviewIndicators(populationRankings),
   },
   {
     id: "environment",
     title: "Environment",
-    indicators: [
-      { seriesId: "area", rankingDirectory: "area" },
-      {
-        seriesId: "forestAreaPercentOfLandArea",
-        rankingDirectory: "forest-area",
-        pagePathSegment: "forest-area",
-      },
-      {
-        seriesId: "agriculturalLandPercentOfLandArea",
-        rankingDirectory: "agricultural-land",
-        pagePathSegment: "agricultural-land",
-      },
-    ],
+    indicators: buildOverviewIndicators(environmentalRankings),
   },
   {
     id: "trade",
     title: "Trade",
-    indicators: [
-      {
-        seriesId: "currentAccountBalance",
-        rankingDirectory: "current-account-balance",
-        pagePathSegment: "current-account-balance",
-      },
-      {
-        seriesId: "currentAccountBalancePercentGdp",
-        rankingDirectory: "current-account-balance-percent-gdp",
-        pagePathSegment: "current-account-balance-percent-gdp",
-      },
-      { seriesId: "goodsExports", rankingDirectory: "goods-exports", pagePathSegment: "goods-exports" },
-      { seriesId: "goodsImports", rankingDirectory: "goods-imports", pagePathSegment: "goods-imports" },
-      {
-        seriesId: "goodsTradeBalance",
-        rankingDirectory: "goods-trade-balance",
-        pagePathSegment: "goods-trade-balance",
-      },
-    ],
+    indicators: buildOverviewIndicators(tradeRankings),
   },
   {
     id: "finance",
     title: "Finance",
-    indicators: [
-      {
-        seriesId: "governmentGrossDebt",
-        rankingDirectory: "government-gross-debt",
-        pagePathSegment: "government-gross-debt",
-      },
-      {
-        seriesId: "governmentNetDebt",
-        rankingDirectory: "government-net-debt",
-        pagePathSegment: "government-net-debt",
-      },
-      { seriesId: "fiscalBalance", rankingDirectory: "fiscal-balance", pagePathSegment: "fiscal-balance" },
-      {
-        seriesId: "primaryFiscalBalance",
-        rankingDirectory: "primary-fiscal-balance",
-        pagePathSegment: "primary-fiscal-balance",
-      },
-      { seriesId: "governmentRevenue", rankingDirectory: "government-revenue", pagePathSegment: "government-revenue" },
-      {
-        seriesId: "governmentExpenditure",
-        rankingDirectory: "government-expenditure",
-        pagePathSegment: "government-expenditure",
-      },
-      {
-        seriesId: "totalReservesIncludingGold",
-        rankingDirectory: "total-reserves",
-        pagePathSegment: "total-reserves",
-      },
-    ],
+    indicators: buildOverviewIndicators(fiscalRankings),
   },
 ];
 

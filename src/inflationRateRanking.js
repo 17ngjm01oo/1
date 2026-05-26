@@ -6,7 +6,6 @@ initializeRankingPage({
   staticDataPath: dataSources.weoCurrentPrices.rankingStaticDataPath,
   indicatorCode: "PCPIPCH",
   rankingTitleBase: "Inflation Rate Ranking",
-  pagePathSegment: "inflation-rate",
   linkAriaMetric: "Inflation Rate",
   displayScaleConfig: {
     valueScale: 1,

@@ -8,7 +8,6 @@ initializeRankingPage({
   startYear: dataSources.worldBankWdi.startYear,
   endYear: dataSources.worldBankWdi.endYear,
   rankingTitleBase: "Total Reserves Ranking",
-  pagePathSegment: "total-reserves",
   linkAriaMetric: "Total Reserves",
   displayScaleConfig: {
     valueScaleMode: "usdMagnitude",

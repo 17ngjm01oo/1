@@ -3,10 +3,14 @@ import { countries } from "./countries.js";
 import { filterCountries, formatCountryMetaText, initializeCountrySelector } from "./countrySelector.js";
 import { getCurrencyCode } from "./currencyCodes.js";
 import { getCurrencyDisplay } from "./currencyDisplay.js";
-import { environmentalIndicatorLinks } from "./environmentalRankings.js";
+import { economicIndicatorLinks, economicRankings } from "./economicRankings.js";
+import { environmentalIndicatorLinks, environmentalRankings } from "./environmentalRankings.js";
+import { fiscalIndicatorLinks, fiscalRankings } from "./fiscalRankings.js";
 import { getFlagEmoji } from "./flags.js";
+import { populationIndicatorLinks, populationRankings } from "./populationRankings.js";
 import { renderTopNavigationLinks } from "./siteNavigation.js";
 import { buildStaticDataRequestUrls, fetchStaticData } from "./staticData.js";
+import { tradeIndicatorLinks, tradeRankings } from "./tradeRankings.js";
 import { transformSeriesData } from "./transform.js";
 import { clearLineChart, formatCompactDisplayValue, getDisplayScale, renderLineChart } from "./chart.js";
 
@@ -15,227 +19,161 @@ const pageDefinitions = {
     logPrefix: "GDP page",
     group: "economic",
     documentTitleMetric: "GDP",
-    pathSegment: "gdp",
     seriesIds: ["gdp", "gdpNational", "realGdp"],
   },
   "gdp-per-capita": {
     logPrefix: "GDP per capita page",
     group: "economic",
     documentTitleMetric: "GDP per capita",
-    pathSegment: "gdp-per-capita",
     seriesIds: ["gdpPerCapita", "gdpNationalPerCapita", "realGdpPerCapita"],
   },
   "gdp-growth": {
     logPrefix: "GDP growth page",
     group: "economic",
     documentTitleMetric: "GDP Growth",
-    pathSegment: "gdp-growth",
     seriesIds: ["gdpGrowth"],
   },
   "inflation-rate": {
     logPrefix: "Inflation rate page",
     group: "economic",
     documentTitleMetric: "Inflation Rate",
-    pathSegment: "inflation-rate",
     seriesIds: ["inflationRate"],
   },
   population: {
     logPrefix: "Population page",
     group: "population",
     documentTitleMetric: "Population",
-    pathSegment: "population",
     seriesIds: ["population"],
   },
   "population-density": {
     logPrefix: "Population density page",
     group: "population",
     documentTitleMetric: "Population Density",
-    pathSegment: "population-density",
     seriesIds: ["populationDensity"],
   },
   employment: {
     logPrefix: "Employment page",
     group: "population",
     documentTitleMetric: "Employment",
-    pathSegment: "employment",
     seriesIds: ["employment"],
   },
   "unemployment-rate": {
     logPrefix: "Unemployment rate page",
     group: "population",
     documentTitleMetric: "Unemployment Rate",
-    pathSegment: "unemployment-rate",
     seriesIds: ["unemploymentRate"],
   },
   "life-expectancy": {
     logPrefix: "Life expectancy page",
     group: "population",
     documentTitleMetric: "Life Expectancy",
-    pathSegment: "life-expectancy",
     seriesIds: ["lifeExpectancy"],
   },
   "fertility-rate": {
     logPrefix: "Fertility rate page",
     group: "population",
     documentTitleMetric: "Fertility Rate",
-    pathSegment: "fertility-rate",
     seriesIds: ["fertilityRate"],
   },
-  ppp: {
+  "ppp-gdp": {
     logPrefix: "PPP page",
     group: "economic",
-    documentTitleMetric: "PPP",
-    pathSegment: "ppp",
+    documentTitleMetric: "PPP GDP",
     seriesIds: ["ppp"],
   },
-  "ppp-per-capita": {
+  "ppp-gdp-per-capita": {
     logPrefix: "PPP per capita page",
     group: "economic",
-    documentTitleMetric: "PPP per capita",
-    pathSegment: "ppp-per-capita",
+    documentTitleMetric: "PPP GDP per Capita",
     seriesIds: ["pppPerCapita"],
   },
   "current-account-balance": {
     logPrefix: "Current account balance page",
     group: "trade",
     documentTitleMetric: "Current Account Balance",
-    pathSegment: "current-account-balance",
     seriesIds: ["currentAccountBalance"],
   },
   "current-account-balance-percent-gdp": {
     logPrefix: "Current account balance percent of GDP page",
     group: "trade",
     documentTitleMetric: "Current Account Balance (% of GDP)",
-    pathSegment: "current-account-balance-percent-gdp",
     seriesIds: ["currentAccountBalancePercentGdp"],
   },
   "goods-exports": {
     logPrefix: "Goods exports page",
     group: "trade",
     documentTitleMetric: "Goods Exports",
-    pathSegment: "goods-exports",
     seriesIds: ["goodsExports"],
   },
   "goods-imports": {
     logPrefix: "Goods imports page",
     group: "trade",
     documentTitleMetric: "Goods Imports",
-    pathSegment: "goods-imports",
     seriesIds: ["goodsImports"],
   },
   "goods-trade-balance": {
     logPrefix: "Goods trade balance page",
     group: "trade",
     documentTitleMetric: "Goods Trade Balance",
-    pathSegment: "goods-trade-balance",
     seriesIds: ["goodsTradeBalance"],
   },
   "government-gross-debt": {
     logPrefix: "Government gross debt page",
     group: "fiscal",
     documentTitleMetric: "Government Gross Debt",
-    pathSegment: "government-gross-debt",
     seriesIds: ["governmentGrossDebt"],
   },
   "government-net-debt": {
     logPrefix: "Government net debt page",
     group: "fiscal",
     documentTitleMetric: "Government Net Debt",
-    pathSegment: "government-net-debt",
     seriesIds: ["governmentNetDebt"],
   },
   "fiscal-balance": {
     logPrefix: "Fiscal balance page",
     group: "fiscal",
     documentTitleMetric: "Fiscal Balance",
-    pathSegment: "fiscal-balance",
     seriesIds: ["fiscalBalance"],
   },
   "primary-fiscal-balance": {
     logPrefix: "Primary fiscal balance page",
     group: "fiscal",
     documentTitleMetric: "Primary Fiscal Balance",
-    pathSegment: "primary-fiscal-balance",
     seriesIds: ["primaryFiscalBalance"],
   },
   "government-revenue": {
     logPrefix: "Government revenue page",
     group: "fiscal",
     documentTitleMetric: "Government Revenue",
-    pathSegment: "government-revenue",
     seriesIds: ["governmentRevenue"],
   },
   "government-expenditure": {
     logPrefix: "Government expenditure page",
     group: "fiscal",
     documentTitleMetric: "Government Expenditure",
-    pathSegment: "government-expenditure",
     seriesIds: ["governmentExpenditure"],
   },
   "total-reserves": {
     logPrefix: "Total reserves including gold page",
     group: "fiscal",
     documentTitleMetric: "Total Reserves",
-    pathSegment: "total-reserves",
     seriesIds: ["totalReservesIncludingGold"],
   },
   "agricultural-land": {
     logPrefix: "Agricultural land percent of land area page",
     group: "environmental",
     documentTitleMetric: "Agricultural Land",
-    pathSegment: "agricultural-land",
     seriesIds: ["agriculturalLandPercentOfLandArea"],
   },
   "forest-area": {
     logPrefix: "Forest area percent of land area page",
     group: "environmental",
     documentTitleMetric: "Forest Area",
-    pathSegment: "forest-area",
     seriesIds: ["forestAreaPercentOfLandArea"],
   },
 };
-const countryIndicatorLinks = [
-  { pageKind: "gdp", href: "../gdp/", label: "GDP" },
-  { pageKind: "gdp-per-capita", href: "../gdp-per-capita/", label: "GDP per capita" },
-  { pageKind: "gdp-growth", href: "../gdp-growth/", label: "GDP Growth" },
-  { pageKind: "inflation-rate", href: "../inflation-rate/", label: "Inflation Rate" },
-  { pageKind: "ppp", href: "../ppp/", label: "PPP" },
-  { pageKind: "ppp-per-capita", href: "../ppp-per-capita/", label: "PPP per capita" },
-];
-const populationIndicatorLinks = [
-  { pageKind: "population", href: "../population/", label: "Population" },
-  { pageKind: "population-density", href: "../population-density/", label: "Population Density" },
-  { pageKind: "life-expectancy", href: "../life-expectancy/", label: "Life Expectancy" },
-  { pageKind: "fertility-rate", href: "../fertility-rate/", label: "Fertility Rate" },
-  { pageKind: "employment", href: "../employment/", label: "Employment" },
-  { pageKind: "unemployment-rate", href: "../unemployment-rate/", label: "Unemployment Rate" },
-];
-const tradeIndicatorLinks = [
-  { pageKind: "current-account-balance", href: "../current-account-balance/", label: "Current Account Balance" },
-  {
-    pageKind: "current-account-balance-percent-gdp",
-    href: "../current-account-balance-percent-gdp/",
-    label: "Current Account Balance (% of GDP)",
-  },
-  { pageKind: "goods-exports", href: "../goods-exports/", label: "Goods Exports" },
-  { pageKind: "goods-imports", href: "../goods-imports/", label: "Goods Imports" },
-  { pageKind: "goods-trade-balance", href: "../goods-trade-balance/", label: "Goods Trade Balance" },
-];
-const fiscalIndicatorLinks = [
-  { pageKind: "government-gross-debt", href: "../government-gross-debt/", label: "Government Gross Debt" },
-  { pageKind: "government-net-debt", href: "../government-net-debt/", label: "Government Net Debt" },
-  { pageKind: "fiscal-balance", href: "../fiscal-balance/", label: "Fiscal Balance" },
-  { pageKind: "primary-fiscal-balance", href: "../primary-fiscal-balance/", label: "Primary Fiscal Balance" },
-  { pageKind: "government-revenue", href: "../government-revenue/", label: "Government Revenue" },
-  { pageKind: "government-expenditure", href: "../government-expenditure/", label: "Government Expenditure" },
-  {
-    pageKind: "total-reserves",
-    href: "../total-reserves/",
-    label: "Total Reserves",
-  },
-];
 const countryIndicatorLinksByGroup = {
-  economic: countryIndicatorLinks,
+  economic: economicIndicatorLinks,
   population: populationIndicatorLinks,
   trade: tradeIndicatorLinks,
   fiscal: fiscalIndicatorLinks,
@@ -247,63 +185,18 @@ const pageSeriesIds = new Set(pageDefinition.seriesIds);
 const pageSeriesConfigs = seriesConfigs.filter((seriesConfig) => pageSeriesIds.has(seriesConfig.id));
 const countryCode = document.body.dataset.countryCode;
 const selectedCountry = countries.find((country) => country.code === countryCode);
-const comparableSeriesIds = new Set([
-  "gdp",
-  "gdpPerCapita",
-  "gdpGrowth",
-  "inflationRate",
-  "population",
-  "populationDensity",
-  "employment",
-  "unemploymentRate",
-  "lifeExpectancy",
-  "fertilityRate",
-  "ppp",
-  "pppPerCapita",
-  "currentAccountBalance",
-  "currentAccountBalancePercentGdp",
-  "goodsExports",
-  "goodsImports",
-  "goodsTradeBalance",
-  "governmentGrossDebt",
-  "governmentNetDebt",
-  "fiscalBalance",
-  "primaryFiscalBalance",
-  "governmentRevenue",
-  "governmentExpenditure",
-  "totalReservesIncludingGold",
-  "agriculturalLandPercentOfLandArea",
-  "forestAreaPercentOfLandArea",
-]);
-const rankedSeriesIds = new Set(comparableSeriesIds);
-const rankingDirectoryBySeriesId = {
-  gdp: "gdp",
-  gdpPerCapita: "gdp-per-capita",
-  gdpGrowth: "gdp-growth",
-  inflationRate: "inflation-rate",
-  population: "population",
-  populationDensity: "population-density",
-  employment: "employment",
-  unemploymentRate: "unemployment-rate",
-  lifeExpectancy: "life-expectancy",
-  fertilityRate: "fertility-rate",
-  ppp: "ppp",
-  pppPerCapita: "ppp-per-capita",
-  currentAccountBalance: "current-account-balance",
-  currentAccountBalancePercentGdp: "current-account-balance-percent-gdp",
-  goodsExports: "goods-exports",
-  goodsImports: "goods-imports",
-  goodsTradeBalance: "goods-trade-balance",
-  governmentGrossDebt: "government-gross-debt",
-  governmentNetDebt: "government-net-debt",
-  fiscalBalance: "fiscal-balance",
-  primaryFiscalBalance: "primary-fiscal-balance",
-  governmentRevenue: "government-revenue",
-  governmentExpenditure: "government-expenditure",
-  totalReservesIncludingGold: "total-reserves",
-  agriculturalLandPercentOfLandArea: "agricultural-land",
-  forestAreaPercentOfLandArea: "forest-area",
-};
+const countryPageRankings = [
+  ...economicRankings,
+  ...populationRankings,
+  ...tradeRankings,
+  ...fiscalRankings,
+  ...environmentalRankings,
+].filter((ranking) => ranking.countryPageKind);
+const rankingDirectoryBySeriesId = Object.fromEntries(
+  countryPageRankings.map((ranking) => [ranking.seriesId, ranking.directory]),
+);
+const rankedSeriesIds = new Set(Object.keys(rankingDirectoryBySeriesId));
+const comparableSeriesIds = rankedSeriesIds;
 const seriesRuntimeState = new Map();
 
 initializePage().catch((error) => {
@@ -340,7 +233,7 @@ async function initializePage() {
 }
 
 function navigateToCountry(country) {
-  window.location.href = `../../../countries/${country.slug}/${pageDefinition.pathSegment}/`;
+  window.location.href = `../../../countries/${country.slug}/${pageKind}/`;
 }
 
 function updateTopRankingLinks() {

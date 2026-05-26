@@ -8,7 +8,6 @@ initializeRankingPage({
   startYear: dataSources.worldBankEnvironment.startYear,
   endYear: dataSources.worldBankEnvironment.endYear,
   rankingTitleBase: "Forest Area Ranking",
-  pagePathSegment: "forest-area",
   linkAriaMetric: "Forest Area",
   displayScaleConfig: {
     suffix: "%",

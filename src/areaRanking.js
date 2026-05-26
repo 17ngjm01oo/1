@@ -8,7 +8,7 @@ initializeRankingPage({
   startYear: dataSources.ciaWorldFactbook.startYear,
   endYear: dataSources.ciaWorldFactbook.endYear,
   rankingTitleBase: "Area (km²) Ranking",
-  pagePathSegment: null,
+  hasCountryIndicatorPage: false,
   linkAriaMetric: "Area (km²)",
   displayScaleConfig: {
     valueScaleMode: "areaMagnitude",

@@ -6,7 +6,6 @@ initializeRankingPage({
   staticDataPath: dataSources.weoCurrentPrices.rankingStaticDataPath,
   indicatorCode: "GGXONLB_NGDP",
   rankingTitleBase: "Primary Fiscal Balance Ranking",
-  pagePathSegment: "primary-fiscal-balance",
   linkAriaMetric: "Primary Fiscal Balance",
   displayScaleConfig: {
     suffix: "%",

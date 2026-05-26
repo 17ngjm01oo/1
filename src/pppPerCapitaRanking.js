@@ -5,8 +5,7 @@ initializeRankingPage({
   logName: "PPP per capita",
   staticDataPath: dataSources.weoCurrentPrices.rankingStaticDataPath,
   indicatorCode: "PPPPC",
-  rankingTitleBase: "PPP per Capita Ranking",
-  pagePathSegment: "ppp-per-capita",
+  rankingTitleBase: "PPP GDP per Capita Ranking",
   linkAriaMetric: "PPP per capita",
   displayScaleConfig: {
     currencyCode: "Int$",

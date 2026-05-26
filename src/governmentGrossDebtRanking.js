@@ -6,7 +6,6 @@ initializeRankingPage({
   staticDataPath: dataSources.weoCurrentPrices.rankingStaticDataPath,
   indicatorCode: "GGXWDG_NGDP",
   rankingTitleBase: "Government Gross Debt Ranking",
-  pagePathSegment: "government-gross-debt",
   linkAriaMetric: "Government Gross Debt",
   displayScaleConfig: {
     suffix: "%",

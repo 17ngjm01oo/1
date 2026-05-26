@@ -8,7 +8,6 @@ initializeRankingPage({
   startYear: dataSources.worldBankEnvironment.startYear,
   endYear: dataSources.worldBankEnvironment.endYear,
   rankingTitleBase: "Agricultural Land Ranking",
-  pagePathSegment: "agricultural-land",
   linkAriaMetric: "Agricultural Land",
   displayScaleConfig: {
     suffix: "%",
