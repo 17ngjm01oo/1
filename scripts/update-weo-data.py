@@ -47,7 +47,7 @@ TARGET_INDICATORS = {
         "description": "Gross domestic product (GDP), Constant prices, domestic currency",
     },
     "NGDP_RPCH": {
-        "label": "GDP Growth Rate",
+        "label": "GDP Growth",
         "description": "Gross domestic product (GDP), Constant prices, Percent change",
     },
     "PCPIPCH": {

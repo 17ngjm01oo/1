@@ -100,18 +100,8 @@ def render_country_page(country: dict[str, str], config: CountryPageConfig) -> s
               aria-autocomplete="list"
               aria-expanded="false"
             />
+            <div class="country-results" id="countrySearchResults" role="listbox" aria-label="Country search results" hidden></div>
           </div>
-          <div class="filter-panel-row">
-            <details class="category-panel" aria-labelledby="region-heading">
-              <summary class="category-heading" id="region-heading">Regions</summary>
-            </details>
-            <details class="category-panel" aria-labelledby="category-heading">
-              <summary class="category-heading" id="category-heading">Categories</summary>
-            </details>
-          </div>
-          <div class="category-list filter-option-list" id="regionList" hidden></div>
-          <div class="category-list filter-option-list" id="categoryList" hidden></div>
-          <div class="country-results" id="countrySearchResults" role="listbox" aria-label="Country search results" hidden></div>
         </div>
       </section>
 

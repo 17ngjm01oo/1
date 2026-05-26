@@ -14,7 +14,7 @@ const overviewGroups = [
     indicators: [
       { seriesId: "gdp", rankingDirectory: "gdp", pagePathSegment: "gdp" },
       { seriesId: "gdpPerCapita", rankingDirectory: "gdp-per-capita", pagePathSegment: "gdp-per-capita" },
-      { seriesId: "gdpGrowth", rankingDirectory: "real-gdp-growth", pagePathSegment: "gdp-growth" },
+      { seriesId: "gdpGrowth", rankingDirectory: "gdp-growth", pagePathSegment: "gdp-growth" },
       { seriesId: "inflationRate", rankingDirectory: "inflation-rate", pagePathSegment: "inflation-rate" },
       { seriesId: "ppp", rankingDirectory: "ppp", pagePathSegment: "ppp" },
       { seriesId: "pppPerCapita", rankingDirectory: "ppp-per-capita", pagePathSegment: "ppp-per-capita" },

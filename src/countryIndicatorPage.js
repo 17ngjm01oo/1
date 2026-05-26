@@ -28,7 +28,7 @@ const pageDefinitions = {
   "gdp-growth": {
     logPrefix: "GDP growth page",
     group: "economic",
-    documentTitleMetric: "GDP Growth Rate",
+    documentTitleMetric: "GDP Growth",
     pathSegment: "gdp-growth",
     seriesIds: ["gdpGrowth"],
   },
@@ -49,7 +49,7 @@ const pageDefinitions = {
   "population-density": {
     logPrefix: "Population density page",
     group: "population",
-    documentTitleMetric: "Population Density (/km²)",
+    documentTitleMetric: "Population Density",
     pathSegment: "population-density",
     seriesIds: ["populationDensity"],
   },
@@ -197,14 +197,14 @@ const pageDefinitions = {
 const countryIndicatorLinks = [
   { pageKind: "gdp", href: "../gdp/", label: "GDP" },
   { pageKind: "gdp-per-capita", href: "../gdp-per-capita/", label: "GDP per capita" },
-  { pageKind: "gdp-growth", href: "../gdp-growth/", label: "GDP Growth Rate" },
+  { pageKind: "gdp-growth", href: "../gdp-growth/", label: "GDP Growth" },
   { pageKind: "inflation-rate", href: "../inflation-rate/", label: "Inflation Rate" },
   { pageKind: "ppp", href: "../ppp/", label: "PPP" },
   { pageKind: "ppp-per-capita", href: "../ppp-per-capita/", label: "PPP per capita" },
 ];
 const populationIndicatorLinks = [
   { pageKind: "population", href: "../population/", label: "Population" },
-  { pageKind: "population-density", href: "../population-density/", label: "Population Density (/km²)" },
+  { pageKind: "population-density", href: "../population-density/", label: "Population Density" },
   { pageKind: "life-expectancy", href: "../life-expectancy/", label: "Life Expectancy" },
   { pageKind: "fertility-rate", href: "../fertility-rate/", label: "Fertility Rate" },
   { pageKind: "employment", href: "../employment/", label: "Employment" },
@@ -279,7 +279,7 @@ const rankedSeriesIds = new Set(comparableSeriesIds);
 const rankingDirectoryBySeriesId = {
   gdp: "gdp",
   gdpPerCapita: "gdp-per-capita",
-  gdpGrowth: "real-gdp-growth",
+  gdpGrowth: "gdp-growth",
   inflationRate: "inflation-rate",
   population: "population",
   populationDensity: "population-density",
@@ -385,12 +385,20 @@ function getCountryPageStaticDataPath(seriesConfig) {
 
 function getSeriesChartTitle(seriesConfig, currencyCode) {
   const title = seriesConfig.titleTemplate;
+  if (seriesConfig.id === "populationDensity") {
+    return `${title} - /km²`;
+  }
+
   const isGdpCurrencySeries =
     title.includes("GDP") &&
     (seriesConfig.usesCountryCurrency || seriesConfig.currencyCode);
 
   if (!isGdpCurrencySeries || !currencyCode) {
     return title;
+  }
+
+  if (seriesConfig.usesCountryCurrency) {
+    return `${title} - Local currency`;
   }
 
   return `${title} - ${formatTitleCurrencyCode(currencyCode)}`;

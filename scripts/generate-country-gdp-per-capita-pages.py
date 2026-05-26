@@ -18,18 +18,18 @@ def main() -> None:
             indicators=(
                 IndicatorBlockConfig(
                     series_id="gdpPerCapita",
-                    title="Nominal GDP per capita - USD",
+                    title="GDP per capita - USD",
                     canvas_label="GDP per capita line chart",
                     compare_label="GDP per capita",
                 ),
                 IndicatorBlockConfig(
                     series_id="gdpNationalPerCapita",
-                    title="Nominal GDP per capita",
+                    title="GDP per capita - Local currency",
                     canvas_label="GDP per capita in national currency line chart",
                 ),
                 IndicatorBlockConfig(
                     series_id="realGdpPerCapita",
-                    title="Real GDP per capita",
+                    title="Real GDP per capita - Local currency",
                     canvas_label="Real GDP per capita in constant national currency line chart",
                 ),
             ),

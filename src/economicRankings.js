@@ -12,8 +12,8 @@ export const economicRankings = [
     countryPageKinds: ["gdp-per-capita"],
   },
   {
-    directory: "real-gdp-growth",
-    label: "GDP Growth Rate",
+    directory: "gdp-growth",
+    label: "GDP Growth",
     countryPageKinds: ["gdp-growth"],
   },
   {

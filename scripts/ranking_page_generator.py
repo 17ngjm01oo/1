@@ -69,10 +69,9 @@ def render_ranking_page(ranking_type: dict[str, str], scope: dict[str, str], is_
     subtitle_markup = f'\n          <p class="subtitle">{escape(subtitle)}</p>' if subtitle else ""
     source_note = ranking_type.get("source_note", "")
     data_note = ranking_type.get("data_note", "")
-    exclusion_note = ranking_type.get("exclusion_note", "")
     notes_markup = "\n".join(
         f"          <p>{escape(note)}</p>"
-        for note in (source_note, data_note, exclusion_note)
+        for note in (source_note, data_note)
         if note
     )
 

@@ -15,24 +15,34 @@
       <section class="top-nav-card" aria-label="Site navigation"></section>
 
       <section class="hub-section rankings-hub" aria-label="Rankings">
+        <nav class="rankings-jump-nav" aria-label="Filter ranking categories">
+          <span class="rankings-jump-label">Filter by:</span>
+          <div class="rankings-jump-links">
+            <button class="category-button" type="button" data-rankings-hub-category="economic" aria-pressed="false">Economic</button>
+            <button class="category-button" type="button" data-rankings-hub-category="population" aria-pressed="false">Population</button>
+            <button class="category-button" type="button" data-rankings-hub-category="environmental" aria-pressed="false">Environmental</button>
+            <button class="category-button" type="button" data-rankings-hub-category="trade" aria-pressed="false">Trade</button>
+            <button class="category-button" type="button" data-rankings-hub-category="fiscal" aria-pressed="false">Fiscal</button>
+          </div>
+        </nav>
         <div class="rankings-hub-groups">
-          <section class="rankings-hub-group" aria-labelledby="economic-rankings-title">
+          <section class="rankings-hub-group" data-rankings-hub-group="economic" aria-labelledby="economic-rankings-title">
             <h2 id="economic-rankings-title">Economic</h2>
             <nav class="site-nav" id="rankingTopNav" aria-label="Economic rankings"></nav>
           </section>
-          <section class="rankings-hub-group" aria-labelledby="population-rankings-title">
+          <section class="rankings-hub-group" data-rankings-hub-group="population" aria-labelledby="population-rankings-title">
             <h2 id="population-rankings-title">Population</h2>
             <nav class="site-nav" id="populationTopNav" aria-label="Population rankings"></nav>
           </section>
-          <section class="rankings-hub-group" aria-labelledby="environmental-rankings-title">
+          <section class="rankings-hub-group" data-rankings-hub-group="environmental" aria-labelledby="environmental-rankings-title">
             <h2 id="environmental-rankings-title">Environmental</h2>
             <nav class="site-nav" id="environmentalTopNav" aria-label="Environmental rankings"></nav>
           </section>
-          <section class="rankings-hub-group" aria-labelledby="trade-rankings-title">
+          <section class="rankings-hub-group" data-rankings-hub-group="trade" aria-labelledby="trade-rankings-title">
             <h2 id="trade-rankings-title">Trade</h2>
             <nav class="site-nav" id="tradeTopNav" aria-label="Trade rankings"></nav>
           </section>
-          <section class="rankings-hub-group" aria-labelledby="fiscal-rankings-title">
+          <section class="rankings-hub-group" data-rankings-hub-group="fiscal" aria-labelledby="fiscal-rankings-title">
             <h2 id="fiscal-rankings-title">Fiscal</h2>
             <nav class="site-nav" id="fiscalTopNav" aria-label="Fiscal rankings"></nav>
           </section>

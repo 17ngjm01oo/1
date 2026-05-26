@@ -17,10 +17,10 @@ RANKING_TYPES = [
         "subtitle": "GDP per capita is nominal GDP in U.S. dollars divided by population.",
     },
     {
-        "directory": "real-gdp-growth",
-        "title": "GDP Growth Rate Ranking by Country",
+        "directory": "gdp-growth",
+        "title": "GDP Growth Ranking by Country",
         "script": "realGdpGrowthRanking.js",
-        "subtitle": "GDP growth rate is the annual percentage change in GDP in national currency.",
+        "subtitle": "GDP growth is the annual percentage change in real GDP in national currency.",
     },
     {
         "directory": "inflation-rate",

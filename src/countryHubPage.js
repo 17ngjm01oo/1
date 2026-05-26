@@ -32,7 +32,7 @@ initializeCountrySelector({
   },
   onResultsChange({ rowCount, activeRegionId }) {
     if (countElement) {
-      countElement.textContent = `Countries shown: ${rowCount}`;
+      countElement.textContent = `Showing: ${rowCount}`;
     }
 
     worldMap?.focusRegion(activeRegionId);

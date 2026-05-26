@@ -7,7 +7,7 @@ export const populationRankings = [
   },
   {
     directory: "population-density",
-    label: "Population Density (/km²)",
+    label: "Population Density",
   },
   {
     directory: "life-expectancy",

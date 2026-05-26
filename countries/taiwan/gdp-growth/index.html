@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Taiwan GDP Growth Rate</title>
+    <title>Taiwan GDP Growth</title>
     <link rel="stylesheet" href="../../../styles.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
     <script type="module" src="../../../src/countryIndicatorPage.js"></script>
@@ -17,8 +17,8 @@
 
       <section class="hub-section" aria-labelledby="country-hub-title">
         <header class="page-header">
-          <h1 id="country-hub-title" class="page-title">GDP Growth Rate Chart by Country</h1>
-          <p class="subtitle">Select a country to view historical GDP growth rate trends.</p>
+          <h1 id="country-hub-title" class="page-title">GDP Growth Chart by Country</h1>
+          <p class="subtitle">Select a country to view historical GDP growth trends. GDP growth is the annual percentage change in real GDP in national currency.</p>
         </header>
 
         <div class="country-search-panel">
@@ -34,18 +34,8 @@
               aria-autocomplete="list"
               aria-expanded="false"
             />
+            <div class="country-results" id="countrySearchResults" role="listbox" aria-label="Country search results" hidden></div>
           </div>
-          <div class="filter-panel-row">
-            <details class="category-panel" aria-labelledby="region-heading">
-              <summary class="category-heading" id="region-heading">Regions</summary>
-            </details>
-            <details class="category-panel" aria-labelledby="category-heading">
-              <summary class="category-heading" id="category-heading">Categories</summary>
-            </details>
-          </div>
-          <div class="category-list filter-option-list" id="regionList" hidden></div>
-          <div class="category-list filter-option-list" id="categoryList" hidden></div>
-          <div class="country-results" id="countrySearchResults" role="listbox" aria-label="Country search results" hidden></div>
         </div>
       </section>
 
@@ -59,7 +49,7 @@
           <section class="indicator-block" aria-labelledby="gdpGrowth-title">
             <header class="indicator-header">
               <div class="indicator-title-group">
-                <h2 id="gdpGrowth-title">GDP Growth Rate</h2>
+                <h2 id="gdpGrowth-title">GDP Growth</h2>
               </div>
               <div class="compare-control" data-series-id="gdpGrowth">
                 <div class="compare-input-wrap">
@@ -76,12 +66,12 @@
                   />
                 </div>
                 <p class="compare-selected" id="gdpGrowthCompareSelected"></p>
-                <div class="country-results compare-results" id="gdpGrowthCompareResults" role="listbox" aria-label="GDP Growth Rate comparison country results" hidden></div>
+                <div class="country-results compare-results" id="gdpGrowthCompareResults" role="listbox" aria-label="GDP Growth comparison country results" hidden></div>
               </div>
             </header>
 
             <div class="chart-card" id="gdpGrowthChartCard">
-              <canvas id="gdpGrowthChart" aria-label="GDP Growth Rate line chart" role="img"></canvas>
+              <canvas id="gdpGrowthChart" aria-label="GDP Growth line chart" role="img"></canvas>
               <div class="chart-overlay" id="gdpGrowthOverlay" aria-hidden="true"></div>
             </div>
 

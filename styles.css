@@ -201,11 +201,34 @@ body {
 .rankings-hub-groups {
   display: grid;
   gap: 22px;
+  margin-top: 10px;
+}
+
+.rankings-jump-nav {
+  display: grid;
+  gap: 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.rankings-jump-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.rankings-jump-label {
+  color: var(--text);
 }
 
 .rankings-hub-group {
   display: grid;
   gap: 10px;
+}
+
+.rankings-hub-group[hidden] {
+  display: none;
 }
 
 .rankings-hub-group h2 {

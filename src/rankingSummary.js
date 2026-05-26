@@ -10,7 +10,7 @@ export function updateRankingSummaryDisplay({
   }
 
   if (countElement) {
-    countElement.textContent = `Countries shown: ${rowCount}`;
+    countElement.textContent = `Showing: ${rowCount}`;
   }
 }
 

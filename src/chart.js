@@ -290,6 +290,8 @@ function getCurrencyMagnitudeDisplayScale(points, config, magnitudeSteps, fallba
     compactUnit: `${magnitudeStep.compactUnit}${currencyDisplay.compactUnitSuffix}`,
     compactUnitSuffix: currencyDisplay.compactUnitSuffix,
     adaptiveCompactSteps: magnitudeSteps,
+    adaptiveFallbackSuffix: currencyDisplay.suffix,
+    adaptiveFallbackSuffixSpacing: config.suffixSpacing ?? " ",
     adaptiveFallbackMaximumFractionDigits: fallback.maximumFractionDigits ?? config.maximumFractionDigits ?? 0,
     maximumFractionDigits: magnitudeStep.fixedFractionDigits ?? getMagnitudeFractionDigits(displayValue),
   };
@@ -396,8 +398,10 @@ function formatAdaptiveCompactValue(value, displayScale) {
     const fallbackValue = value * (displayScale.adaptiveFallbackValueScale ?? 1);
     const formattedValue = formatNumber(fallbackValue, getAdaptiveFallbackFractionDigits(fallbackValue, displayScale));
     const unit = displayScale.tooltipUnit ? ` ${displayScale.tooltipUnit}` : "";
-    const suffixSpacing = displayScale.suffixSpacing ?? (displayScale.suffix ? " " : "");
-    const suffix = displayScale.suffix ? `${suffixSpacing}${displayScale.suffix}` : "";
+    const suffixValue = displayScale.adaptiveFallbackSuffix ?? displayScale.suffix;
+    const suffixSpacing =
+      displayScale.adaptiveFallbackSuffixSpacing ?? displayScale.suffixSpacing ?? (suffixValue ? " " : "");
+    const suffix = suffixValue ? `${suffixSpacing}${suffixValue}` : "";
 
     return `${displayScale.tooltipPrefix}${formattedValue}${unit}${suffix}`;
   }

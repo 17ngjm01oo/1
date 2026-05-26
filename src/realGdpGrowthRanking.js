@@ -5,9 +5,9 @@ initializeRankingPage({
   logName: "GDP growth",
   staticDataPath: dataSources.weoCurrentPrices.rankingStaticDataPath,
   indicatorCode: "NGDP_RPCH",
-  rankingTitleBase: "GDP Growth Rate Ranking",
+  rankingTitleBase: "GDP Growth Ranking",
   pagePathSegment: "gdp-growth",
-  linkAriaMetric: "GDP Growth Rate",
+  linkAriaMetric: "GDP Growth",
   displayScaleConfig: {
     valueScale: 1,
     tooltipPrefix: "",

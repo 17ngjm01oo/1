@@ -4,7 +4,6 @@ from data_source_notes import WEO_RANKING_NOTES
 from ranking_page_generator import generate_ranking_pages
 
 UNCTAD_SOURCE_NOTE = "Source: UNCTADstat."
-UNCTAD_EXCLUSION_NOTE = "Countries with no available UNCTAD data are excluded from the ranking."
 
 RANKING_TYPES = [
     {
@@ -28,7 +27,6 @@ RANKING_TYPES = [
         "subtitle": "Goods exports are measured in current U.S. dollars.",
         "source_note": UNCTAD_SOURCE_NOTE,
         "data_note": "",
-        "exclusion_note": UNCTAD_EXCLUSION_NOTE,
     },
     {
         "directory": "goods-imports",
@@ -37,7 +35,6 @@ RANKING_TYPES = [
         "subtitle": "Goods imports are measured in current U.S. dollars.",
         "source_note": UNCTAD_SOURCE_NOTE,
         "data_note": "",
-        "exclusion_note": UNCTAD_EXCLUSION_NOTE,
     },
     {
         "directory": "goods-trade-balance",
@@ -46,7 +43,6 @@ RANKING_TYPES = [
         "subtitle": "Goods trade balance is exports minus imports, measured in current U.S. dollars.",
         "source_note": UNCTAD_SOURCE_NOTE,
         "data_note": "",
-        "exclusion_note": UNCTAD_EXCLUSION_NOTE,
     },
 ]
 

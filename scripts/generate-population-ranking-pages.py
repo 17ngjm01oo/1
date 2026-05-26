@@ -12,7 +12,7 @@ RANKING_TYPES = [
     {
         **WORLD_BANK_RANKING_NOTES,
         "directory": "population-density",
-        "title": "Population Density (/km²) Ranking by Country",
+        "title": "Population Density Ranking by Country",
         "script": "populationDensityRanking.js",
         "subtitle": "Population density is shown per km².",
     },

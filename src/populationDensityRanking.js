@@ -7,9 +7,9 @@ initializeRankingPage({
   indicatorCode: "EN.POP.DNST",
   startYear: dataSources.worldBankPopulation.startYear,
   endYear: dataSources.worldBankPopulation.endYear,
-  rankingTitleBase: "Population Density (/km²) Ranking",
+  rankingTitleBase: "Population Density Ranking",
   pagePathSegment: "population-density",
-  linkAriaMetric: "Population Density (/km²)",
+  linkAriaMetric: "Population Density",
   displayScaleConfig: {
     maximumFractionDigits: 1,
   },
