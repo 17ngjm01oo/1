@@ -12,7 +12,7 @@ const countElement = document.querySelector("#countryHubCount");
 const worldMap = await renderWorldMap({
   countryList: hubCountries,
   rootHref,
-  defaultZoom: 1.10,
+  defaultZoom: 1.11,
 });
 
 initializeCountrySelector({
