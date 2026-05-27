@@ -1760,7 +1760,7 @@ h1 {
 
 @media (max-width: 640px) {
   .page-shell {
-    gap: 10px;
+    gap: 6px;
     max-width: none;
     padding: 20px 0;
   }
