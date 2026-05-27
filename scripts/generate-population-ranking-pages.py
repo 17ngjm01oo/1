@@ -8,6 +8,8 @@ RANKING_TYPES = [
         "directory": "population",
         "title": "Population Ranking by Country",
         "script": "populationRanking.js",
+        "source_note": "Source: World Bank; IMF World Economic Outlook for Taiwan only.",
+        "data_note": "",
     },
     {
         **WORLD_BANK_RANKING_NOTES,

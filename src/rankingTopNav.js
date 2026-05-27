@@ -21,9 +21,7 @@ function initializeRankingsHubCategoryFilter() {
 
   buttons.forEach((button) => {
     button.addEventListener("click", () => {
-      const categoryId = button.getAttribute("aria-pressed") === "true"
-        ? ""
-        : button.dataset.rankingsHubCategory ?? "";
+      const categoryId = button.dataset.rankingsHubCategory ?? "";
       updateRankingsHubCategoryFilter(buttons, groups, categoryId);
     });
   });

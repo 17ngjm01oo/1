@@ -11,6 +11,11 @@
   --error-bg: #fff0f0;
   --section-gap: 8px;
   --section-gap-compact: 8px;
+  --radius-component: 8px;
+  --radius-round: 999px;
+  --control-gap: 6px;
+  --control-padding: 6px 10px;
+  --compact-table-cell-padding: 10px 12px;
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
@@ -75,7 +80,7 @@ body {
   min-width: 0;
   padding: 28px;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-component);
   background: var(--surface);
   box-shadow: 0 18px 40px rgba(23, 32, 42, 0.08);
 }
@@ -127,97 +132,84 @@ body {
   min-height: 148px;
   overflow: hidden;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-component);
   background: var(--surface);
-  box-shadow: 0 18px 40px rgba(23, 32, 42, 0.08);
+  box-shadow: 0 7px 18px rgba(23, 32, 42, 0.06);
   color: var(--text);
   text-decoration: none;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
 }
 
 .home-entry-card:hover,
 .home-entry-card:focus-visible {
   border-color: rgba(23, 107, 135, 0.35);
-  box-shadow: 0 18px 40px rgba(23, 32, 42, 0.12);
+  box-shadow: 0 12px 25px rgba(23, 32, 42, 0.09);
+  transform: translateY(-2px);
 }
 
 .home-entry-icon {
   display: grid;
-  flex: 0 0 auto;
+  flex: 0 0 146px;
   place-items: center;
-  width: auto;
+  width: 146px;
   align-self: stretch;
-  aspect-ratio: 1;
-  color: #4b5968;
 }
 
-.home-entry-icon.flag-icon {
-  background: #f2f3f4;
+.home-entry-card-countries .home-entry-icon {
+  background: linear-gradient(145deg, #f1f8fc 0%, #e5f1f8 100%);
 }
 
-.home-entry-icon.trophy-icon {
-  background: #f4f4f4;
+.home-entry-card-rankings .home-entry-icon {
+  background: linear-gradient(145deg, #fff9ee 0%, #fbeacd 100%);
 }
 
-.home-entry-icon svg {
-  width: 92px;
-  height: 92px;
+.home-entry-visual {
+  width: 124px;
+  height: 124px;
   fill: none;
 }
 
-.home-entry-icon .pixel-shadow {
-  fill: #d4d6d8;
+.globe-visual .visual-orbit {
+  stroke: #207292;
+  stroke-width: 2.2;
 }
 
-.home-entry-icon .pixel-flag-outline {
-  fill: #303438;
+.globe-visual .visual-grid {
+  stroke: #76afc4;
+  stroke-width: 1.4;
 }
 
-.home-entry-icon .pixel-flag-pole {
-  fill: #70757a;
+.ranking-visual .visual-axis {
+  stroke: #c39a50;
+  stroke-width: 1.6;
 }
 
-.home-entry-icon .pixel-flag-finial {
-  fill: #555a5f;
+.ranking-visual .visual-bar {
+  fill: #ecc576;
 }
 
-.home-entry-icon .pixel-flag-fabric {
-  fill: #a1a5a9;
+.ranking-visual .visual-bar-mid {
+  fill: #ddb05b;
 }
 
-.home-entry-icon .pixel-flag-light {
-  fill: #dce0e3;
+.ranking-visual .visual-bar-high {
+  fill: #cb9236;
 }
 
-.home-entry-icon .pixel-flag-shadow {
-  fill: #74797e;
+.ranking-visual .visual-trend {
+  stroke: #a76b1b;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.home-entry-icon .pixel-trophy-outline {
-  fill: #303336;
-}
-
-.home-entry-icon .pixel-trophy-cup {
-  fill: #999da1;
-}
-
-.home-entry-icon .pixel-trophy-handle {
-  fill: #72767b;
-}
-
-.home-entry-icon .pixel-trophy-light {
-  fill: #e3e5e7;
-}
-
-.home-entry-icon .pixel-trophy-mid {
-  fill: #b8bcc0;
-}
-
-.home-entry-icon .pixel-trophy-shadow {
-  fill: #5a5e63;
-}
-
-.home-entry-icon .pixel-trophy-rim {
-  fill: #cdd0d3;
+.ranking-visual .visual-trend-node {
+  fill: #fffaf2;
+  stroke: #a76b1b;
+  stroke-width: 2;
 }
 
 .home-entry-copy {
@@ -240,6 +232,17 @@ body {
   color: var(--muted);
   font-size: 1rem;
   line-height: 1.55;
+}
+
+.home-entry-action {
+  margin-top: 5px;
+  color: var(--accent);
+  font-size: 0.94rem;
+  font-weight: 650;
+}
+
+.home-entry-card-rankings .home-entry-action {
+  color: #9a6418;
 }
 
 .legal-content {
@@ -417,7 +420,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
+  gap: var(--control-gap);
 }
 
 .rankings-jump-label {
@@ -436,7 +439,7 @@ body {
 .rankings-hub-group h2 {
   margin: 0;
   color: var(--text);
-  font-size: 1.24rem;
+  font-size: 1.18rem;
 }
 
 body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav {
@@ -449,13 +452,13 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a {
   display: block;
   width: 100%;
   padding: 0;
-  padding-block: 10px;
+  padding-block: 8px;
   border: 0;
   border-bottom: 1px solid var(--border);
   border-radius: 0;
   background: transparent;
   color: var(--accent);
-  font-size: 1.06rem;
+  font-size: 1rem;
 }
 
 body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
@@ -549,7 +552,7 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
 .country-overview-category-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--control-gap);
 }
 
 .country-overview-category-button {
@@ -557,10 +560,10 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 34px;
-  padding: 7px 12px;
+  min-height: 32px;
+  padding: var(--control-padding);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-component);
   background: #fff;
   color: var(--text);
   font: inherit;
@@ -624,6 +627,10 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
   min-width: 0;
 }
 
+.country-overview-section + .country-overview-section {
+  margin-top: 12px;
+}
+
 .country-overview-section h2 {
   margin: 0;
   color: var(--text);
@@ -637,15 +644,15 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
   grid-template-columns: max-content minmax(0, 1fr);
   margin: 0;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-component);
   overflow: hidden;
 }
 
 .country-basic-information-grid dt,
 .country-basic-information-grid dd {
-  min-height: 44px;
+  min-height: 40px;
   margin: 0;
-  padding: 12px 14px;
+  padding: var(--compact-table-cell-padding);
   border-bottom: 1px solid var(--border);
   color: var(--text);
   overflow-wrap: anywhere;
@@ -681,7 +688,7 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
 
 .country-overview-table th,
 .country-overview-table td {
-  padding: 12px 14px;
+  padding: var(--compact-table-cell-padding);
   border-bottom: 1px solid var(--border);
   text-align: left;
   vertical-align: top;
@@ -811,7 +818,7 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
   min-height: 38px;
   padding: 8px 10px;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-component);
   background: #fbfcfd;
   color: var(--text);
   font: inherit;
@@ -853,7 +860,7 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
   display: grid;
   place-items: center;
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-round);
   background: #ffffff;
   color: var(--muted);
   font: inherit;
@@ -919,15 +926,15 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
 .site-nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--control-gap);
 }
 
 .site-nav a {
   width: max-content;
   max-width: 100%;
-  padding: 7px 12px;
+  padding: var(--control-padding);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-component);
   background: #fbfcfd;
   color: var(--text);
   font-size: 0.92rem;
@@ -961,14 +968,14 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
   min-width: 0;
   aspect-ratio: 16 / 8.5;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: var(--radius-component);
   background: #ffffff;
 }
 
 body[data-page-kind="country-hub"] .hub-section > .world-map {
   width: auto;
   margin: -28px -28px 0;
-  border-radius: 8px 8px 0 0;
+  border-radius: var(--radius-component) var(--radius-component) 0 0;
 }
 
 .world-map-instruction {
@@ -1014,7 +1021,7 @@ body[data-page-kind="country-hub"] .hub-section > .world-map {
   max-width: min(220px, calc(100% - 28px));
   padding: 7px 10px;
   border: 1px solid rgba(15, 23, 42, 0.12);
-  border-radius: 8px;
+  border-radius: var(--radius-component);
   background: rgba(255, 255, 255, 0.94);
   box-shadow: 0 10px 24px rgba(15, 23, 42, 0.14);
   color: var(--text);
@@ -1072,8 +1079,12 @@ body[data-page-kind="country-hub"] .hub-section > .world-map {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
-  margin-top: 4px;
+  margin-top: 0;
   min-width: 0;
+}
+
+.filter-label + .filter-panel-row {
+  margin-top: -3px;
 }
 
 .country-search-input {
@@ -1082,7 +1093,7 @@ body[data-page-kind="country-hub"] .hub-section > .world-map {
   min-height: 46px;
   padding: 10px 12px;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-component);
   background: #fbfcfd;
   color: var(--text);
   font: inherit;
@@ -1114,7 +1125,7 @@ body[data-page-kind="country-hub"] .hub-section > .world-map {
   display: grid;
   min-width: 0;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-component);
   background: #fbfcfd;
   overflow: hidden;
 }
@@ -1155,13 +1166,13 @@ body[data-page-kind="country-hub"] .hub-section > .world-map {
 .category-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--control-gap);
   min-width: 0;
   padding: 0 12px 12px;
 }
 
 .filter-option-list {
-  padding: 6px 0 0;
+  padding: 3px 0 0;
 }
 
 .filter-option-list[hidden] {
@@ -1172,10 +1183,10 @@ body[data-page-kind="country-hub"] .hub-section > .world-map {
   display: inline-flex;
   align-items: center;
   text-decoration: none;
-  min-height: 36px;
-  padding: 7px 12px;
+  min-height: 33px;
+  padding: var(--control-padding);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-component);
   background: #fbfcfd;
   color: var(--text);
   font: inherit;
@@ -1200,7 +1211,7 @@ body[data-page-kind="country-hub"] .hub-section > .world-map {
   max-width: 100%;
   padding: 0;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-component);
   background: #fbfcfd;
 }
 
@@ -1399,7 +1410,7 @@ h1 {
   align-items: center;
   padding: 10px 14px;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-component);
   background: var(--surface);
   color: var(--muted);
   font-size: 0.95rem;
@@ -1436,7 +1447,7 @@ h1 {
   min-height: 360px;
   padding: 18px;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-component);
   background: #fbfcfd;
   overflow: hidden;
 }
@@ -1492,7 +1503,7 @@ h1 {
   height: 34px;
   border: 3px solid rgba(23, 107, 135, 0.18);
   border-top-color: var(--accent);
-  border-radius: 999px;
+  border-radius: var(--radius-round);
   animation: spin 900ms linear infinite;
 }
 
@@ -1525,7 +1536,7 @@ h1 {
   margin-top: 12px;
   overflow-x: auto;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-component);
   background: #fbfcfd;
 }
 
@@ -1537,7 +1548,7 @@ h1 {
 }
 
 .data-table td {
-  padding: 10px 12px;
+  padding: var(--compact-table-cell-padding);
   border-bottom: 1px solid var(--border);
   font-weight: 700;
   text-align: right;
@@ -1697,7 +1708,7 @@ h1 {
   width: min(100%, 170px);
   height: 6px;
   overflow: hidden;
-  border-radius: 999px;
+  border-radius: var(--radius-round);
   background: rgba(226, 115, 137, 0.14);
 }
 
@@ -1760,13 +1771,13 @@ h1 {
   .shared-notes {
     gap: 16px;
     padding: 18px 14px;
-    border-radius: 8px;
+    border-radius: var(--radius-component);
   }
 
   .top-nav-card {
     gap: 18px;
     padding: 12px 14px;
-    border-radius: 8px;
+    border-radius: var(--radius-component);
   }
 
   .site-footer-card {
@@ -1778,12 +1789,13 @@ h1 {
   }
 
   .home-entry-icon {
-    width: auto;
+    flex-basis: 112px;
+    width: 112px;
   }
 
-  .home-entry-icon svg {
-    width: 68px;
-    height: 68px;
+  .home-entry-visual {
+    width: 98px;
+    height: 98px;
   }
 
   .home-entry-copy {
@@ -1797,6 +1809,11 @@ h1 {
 
   .home-entry-description {
     font-size: 0.93rem;
+  }
+
+  .home-entry-action {
+    margin-top: 3px;
+    font-size: 0.9rem;
   }
 
   .ranking-card {
@@ -1832,14 +1849,14 @@ h1 {
   .country-overview-card > .country-overview-content {
     padding: 18px 14px;
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: var(--radius-component);
     background: var(--surface);
     box-shadow: 0 18px 40px rgba(23, 32, 42, 0.08);
   }
 
   .country-overview-card > .country-data-header {
     border-bottom: 0;
-    border-radius: 8px 8px 0 0;
+    border-radius: var(--radius-component) var(--radius-component) 0 0;
     box-shadow: none;
   }
 
@@ -1852,11 +1869,15 @@ h1 {
 
   .country-overview-card > .country-overview-content {
     border-top: 0;
-    border-radius: 0 0 8px 8px;
+    border-radius: 0 0 var(--radius-component) var(--radius-component);
   }
 
   .country-overview-content {
     gap: 16px;
+  }
+
+  .country-overview-section + .country-overview-section {
+    margin-top: 10px;
   }
 
   .country-overview-content .country-overview-category-panel {
@@ -1867,7 +1888,7 @@ h1 {
 
   .country-overview-table th,
   .country-overview-table td {
-    padding: 10px 8px;
+    padding: 9px 8px;
     text-align: left;
   }
 

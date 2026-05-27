@@ -3,11 +3,13 @@ import { dataSources } from "./dataSources.js";
 
 initializeRankingPage({
   logName: "population",
-  staticDataPath: dataSources.weoCurrentPrices.rankingStaticDataPath,
-  indicatorCode: "LP",
+  staticDataPath: dataSources.worldBankPopulation.rankingStaticDataPath,
+  indicatorCode: "SP.POP.TOTL",
+  startYear: dataSources.worldBankPopulation.startYear,
+  endYear: dataSources.worldBankPopulation.endYear,
   rankingTitleBase: "Population Ranking",
   linkAriaMetric: "Population",
   displayScaleConfig: {
-    valueScaleMode: "populationMagnitude",
+    valueScaleMode: "populationUnitsMagnitude",
   },
 });

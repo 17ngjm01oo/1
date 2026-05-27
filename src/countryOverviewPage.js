@@ -293,7 +293,7 @@ function getBasicInformationItems() {
   const capitals = Array.isArray(selectedCountry.capitals) ? selectedCountry.capitals : [];
 
   return [
-    { label: "Official Name", value: selectedCountry.officialName ?? "" },
+    { label: "Official name", value: selectedCountry.officialName ?? "" },
     { label: capitals.length > 1 ? "Capitals" : "Capital", value: capitals.join(", ") },
     { label: "Region", value: selectedCountry.region ?? "" },
     { label: "Currency", value: getCountryCurrencyDisplay(selectedCountry.code) },

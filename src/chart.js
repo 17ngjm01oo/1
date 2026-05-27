@@ -213,6 +213,12 @@ export function getDisplayScale(points, config) {
     });
   }
 
+  if (config.valueScaleMode === "populationUnitsMagnitude") {
+    return getMagnitudeDisplayScale(points, magnitudeInputs.units, {
+      maximumFractionDigits: 0,
+    });
+  }
+
   if (config.valueScaleMode === "areaMagnitude") {
     return getMagnitudeDisplayScale(points, magnitudeInputs.units, {
       maximumFractionDigits: config.fallbackMaximumFractionDigits ?? 0,

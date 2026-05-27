@@ -94,10 +94,10 @@ export const seriesConfigs = [
     chartCardId: "populationChartCard",
     overlayId: "populationOverlay",
     statusId: "populationStatus",
-    ...weoCurrentPrices,
-    indicatorCode: "LP",
+    ...worldBankPopulation,
+    indicatorCode: "SP.POP.TOTL",
     titleTemplate: "Population",
-    valueScaleMode: "populationMagnitude",
+    valueScaleMode: "populationUnitsMagnitude",
     maximumFractionDigits: 1,
   },
   {

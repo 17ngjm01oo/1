@@ -497,6 +497,7 @@ async function loadAndRenderSeries(seriesConfig) {
     console.info(`[${pageDefinition.logPrefix}] ${seriesConfig.indicatorCode} static data file:`, requestUrls.appUrl);
 
     const { data, url } = await fetchStaticData(seriesConfig);
+    updateSeriesSourceOverrideNotes(data, seriesConfig);
     const points = transformSeriesData(data, seriesConfig);
     const state = seriesRuntimeState.get(seriesConfig.id);
 
@@ -1082,6 +1083,29 @@ function appendDataTablePointCells(row, point, displayScale) {
 
 function formatDataTableValue(value, displayScale) {
   return formatCompactDisplayValue(value, displayScale);
+}
+
+function updateSeriesSourceOverrideNotes(data, seriesConfig) {
+  const notesContainer = document.querySelector(".indicators-card > .shared-notes");
+  if (!notesContainer) {
+    return;
+  }
+
+  const overrideNotes =
+    data?.economies?.[seriesConfig.countryCode]?.series?.[seriesConfig.indicatorCode]?.sourceOverride?.notes ?? [];
+  const primarySourceNote = notesContainer.querySelector("[data-primary-source-note]");
+
+  primarySourceNote?.toggleAttribute("hidden", overrideNotes.length > 0);
+  notesContainer
+    .querySelectorAll(`[data-source-override-series="${seriesConfig.id}"]`)
+    .forEach((element) => element.remove());
+
+  overrideNotes.forEach((noteText) => {
+    const noteElement = document.createElement("p");
+    noteElement.dataset.sourceOverrideSeries = seriesConfig.id;
+    noteElement.textContent = noteText;
+    notesContainer.append(noteElement);
+  });
 }
 
 function showChartOverlay({ chartCard, overlayElement, message, state }) {

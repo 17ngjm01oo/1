@@ -32,6 +32,7 @@ class CountryPageConfig:
     related_nav_label: str = "Country page navigation"
     notes_label: str = "Chart notes"
     source_note: str | None = None
+    source_note_overridable: bool = False
     data_note: str = ""
 
 
@@ -124,11 +125,15 @@ def render_country_page(country: dict[str, str], config: CountryPageConfig) -> s
 
 
 def render_notes(config: CountryPageConfig) -> str:
-    notes = [note for note in (config.source_note, config.data_note) if note]
-    notes_markup = "\n".join(f"            <p>{html.escape(note)}</p>" for note in notes)
+    notes_markup = []
+    if config.source_note:
+        source_note_attribute = " data-primary-source-note" if config.source_note_overridable else ""
+        notes_markup.append(f"            <p{source_note_attribute}>{html.escape(config.source_note)}</p>")
+    if config.data_note:
+        notes_markup.append(f"            <p>{html.escape(config.data_note)}</p>")
 
     return f"""          <footer class="shared-notes" aria-label="{html.escape(config.notes_label)}">
-{notes_markup}
+{chr(10).join(notes_markup)}
           </footer>"""
 
 

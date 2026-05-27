@@ -8,7 +8,7 @@ const MAP_PADDING = -18;
 const MAP_DATA_PATH = "data/geo/countries-50m.json";
 const hoverTooltipMedia = window.matchMedia("(hover: hover) and (pointer: fine)");
 const REGION_COLORS = {
-  Asia: "#C2A947",
+  Asia: "#C09A3B",
   Europe: "#857CB8",
   Africa: "#C18458",
   "North America": "#5A91C9",

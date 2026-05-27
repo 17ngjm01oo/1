@@ -20,6 +20,7 @@ from data_update_utils import (
 ROOT_DIR = Path(__file__).resolve().parents[1]
 API_BASE_URL = "https://api.worldbank.org/v2"
 DATASET_ID = "World Development Indicators"
+IMF_WEO_PATH = ROOT_DIR / "data" / "weo" / "current-prices.json"
 DATASETS = {
     "total-reserves": {
         "outputPath": ROOT_DIR / "data" / "world-bank" / "total-reserves.json",
@@ -38,6 +39,13 @@ DATASETS = {
         "outputPath": ROOT_DIR / "data" / "world-bank" / "population-demographics.json",
         "sourceUrl": "https://databank.worldbank.org/source/world-development-indicators",
         "indicators": {
+            "SP.POP.TOTL": {
+                "label": "Population",
+                "slug": "population",
+                "description": "Population, total",
+                "scale": "Units",
+                "unit": "Persons",
+            },
             "SP.DYN.LE00.IN": {
                 "label": "Life Expectancy",
                 "slug": "life-expectancy",
@@ -58,6 +66,21 @@ DATASETS = {
                 "description": "Population density",
                 "scale": "Units",
                 "unit": "/km²",
+            },
+        },
+        "supplementalSeries": {
+            "SP.POP.TOTL": {
+                "path": IMF_WEO_PATH,
+                "indicatorId": "LP",
+                "valueMultiplier": 1_000_000,
+                "countries": ["TWN"],
+                "source": {
+                    "provider": "IMF",
+                    "dataset": "World Economic Outlook",
+                    "notes": [
+                        "Source: Taiwan population from IMF World Economic Outlook.",
+                    ],
+                },
             },
         },
     },
@@ -159,6 +182,8 @@ def build_normalized_world_bank_json(dataset_config: dict) -> dict:
         if economy["series"]:
             economies[country["code"]] = economy
 
+    add_supplemental_series(economies, countries, dataset_config, set(years))
+
     return {
         "schemaVersion": 1,
         "source": {
@@ -185,6 +210,48 @@ def build_normalized_world_bank_json(dataset_config: dict) -> dict:
             "missingTargetSeries": missing_target_series,
         },
     }
+
+
+def add_supplemental_series(
+    economies: dict[str, dict],
+    countries: list[dict],
+    dataset_config: dict,
+    dataset_years: set[str],
+) -> None:
+    country_names = {country["code"]: country["name"] for country in countries}
+
+    for indicator_code, supplemental_config in dataset_config.get("supplementalSeries", {}).items():
+        source_data = json.loads(supplemental_config["path"].read_text(encoding="utf-8"))
+        source_indicator_id = supplemental_config["indicatorId"]
+        value_multiplier = supplemental_config.get("valueMultiplier", 1)
+
+        for country_code in supplemental_config["countries"]:
+            source_series = source_data.get("economies", {}).get(country_code, {}).get("series", {}).get(source_indicator_id)
+            if not source_series or not source_series.get("values"):
+                raise RuntimeError(f"Supplemental series {source_indicator_id} was not found for {country_code}.")
+
+            values = {}
+            for year, value in source_series["values"].items():
+                normalized_value = normalize_number(value)
+                if year in dataset_years and normalized_value is not None:
+                    values[year] = normalize_number(normalized_value * value_multiplier)
+            indicator = dataset_config["indicators"][indicator_code]
+            economy = economies.setdefault(country_code, {
+                "name": country_names.get(country_code, country_code),
+                "sourceCode": country_code,
+                "sourceName": country_names.get(country_code, country_code),
+                "series": {},
+            })
+            economy["series"][indicator_code] = {
+                "seriesCode": f"{country_code}.{indicator_code}.A",
+                "indicatorId": indicator_code,
+                "indicator": indicator["description"],
+                "scale": indicator["scale"],
+                "unit": indicator["unit"],
+                "latestActualAnnualData": max(values, key=int),
+                "values": values,
+                "sourceOverride": supplemental_config["source"],
+            }
 
 
 def fetch_world_bank_countries() -> list[dict]:
