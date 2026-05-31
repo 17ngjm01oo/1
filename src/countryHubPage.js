@@ -19,10 +19,9 @@ const worldMap = await renderWorldMap({
 initializeCountrySelector({
   countryPool: hubCountries,
   showAllCountries: true,
-  inlineSearchResults: true,
-  highlightFirstResult: false,
+  resultsPresentation: "table",
+  resultsSelector: "#countryTableBody",
   closePanelsOnFilterSelect: true,
-  resetToAllCountriesOnNavigate: true,
   sortCountryResults(countryList) {
     return [...countryList].sort((countryA, countryB) => {
       return countryA.name.localeCompare(countryB.name, "en", { sensitivity: "base" });
@@ -76,4 +75,4 @@ initializeCountrySelector({
   },
 });
 
-appendTerritoryNote(document.querySelector(".country-hub-search-panel"));
+appendTerritoryNote(document.querySelector(".hub-section"));

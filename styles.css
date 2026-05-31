@@ -12,6 +12,18 @@
   --territory-bg: #fffced;
   --section-gap: 8px;
   --section-gap-compact: 8px;
+  --card-padding-block: 22px;
+  --card-padding-inline: 22px;
+  --card-padding: var(--card-padding-block) var(--card-padding-inline);
+  --card-padding-block-mobile: 14px;
+  --card-padding-inline-mobile: 10px;
+  --card-padding-mobile: var(--card-padding-block-mobile) var(--card-padding-inline-mobile);
+  --nav-card-padding: 14px 18px;
+  --nav-card-padding-mobile: 10px;
+  --footer-card-padding: 6px 18px;
+  --footer-card-padding-mobile: 3px 10px;
+  --home-entry-copy-padding: 20px 24px;
+  --home-entry-copy-padding-mobile: 12px;
   --radius-component: 8px;
   --radius-round: 999px;
   --control-gap: 6px;
@@ -79,7 +91,7 @@ body {
 .shared-notes {
   display: grid;
   min-width: 0;
-  padding: 28px;
+  padding: var(--card-padding);
   border: 1px solid var(--border);
   border-radius: var(--radius-component);
   background: var(--surface);
@@ -89,11 +101,11 @@ body {
 .top-nav-card {
   grid-template-columns: repeat(2, max-content);
   gap: 22px;
-  padding: 18px 22px;
+  padding: var(--nav-card-padding);
 }
 
 .site-footer-card {
-  padding: 8px 22px;
+  padding: var(--footer-card-padding);
 }
 
 .site-footer-nav {
@@ -219,7 +231,7 @@ body {
   gap: 7px;
   align-content: center;
   min-width: 0;
-  padding: 24px 30px;
+  padding: var(--home-entry-copy-padding);
 }
 
 .home-entry-title {
@@ -478,7 +490,9 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  font-size: clamp(1.55rem, 3.7vw, 2.4rem);
+  line-height: 1.18;
+  letter-spacing: 0;
   overflow-wrap: anywhere;
 }
 
@@ -778,7 +792,7 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
 .indicator-header h2 {
   margin: 0;
   color: var(--text);
-  font-size: clamp(1.25rem, 2.4vw, 1.65rem);
+  font-size: clamp(1.02rem, 3vw, 1.65rem);
   line-height: 1.18;
   letter-spacing: 0;
 }
@@ -975,7 +989,7 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
 
 body[data-page-kind="country-hub"] .hub-section > .world-map {
   width: auto;
-  margin: -28px -28px 0;
+  margin: calc(-1 * var(--card-padding-block)) calc(-1 * var(--card-padding-inline)) 0;
   border-radius: var(--radius-component) var(--radius-component) 0 0;
 }
 
@@ -1208,6 +1222,7 @@ body[data-page-kind="country-hub"] .hub-section > .world-map {
 }
 
 .country-results,
+.country-hub-table,
 .ranking-table-wrap {
   min-width: 0;
   max-width: 100%;
@@ -1238,38 +1253,8 @@ body[data-page-kind="country-hub"] .hub-section > .world-map {
   display: none;
 }
 
-.country-hub-results {
-  max-height: none;
-  overflow: visible;
-}
-
-body[data-page-kind="country-hub"] .country-hub-results {
-  max-height: none;
-  overflow: visible;
-}
-
-.country-hub-results[data-mode="search"] {
-  position: static;
-  box-shadow: none;
-}
-
-.country-hub-results .country-result {
-  display: grid;
-  grid-template-columns: 58px minmax(0, 1fr) minmax(150px, 32%);
-  align-items: stretch;
-  gap: 0;
-  padding: 0;
-  border-bottom: 0;
-}
-
-.country-hub-results .country-result > span {
-  display: flex;
-  align-items: center;
-  min-width: 0;
-}
-
 .country-hub-result-flag {
-  justify-content: center;
+  display: block;
   text-align: center;
 }
 
@@ -1279,17 +1264,13 @@ body[data-page-kind="country-hub"] .country-hub-results {
 }
 
 .country-hub-result-region {
+  color: var(--accent);
+  text-align: right;
   white-space: nowrap;
 }
 
 .country-hub-result-name {
   color: var(--accent);
-}
-
-.country-hub-result-region {
-  justify-content: flex-end;
-  color: var(--accent);
-  text-align: right;
 }
 
 .country-hub-result-region[role="button"] {
@@ -1342,6 +1323,7 @@ body[data-page-kind="country-hub"] .country-hub-results {
 }
 
 .country-result.is-territory,
+.country-table-row.is-territory td,
 .ranking-table tr.is-territory td {
   background: var(--territory-bg);
 }
@@ -1366,9 +1348,6 @@ body[data-page-kind="country-hub"] .country-hub-results {
 .country-result-empty {
   color: var(--muted);
   font-size: 0.88rem;
-}
-
-.country-result-empty {
   padding: 9px 12px;
 }
 
@@ -1406,7 +1385,7 @@ h1 {
 }
 
 body[data-country-code] .page-title {
-  font-size: clamp(1.42rem, 2.95vw, 2.05rem);
+  font-size: clamp(1.28rem, 3vw, 2.05rem);
 }
 
 .subtitle {
@@ -1642,7 +1621,8 @@ body[data-country-code] .subtitle {
   position: relative;
   grid-column: 2;
   grid-row: 1 / span 3;
-  align-self: start;
+  align-self: end;
+  z-index: 10;
 }
 
 .ranking-sort-toggle {
@@ -1729,19 +1709,20 @@ body[data-country-code] .subtitle {
 }
 
 .ranking-table,
-.country-hub-results .country-result {
+.country-hub-table {
   font-size: 1.06rem;
 }
 
-.ranking-table {
+.ranking-table,
+.country-hub-table {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
 }
 
 .ranking-table td,
-.country-hub-results .country-result > span {
-  padding: 13px 12px;
+.country-hub-table td {
+  padding: 7px 12px;
   border-bottom: 1px solid var(--border);
   overflow-wrap: anywhere;
   vertical-align: middle;
@@ -1752,7 +1733,7 @@ body[data-country-code] .subtitle {
 }
 
 .ranking-table td:not(:last-child),
-.country-hub-results .country-result > span:not(:last-child) {
+.country-hub-table td:not(:last-child) {
   border-right: 1px solid var(--border);
 }
 
@@ -1779,16 +1760,31 @@ body[data-country-code] .subtitle {
 }
 
 .ranking-table tbody tr:last-child td,
-.country-hub-results .country-result:last-child > span {
+.country-hub-table tr:last-child td {
   border-bottom: 0;
 }
 
-.ranking-table a {
+.ranking-table a,
+.country-hub-table a {
   color: var(--accent);
   text-decoration: none;
 }
 
-.ranking-table a:hover {
+.country-hub-table .country-table-row {
+  cursor: pointer;
+}
+
+.country-hub-table td:nth-child(1) {
+  width: 58px;
+}
+
+.country-hub-table td:nth-child(3) {
+  width: 32%;
+  text-align: right;
+}
+
+.ranking-table a:hover,
+.country-hub-table a:hover {
   text-decoration: underline;
 }
 
@@ -1863,7 +1859,7 @@ body[data-country-code] .subtitle {
   margin: 0;
 }
 
-.country-hub-search-panel > .territory-note {
+.hub-section > .territory-note {
   margin: 0;
   color: var(--muted);
   font-size: 0.92rem;
@@ -1883,18 +1879,18 @@ body[data-country-code] .subtitle {
   .site-footer-card,
   .shared-notes {
     gap: 16px;
-    padding: 18px 14px;
+    padding: var(--card-padding-mobile);
     border-radius: var(--radius-component);
   }
 
   .top-nav-card {
     gap: 18px;
-    padding: 12px 14px;
+    padding: var(--nav-card-padding-mobile);
     border-radius: var(--radius-component);
   }
 
   .site-footer-card {
-    padding: 4px 14px;
+    padding: var(--footer-card-padding-mobile);
   }
 
   .home-entry-card {
@@ -1913,7 +1909,7 @@ body[data-country-code] .subtitle {
 
   .home-entry-copy {
     gap: 5px;
-    padding: 14px;
+    padding: var(--home-entry-copy-padding-mobile);
   }
 
   .home-entry-title {
@@ -1930,23 +1926,18 @@ body[data-country-code] .subtitle {
   }
 
   .ranking-card {
-    gap: 8px;
+    gap: var(--section-gap-compact);
   }
 
   body[data-page-kind="country-hub"] .hub-section > .world-map {
-    margin: -18px -14px 0;
+    margin:
+      calc(-1 * var(--card-padding-block-mobile))
+      calc(-1 * var(--card-padding-inline-mobile))
+      0;
   }
 
   .world-map-instruction {
     margin-block: -8px;
-  }
-
-  .indicators-section {
-    gap: 8px;
-  }
-
-  .country-data-header h1 {
-    font-size: clamp(1.65rem, 7.6vw, 2.1rem);
   }
 
   .country-overview-card {
@@ -1960,7 +1951,7 @@ body[data-country-code] .subtitle {
   .country-overview-card > .country-data-header,
   .country-overview-card > .country-overview-map,
   .country-overview-card > .country-overview-content {
-    padding: 18px 14px;
+    padding: var(--card-padding-mobile);
     border: 1px solid var(--border);
     border-radius: var(--radius-component);
     background: var(--surface);
@@ -2035,10 +2026,6 @@ body[data-country-code] .subtitle {
     padding-top: 20px;
   }
 
-  .indicator-header h2 {
-    font-size: clamp(1.15rem, 5.4vw, 1.45rem);
-  }
-
   .indicator-header {
     grid-template-columns: 1fr;
   }
@@ -2053,10 +2040,6 @@ body[data-country-code] .subtitle {
     margin-top: 2px;
     max-height: 220px;
     box-shadow: none;
-  }
-
-  .shared-notes {
-    gap: 2px;
   }
 
   .country-results {
@@ -2087,17 +2070,21 @@ body[data-country-code] .subtitle {
   }
 
   .ranking-table,
-  .country-hub-results .country-result {
+  .country-hub-table {
     font-size: 0.82rem;
   }
 
   .ranking-table td,
-  .country-hub-results .country-result > span {
-    padding: 8px 5px;
+  .country-hub-table td {
+    padding: 5px;
   }
 
-  .country-hub-results .country-result {
-    grid-template-columns: 38px minmax(0, 1fr) minmax(112px, 36%);
+  .country-hub-table td:nth-child(1) {
+    width: 38px;
+  }
+
+  .country-hub-table td:nth-child(3) {
+    width: 36%;
   }
 
   .ranking-table td:nth-child(1) {
@@ -2129,13 +2116,12 @@ body[data-country-code] .subtitle {
     font-size: clamp(1.38rem, 6.5vw, 1.75rem);
   }
 
-  .ranking-page-title,
-  .ranking-card-header h2 {
+  .ranking-page-title {
     font-size: clamp(1.16rem, 5.3vw, 1.48rem);
   }
 
-  body[data-country-code] .page-title {
-    font-size: clamp(1.28rem, 6vw, 1.62rem);
+  .ranking-card-header h2 {
+    font-size: clamp(1.02rem, 4.7vw, 1.28rem);
   }
 
 }

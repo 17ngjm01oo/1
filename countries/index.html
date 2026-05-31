@@ -28,10 +28,6 @@
               class="country-search-input"
               type="search"
               autocomplete="off"
-              aria-controls="countrySearchResults"
-              role="combobox"
-              aria-autocomplete="list"
-              aria-expanded="true"
             />
           </div>
           <p class="filter-label">Filter by:</p>
@@ -46,12 +42,9 @@
           <div class="category-list filter-option-list" id="regionList" hidden></div>
           <div class="category-list filter-option-list" id="categoryList" hidden></div>
           <p class="ranking-count country-hub-count" id="countryHubCount"></p>
-          <div
-            class="country-results country-hub-results"
-            id="countrySearchResults"
-            role="listbox"
-            aria-label="Country profile links"
-          ></div>
+          <table class="country-hub-table" aria-label="Countries and territories">
+            <tbody id="countryTableBody"></tbody>
+          </table>
         </div>
       </section>
     </main>
