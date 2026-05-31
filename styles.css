@@ -792,7 +792,6 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
 .indicator-header h2 {
   margin: 0;
   color: var(--text);
-  font-size: clamp(1.02rem, 3vw, 1.65rem);
   line-height: 1.18;
   letter-spacing: 0;
 }
@@ -1384,8 +1383,9 @@ h1 {
   font-size: clamp(1.22rem, 2.45vw, 1.72rem);
 }
 
-body[data-country-code] .page-title {
-  font-size: clamp(1.28rem, 3vw, 2.05rem);
+body[data-country-code][data-page-kind] .page-title,
+.indicator-header h2 {
+  font-size: clamp(1.02rem, 3vw, 1.65rem);
 }
 
 .subtitle {
@@ -1720,6 +1720,12 @@ body[data-country-code] .subtitle {
   table-layout: fixed;
 }
 
+.country-hub-table {
+  overflow: hidden;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
 .ranking-table td,
 .country-hub-table td {
   padding: 7px 12px;
@@ -1891,6 +1897,10 @@ body[data-country-code] .subtitle {
 
   .site-footer-card {
     padding: var(--footer-card-padding-mobile);
+  }
+
+  .shared-notes {
+    gap: 2px;
   }
 
   .home-entry-card {
