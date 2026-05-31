@@ -1,5 +1,8 @@
 import { countries, countryCategories, countryRegions } from "./countries.js";
 import { countryBelongsToRegion } from "./countryFilters.js";
+import { markTerritoryElement } from "./countryTypes.js";
+
+const countrySearchPlaceholder = "Search a country or territory...";
 
 export function initializeCountrySelector({
   selectedCountry = null,
@@ -44,6 +47,8 @@ export function initializeCountrySelector({
       close() {},
     };
   }
+
+  searchInput.placeholder = countrySearchPlaceholder;
 
   searchInput.addEventListener("input", () => {
     clearActiveFilters();
@@ -311,6 +316,7 @@ export function initializeCountrySelector({
     matchingCountries.forEach((country, index) => {
       const resultButton = getCountryHref ? document.createElement("a") : document.createElement("button");
       resultButton.className = "country-result";
+      markTerritoryElement(resultButton, country);
       if (getCountryHref) {
         resultButton.href = getCountryHref(country);
       } else {

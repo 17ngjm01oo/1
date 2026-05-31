@@ -112,7 +112,6 @@ def render_ranking_page(ranking_type: dict[str, str], scope: dict[str, str], is_
                 class="country-search-input"
                 type="search"
                 autocomplete="off"
-                placeholder="Search a country&hellip;"
                 aria-controls="rankingCountrySearchResults"
                 role="combobox"
                 aria-autocomplete="list"

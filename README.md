@@ -57,6 +57,7 @@ data/weo/current-prices.json
 ## 国を追加・変更する場合
 
 国の一覧は `src/countries.js` の `countries` 配列で管理します。
+Country / Territory の分類は `src/countryTypes.js` で管理します。Territory を追加・変更する場合は、同ファイルの `territoryCodes` を更新してください。
 
 ```js
 { code: "USA", name: "United States", slug: "united-states", region: "North America" }

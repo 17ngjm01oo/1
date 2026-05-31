@@ -1,5 +1,6 @@
 import { countries } from "./countries.js";
 import { initializeCountrySelector } from "./countrySelector.js";
+import { appendTerritoryNote } from "./countryTypes.js";
 import { getFlagEmoji } from "./flags.js";
 import { renderWorldMap } from "./worldMap.js";
 import "./rankingTopNav.js";
@@ -74,3 +75,5 @@ initializeCountrySelector({
     return [flag, name, region];
   },
 });
+
+appendTerritoryNote(document.querySelector(".country-hub-search-panel"));

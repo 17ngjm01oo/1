@@ -95,7 +95,6 @@ def render_country_page(country: dict[str, str], config: CountryPageConfig) -> s
               class="country-search-input"
               type="search"
               autocomplete="off"
-              placeholder="Search a country&hellip;"
               aria-controls="countrySearchResults"
               role="combobox"
               aria-autocomplete="list"

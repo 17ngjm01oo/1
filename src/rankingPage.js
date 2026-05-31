@@ -1,21 +1,33 @@
 import { countries } from "./countries.js";
 import { filterCountriesByScope } from "./countryFilters.js";
 import { initializeCountrySelector } from "./countrySelector.js";
+import { appendTerritoryNote, markTerritoryElement } from "./countryTypes.js";
 import { formatCompactDisplayValue, getDisplayScale } from "./chart.js";
 import { getFlagEmoji } from "./flags.js";
 import { initializeRankingFilters } from "./rankingFilters.js";
 import { showRankingLoadError, updateRankingSummaryDisplay } from "./rankingSummary.js";
+import { initializeRankingSort } from "./rankingSort.js";
 import { appendRankingValueCell } from "./rankingValueBar.js";
 import "./rankingTopNav.js";
 import { getIndicatorSeriesMap } from "./seriesData.js";
 
 export function initializeRankingPage(config) {
   initializeRankingCountrySearch(config);
+  appendTerritoryNote(document.querySelector(".ranking-notes"));
 
   const state = {
     allRankingRows: [],
     activeScope: null,
+    sortOrder: "highest",
   };
+
+  state.sortOrder = initializeRankingSort({
+    initialValue: state.sortOrder,
+    onChange(sortOrder) {
+      state.sortOrder = sortOrder;
+      renderScopedRanking(config, state);
+    },
+  });
 
   initializeRanking(config, state).catch((error) => {
     console.error(`[Ranking] Failed to initialize ${config.logName} ranking.`, error);
@@ -93,10 +105,18 @@ function buildRankingRows(data, config) {
 }
 
 function renderScopedRanking(config, state) {
-  const rankingRows = filterRankingRows(state.allRankingRows, state.activeScope);
+  const rankingRows = sortRankingRows(
+    filterRankingRows(state.allRankingRows, state.activeScope),
+    state.sortOrder,
+  );
   updateRankingTitle(config, state.activeScope);
   renderRankingTable(config, rankingRows);
   updateRankingSummary(rankingRows);
+}
+
+function sortRankingRows(rankingRows, sortOrder) {
+  const direction = sortOrder === "lowest" ? 1 : -1;
+  return [...rankingRows].sort((countryA, countryB) => direction * (countryA.value - countryB.value));
 }
 
 function updateRankingTitle(config, scope) {
@@ -163,6 +183,7 @@ function renderRankingTable(config, rankingRows) {
 
   rankingRows.forEach((country, index) => {
     const row = document.createElement("tr");
+    markTerritoryElement(row, country);
     const rankCell = document.createElement("td");
     const flagCell = document.createElement("td");
     const countryCell = document.createElement("td");

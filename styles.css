@@ -9,6 +9,7 @@
   --accent-soft: rgba(23, 107, 135, 0.12);
   --error: #9f2f2f;
   --error-bg: #fff0f0;
+  --territory-bg: #fffced;
   --section-gap: 8px;
   --section-gap-compact: 8px;
   --radius-component: 8px;
@@ -896,7 +897,7 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
 }
 
 .shared-notes {
-  gap: 6px;
+  gap: 2px;
   color: var(--muted);
   font-size: 0.92rem;
   line-height: 1.55;
@@ -1340,6 +1341,11 @@ body[data-page-kind="country-hub"] .country-hub-results {
   background: rgba(23, 107, 135, 0.16);
 }
 
+.country-result.is-territory,
+.ranking-table tr.is-territory td {
+  background: var(--territory-bg);
+}
+
 .country-result-name,
 .country-result-meta,
 .country-result-empty {
@@ -1394,14 +1400,24 @@ h1 {
   margin: 0;
 }
 
-.ranking-page-title {
-  font-size: clamp(1.35rem, 2.7vw, 1.9rem);
+.ranking-page-title,
+.ranking-card-header h2 {
+  font-size: clamp(1.22rem, 2.45vw, 1.72rem);
+}
+
+body[data-country-code] .page-title {
+  font-size: clamp(1.42rem, 2.95vw, 2.05rem);
 }
 
 .subtitle {
   margin: 0;
   color: var(--muted);
   font-size: 1.05rem;
+}
+
+.ranking-page .subtitle,
+body[data-country-code] .subtitle {
+  font-size: 0.96rem;
 }
 
 .status-bar {
@@ -1594,15 +1610,17 @@ h1 {
 
 .ranking-card-header {
   display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 6px;
 }
 
 .ranking-card-header h2 {
+  grid-column: 1;
   margin: 0;
-  font-size: clamp(1.25rem, 2.4vw, 1.65rem);
 }
 
 .ranking-summary {
+  grid-column: 1;
   margin: 0;
   color: var(--muted);
   font-weight: 700;
@@ -1613,10 +1631,97 @@ h1 {
 }
 
 .ranking-count {
+  grid-column: 1;
   margin: 0;
   color: var(--accent);
   font-size: 0.86rem;
   font-weight: 700;
+}
+
+.ranking-sort {
+  position: relative;
+  grid-column: 2;
+  grid-row: 1 / span 3;
+  align-self: start;
+}
+
+.ranking-sort-toggle {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 36px;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-component);
+  background: #fbfcfd;
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+
+.ranking-sort-toggle::-webkit-details-marker {
+  display: none;
+}
+
+.ranking-sort-toggle::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid var(--muted);
+  border-bottom: 2px solid var(--muted);
+  transform: rotate(45deg);
+  transition: transform 160ms ease;
+}
+
+.ranking-sort[open] .ranking-sort-toggle::after {
+  transform: rotate(225deg);
+}
+
+.ranking-sort-toggle:hover,
+.ranking-sort-toggle:focus-visible {
+  border-color: rgba(23, 107, 135, 0.45);
+  outline: none;
+}
+
+.ranking-sort-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 10;
+  display: grid;
+  min-width: 88px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-component);
+  background: #ffffff;
+  box-shadow: 0 12px 28px rgba(23, 32, 42, 0.14);
+}
+
+.ranking-sort-option {
+  min-height: 38px;
+  padding: 8px 10px;
+  border: 0;
+  background: #ffffff;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ranking-sort-option + .ranking-sort-option {
+  border-top: 1px solid var(--border);
+}
+
+.ranking-sort-option:hover,
+.ranking-sort-option:focus-visible,
+.ranking-sort-option[aria-pressed="true"] {
+  background: var(--accent-soft);
+  color: var(--accent);
+  outline: none;
 }
 
 .ranking-table-wrap {
@@ -1756,6 +1861,13 @@ h1 {
 
 .notes p {
   margin: 0;
+}
+
+.country-hub-search-panel > .territory-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.55;
 }
 
 @media (max-width: 640px) {
@@ -1944,7 +2056,7 @@ h1 {
   }
 
   .shared-notes {
-    gap: 6px;
+    gap: 2px;
   }
 
   .country-results {
@@ -2017,8 +2129,13 @@ h1 {
     font-size: clamp(1.38rem, 6.5vw, 1.75rem);
   }
 
-  .ranking-page-title {
-    font-size: clamp(1.25rem, 5.8vw, 1.6rem);
+  .ranking-page-title,
+  .ranking-card-header h2 {
+    font-size: clamp(1.16rem, 5.3vw, 1.48rem);
+  }
+
+  body[data-country-code] .page-title {
+    font-size: clamp(1.28rem, 6vw, 1.62rem);
   }
 
 }
