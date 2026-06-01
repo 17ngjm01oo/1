@@ -589,8 +589,9 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
 }
 
 #countryRelatedPageNav {
-  padding-top: 16px;
+  padding-block: 10px;
   border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 
 .indicator-block {
@@ -604,8 +605,7 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
 }
 
 .country-data-header + .indicator-block {
-  padding-top: 24px;
-  border-top: 1px solid var(--border);
+  padding-top: 0;
 }
 
 .indicator-block + .indicator-block {
@@ -1134,7 +1134,7 @@ body[data-page-kind="country-hub"] .hub-section > .world-map {
   justify-content: space-between;
   width: 100%;
   margin: 0;
-  padding: 10px 12px;
+  padding: 8px 12px;
   color: var(--text);
   font-size: 1rem;
   font-weight: 700;
@@ -1607,8 +1607,8 @@ body[data-country-code] .subtitle {
   display: flex;
   align-items: center;
   gap: 9px;
-  min-height: 36px;
-  padding: 7px 10px;
+  min-height: 28px;
+  padding: 3px 10px;
   border: 1px solid var(--border);
   border-radius: var(--radius-component);
   background: #fbfcfd;
@@ -1627,15 +1627,12 @@ body[data-country-code] .subtitle {
   font-family: inherit;
 }
 
-.ranking-territory-toggle:hover,
-.ranking-territory-toggle:focus-visible,
 .country-overview-category-button:hover,
 .country-overview-category-button:focus-visible,
 .country-overview-category-button[aria-selected="true"],
 .site-nav a.is-current,
 .site-nav a[aria-current="page"],
-.category-button[aria-pressed="true"],
-.ranking-territory-toggle[aria-pressed="false"] {
+.category-button[aria-pressed="true"] {
   background: var(--accent-soft);
 }
 
@@ -1673,7 +1670,7 @@ body[data-country-code] .subtitle {
   right: 0;
   z-index: 10;
   display: grid;
-  min-width: 88px;
+  min-width: 78px;
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: var(--radius-component);
@@ -1683,7 +1680,7 @@ body[data-country-code] .subtitle {
 
 .ranking-sort-option {
   min-height: 38px;
-  padding: 8px 10px;
+  padding: 8px 8px;
   border: 0;
   background: #ffffff;
   color: var(--text);
@@ -2027,7 +2024,7 @@ body[data-country-code] .subtitle {
   }
 
   .country-data-header + .indicator-block {
-    padding-top: 20px;
+    padding-top: 0;
   }
 
   .indicator-block + .indicator-block {

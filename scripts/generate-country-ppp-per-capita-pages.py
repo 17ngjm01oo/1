@@ -13,6 +13,7 @@ def main() -> None:
             chart_title="PPP GDP per Capita Chart by Country",
             subtitle="Select a country to view historical PPP per capita trends.",
             generated_label="PPP per capita",
+            related_nav_label="Economy page navigation",
             source_note=WEO_COUNTRY_SOURCE_NOTE,
             data_note=WEO_COUNTRY_DATA_NOTE,
             indicators=(

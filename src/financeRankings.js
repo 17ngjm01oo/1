@@ -1,6 +1,6 @@
-import { getCountryIndicatorLinks, renderRankingLinks } from "./rankingLinks.js";
+import { getCountryIndicatorLinks } from "./rankingLinks.js";
 
-export const fiscalRankings = [
+export const financeRankings = [
   {
     seriesId: "governmentGrossDebt",
     directory: "government-gross-debt",
@@ -45,23 +45,4 @@ export const fiscalRankings = [
   },
 ];
 
-export const fiscalIndicatorLinks = getCountryIndicatorLinks(fiscalRankings);
-
-export function renderFiscalRankingLinks(
-  nav,
-  {
-    rootHref = "./",
-    currentRankingDirectory = "",
-    currentScopeSlug = "world",
-    highlightCurrent = true,
-    replace = true,
-  } = {},
-) {
-  renderRankingLinks(nav, fiscalRankings, {
-    rootHref,
-    currentRankingDirectory,
-    currentScopeSlug,
-    highlightCurrent,
-    replace,
-  });
-}
+export const financeIndicatorLinks = getCountryIndicatorLinks(financeRankings);

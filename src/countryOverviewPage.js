@@ -2,13 +2,9 @@ import { formatCompactDisplayValue, getDisplayScale } from "./chart.js";
 import { seriesConfigs } from "./config.js";
 import { countries } from "./countries.js";
 import { getCountryCurrencyDisplay } from "./currencyCodes.js";
-import { economicRankings } from "./economicRankings.js";
-import { environmentalRankings } from "./environmentalRankings.js";
-import { fiscalRankings } from "./fiscalRankings.js";
 import { getFlagEmoji } from "./flags.js";
-import { populationRankings } from "./populationRankings.js";
+import { rankingCategories } from "./rankingCategories.js";
 import { getIndicatorSeriesMap } from "./seriesData.js";
-import { tradeRankings } from "./tradeRankings.js";
 import { renderWorldMap } from "./worldMap.js";
 import "./rankingTopNav.js";
 
@@ -20,33 +16,11 @@ function buildOverviewIndicators(rankings) {
   }));
 }
 
-const overviewGroups = [
-  {
-    id: "economy",
-    title: "Economy",
-    indicators: buildOverviewIndicators(economicRankings),
-  },
-  {
-    id: "population",
-    title: "Population",
-    indicators: buildOverviewIndicators(populationRankings),
-  },
-  {
-    id: "environment",
-    title: "Environment",
-    indicators: buildOverviewIndicators(environmentalRankings),
-  },
-  {
-    id: "trade",
-    title: "Trade",
-    indicators: buildOverviewIndicators(tradeRankings),
-  },
-  {
-    id: "finance",
-    title: "Finance",
-    indicators: buildOverviewIndicators(fiscalRankings),
-  },
-];
+const overviewGroups = rankingCategories.map(({ id, label, rankings }) => ({
+  id,
+  title: label,
+  indicators: buildOverviewIndicators(rankings),
+}));
 
 const overviewCategory = { id: "overview", title: "Overview" };
 const overviewCategories = [

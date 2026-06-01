@@ -10,7 +10,7 @@ PERCENT_GDP_SUBTITLE = (
     "Values are shown as a percentage of nominal GDP in local currency."
 )
 
-FISCAL_PAGE_CONFIGS = (
+FINANCE_PAGE_CONFIGS = (
     CountryPageConfig(
         page_kind="government-gross-debt",
         title_suffix="Government Gross Debt",
@@ -19,7 +19,7 @@ FISCAL_PAGE_CONFIGS = (
         generated_label="government gross debt",
         source_note=WEO_COUNTRY_SOURCE_NOTE,
         data_note=WEO_COUNTRY_DATA_NOTE,
-        related_nav_label="Fiscal page navigation",
+        related_nav_label="Finance page navigation",
         indicators=(
             IndicatorBlockConfig(
                 series_id="governmentGrossDebt",
@@ -37,7 +37,7 @@ FISCAL_PAGE_CONFIGS = (
         generated_label="government net debt",
         source_note=WEO_COUNTRY_SOURCE_NOTE,
         data_note=WEO_COUNTRY_DATA_NOTE,
-        related_nav_label="Fiscal page navigation",
+        related_nav_label="Finance page navigation",
         indicators=(
             IndicatorBlockConfig(
                 series_id="governmentNetDebt",
@@ -55,7 +55,7 @@ FISCAL_PAGE_CONFIGS = (
         generated_label="fiscal balance",
         source_note=WEO_COUNTRY_SOURCE_NOTE,
         data_note=WEO_COUNTRY_DATA_NOTE,
-        related_nav_label="Fiscal page navigation",
+        related_nav_label="Finance page navigation",
         indicators=(
             IndicatorBlockConfig(
                 series_id="fiscalBalance",
@@ -73,7 +73,7 @@ FISCAL_PAGE_CONFIGS = (
         generated_label="primary fiscal balance",
         source_note=WEO_COUNTRY_SOURCE_NOTE,
         data_note=WEO_COUNTRY_DATA_NOTE,
-        related_nav_label="Fiscal page navigation",
+        related_nav_label="Finance page navigation",
         indicators=(
             IndicatorBlockConfig(
                 series_id="primaryFiscalBalance",
@@ -91,7 +91,7 @@ FISCAL_PAGE_CONFIGS = (
         generated_label="government revenue",
         source_note=WEO_COUNTRY_SOURCE_NOTE,
         data_note=WEO_COUNTRY_DATA_NOTE,
-        related_nav_label="Fiscal page navigation",
+        related_nav_label="Finance page navigation",
         indicators=(
             IndicatorBlockConfig(
                 series_id="governmentRevenue",
@@ -109,7 +109,7 @@ FISCAL_PAGE_CONFIGS = (
         generated_label="government expenditure",
         source_note=WEO_COUNTRY_SOURCE_NOTE,
         data_note=WEO_COUNTRY_DATA_NOTE,
-        related_nav_label="Fiscal page navigation",
+        related_nav_label="Finance page navigation",
         indicators=(
             IndicatorBlockConfig(
                 series_id="governmentExpenditure",
@@ -126,7 +126,7 @@ FISCAL_PAGE_CONFIGS = (
         subtitle="Select a country to view historical total reserves including gold trends. Values are shown in current U.S. dollars.",
         generated_label="total reserves including gold",
         source_note=WORLD_BANK_COUNTRY_SOURCE_NOTE,
-        related_nav_label="Fiscal page navigation",
+        related_nav_label="Finance page navigation",
         indicators=(
             IndicatorBlockConfig(
                 series_id="totalReservesIncludingGold",
@@ -140,7 +140,7 @@ FISCAL_PAGE_CONFIGS = (
 
 
 def main() -> None:
-    for config in FISCAL_PAGE_CONFIGS:
+    for config in FINANCE_PAGE_CONFIGS:
         generate_country_pages(config)
 
 

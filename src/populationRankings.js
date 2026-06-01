@@ -1,4 +1,4 @@
-import { getCountryIndicatorLinks, renderRankingLinks } from "./rankingLinks.js";
+import { getCountryIndicatorLinks } from "./rankingLinks.js";
 
 export const populationRankings = [
   {
@@ -40,22 +40,3 @@ export const populationRankings = [
 ];
 
 export const populationIndicatorLinks = getCountryIndicatorLinks(populationRankings);
-
-export function renderPopulationRankingLinks(
-  nav,
-  {
-    rootHref = "./",
-    currentRankingDirectory = "",
-    currentScopeSlug = "world",
-    highlightCurrent = true,
-    replace = true,
-  } = {},
-) {
-  renderRankingLinks(nav, populationRankings, {
-    rootHref,
-    currentRankingDirectory,
-    currentScopeSlug,
-    highlightCurrent,
-    replace,
-  });
-}

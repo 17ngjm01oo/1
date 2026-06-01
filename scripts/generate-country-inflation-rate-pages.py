@@ -16,6 +16,7 @@ def main() -> None:
                 "Inflation rate is the annual percentage change in the consumer price index."
             ),
             generated_label="inflation rate",
+            related_nav_label="Economy page navigation",
             source_note=WEO_COUNTRY_SOURCE_NOTE,
             data_note=WEO_COUNTRY_DATA_NOTE,
             indicators=(

@@ -1,4 +1,4 @@
-import { getCountryIndicatorLinks, renderRankingLinks } from "./rankingLinks.js";
+import { getCountryIndicatorLinks } from "./rankingLinks.js";
 
 export const tradeRankings = [
   {
@@ -34,22 +34,3 @@ export const tradeRankings = [
 ];
 
 export const tradeIndicatorLinks = getCountryIndicatorLinks(tradeRankings);
-
-export function renderTradeRankingLinks(
-  nav,
-  {
-    rootHref = "./",
-    currentRankingDirectory = "",
-    currentScopeSlug = "world",
-    highlightCurrent = true,
-    replace = true,
-  } = {},
-) {
-  renderRankingLinks(nav, tradeRankings, {
-    rootHref,
-    currentRankingDirectory,
-    currentScopeSlug,
-    highlightCurrent,
-    replace,
-  });
-}

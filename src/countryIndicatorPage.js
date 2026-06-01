@@ -2,39 +2,35 @@ import { seriesConfigs } from "./config.js";
 import { countries } from "./countries.js";
 import { filterCountries, formatCountryMetaText, initializeCountrySelector } from "./countrySelector.js";
 import { getCurrencyCode } from "./currencyCodes.js";
-import { economicIndicatorLinks, economicRankings } from "./economicRankings.js";
-import { environmentalIndicatorLinks, environmentalRankings } from "./environmentalRankings.js";
-import { fiscalIndicatorLinks, fiscalRankings } from "./fiscalRankings.js";
 import { getFlagEmoji } from "./flags.js";
-import { populationIndicatorLinks, populationRankings } from "./populationRankings.js";
+import { countryPageRankings, rankingCategoryById } from "./rankingCategories.js";
 import { renderTopNavigationLinks } from "./siteNavigation.js";
 import { buildStaticDataRequestUrls, fetchStaticData } from "./staticData.js";
-import { tradeIndicatorLinks, tradeRankings } from "./tradeRankings.js";
 import { transformSeriesData } from "./transform.js";
 import { clearLineChart, formatCompactDisplayValue, getDisplayScale, renderLineChart } from "./chart.js";
 
 const pageDefinitions = {
   gdp: {
     logPrefix: "GDP page",
-    group: "economic",
+    group: "economy",
     documentTitleMetric: "GDP",
     seriesIds: ["gdp", "gdpNational", "realGdp"],
   },
   "gdp-per-capita": {
     logPrefix: "GDP per capita page",
-    group: "economic",
+    group: "economy",
     documentTitleMetric: "GDP per capita",
     seriesIds: ["gdpPerCapita", "gdpNationalPerCapita", "realGdpPerCapita"],
   },
   "gdp-growth": {
     logPrefix: "GDP growth page",
-    group: "economic",
+    group: "economy",
     documentTitleMetric: "GDP Growth",
     seriesIds: ["gdpGrowth"],
   },
   "inflation-rate": {
     logPrefix: "Inflation rate page",
-    group: "economic",
+    group: "economy",
     documentTitleMetric: "Inflation Rate",
     seriesIds: ["inflationRate"],
   },
@@ -76,13 +72,13 @@ const pageDefinitions = {
   },
   "ppp-gdp": {
     logPrefix: "PPP page",
-    group: "economic",
+    group: "economy",
     documentTitleMetric: "PPP GDP",
     seriesIds: ["ppp"],
   },
   "ppp-gdp-per-capita": {
     logPrefix: "PPP per capita page",
-    group: "economic",
+    group: "economy",
     documentTitleMetric: "PPP GDP per Capita",
     seriesIds: ["pppPerCapita"],
   },
@@ -118,65 +114,58 @@ const pageDefinitions = {
   },
   "government-gross-debt": {
     logPrefix: "Government gross debt page",
-    group: "fiscal",
+    group: "finance",
     documentTitleMetric: "Government Gross Debt",
     seriesIds: ["governmentGrossDebt"],
   },
   "government-net-debt": {
     logPrefix: "Government net debt page",
-    group: "fiscal",
+    group: "finance",
     documentTitleMetric: "Government Net Debt",
     seriesIds: ["governmentNetDebt"],
   },
   "fiscal-balance": {
     logPrefix: "Fiscal balance page",
-    group: "fiscal",
+    group: "finance",
     documentTitleMetric: "Fiscal Balance",
     seriesIds: ["fiscalBalance"],
   },
   "primary-fiscal-balance": {
     logPrefix: "Primary fiscal balance page",
-    group: "fiscal",
+    group: "finance",
     documentTitleMetric: "Primary Fiscal Balance",
     seriesIds: ["primaryFiscalBalance"],
   },
   "government-revenue": {
     logPrefix: "Government revenue page",
-    group: "fiscal",
+    group: "finance",
     documentTitleMetric: "Government Revenue",
     seriesIds: ["governmentRevenue"],
   },
   "government-expenditure": {
     logPrefix: "Government expenditure page",
-    group: "fiscal",
+    group: "finance",
     documentTitleMetric: "Government Expenditure",
     seriesIds: ["governmentExpenditure"],
   },
   "total-reserves": {
     logPrefix: "Total reserves including gold page",
-    group: "fiscal",
+    group: "finance",
     documentTitleMetric: "Total Reserves",
     seriesIds: ["totalReservesIncludingGold"],
   },
   "agricultural-land": {
     logPrefix: "Agricultural land percent of land area page",
-    group: "environmental",
+    group: "environment",
     documentTitleMetric: "Agricultural Land",
     seriesIds: ["agriculturalLandPercentOfLandArea"],
   },
   "forest-area": {
     logPrefix: "Forest area percent of land area page",
-    group: "environmental",
+    group: "environment",
     documentTitleMetric: "Forest Area",
     seriesIds: ["forestAreaPercentOfLandArea"],
   },
-};
-const countryIndicatorLinksByGroup = {
-  economic: economicIndicatorLinks,
-  population: populationIndicatorLinks,
-  trade: tradeIndicatorLinks,
-  fiscal: fiscalIndicatorLinks,
-  environmental: environmentalIndicatorLinks,
 };
 const pageKind = pageDefinitions[document.body.dataset.pageKind] ? document.body.dataset.pageKind : "gdp";
 const pageDefinition = pageDefinitions[pageKind];
@@ -184,13 +173,6 @@ const pageSeriesIds = new Set(pageDefinition.seriesIds);
 const pageSeriesConfigs = seriesConfigs.filter((seriesConfig) => pageSeriesIds.has(seriesConfig.id));
 const countryCode = document.body.dataset.countryCode;
 const selectedCountry = countries.find((country) => country.code === countryCode);
-const countryPageRankings = [
-  ...economicRankings,
-  ...populationRankings,
-  ...tradeRankings,
-  ...fiscalRankings,
-  ...environmentalRankings,
-].filter((ranking) => ranking.countryPageKind);
 const rankingDirectoryBySeriesId = Object.fromEntries(
   countryPageRankings.map((ranking) => [ranking.seriesId, ranking.directory]),
 );
@@ -238,7 +220,6 @@ function navigateToCountry(country) {
 function updateTopRankingLinks() {
   renderTopNavigationLinks({
     rootHref: "../../../",
-    economicNavSelector: "#economicTopNav",
     currentPageKind: pageKind,
     highlightCurrent: false,
   });
@@ -344,7 +325,7 @@ async function updateRelatedPageLinks() {
   }
 
   nav.innerHTML = "";
-  const relatedLinks = countryIndicatorLinksByGroup[pageDefinition.group] ?? [];
+  const relatedLinks = rankingCategoryById[pageDefinition.group]?.indicatorLinks ?? [];
 
   for (const linkConfig of relatedLinks) {
     if (linkConfig.pageKind !== pageKind && !(await doesIndicatorPageHaveData(linkConfig.pageKind))) {
@@ -1032,7 +1013,7 @@ function renderDataTable(points, seriesConfig) {
     const row = document.createElement("tr");
 
     for (let columnIndex = 0; columnIndex < columnCount; columnIndex += 1) {
-      appendDataTablePointCells(row, sortedPoints[rowIndex * columnCount + columnIndex], displayScale);
+      appendDataTablePointCells(row, sortedPoints[rowIndex + columnIndex * rowCount], displayScale);
     }
 
     tbody.append(row);

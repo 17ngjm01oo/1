@@ -1,6 +1,6 @@
-import { getCountryIndicatorLinks, renderRankingLinks } from "./rankingLinks.js";
+import { getCountryIndicatorLinks } from "./rankingLinks.js";
 
-export const economicRankings = [
+export const economyRankings = [
   {
     seriesId: "gdp",
     directory: "gdp",
@@ -39,25 +39,4 @@ export const economicRankings = [
   },
 ];
 
-export const economicIndicatorLinks = getCountryIndicatorLinks(economicRankings);
-
-export function renderEconomicRankingLinks(
-  nav,
-  {
-    rootHref = "./",
-    currentPageKind = "",
-    currentRankingDirectory = "",
-    currentScopeSlug = "world",
-    highlightCurrent = true,
-    replace = true,
-  } = {},
-) {
-  renderRankingLinks(nav, economicRankings, {
-    rootHref,
-    currentPageKind,
-    currentRankingDirectory,
-    currentScopeSlug,
-    highlightCurrent,
-    replace,
-  });
-}
+export const economyIndicatorLinks = getCountryIndicatorLinks(economyRankings);
