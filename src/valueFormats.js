@@ -45,7 +45,7 @@ export const valueFormats = {
   co2Emissions: {
     valueScaleMode: "populationUnitsMagnitude",
     fallbackMaximumFractionDigits: 2,
-    fallbackSmallValueMaximumFractionDigits: 3,
+    fallbackSmallValueMaximumFractionDigits: 4,
     fallbackSmallValueThreshold: 10,
     fallbackIntegerValueThreshold: 1000,
     suffix: "Mt",
