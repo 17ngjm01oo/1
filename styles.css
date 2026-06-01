@@ -1383,12 +1383,9 @@ h1 {
   font-size: clamp(1.22rem, 2.45vw, 1.72rem);
 }
 
-body[data-country-code][data-page-kind] .page-title {
-  font-size: clamp(1.16rem, 3.3vw, 1.84rem);
-}
-
+body[data-country-code][data-page-kind] .page-title,
 .indicator-header h2 {
-  font-size: clamp(1rem, 2.8vw, 1.56rem);
+  font-size: clamp(1.16rem, 3.3vw, 1.84rem);
 }
 
 .subtitle {
@@ -1533,7 +1530,7 @@ body[data-country-code] .subtitle {
 .data-table-wrap {
   max-width: 100%;
   margin-top: 12px;
-  overflow-x: auto;
+  overflow-x: visible;
   border: 1px solid var(--border);
   border-radius: var(--radius-component);
   background: #fbfcfd;
@@ -1541,7 +1538,7 @@ body[data-country-code] .subtitle {
 
 .data-table {
   width: 100%;
-  min-width: 600px;
+  min-width: 0;
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 0.92rem;
@@ -2042,10 +2039,6 @@ body[data-country-code] .subtitle {
     grid-template-columns: 1fr;
   }
 
-  .indicator-header h2 {
-    font-size: clamp(1.16rem, 5.3vw, 1.48rem);
-  }
-
   .country-search-input,
   .compare-search-input {
     font-size: 16px;
@@ -2069,11 +2062,11 @@ body[data-country-code] .subtitle {
   }
 
   .data-table-wrap {
-    overflow-x: auto;
+    overflow-x: visible;
   }
 
   .data-table {
-    min-width: 520px;
+    min-width: 0;
     font-size: 0.78rem;
   }
 

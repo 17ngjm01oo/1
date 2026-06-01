@@ -1025,7 +1025,7 @@ function renderDataTable(points, seriesConfig) {
   table.className = "data-table";
 
   const tbody = document.createElement("tbody");
-  const pointsPerRow = 4;
+  const pointsPerRow = 3;
 
   for (let index = 0; index < sortedPoints.length; index += pointsPerRow) {
     const row = document.createElement("tr");
