@@ -1,12 +1,13 @@
 import { countries } from "./countries.js";
 import { filterCountriesByScope } from "./countryFilters.js";
 import { initializeCountrySelector } from "./countrySelector.js";
-import { appendTerritoryNote, markTerritoryElement } from "./countryTypes.js";
+import { appendTerritoryNote, isTerritory, markTerritoryElement } from "./countryTypes.js";
 import { formatCompactDisplayValue, getDisplayScale } from "./chart.js";
 import { getFlagEmoji } from "./flags.js";
 import { initializeRankingFilters } from "./rankingFilters.js";
 import { showRankingLoadError, updateRankingSummaryDisplay } from "./rankingSummary.js";
 import { initializeRankingSort } from "./rankingSort.js";
+import { initializeRankingTerritoryToggle } from "./rankingTerritoryToggle.js";
 import { appendRankingValueCell } from "./rankingValueBar.js";
 import "./rankingTopNav.js";
 import { getIndicatorSeriesMap } from "./seriesData.js";
@@ -19,7 +20,16 @@ export function initializeRankingPage(config) {
     allRankingRows: [],
     activeScope: null,
     sortOrder: "highest",
+    showTerritories: true,
   };
+
+  state.showTerritories = initializeRankingTerritoryToggle({
+    initialValue: state.showTerritories,
+    onChange(showTerritories) {
+      state.showTerritories = showTerritories;
+      renderScopedRanking(config, state);
+    },
+  });
 
   state.sortOrder = initializeRankingSort({
     initialValue: state.sortOrder,
@@ -105,7 +115,7 @@ function buildRankingRows(data, config) {
 
 function renderScopedRanking(config, state) {
   const rankingRows = sortRankingRows(
-    filterRankingRows(state.allRankingRows, state.activeScope),
+    filterRankingRows(state.allRankingRows, state.activeScope, state.showTerritories),
     state.sortOrder,
   );
   updateRankingTitle(config, state.activeScope);
@@ -129,10 +139,12 @@ function updateRankingTitle(config, scope) {
   rankingTableTitle.textContent = `Scope: ${scopeLabel}`;
 }
 
-function filterRankingRows(rankingRows, scope) {
+function filterRankingRows(rankingRows, scope, showTerritories) {
   const rankingCountries = countries.filter((country) => country.includeInRankings !== false);
   const scopedCountryCodes = new Set(filterCountriesByScope(rankingCountries, scope).map((country) => country.code));
-  return rankingRows.filter((country) => scopedCountryCodes.has(country.code));
+  return rankingRows.filter((country) => {
+    return scopedCountryCodes.has(country.code) && (showTerritories || !isTerritory(country));
+  });
 }
 
 function getLatestNumericPoint(series, config) {

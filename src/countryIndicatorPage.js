@@ -1032,7 +1032,7 @@ function renderDataTable(points, seriesConfig) {
     const row = document.createElement("tr");
 
     for (let columnIndex = 0; columnIndex < columnCount; columnIndex += 1) {
-      appendDataTablePointCells(row, sortedPoints[rowIndex + columnIndex * rowCount], displayScale);
+      appendDataTablePointCells(row, sortedPoints[rowIndex * columnCount + columnIndex], displayScale);
     }
 
     tbody.append(row);

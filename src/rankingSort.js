@@ -1,12 +1,14 @@
+import { getRankingControls } from "./rankingControls.js";
+
 const sortOptions = [
   { value: "highest", label: "Highest" },
   { value: "lowest", label: "Lowest" },
 ];
 
 export function initializeRankingSort({ initialValue = "highest", onChange }) {
-  const rankingCardHeader = document.querySelector(".ranking-card-header");
+  const controls = getRankingControls();
 
-  if (!rankingCardHeader) {
+  if (!controls) {
     return initialValue;
   }
 
@@ -43,7 +45,7 @@ export function initializeRankingSort({ initialValue = "highest", onChange }) {
   });
 
   sortControl.append(sortToggle, sortMenu);
-  rankingCardHeader.append(sortControl);
+  controls.append(sortControl);
 
   document.addEventListener("click", (event) => {
     if (!sortControl.contains(event.target)) {
