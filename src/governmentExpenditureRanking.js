@@ -1,5 +1,6 @@
 import { initializeRankingPage } from "./rankingPage.js";
 import { dataSources } from "./dataSources.js";
+import { valueFormats } from "./valueFormats.js";
 
 initializeRankingPage({
   logName: "government expenditure",
@@ -7,9 +8,5 @@ initializeRankingPage({
   indicatorCode: "GGX_NGDP",
   rankingTitleBase: "Government Expenditure Ranking",
   linkAriaMetric: "Government Expenditure",
-  displayScaleConfig: {
-    suffix: "%",
-    suffixSpacing: "",
-    maximumFractionDigits: 1,
-  },
+  displayScaleConfig: valueFormats.percentOneDecimal,
 });

@@ -1,5 +1,6 @@
 import { initializeRankingPage } from "./rankingPage.js";
 import { dataSources } from "./dataSources.js";
+import { valueFormats } from "./valueFormats.js";
 
 initializeRankingPage({
   logName: "population",
@@ -9,7 +10,5 @@ initializeRankingPage({
   endYear: dataSources.worldBankPopulation.endYear,
   rankingTitleBase: "Population Ranking",
   linkAriaMetric: "Population",
-  displayScaleConfig: {
-    valueScaleMode: "populationUnitsMagnitude",
-  },
+  displayScaleConfig: valueFormats.populationUnitsMagnitude,
 });

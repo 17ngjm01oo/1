@@ -28,6 +28,20 @@ RANKING_TYPES = [
         "script": "forestAreaPercentOfLandAreaRanking.js",
         "subtitle": PERCENT_LAND_AREA_SUBTITLE,
     },
+    {
+        **WORLD_BANK_RANKING_NOTES,
+        "directory": "co2-emissions",
+        "title": "CO2 Emissions Ranking by Country",
+        "script": "co2EmissionsRanking.js",
+        "subtitle": "CO2 emissions excluding LULUCF are measured in Mt CO2e.",
+    },
+    {
+        **WORLD_BANK_RANKING_NOTES,
+        "directory": "co2-emissions-per-capita",
+        "title": "CO2 Emissions per Capita Ranking by Country",
+        "script": "co2EmissionsPerCapitaRanking.js",
+        "subtitle": "CO2 emissions excluding LULUCF per capita are measured in t CO2e.",
+    },
 ]
 
 

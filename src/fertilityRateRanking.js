@@ -1,5 +1,6 @@
 import { initializeRankingPage } from "./rankingPage.js";
 import { dataSources } from "./dataSources.js";
+import { valueFormats } from "./valueFormats.js";
 
 initializeRankingPage({
   logName: "fertility rate",
@@ -9,7 +10,5 @@ initializeRankingPage({
   endYear: dataSources.worldBankPopulation.endYear,
   rankingTitleBase: "Fertility Rate Ranking",
   linkAriaMetric: "Fertility Rate",
-  displayScaleConfig: {
-    maximumFractionDigits: 2,
-  },
+  displayScaleConfig: valueFormats.decimalTwo,
 });

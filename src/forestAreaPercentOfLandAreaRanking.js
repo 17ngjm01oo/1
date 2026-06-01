@@ -1,5 +1,6 @@
 import { initializeRankingPage } from "./rankingPage.js";
 import { dataSources } from "./dataSources.js";
+import { valueFormats } from "./valueFormats.js";
 
 initializeRankingPage({
   logName: "forest area percent of land area",
@@ -9,9 +10,5 @@ initializeRankingPage({
   endYear: dataSources.worldBankEnvironment.endYear,
   rankingTitleBase: "Forest Area Ranking",
   linkAriaMetric: "Forest Area",
-  displayScaleConfig: {
-    suffix: "%",
-    suffixSpacing: "",
-    maximumFractionDigits: 1,
-  },
+  displayScaleConfig: valueFormats.percentOneDecimal,
 });

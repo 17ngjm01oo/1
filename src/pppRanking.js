@@ -1,5 +1,6 @@
 import { initializeRankingPage } from "./rankingPage.js";
 import { dataSources } from "./dataSources.js";
+import { valueFormats } from "./valueFormats.js";
 
 initializeRankingPage({
   logName: "PPP",
@@ -7,7 +8,5 @@ initializeRankingPage({
   indicatorCode: "PPPGDP",
   rankingTitleBase: "PPP GDP Ranking",
   linkAriaMetric: "PPP",
-  displayScaleConfig: {
-    valueScaleMode: "internationalDollarMagnitude",
-  },
+  displayScaleConfig: valueFormats.internationalDollarMagnitude,
 });

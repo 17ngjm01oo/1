@@ -1,5 +1,6 @@
 import { initializeRankingPage } from "./rankingPage.js";
 import { dataSources } from "./dataSources.js";
+import { valueFormats } from "./valueFormats.js";
 
 initializeRankingPage({
   logName: "population density",
@@ -9,7 +10,5 @@ initializeRankingPage({
   endYear: dataSources.worldBankPopulation.endYear,
   rankingTitleBase: "Population Density Ranking",
   linkAriaMetric: "Population Density",
-  displayScaleConfig: {
-    maximumFractionDigits: 1,
-  },
+  displayScaleConfig: valueFormats.decimalOne,
 });

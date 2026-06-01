@@ -1,5 +1,6 @@
 import { initializeRankingPage } from "./rankingPage.js";
 import { dataSources } from "./dataSources.js";
+import { valueFormats } from "./valueFormats.js";
 
 initializeRankingPage({
   logName: "life expectancy",
@@ -9,7 +10,5 @@ initializeRankingPage({
   endYear: dataSources.worldBankPopulation.endYear,
   rankingTitleBase: "Life Expectancy Ranking",
   linkAriaMetric: "Life Expectancy",
-  displayScaleConfig: {
-    maximumFractionDigits: 1,
-  },
+  displayScaleConfig: valueFormats.decimalOne,
 });

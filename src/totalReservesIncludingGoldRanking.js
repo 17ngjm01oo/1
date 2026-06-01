@@ -1,5 +1,6 @@
 import { initializeRankingPage } from "./rankingPage.js";
 import { dataSources } from "./dataSources.js";
+import { valueFormats } from "./valueFormats.js";
 
 initializeRankingPage({
   logName: "total reserves including gold",
@@ -9,7 +10,5 @@ initializeRankingPage({
   endYear: dataSources.worldBankWdi.endYear,
   rankingTitleBase: "Total Reserves Ranking",
   linkAriaMetric: "Total Reserves",
-  displayScaleConfig: {
-    valueScaleMode: "usdMagnitude",
-  },
+  displayScaleConfig: valueFormats.usdMagnitude,
 });

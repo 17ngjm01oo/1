@@ -1,5 +1,6 @@
 import { initializeRankingPage } from "./rankingPage.js";
 import { dataSources } from "./dataSources.js";
+import { valueFormats } from "./valueFormats.js";
 
 initializeRankingPage({
   logName: "fiscal balance",
@@ -7,9 +8,5 @@ initializeRankingPage({
   indicatorCode: "GGXCNL_NGDP",
   rankingTitleBase: "Fiscal Balance Ranking",
   linkAriaMetric: "Fiscal Balance",
-  displayScaleConfig: {
-    suffix: "%",
-    suffixSpacing: "",
-    maximumFractionDigits: 1,
-  },
+  displayScaleConfig: valueFormats.percentOneDecimal,
 });

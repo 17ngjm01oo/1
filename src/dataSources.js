@@ -48,8 +48,8 @@ export const dataSources = {
     staticDataPath: "./data/world-bank/environment.json",
     sourceUrl: "https://databank.worldbank.org/source/world-development-indicators",
     startYear: 1961,
-    endYear: 2023,
-    subtitle: "World Bank World Development Indicators, 1961-2023",
+    endYear: 2024,
+    subtitle: "World Bank World Development Indicators, 1961-2024",
   }),
   ciaWorldFactbook: defineDataSource({
     dataSource: "CIA",

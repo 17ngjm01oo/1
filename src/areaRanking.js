@@ -1,5 +1,6 @@
 import { initializeRankingPage } from "./rankingPage.js";
 import { dataSources } from "./dataSources.js";
+import { valueFormats } from "./valueFormats.js";
 
 initializeRankingPage({
   logName: "area",
@@ -10,10 +11,5 @@ initializeRankingPage({
   rankingTitleBase: "Area (km²) Ranking",
   hasCountryIndicatorPage: false,
   linkAriaMetric: "Area (km²)",
-  displayScaleConfig: {
-    valueScaleMode: "areaMagnitude",
-    maximumFractionDigits: 2,
-    fallbackMaximumFractionDigits: 0,
-    fallbackSmallValueMaximumFractionDigits: 2,
-  },
+  displayScaleConfig: valueFormats.areaMagnitude,
 });

@@ -166,6 +166,18 @@ const pageDefinitions = {
     documentTitleMetric: "Forest Area",
     seriesIds: ["forestAreaPercentOfLandArea"],
   },
+  "co2-emissions": {
+    logPrefix: "CO2 emissions page",
+    group: "environment",
+    documentTitleMetric: "CO2 Emissions",
+    seriesIds: ["co2Emissions"],
+  },
+  "co2-emissions-per-capita": {
+    logPrefix: "CO2 emissions per capita page",
+    group: "environment",
+    documentTitleMetric: "CO2 Emissions per Capita",
+    seriesIds: ["co2EmissionsPerCapita"],
+  },
 };
 const pageKind = pageDefinitions[document.body.dataset.pageKind] ? document.body.dataset.pageKind : "gdp";
 const pageDefinition = pageDefinitions[pageKind];
@@ -258,7 +270,12 @@ function getSeriesChartTitle(seriesConfig, currencyCode) {
   ) {
     return `${title} - % of Land Area`;
   }
-
+  if (
+    seriesConfig.id === "co2Emissions" ||
+    seriesConfig.id === "co2EmissionsPerCapita"
+  ) {
+    return `${title} - CO2e`;
+  }
   const isGdpCurrencySeries =
     title.includes("GDP") &&
     (seriesConfig.usesCountryCurrency || seriesConfig.currencyCode);

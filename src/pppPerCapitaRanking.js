@@ -1,5 +1,6 @@
 import { initializeRankingPage } from "./rankingPage.js";
 import { dataSources } from "./dataSources.js";
+import { valueFormats } from "./valueFormats.js";
 
 initializeRankingPage({
   logName: "PPP per capita",
@@ -7,8 +8,5 @@ initializeRankingPage({
   indicatorCode: "PPPPC",
   rankingTitleBase: "PPP GDP per Capita Ranking",
   linkAriaMetric: "PPP per capita",
-  displayScaleConfig: {
-    valueScaleMode: "currencyUnitsMagnitude",
-    maximumFractionDigits: 0,
-  },
+  displayScaleConfig: valueFormats.currencyUnitsWhole,
 });

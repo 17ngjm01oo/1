@@ -1,5 +1,6 @@
 import { initializeRankingPage } from "./rankingPage.js";
 import { dataSources } from "./dataSources.js";
+import { valueFormats } from "./valueFormats.js";
 
 initializeRankingPage({
   logName: "unemployment rate",
@@ -7,9 +8,5 @@ initializeRankingPage({
   indicatorCode: "LUR",
   rankingTitleBase: "Unemployment Rate Ranking",
   linkAriaMetric: "Unemployment Rate",
-  displayScaleConfig: {
-    suffix: "%",
-    suffixSpacing: "",
-    maximumFractionDigits: 1,
-  },
+  displayScaleConfig: valueFormats.percentOneDecimal,
 });

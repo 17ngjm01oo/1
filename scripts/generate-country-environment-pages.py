@@ -42,6 +42,40 @@ ENVIRONMENT_PAGE_CONFIGS = (
             ),
         ),
     ),
+    CountryPageConfig(
+        page_kind="co2-emissions",
+        title_suffix="CO2 Emissions",
+        chart_title="CO2 Emissions Chart by Country",
+        subtitle=ENVIRONMENT_SUBTITLE,
+        generated_label="CO2 emissions",
+        source_note=WORLD_BANK_COUNTRY_SOURCE_NOTE,
+        related_nav_label="Environment page navigation",
+        indicators=(
+            IndicatorBlockConfig(
+                series_id="co2Emissions",
+                title="CO2 Emissions - CO2e",
+                canvas_label="CO2 emissions line chart",
+                compare_label="CO2 Emissions",
+            ),
+        ),
+    ),
+    CountryPageConfig(
+        page_kind="co2-emissions-per-capita",
+        title_suffix="CO2 Emissions per Capita",
+        chart_title="CO2 Emissions per Capita Chart by Country",
+        subtitle=ENVIRONMENT_SUBTITLE,
+        generated_label="CO2 emissions per capita",
+        source_note=WORLD_BANK_COUNTRY_SOURCE_NOTE,
+        related_nav_label="Environment page navigation",
+        indicators=(
+            IndicatorBlockConfig(
+                series_id="co2EmissionsPerCapita",
+                title="CO2 Emissions per Capita - CO2e",
+                canvas_label="CO2 emissions per capita line chart",
+                compare_label="CO2 Emissions per Capita",
+            ),
+        ),
+    ),
 )
 
 

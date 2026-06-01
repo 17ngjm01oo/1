@@ -1,5 +1,6 @@
 import { initializeRankingPage } from "./rankingPage.js";
 import { dataSources } from "./dataSources.js";
+import { valueFormats } from "./valueFormats.js";
 
 initializeRankingPage({
   logName: "GDP growth",
@@ -7,12 +8,5 @@ initializeRankingPage({
   indicatorCode: "NGDP_RPCH",
   rankingTitleBase: "GDP Growth Ranking",
   linkAriaMetric: "GDP Growth",
-  displayScaleConfig: {
-    valueScale: 1,
-    tooltipPrefix: "",
-    tooltipUnit: "",
-    suffix: "%",
-    suffixSpacing: "",
-    maximumFractionDigits: 1,
-  },
+  displayScaleConfig: valueFormats.percentOneDecimal,
 });

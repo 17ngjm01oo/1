@@ -102,6 +102,20 @@ DATASETS = {
                 "scale": "Units",
                 "unit": "%",
             },
+            "EN.GHG.CO2.MT.CE.AR5": {
+                "label": "CO2 Emissions",
+                "slug": "co2-emissions",
+                "description": "Carbon dioxide emissions excluding LULUCF, Mt CO2e",
+                "scale": "Units",
+                "unit": "Mt CO2e",
+            },
+            "EN.GHG.CO2.PC.CE.AR5": {
+                "label": "CO2 Emissions per Capita",
+                "slug": "co2-emissions-per-capita",
+                "description": "Carbon dioxide emissions excluding LULUCF per capita, t CO2e/capita",
+                "scale": "Units",
+                "unit": "t CO2e/capita",
+            },
         },
     },
 }

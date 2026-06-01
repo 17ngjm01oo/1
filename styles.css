@@ -6,7 +6,7 @@
   --muted: #617083;
   --border: #d9e0e7;
   --accent: #176b87;
-  --accent-soft: rgba(23, 107, 135, 0.08);
+  --accent-soft: rgba(23, 107, 135, 0.12);
   --error: #9f2f2f;
   --error-bg: #fff0f0;
   --territory-bg: #fffced;
@@ -42,6 +42,7 @@ html,
 body {
   width: 100%;
   overflow-x: hidden;
+  touch-action: manipulation;
 }
 
 html {
@@ -1636,6 +1637,14 @@ body[data-country-code] .subtitle {
   background: var(--accent-soft);
 }
 
+.country-overview-category-button[aria-selected="true"],
+.site-nav a.is-current,
+.site-nav a[aria-current="page"],
+.category-button[aria-pressed="true"],
+.ranking-sort-option[aria-pressed="true"] {
+  color: var(--text);
+}
+
 .ranking-territory-toggle:hover,
 .ranking-territory-toggle:focus-visible,
 .ranking-territory-toggle[aria-pressed="false"] {
@@ -1696,11 +1705,15 @@ body[data-country-code] .subtitle {
 }
 
 .ranking-sort-option:hover,
-.ranking-sort-option:focus-visible,
-.ranking-sort-option[aria-pressed="true"] {
+.ranking-sort-option:focus-visible {
   background: var(--accent-soft);
   color: var(--accent);
   outline: none;
+}
+
+.ranking-sort-option[aria-pressed="true"] {
+  background: var(--accent-soft);
+  color: var(--text);
 }
 
 .ranking-table-wrap {

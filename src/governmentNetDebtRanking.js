@@ -1,5 +1,6 @@
 import { initializeRankingPage } from "./rankingPage.js";
 import { dataSources } from "./dataSources.js";
+import { valueFormats } from "./valueFormats.js";
 
 initializeRankingPage({
   logName: "government net debt",
@@ -7,9 +8,5 @@ initializeRankingPage({
   indicatorCode: "GGXWDN_NGDP",
   rankingTitleBase: "Government Net Debt Ranking",
   linkAriaMetric: "Government Net Debt",
-  displayScaleConfig: {
-    suffix: "%",
-    suffixSpacing: "",
-    maximumFractionDigits: 1,
-  },
+  displayScaleConfig: valueFormats.percentOneDecimal,
 });

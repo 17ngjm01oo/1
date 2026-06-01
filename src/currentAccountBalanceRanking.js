@@ -1,5 +1,6 @@
 import { initializeRankingPage } from "./rankingPage.js";
 import { dataSources } from "./dataSources.js";
+import { valueFormats } from "./valueFormats.js";
 
 initializeRankingPage({
   logName: "current account balance",
@@ -7,7 +8,5 @@ initializeRankingPage({
   indicatorCode: "BCA",
   rankingTitleBase: "Current Account Balance Ranking",
   linkAriaMetric: "Current Account Balance",
-  displayScaleConfig: {
-    valueScaleMode: "gdpMagnitude",
-  },
+  displayScaleConfig: valueFormats.gdpMagnitude,
 });

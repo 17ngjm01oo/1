@@ -176,17 +176,19 @@ function buildDataset({
   };
 }
 
+const basicMagnitudeModes = {
+  gdpMagnitude: "billions",
+  usdMillionsMagnitude: "millions",
+  usdMagnitude: "units",
+  internationalDollarMagnitude: "billions",
+  nationalCurrencyMagnitude: "billions",
+};
+
 export function getDisplayScale(points, config) {
-  if (config.valueScaleMode === "gdpMagnitude") {
-    return getMagnitudeDisplayScale(points, magnitudeInputs.billions);
-  }
+  const basicMagnitudeInput = basicMagnitudeModes[config.valueScaleMode];
 
-  if (config.valueScaleMode === "usdMillionsMagnitude") {
-    return getMagnitudeDisplayScale(points, magnitudeInputs.millions);
-  }
-
-  if (config.valueScaleMode === "usdMagnitude") {
-    return getMagnitudeDisplayScale(points, magnitudeInputs.units);
+  if (basicMagnitudeInput) {
+    return getMagnitudeDisplayScale(points, magnitudeInputs[basicMagnitudeInput]);
   }
 
   if (config.valueScaleMode === "currencyUnitsMagnitude") {
@@ -194,14 +196,6 @@ export function getDisplayScale(points, config) {
       maximumFractionDigits: config.maximumFractionDigits ?? 0,
       tooltipUnit: config.tooltipUnit ?? "",
     });
-  }
-
-  if (config.valueScaleMode === "internationalDollarMagnitude") {
-    return getMagnitudeDisplayScale(points, magnitudeInputs.billions);
-  }
-
-  if (config.valueScaleMode === "nationalCurrencyMagnitude") {
-    return getMagnitudeDisplayScale(points, magnitudeInputs.billions);
   }
 
   if (config.valueScaleMode === "populationMagnitude") {
@@ -213,7 +207,12 @@ export function getDisplayScale(points, config) {
 
   if (config.valueScaleMode === "populationUnitsMagnitude") {
     return getMagnitudeDisplayScale(points, magnitudeInputs.units, {
-      maximumFractionDigits: 0,
+      maximumFractionDigits: config.fallbackMaximumFractionDigits ?? 0,
+      smallValueMaximumFractionDigits: config.fallbackSmallValueMaximumFractionDigits,
+      smallValueThreshold: config.fallbackSmallValueThreshold,
+      integerValueThreshold: config.fallbackIntegerValueThreshold,
+      suffix: config.suffix,
+      suffixSpacing: config.suffixSpacing,
     });
   }
 
@@ -282,6 +281,7 @@ function getMagnitudeDisplayScale(points, magnitudeSteps, fallback = {}) {
       adaptiveFallbackMaximumFractionDigits: fallback.maximumFractionDigits ?? 0,
       smallValueMaximumFractionDigits: fallback.smallValueMaximumFractionDigits,
       smallValueThreshold: fallback.smallValueThreshold,
+      integerValueThreshold: fallback.integerValueThreshold,
       maximumFractionDigits: fallback.maximumFractionDigits ?? 0,
     };
   }
@@ -292,13 +292,15 @@ function getMagnitudeDisplayScale(points, magnitudeSteps, fallback = {}) {
     valueScale: magnitudeStep.valueScale,
     tooltipPrefix: "",
     tickPrefix: "",
-    suffix: "",
+    suffix: fallback.suffix ?? "",
+    suffixSpacing: fallback.suffixSpacing ?? " ",
     compactUnit: magnitudeStep.compactUnit,
     adaptiveCompactSteps: magnitudeSteps,
     adaptiveFallbackValueScale: fallback.valueScale ?? 1,
     adaptiveFallbackMaximumFractionDigits: fallback.maximumFractionDigits ?? 0,
     smallValueMaximumFractionDigits: fallback.smallValueMaximumFractionDigits,
     smallValueThreshold: fallback.smallValueThreshold,
+    integerValueThreshold: fallback.integerValueThreshold,
     maximumFractionDigits: magnitudeStep.fixedFractionDigits ?? getMagnitudeFractionDigits(displayValue),
   };
 }
@@ -374,12 +376,19 @@ function formatAdaptiveCompactValue(value, displayScale) {
   const displayValue = value * magnitudeStep.valueScale;
   const maximumFractionDigits = magnitudeStep.fixedFractionDigits ?? getMagnitudeFractionDigits(Math.abs(displayValue));
   const formattedValue = formatNumber(displayValue, maximumFractionDigits);
-  return `${displayScale.tooltipPrefix}${formattedValue}${magnitudeStep.compactUnit}`;
+  const suffixValue = displayScale.suffix;
+  const suffixSpacing = displayScale.suffixSpacing ?? (suffixValue ? " " : "");
+  const suffix = suffixValue ? `${suffixSpacing}${suffixValue}` : "";
+  return `${displayScale.tooltipPrefix}${formattedValue}${magnitudeStep.compactUnit}${suffix}`;
 }
 
 function getAdaptiveFallbackFractionDigits(value, displayScale) {
   const defaultFractionDigits = displayScale.adaptiveFallbackMaximumFractionDigits;
   const smallValueMaximumFractionDigits = displayScale.smallValueMaximumFractionDigits;
+
+  if (Math.abs(value) >= (displayScale.integerValueThreshold ?? Number.POSITIVE_INFINITY)) {
+    return 0;
+  }
 
   if (
     smallValueMaximumFractionDigits != null

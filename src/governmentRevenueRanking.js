@@ -1,5 +1,6 @@
 import { initializeRankingPage } from "./rankingPage.js";
 import { dataSources } from "./dataSources.js";
+import { valueFormats } from "./valueFormats.js";
 
 initializeRankingPage({
   logName: "government revenue",
@@ -7,9 +8,5 @@ initializeRankingPage({
   indicatorCode: "GGR_NGDP",
   rankingTitleBase: "Government Revenue Ranking",
   linkAriaMetric: "Government Revenue",
-  displayScaleConfig: {
-    suffix: "%",
-    suffixSpacing: "",
-    maximumFractionDigits: 1,
-  },
+  displayScaleConfig: valueFormats.percentOneDecimal,
 });

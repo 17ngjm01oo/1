@@ -1,5 +1,6 @@
 import { initializeRankingPage } from "./rankingPage.js";
 import { dataSources } from "./dataSources.js";
+import { valueFormats } from "./valueFormats.js";
 
 initializeRankingPage({
   logName: "GDP per capita",
@@ -7,8 +8,5 @@ initializeRankingPage({
   indicatorCode: "NGDPDPC",
   rankingTitleBase: "GDP per Capita Ranking",
   linkAriaMetric: "GDP per capita",
-  displayScaleConfig: {
-    valueScaleMode: "currencyUnitsMagnitude",
-    maximumFractionDigits: 0,
-  },
+  displayScaleConfig: valueFormats.currencyUnitsWhole,
 });

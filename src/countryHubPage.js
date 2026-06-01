@@ -59,7 +59,7 @@ function renderRegionButtons() {
 
 function renderCategoryButtons() {
   countryCategories.forEach((category) => {
-    appendFilterButton(categoryList, category.label, { type: "category", id: category.id }, category.id);
+    appendFilterButton(categoryList, category.label, { type: "category", id: category.id });
   });
 }
 

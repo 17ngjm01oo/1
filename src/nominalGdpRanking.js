@@ -1,5 +1,6 @@
 import { initializeRankingPage } from "./rankingPage.js";
 import { dataSources } from "./dataSources.js";
+import { valueFormats } from "./valueFormats.js";
 
 initializeRankingPage({
   logName: "nominal GDP",
@@ -7,7 +8,5 @@ initializeRankingPage({
   indicatorCode: "NGDPD",
   rankingTitleBase: "GDP Ranking",
   linkAriaMetric: "GDP",
-  displayScaleConfig: {
-    valueScaleMode: "gdpMagnitude",
-  },
+  displayScaleConfig: valueFormats.gdpMagnitude,
 });

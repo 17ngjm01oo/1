@@ -1,5 +1,6 @@
 import { initializeRankingPage } from "./rankingPage.js";
 import { dataSources } from "./dataSources.js";
+import { valueFormats } from "./valueFormats.js";
 
 initializeRankingPage({
   logName: "current account balance percent of GDP",
@@ -7,9 +8,5 @@ initializeRankingPage({
   indicatorCode: "BCA_NGDPD",
   rankingTitleBase: "Current Account Balance (% of GDP) Ranking",
   linkAriaMetric: "Current Account Balance (% of GDP)",
-  displayScaleConfig: {
-    suffix: "%",
-    suffixSpacing: "",
-    maximumFractionDigits: 1,
-  },
+  displayScaleConfig: valueFormats.percentOneDecimal,
 });

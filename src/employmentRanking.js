@@ -1,5 +1,6 @@
 import { initializeRankingPage } from "./rankingPage.js";
 import { dataSources } from "./dataSources.js";
+import { valueFormats } from "./valueFormats.js";
 
 initializeRankingPage({
   logName: "employment",
@@ -7,7 +8,5 @@ initializeRankingPage({
   indicatorCode: "LE",
   rankingTitleBase: "Employment Ranking",
   linkAriaMetric: "Employment",
-  displayScaleConfig: {
-    valueScaleMode: "populationMagnitude",
-  },
+  displayScaleConfig: valueFormats.populationMagnitude,
 });

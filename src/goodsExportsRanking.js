@@ -1,5 +1,6 @@
 import { initializeRankingPage } from "./rankingPage.js";
 import { dataSources } from "./dataSources.js";
+import { valueFormats } from "./valueFormats.js";
 
 initializeRankingPage({
   logName: "goods exports",
@@ -9,7 +10,5 @@ initializeRankingPage({
   endYear: 2025,
   rankingTitleBase: "Goods Exports Ranking",
   linkAriaMetric: "Goods Exports",
-  displayScaleConfig: {
-    valueScaleMode: "usdMillionsMagnitude",
-  },
+  displayScaleConfig: valueFormats.usdMillionsMagnitude,
 });
