@@ -2,7 +2,6 @@ import { seriesConfigs } from "./config.js";
 import { countries } from "./countries.js";
 import { filterCountries, formatCountryMetaText, initializeCountrySelector } from "./countrySelector.js";
 import { getCurrencyCode } from "./currencyCodes.js";
-import { getCurrencyDisplay } from "./currencyDisplay.js";
 import { economicIndicatorLinks, economicRankings } from "./economicRankings.js";
 import { environmentalIndicatorLinks, environmentalRankings } from "./environmentalRankings.js";
 import { fiscalIndicatorLinks, fiscalRankings } from "./fiscalRankings.js";
@@ -249,10 +248,6 @@ function buildCountrySeriesConfig(seriesConfig, country) {
   const currencyCode = seriesConfig.usesCountryCurrency
     ? getCurrencyCode(country.code)
     : seriesConfig.currencyCode;
-  const currencyDisplay = getCurrencyDisplay({
-    ...seriesConfig,
-    currencyCode,
-  });
 
   return {
     ...seriesConfig,
@@ -260,11 +255,6 @@ function buildCountrySeriesConfig(seriesConfig, country) {
     countryCode: country.code,
     countryName: country.name,
     chartTitle: getSeriesChartTitle(seriesConfig, currencyCode),
-    currencyCode,
-    currencyDisplay,
-    tooltipPrefix: currencyDisplay.prefix || seriesConfig.tooltipPrefix,
-    tickPrefix: currencyDisplay.prefix || seriesConfig.tickPrefix,
-    suffix: seriesConfig.usesCountryCurrency ? currencyDisplay.suffix : seriesConfig.suffix,
   };
 }
 
@@ -297,14 +287,10 @@ function getSeriesChartTitle(seriesConfig, currencyCode) {
   }
 
   if (seriesConfig.usesCountryCurrency) {
-    return `${title} - Local currency`;
+    return `${title} - Local currency (${currencyCode})`;
   }
 
-  return `${title} - ${formatTitleCurrencyCode(currencyCode)}`;
-}
-
-function formatTitleCurrencyCode(currencyCode) {
-  return currencyCode;
+  return `${title} - ${currencyCode}`;
 }
 
 function updateCountryHeading(country) {
@@ -1039,14 +1025,16 @@ function renderDataTable(points, seriesConfig) {
   table.className = "data-table";
 
   const tbody = document.createElement("tbody");
-  const splitIndex = Math.ceil(sortedPoints.length / 2);
-  const leftPoints = sortedPoints.slice(0, splitIndex);
-  const rightPoints = sortedPoints.slice(splitIndex);
+  const pointsPerRow = 4;
 
-  for (let index = 0; index < leftPoints.length; index += 1) {
+  for (let index = 0; index < sortedPoints.length; index += pointsPerRow) {
     const row = document.createElement("tr");
-    appendDataTablePointCells(row, leftPoints[index], displayScale);
-    appendDataTablePointCells(row, rightPoints[index], displayScale);
+    const rowPoints = sortedPoints.slice(index, index + pointsPerRow);
+
+    for (let pointIndex = 0; pointIndex < pointsPerRow; pointIndex += 1) {
+      appendDataTablePointCells(row, rowPoints[pointIndex], displayScale);
+    }
+
     tbody.append(row);
   }
 

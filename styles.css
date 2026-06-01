@@ -1383,9 +1383,12 @@ h1 {
   font-size: clamp(1.22rem, 2.45vw, 1.72rem);
 }
 
-body[data-country-code][data-page-kind] .page-title,
+body[data-country-code][data-page-kind] .page-title {
+  font-size: clamp(1.16rem, 3.3vw, 1.84rem);
+}
+
 .indicator-header h2 {
-  font-size: clamp(1.08rem, 3.1vw, 1.72rem);
+  font-size: clamp(1rem, 2.8vw, 1.56rem);
 }
 
 .subtitle {
@@ -1538,26 +1541,27 @@ body[data-country-code] .subtitle {
 
 .data-table {
   width: 100%;
-  min-width: 320px;
+  min-width: 600px;
   border-collapse: collapse;
+  table-layout: fixed;
   font-size: 0.92rem;
 }
 
 .data-table td {
-  padding: var(--compact-table-cell-padding);
+  padding: 5px 3px;
+  border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   font-weight: 700;
-  text-align: right;
+  text-align: center;
   white-space: nowrap;
 }
 
-.data-table td:first-child {
-  text-align: left;
+.data-table td:last-child {
+  border-right: 0;
 }
 
-.data-table td:nth-child(3) {
-  border-left: 1px solid var(--border);
-  text-align: left;
+.data-table td:nth-child(odd) {
+  color: var(--muted);
 }
 
 .data-table tbody tr:last-child td {
@@ -1659,9 +1663,7 @@ body[data-country-code] .subtitle {
   transform: rotate(225deg);
 }
 
-.ranking-sort-toggle:hover,
 .ranking-sort-toggle:focus-visible {
-  border-color: rgba(23, 107, 135, 0.45);
   outline: none;
 }
 
@@ -2040,6 +2042,10 @@ body[data-country-code] .subtitle {
     grid-template-columns: 1fr;
   }
 
+  .indicator-header h2 {
+    font-size: clamp(1.16rem, 5.3vw, 1.48rem);
+  }
+
   .country-search-input,
   .compare-search-input {
     font-size: 16px;
@@ -2063,17 +2069,16 @@ body[data-country-code] .subtitle {
   }
 
   .data-table-wrap {
-    overflow-x: visible;
+    overflow-x: auto;
   }
 
   .data-table {
-    min-width: 0;
-    table-layout: fixed;
+    min-width: 520px;
     font-size: 0.78rem;
   }
 
   .data-table td {
-    padding: 8px 6px;
+    padding: 4px 2px;
     white-space: normal;
     overflow-wrap: anywhere;
     word-break: normal;

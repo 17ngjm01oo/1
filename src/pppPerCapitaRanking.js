@@ -8,7 +8,6 @@ initializeRankingPage({
   rankingTitleBase: "PPP GDP per Capita Ranking",
   linkAriaMetric: "PPP per capita",
   displayScaleConfig: {
-    currencyCode: "Int$",
     valueScaleMode: "currencyUnitsMagnitude",
     maximumFractionDigits: 0,
   },

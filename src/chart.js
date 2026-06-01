@@ -1,5 +1,3 @@
-import { getCurrencyDisplay } from "./currencyDisplay.js";
-
 const chartInstances = new Map();
 const actualColor = "#176b87";
 const comparisonColor = "#475569";
@@ -180,30 +178,30 @@ function buildDataset({
 
 export function getDisplayScale(points, config) {
   if (config.valueScaleMode === "gdpMagnitude") {
-    return getCurrencyMagnitudeDisplayScale(points, { currencyCode: "USD", ...config }, magnitudeInputs.billions);
+    return getMagnitudeDisplayScale(points, magnitudeInputs.billions);
   }
 
   if (config.valueScaleMode === "usdMillionsMagnitude") {
-    return getCurrencyMagnitudeDisplayScale(points, { currencyCode: "USD", ...config }, magnitudeInputs.millions);
+    return getMagnitudeDisplayScale(points, magnitudeInputs.millions);
   }
 
   if (config.valueScaleMode === "usdMagnitude") {
-    return getCurrencyMagnitudeDisplayScale(points, { currencyCode: "USD", ...config }, magnitudeInputs.units);
+    return getMagnitudeDisplayScale(points, magnitudeInputs.units);
   }
 
   if (config.valueScaleMode === "currencyUnitsMagnitude") {
-    return getCurrencyMagnitudeDisplayScale(points, config, magnitudeInputs.units, {
+    return getMagnitudeDisplayScale(points, magnitudeInputs.units, {
       maximumFractionDigits: config.maximumFractionDigits ?? 0,
       tooltipUnit: config.tooltipUnit ?? "",
     });
   }
 
   if (config.valueScaleMode === "internationalDollarMagnitude") {
-    return getCurrencyMagnitudeDisplayScale(points, { currencyCode: "Int$", ...config }, magnitudeInputs.billions);
+    return getMagnitudeDisplayScale(points, magnitudeInputs.billions);
   }
 
   if (config.valueScaleMode === "nationalCurrencyMagnitude") {
-    return getCurrencyMagnitudeDisplayScale(points, config, magnitudeInputs.billions);
+    return getMagnitudeDisplayScale(points, magnitudeInputs.billions);
   }
 
   if (config.valueScaleMode === "populationMagnitude") {
@@ -266,44 +264,6 @@ const magnitudeInputs = {
   ],
 };
 
-function getCurrencyMagnitudeDisplayScale(points, config, magnitudeSteps, fallback = {}) {
-  const currencyDisplay = getCurrencyDisplay(config);
-  const maxRawValue = Math.max(...points.map((point) => Math.abs(point.value)));
-  const magnitudeStep = magnitudeSteps.find((step) => maxRawValue >= step.threshold);
-
-  if (!magnitudeStep) {
-    return {
-      valueScale: config.valueScale ?? 1,
-      tooltipPrefix: currencyDisplay.prefix,
-      tooltipUnit: fallback.tooltipUnit ?? config.tooltipUnit ?? "",
-      tickPrefix: currencyDisplay.prefix,
-      suffix: currencyDisplay.suffix,
-      suffixSpacing: config.suffixSpacing ?? " ",
-      compactUnit: "",
-      compactUnitSuffix: currencyDisplay.compactUnitSuffix,
-      adaptiveCompactSteps: magnitudeSteps,
-      adaptiveFallbackMaximumFractionDigits: fallback.maximumFractionDigits ?? config.maximumFractionDigits ?? 0,
-      maximumFractionDigits: fallback.maximumFractionDigits ?? config.maximumFractionDigits ?? 0,
-    };
-  }
-
-  const displayValue = maxRawValue * magnitudeStep.valueScale;
-
-  return {
-    valueScale: magnitudeStep.valueScale,
-    tooltipPrefix: currencyDisplay.prefix,
-    tickPrefix: currencyDisplay.prefix,
-    suffix: "",
-    compactUnit: `${magnitudeStep.compactUnit}${currencyDisplay.compactUnitSuffix}`,
-    compactUnitSuffix: currencyDisplay.compactUnitSuffix,
-    adaptiveCompactSteps: magnitudeSteps,
-    adaptiveFallbackSuffix: currencyDisplay.suffix,
-    adaptiveFallbackSuffixSpacing: config.suffixSpacing ?? " ",
-    adaptiveFallbackMaximumFractionDigits: fallback.maximumFractionDigits ?? config.maximumFractionDigits ?? 0,
-    maximumFractionDigits: magnitudeStep.fixedFractionDigits ?? getMagnitudeFractionDigits(displayValue),
-  };
-}
-
 function getMagnitudeDisplayScale(points, magnitudeSteps, fallback = {}) {
   const maxRawValue = Math.max(...points.map((point) => Math.abs(point.value)));
   const magnitudeStep = magnitudeSteps.find((step) => maxRawValue >= step.threshold);
@@ -333,8 +293,7 @@ function getMagnitudeDisplayScale(points, magnitudeSteps, fallback = {}) {
     tooltipPrefix: "",
     tickPrefix: "",
     suffix: "",
-    compactUnit: `${magnitudeStep.compactUnit}${fallback.tooltipUnitSuffix ?? ""}`,
-    compactUnitSuffix: fallback.tooltipUnitSuffix ?? "",
+    compactUnit: magnitudeStep.compactUnit,
     adaptiveCompactSteps: magnitudeSteps,
     adaptiveFallbackValueScale: fallback.valueScale ?? 1,
     adaptiveFallbackMaximumFractionDigits: fallback.maximumFractionDigits ?? 0,
@@ -405,9 +364,8 @@ function formatAdaptiveCompactValue(value, displayScale) {
     const fallbackValue = value * (displayScale.adaptiveFallbackValueScale ?? 1);
     const formattedValue = formatNumber(fallbackValue, getAdaptiveFallbackFractionDigits(fallbackValue, displayScale));
     const unit = displayScale.tooltipUnit ? ` ${displayScale.tooltipUnit}` : "";
-    const suffixValue = displayScale.adaptiveFallbackSuffix ?? displayScale.suffix;
-    const suffixSpacing =
-      displayScale.adaptiveFallbackSuffixSpacing ?? displayScale.suffixSpacing ?? (suffixValue ? " " : "");
+    const suffixValue = displayScale.suffix;
+    const suffixSpacing = displayScale.suffixSpacing ?? (suffixValue ? " " : "");
     const suffix = suffixValue ? `${suffixSpacing}${suffixValue}` : "";
 
     return `${displayScale.tooltipPrefix}${formattedValue}${unit}${suffix}`;
@@ -416,9 +374,7 @@ function formatAdaptiveCompactValue(value, displayScale) {
   const displayValue = value * magnitudeStep.valueScale;
   const maximumFractionDigits = magnitudeStep.fixedFractionDigits ?? getMagnitudeFractionDigits(Math.abs(displayValue));
   const formattedValue = formatNumber(displayValue, maximumFractionDigits);
-  const compactUnit = `${magnitudeStep.compactUnit}${displayScale.compactUnitSuffix ?? ""}`;
-
-  return `${displayScale.tooltipPrefix}${formattedValue}${compactUnit}`;
+  return `${displayScale.tooltipPrefix}${formattedValue}${magnitudeStep.compactUnit}`;
 }
 
 function getAdaptiveFallbackFractionDigits(value, displayScale) {
