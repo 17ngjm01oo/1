@@ -99,7 +99,7 @@ body {
 }
 
 .top-nav-card {
-  grid-template-columns: repeat(2, max-content);
+  grid-template-columns: repeat(3, max-content);
   gap: 12px;
   padding: var(--nav-card-padding);
 }
@@ -311,11 +311,10 @@ body {
   overflow-wrap: anywhere;
 }
 
-.country-hub-nav-link + .country-hub-nav-link::before {
-  content: "|";
-  flex: 0 0 auto;
-  margin-right: 12px;
+.country-hub-nav-separator {
   color: var(--border);
+  font-size: 1.12rem;
+  font-weight: 700;
 }
 
 .country-hub-nav-link:hover {
@@ -493,8 +492,8 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
 
 .country-flag {
   flex: 0 0 auto;
-  font-size: 0.86em;
-  line-height: 1;
+  font-size: 1em;
+  line-height: inherit;
 }
 
 .country-name {
@@ -835,8 +834,7 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
 }
 
 .compare-search-input:focus {
-  outline: 3px solid rgba(23, 107, 135, 0.18);
-  border-color: rgba(23, 107, 135, 0.5);
+  outline: none;
 }
 
 .compare-search-input:disabled {
@@ -1109,8 +1107,7 @@ body[data-page-kind="country-hub"] .hub-section > .world-map {
 }
 
 .country-search-input:focus {
-  outline: 3px solid rgba(23, 107, 135, 0.18);
-  border-color: rgba(23, 107, 135, 0.5);
+  outline: none;
 }
 
 .country-search-input::-webkit-search-cancel-button,
@@ -1544,6 +1541,7 @@ body[data-country-code] .subtitle {
 }
 
 .data-table td:nth-child(odd) {
+  width: 12%;
   color: var(--muted);
 }
 
@@ -1766,7 +1764,7 @@ body[data-country-code] .subtitle {
 }
 
 .country-hub-table td:nth-child(3) {
-  width: 32%;
+  width: 180px;
   text-align: right;
 }
 
@@ -2074,7 +2072,7 @@ body[data-country-code] .subtitle {
   }
 
   .country-hub-table td:nth-child(3) {
-    width: 36%;
+    width: 112px;
   }
 
   .ranking-table td:nth-child(1) {

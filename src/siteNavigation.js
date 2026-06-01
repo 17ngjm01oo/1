@@ -15,6 +15,7 @@ export function renderSiteHubLinks({ rootHref = "./" } = {}) {
   navCards.forEach((navCard) => {
     navCard.replaceChildren(
       createSiteHubLink(`${rootHref}countries/`, "Countries", isCountryHubPage()),
+      createSiteHubSeparator(),
       createSiteHubLink(`${rootHref}rankings/`, "Rankings", isRankingsPage()),
     );
   });
@@ -117,4 +118,12 @@ function createSiteHubLink(href, label, isCurrentPage) {
   }
 
   return link;
+}
+
+function createSiteHubSeparator() {
+  const separator = document.createElement("span");
+  separator.className = "country-hub-nav-separator";
+  separator.setAttribute("aria-hidden", "true");
+  separator.textContent = "|";
+  return separator;
 }

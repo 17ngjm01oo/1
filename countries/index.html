@@ -28,7 +28,12 @@
               class="country-search-input"
               type="search"
               autocomplete="off"
+              aria-controls="countrySearchResults"
+              role="combobox"
+              aria-autocomplete="list"
+              aria-expanded="false"
             />
+            <div class="country-results" id="countrySearchResults" role="listbox" aria-label="Country search results" hidden></div>
           </div>
           <p class="filter-label">Filter by:</p>
           <div class="filter-panel-row">

@@ -1,4 +1,5 @@
 import { countryCategories, countryRegions } from "./countries.js";
+import { initializeFilterPanels } from "./filterPanels.js";
 
 const worldScope = { type: "world", id: "WORLD", label: "World", slug: "world" };
 
@@ -15,28 +16,6 @@ export function initializeRankingFilters() {
   const activeScope = getScopeFromPage();
   const rankingBaseHref = document.body.dataset.rankingBaseHref ?? "./";
 
-  const showOptionList = (type) => {
-    regionList.hidden = type !== "region";
-    categoryList.hidden = type !== "category";
-  };
-
-  const hideOptionLists = () => {
-    regionList.hidden = true;
-    categoryList.hidden = true;
-  };
-
-  const closeFilterPanels = (exceptPanel = null) => {
-    [regionPanel, categoryPanel].forEach((panel) => {
-      if (panel instanceof HTMLDetailsElement && panel !== exceptPanel) {
-        panel.open = false;
-      }
-    });
-
-    if (!exceptPanel) {
-      hideOptionLists();
-    }
-  };
-
   const updateButtons = () => {
     document.querySelectorAll("[data-ranking-scope-type]").forEach((link) => {
       const isActive =
@@ -46,25 +25,7 @@ export function initializeRankingFilters() {
     });
   };
 
-  regionPanel?.addEventListener("toggle", () => {
-    if (regionPanel.open) {
-      closeFilterPanels(regionPanel);
-      showOptionList("region");
-      return;
-    }
-
-    regionList.hidden = true;
-  });
-
-  categoryPanel?.addEventListener("toggle", () => {
-    if (categoryPanel.open) {
-      closeFilterPanels(categoryPanel);
-      showOptionList("category");
-      return;
-    }
-
-    categoryList.hidden = true;
-  });
+  initializeFilterPanels({ regionPanel, categoryPanel, regionList, categoryList });
 
   regionList.innerHTML = "";
   categoryList.innerHTML = "";

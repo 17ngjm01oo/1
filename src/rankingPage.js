@@ -47,7 +47,6 @@ function initializeRankingCountrySearch(config) {
     },
     searchInputSelector: "#rankingCountrySearchInput",
     resultsSelector: "#rankingCountrySearchResults",
-    searchPanelSelector: ".ranking-country-search-panel",
   });
 }
 
