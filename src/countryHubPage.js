@@ -37,7 +37,7 @@ initializeCountrySelector({
 
     worldMap?.focusRegion(activeRegionId);
   },
-  renderCountryResultContent(country, { activateRegion }) {
+  renderCountryResultContent(country) {
     const flag = document.createElement("span");
     flag.className = "ranking-flag country-hub-result-flag";
     flag.textContent = getFlagEmoji(country.code);
@@ -49,27 +49,6 @@ initializeCountrySelector({
     const region = document.createElement("span");
     region.className = "country-hub-result-region";
     region.textContent = country.region || "-";
-    const regionId = country.region?.trim();
-
-    if (regionId) {
-      region.setAttribute("role", "button");
-      region.setAttribute("tabindex", "0");
-      region.setAttribute("aria-label", `Show ${regionId} countries`);
-      region.addEventListener("click", (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        activateRegion(regionId);
-      });
-      region.addEventListener("keydown", (event) => {
-        if (event.key !== "Enter" && event.key !== " ") {
-          return;
-        }
-
-        event.preventDefault();
-        event.stopPropagation();
-        activateRegion(regionId);
-      });
-    }
 
     return [flag, name, region];
   },

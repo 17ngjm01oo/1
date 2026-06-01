@@ -348,13 +348,6 @@ export function initializeCountrySelector({
       }
       resultElement.addEventListener("click", (event) => {
         if (getCountryHref && !onSelect) {
-          if (
-            !usesOptionResults &&
-            event.target instanceof Element &&
-            !event.target.closest("a, [role='button']")
-          ) {
-            window.location.href = getCountryHref(country);
-          }
           return;
         }
 

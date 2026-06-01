@@ -233,10 +233,11 @@ function renderOverview() {
   }
 
   container.innerHTML = "";
-  container.append(renderActiveCategoryHeading());
 
   if (isOverviewActive()) {
     container.append(renderBasicInformationSection());
+  } else {
+    container.append(renderActiveCategoryHeading());
   }
 
   for (const group of getActiveGroups()) {

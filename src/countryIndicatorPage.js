@@ -1025,14 +1025,14 @@ function renderDataTable(points, seriesConfig) {
   table.className = "data-table";
 
   const tbody = document.createElement("tbody");
-  const pointsPerRow = 3;
+  const columnCount = 3;
+  const rowCount = Math.ceil(sortedPoints.length / columnCount);
 
-  for (let index = 0; index < sortedPoints.length; index += pointsPerRow) {
+  for (let rowIndex = 0; rowIndex < rowCount; rowIndex += 1) {
     const row = document.createElement("tr");
-    const rowPoints = sortedPoints.slice(index, index + pointsPerRow);
 
-    for (let pointIndex = 0; pointIndex < pointsPerRow; pointIndex += 1) {
-      appendDataTablePointCells(row, rowPoints[pointIndex], displayScale);
+    for (let columnIndex = 0; columnIndex < columnCount; columnIndex += 1) {
+      appendDataTablePointCells(row, sortedPoints[rowIndex + columnIndex * rowCount], displayScale);
     }
 
     tbody.append(row);
