@@ -178,43 +178,19 @@ def build_ranking_data(result: dict) -> tuple[dict, dict[str, dict[str, dict]]]:
         "yearPathTemplate": "./{indicator}/{year}.json",
     }
     data_by_indicator = {
-        indicator_id: build_ranking_year_data(indicator_id, data_by_year)
+        indicator_id: {
+            year: {
+                "schemaVersion": 1,
+                "dataKind": "ranking-year",
+                "indicatorId": indicator_id,
+                "year": int(year),
+                "valuesByCountry": dict(sorted(values_by_country.items())),
+            }
+            for year, values_by_country in sorted(data_by_year.items(), key=lambda item: int(item[0]))
+        }
         for indicator_id, data_by_year in sorted(values_by_indicator_and_year.items())
     }
     return manifest, data_by_indicator
-
-
-def build_ranking_year_data(indicator_id: str, data_by_year: dict[str, dict[str, float | int]]) -> dict[str, dict]:
-    latest_values_by_country: dict[str, float | int] = {}
-    latest_years_by_country: dict[str, int] = {}
-    ranking_data_by_year: dict[str, dict] = {}
-
-    for year, values_by_country in sorted(data_by_year.items(), key=lambda item: int(item[0])):
-        numeric_year = int(year)
-
-        for country_code, value in values_by_country.items():
-            latest_values_by_country[country_code] = value
-            latest_years_by_country[country_code] = numeric_year
-
-        fallback_years_by_country = {
-            country_code: latest_year
-            for country_code, latest_year in latest_years_by_country.items()
-            if latest_year != numeric_year
-        }
-        year_data = {
-            "schemaVersion": 1,
-            "dataKind": "ranking-year",
-            "indicatorId": indicator_id,
-            "year": numeric_year,
-            "valuesByCountry": dict(sorted(latest_values_by_country.items())),
-        }
-
-        if fallback_years_by_country:
-            year_data["yearsByCountry"] = dict(sorted(fallback_years_by_country.items()))
-
-        ranking_data_by_year[year] = year_data
-
-    return ranking_data_by_year
 
 
 def get_numeric_points(values: dict) -> list[tuple[str, float | int]]:

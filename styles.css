@@ -1287,10 +1287,8 @@ body[data-page-kind="country-hub"] .hub-section > .world-map {
   background: var(--accent-soft);
 }
 
-.country-result.is-territory .country-result-name,
-.country-table-row.is-territory td:nth-child(2),
-.ranking-table tr.is-territory td:nth-child(3),
-.ranking-table td.is-carry-forward-year {
+.country-table-row.is-territory td,
+.ranking-table tr.is-territory td {
   background: var(--territory-bg);
 }
 

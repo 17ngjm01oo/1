@@ -1,5 +1,4 @@
 import { countries } from "./countries.js";
-import { markTerritoryElement } from "./countryTypes.js";
 
 const countrySearchPlaceholder = "Search a country or territory...";
 
@@ -77,7 +76,6 @@ export function initializeCountrySelector({
     matchingCountries.forEach((country, index) => {
       const resultElement = getCountryHref ? document.createElement("a") : document.createElement("button");
       resultElement.className = "country-result";
-      markTerritoryElement(resultElement, country);
       if (getCountryHref) {
         resultElement.href = getCountryHref(country);
       } else {
