@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+import shutil
 from pathlib import Path
 
 
@@ -125,6 +126,89 @@ def write_json(output_path: Path, result: dict) -> None:
         json.dumps(result, ensure_ascii=False, separators=(",", ":")),
         encoding="utf-8",
     )
+
+
+def write_data_bundle(output_path: Path, result: dict) -> Path:
+    write_json(output_path, result)
+    return write_ranking_data(output_path, result)
+
+
+def write_ranking_data(output_path: Path, result: dict) -> Path:
+    ranking_output_dir = get_ranking_output_dir(output_path)
+    manifest, data_by_indicator = build_ranking_data(result)
+    remove_previous_ranking_data(output_path, ranking_output_dir)
+    ranking_output_dir.mkdir(parents=True, exist_ok=True)
+
+    for indicator_id, data_by_year in data_by_indicator.items():
+        for year, year_data in data_by_year.items():
+            write_json(ranking_output_dir / indicator_id / f"{year}.json", year_data)
+
+    write_json(ranking_output_dir / "manifest.json", manifest)
+    return ranking_output_dir / "manifest.json"
+
+
+def get_ranking_output_dir(output_path: Path) -> Path:
+    return output_path.parent / "rankings" / output_path.stem
+
+
+def build_ranking_data(result: dict) -> tuple[dict, dict[str, dict[str, dict]]]:
+    values_by_indicator_and_year: dict[str, dict[str, dict[str, float | int]]] = {}
+    years_by_indicator: dict[str, set[int]] = {}
+
+    for country_code, economy in result["economies"].items():
+        for indicator_id, series in economy["series"].items():
+            for year, value in get_numeric_points(series.get("values", {})):
+                years_by_indicator.setdefault(indicator_id, set()).add(int(year))
+                year_values = values_by_indicator_and_year.setdefault(indicator_id, {}).setdefault(year, {})
+                year_values[country_code] = value
+
+    years = sorted({year for indicator_years in years_by_indicator.values() for year in indicator_years})
+    manifest = {
+        "schemaVersion": 1,
+        "dataKind": "ranking-manifest",
+        "source": result.get("source", {}),
+        "years": years,
+        "yearsByIndicator": {
+            indicator_id: sorted(indicator_years)
+            for indicator_id, indicator_years in sorted(years_by_indicator.items())
+        },
+        "yearPathTemplate": "./{indicator}/{year}.json",
+    }
+    data_by_indicator = {
+        indicator_id: {
+            year: {
+                "schemaVersion": 1,
+                "dataKind": "ranking-year",
+                "indicatorId": indicator_id,
+                "year": int(year),
+                "valuesByCountry": dict(sorted(values_by_country.items())),
+            }
+            for year, values_by_country in sorted(data_by_year.items(), key=lambda item: int(item[0]))
+        }
+        for indicator_id, data_by_year in sorted(values_by_indicator_and_year.items())
+    }
+    return manifest, data_by_indicator
+
+
+def get_numeric_points(values: dict) -> list[tuple[str, float | int]]:
+    return sorted(
+        (
+            (str(year), value)
+            for year, value in values.items()
+            if str(year).isdigit() and isinstance(value, (float, int)) and not isinstance(value, bool)
+        ),
+        key=lambda point: int(point[0]),
+    )
+
+
+def remove_previous_ranking_data(output_path: Path, ranking_output_dir: Path) -> None:
+    legacy_output_path = output_path.parent / "rankings" / output_path.name
+
+    if legacy_output_path.exists():
+        legacy_output_path.unlink()
+
+    if ranking_output_dir.exists():
+        shutil.rmtree(ranking_output_dir)
 
 
 def print_data_source_summary(result: dict, indicator_ids: list[str] | tuple[str, ...] | None = None) -> None:

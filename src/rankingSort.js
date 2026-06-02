@@ -1,4 +1,5 @@
 import { getRankingControls } from "./rankingControls.js";
+import { createRankingDropdown } from "./rankingDropdown.js";
 
 const sortOptions = [
   { value: "highest", label: "Highest" },
@@ -12,53 +13,16 @@ export function initializeRankingSort({ initialValue = "highest", onChange }) {
     return initialValue;
   }
 
-  const sortControl = document.createElement("details");
-  sortControl.className = "ranking-sort";
-
-  const sortToggle = document.createElement("summary");
-  sortToggle.className = "ranking-sort-toggle";
-  sortToggle.textContent = "Sort by";
-  sortToggle.setAttribute("aria-label", "Choose ranking sort order");
-
-  const sortMenu = document.createElement("div");
-  sortMenu.className = "ranking-sort-menu";
-  sortMenu.setAttribute("role", "group");
-  sortMenu.setAttribute("aria-label", "Ranking sort order");
-
-  sortOptions.forEach((option) => {
-    const button = document.createElement("button");
-    button.className = "ranking-sort-option";
-    button.type = "button";
-    button.dataset.rankingSort = option.value;
-    button.setAttribute("aria-pressed", String(option.value === initialValue));
-    button.textContent = option.label;
-
-    button.addEventListener("click", () => {
-      sortMenu.querySelectorAll("[data-ranking-sort]").forEach((sortButton) => {
-        sortButton.setAttribute("aria-pressed", String(sortButton === button));
-      });
-      sortControl.open = false;
-      onChange?.(option.value);
-    });
-
-    sortMenu.append(button);
+  const sortControl = createRankingDropdown({
+    className: "ranking-sort-order",
+    toggleText: () => "Sort by",
+    toggleAriaLabel: "Choose ranking sort order",
+    menuAriaLabel: "Ranking sort order",
+    options: sortOptions,
+    initialValue,
+    onChange,
   });
-
-  sortControl.append(sortToggle, sortMenu);
   controls.append(sortControl);
-
-  document.addEventListener("click", (event) => {
-    if (!sortControl.contains(event.target)) {
-      sortControl.open = false;
-    }
-  });
-
-  sortControl.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      sortControl.open = false;
-      sortToggle.focus();
-    }
-  });
 
   return initialValue;
 }

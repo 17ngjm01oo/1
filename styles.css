@@ -1585,8 +1585,8 @@ body[data-country-code] .subtitle {
 }
 
 .ranking-controls {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: auto auto;
   justify-content: flex-end;
   gap: 6px;
   grid-column: 2;
@@ -1616,6 +1616,11 @@ body[data-country-code] .subtitle {
   font-weight: 700;
   cursor: pointer;
   list-style: none;
+}
+
+.ranking-year {
+  grid-column: 1 / -1;
+  justify-self: end;
 }
 
 .ranking-sort-toggle {
@@ -1685,6 +1690,11 @@ body[data-country-code] .subtitle {
   background: #ffffff;
   box-shadow: 0 12px 28px rgba(23, 32, 42, 0.14);
   transform: translateX(-50%);
+}
+
+.ranking-year-menu {
+  max-height: min(360px, 60vh);
+  overflow-y: auto;
 }
 
 .ranking-sort-option {

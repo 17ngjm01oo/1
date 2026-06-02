@@ -14,7 +14,7 @@ from data_update_utils import (
     load_countries,
     normalize_number,
     print_data_source_summary,
-    write_json,
+    write_data_bundle,
 )
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
@@ -141,8 +141,9 @@ def main() -> None:
     dataset_config = DATASETS[args.dataset]
     output_path = args.output or dataset_config["outputPath"]
     result = build_normalized_world_bank_json(dataset_config)
-    write_json(output_path, result)
+    ranking_output_path = write_data_bundle(output_path, result)
     print(f"Wrote {format_path_for_log(output_path)}")
+    print(f"Wrote {format_path_for_log(ranking_output_path)}")
     print_summary(result)
 
 

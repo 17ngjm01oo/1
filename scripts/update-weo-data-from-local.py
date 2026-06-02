@@ -21,7 +21,7 @@ ROOT_DIR = update_weo_data.ROOT_DIR
 build_normalized_weo_json = update_weo_data.build_normalized_weo_json
 format_path_for_log = update_weo_data.format_path_for_log
 print_summary = update_weo_data.print_summary
-write_json = update_weo_data.write_json
+write_data_bundle = update_weo_data.write_data_bundle
 
 
 DEFAULT_INPUT_PATH = ROOT_DIR / "data" / "weo" / "source" / "WEOApr2026all.xlsx"
@@ -53,8 +53,9 @@ def main() -> None:
 
     print(f"Reading local WEO Excel: {format_path_for_log(args.input)}")
     result = build_normalized_weo_json(args.input)
-    write_json(args.output, result)
+    ranking_output_path = write_data_bundle(args.output, result)
     print(f"Wrote {format_path_for_log(args.output)}")
+    print(f"Wrote {format_path_for_log(ranking_output_path)}")
     print_summary(result)
 
 

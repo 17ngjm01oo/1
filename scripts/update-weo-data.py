@@ -12,7 +12,7 @@ from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 from xml.etree import ElementTree
 
-from data_update_utils import format_path_for_log, normalize_number, write_json
+from data_update_utils import format_path_for_log, normalize_number, write_data_bundle
 
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
@@ -140,9 +140,10 @@ def main() -> None:
     excel_path = args.input or download_weo_excel()
     result = build_normalized_weo_json(excel_path)
 
-    write_json(args.output, result)
+    ranking_output_path = write_data_bundle(args.output, result)
 
     print(f"Wrote {format_path_for_log(args.output)}")
+    print(f"Wrote {format_path_for_log(ranking_output_path)}")
     print_summary(result)
 
 

@@ -9,8 +9,8 @@ import { showRankingLoadError, updateRankingSummaryDisplay } from "./rankingSumm
 import { initializeRankingSort } from "./rankingSort.js";
 import { initializeRankingTerritoryToggle } from "./rankingTerritoryToggle.js";
 import { appendRankingValueCell } from "./rankingValueBar.js";
+import { initializeRankingYear } from "./rankingYear.js";
 import "./rankingTopNav.js";
-import { getIndicatorSeriesMap } from "./seriesData.js";
 
 export function initializeRankingPage(config) {
   initializeRankingCountrySearch(config);
@@ -21,6 +21,10 @@ export function initializeRankingPage(config) {
     activeScope: null,
     sortOrder: "highest",
     showTerritories: true,
+    selectedYear: null,
+    rankingManifestUrl: null,
+    rankingManifest: null,
+    rankingDataByYear: new Map(),
   };
 
   state.showTerritories = initializeRankingTerritoryToggle({
@@ -71,42 +75,115 @@ async function initializeRanking(config, state) {
     throw new Error(`staticDataPath is required for ${config.logName} ranking.`);
   }
 
-  const dataUrl = new URL(config.staticDataPath, import.meta.url);
-  const response = await fetch(dataUrl, {
+  state.rankingManifestUrl = new URL(config.staticDataPath, import.meta.url);
+  state.rankingManifest = await fetchJson(state.rankingManifestUrl, config.logName);
+
+  const availableYears = getAvailableYears(state.rankingManifest, config.indicatorCode);
+  state.selectedYear = availableYears[0] ?? null;
+
+  if (!state.selectedYear) {
+    throw new Error(`Static ${config.logName} ranking manifest has no years for ${config.indicatorCode}.`);
+  }
+
+  initializeRankingYear({
+    years: availableYears,
+    initialValue: state.selectedYear,
+    onChange(year) {
+      state.selectedYear = year;
+      showRankingLoading();
+      loadRankingYear(config, state, year).catch((error) => {
+        console.error(`[Ranking] Failed to load ${config.logName} ranking for ${year}.`, error);
+        if (year === state.selectedYear) {
+          showRankingError();
+        }
+      });
+    },
+  });
+
+  await loadRankingYear(config, state, state.selectedYear);
+}
+
+async function loadRankingYear(config, state, year) {
+  const data = await getRankingYearData(config, state, year);
+
+  if (year !== state.selectedYear) {
+    return;
+  }
+
+  state.allRankingRows = buildRankingRows(data, config, year);
+  renderScopedRanking(config, state);
+}
+
+async function getRankingYearData(config, state, year) {
+  if (!state.rankingDataByYear.has(year)) {
+    const yearPathTemplate = state.rankingManifest?.yearPathTemplate;
+
+    if (
+      !yearPathTemplate
+      || !yearPathTemplate.includes("{indicator}")
+      || !yearPathTemplate.includes("{year}")
+    ) {
+      throw new Error(`Static ${config.logName} ranking manifest has no year path template.`);
+    }
+
+    const yearPath = yearPathTemplate
+      .replace("{indicator}", encodeURIComponent(config.indicatorCode))
+      .replace("{year}", year);
+    const yearUrl = new URL(yearPath, state.rankingManifestUrl);
+    const request = fetchJson(yearUrl, `${config.logName} ${year}`).catch((error) => {
+      state.rankingDataByYear.delete(year);
+      throw error;
+    });
+    state.rankingDataByYear.set(year, request);
+  }
+
+  return state.rankingDataByYear.get(year);
+}
+
+async function fetchJson(url, label) {
+  const response = await fetch(url, {
     headers: {
       Accept: "application/json",
     },
   });
 
   if (!response.ok) {
-    throw new Error(`Static ${config.logName} data file request failed: ${response.status} ${response.statusText}`);
+    throw new Error(`Static ${label} data file request failed: ${response.status} ${response.statusText}`);
   }
 
-  const data = await response.json();
-  state.allRankingRows = buildRankingRows(data, config);
-  renderScopedRanking(config, state);
+  return response.json();
 }
 
-function buildRankingRows(data, config) {
-  const valuesByCountry = getIndicatorSeriesMap(data, config.indicatorCode);
+function getAvailableYears(manifest, indicatorCode) {
+  const years = manifest?.yearsByIndicator?.[indicatorCode];
+
+  if (!Array.isArray(years)) {
+    return [];
+  }
+
+  return years.map(String).sort((yearA, yearB) => Number(yearB) - Number(yearA));
+}
+
+function buildRankingRows(data, config, selectedYear) {
+  const valuesByCountry = data?.indicatorId === config.indicatorCode ? data.valuesByCountry : null;
 
   if (!valuesByCountry || typeof valuesByCountry !== "object") {
-    throw new Error(`Static ${config.logName} data file is missing ${config.indicatorCode} series.`);
+    throw new Error(`Static ${config.logName} data file is missing ${config.indicatorCode} values.`);
   }
 
   return countries
     .filter((country) => country.includeInRankings !== false)
     .map((country) => {
-      const latestPoint = getLatestNumericPoint(valuesByCountry[country.code], config);
+      const value = normalizeNumericValue(valuesByCountry[country.code]);
 
-      if (!latestPoint) {
+      if (!Number.isFinite(value)) {
         return null;
       }
 
       return {
         ...country,
-        value: latestPoint.value,
-        year: latestPoint.year,
+        value,
+        year: Number.parseInt(selectedYear, 10),
       };
     })
     .filter(Boolean)
@@ -145,29 +222,6 @@ function filterRankingRows(rankingRows, scope, showTerritories) {
   return rankingRows.filter((country) => {
     return scopedCountryCodes.has(country.code) && (showTerritories || !isTerritory(country));
   });
-}
-
-function getLatestNumericPoint(series, config) {
-  if (!series || typeof series !== "object" || Array.isArray(series)) {
-    return null;
-  }
-
-  const points = Object.entries(series)
-    .map(([yearKey, value]) => ({
-      year: Number.parseInt(yearKey, 10),
-      value: normalizeNumericValue(value),
-    }))
-    .filter(({ year, value }) => {
-      return (
-        Number.isInteger(year) &&
-        year <= (config.endYear ?? Number.POSITIVE_INFINITY) &&
-        year >= (config.startYear ?? Number.NEGATIVE_INFINITY) &&
-        Number.isFinite(value)
-      );
-    })
-    .sort((pointA, pointB) => pointB.year - pointA.year);
-
-  return points[0] ?? null;
 }
 
 function renderRankingTable(config, rankingRows) {
@@ -274,6 +328,21 @@ function showRankingError() {
 
   if (rankingTableBody) {
     rankingTableBody.innerHTML = "";
+  }
+}
+
+function showRankingLoading() {
+  const summaryElement = document.querySelector("#rankingSummary");
+  const countElement = document.querySelector("#rankingCount");
+
+  if (summaryElement) {
+    summaryElement.hidden = false;
+    summaryElement.textContent = "Loading ranking data...";
+    summaryElement.classList.remove("is-error");
+  }
+
+  if (countElement) {
+    countElement.textContent = "";
   }
 }
 

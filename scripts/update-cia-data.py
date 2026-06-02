@@ -15,7 +15,7 @@ from data_update_utils import (
     get_external_id,
     load_countries,
     print_data_source_summary,
-    write_json,
+    write_data_bundle,
 )
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
@@ -52,8 +52,9 @@ def main() -> None:
     args = parser.parse_args()
 
     result = build_normalized_cia_area_json()
-    write_json(args.output, result)
+    ranking_output_path = write_data_bundle(args.output, result)
     print(f"Wrote {format_path_for_log(args.output)}")
+    print(f"Wrote {format_path_for_log(ranking_output_path)}")
     print_summary(result)
 
 
