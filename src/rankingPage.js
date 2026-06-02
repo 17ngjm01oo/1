@@ -166,6 +166,8 @@ function getAvailableYears(manifest, indicatorCode) {
 
 function buildRankingRows(data, config, selectedYear) {
   const valuesByCountry = data?.indicatorId === config.indicatorCode ? data.valuesByCountry : null;
+  const yearsByCountry = data?.yearsByCountry;
+  const numericSelectedYear = Number.parseInt(selectedYear, 10);
 
   if (!valuesByCountry || typeof valuesByCountry !== "object") {
     throw new Error(`Static ${config.logName} data file is missing ${config.indicatorCode} values.`);
@@ -175,15 +177,17 @@ function buildRankingRows(data, config, selectedYear) {
     .filter((country) => country.includeInRankings !== false)
     .map((country) => {
       const value = normalizeNumericValue(valuesByCountry[country.code]);
+      const year = Number.parseInt(yearsByCountry?.[country.code] ?? selectedYear, 10);
 
-      if (!Number.isFinite(value)) {
+      if (!Number.isFinite(value) || !Number.isInteger(year)) {
         return null;
       }
 
       return {
         ...country,
         value,
-        year: Number.parseInt(selectedYear, 10),
+        year,
+        isCarryForwardYear: year !== numericSelectedYear,
       };
     })
     .filter(Boolean)
@@ -285,6 +289,7 @@ function renderRankingTable(config, rankingRows) {
       valueBarScale,
     });
     yearCell.textContent = String(country.year);
+    yearCell.classList.toggle("is-carry-forward-year", country.isCarryForwardYear);
 
     row.append(rankCell, flagCell, countryCell, valueCell, yearCell);
     rankingTableBody.append(row);

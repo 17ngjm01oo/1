@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import re
-import shutil
 from pathlib import Path
 
 
@@ -136,14 +135,18 @@ def write_data_bundle(output_path: Path, result: dict) -> Path:
 def write_ranking_data(output_path: Path, result: dict) -> Path:
     ranking_output_dir = get_ranking_output_dir(output_path)
     manifest, data_by_indicator = build_ranking_data(result)
-    remove_previous_ranking_data(output_path, ranking_output_dir)
+    remove_legacy_ranking_data(output_path)
     ranking_output_dir.mkdir(parents=True, exist_ok=True)
+    expected_json_paths = {ranking_output_dir / "manifest.json"}
 
     for indicator_id, data_by_year in data_by_indicator.items():
         for year, year_data in data_by_year.items():
-            write_json(ranking_output_dir / indicator_id / f"{year}.json", year_data)
+            year_path = ranking_output_dir / indicator_id / f"{year}.json"
+            write_json(year_path, year_data)
+            expected_json_paths.add(year_path)
 
     write_json(ranking_output_dir / "manifest.json", manifest)
+    remove_stale_ranking_data(ranking_output_dir, expected_json_paths)
     return ranking_output_dir / "manifest.json"
 
 
@@ -175,19 +178,43 @@ def build_ranking_data(result: dict) -> tuple[dict, dict[str, dict[str, dict]]]:
         "yearPathTemplate": "./{indicator}/{year}.json",
     }
     data_by_indicator = {
-        indicator_id: {
-            year: {
-                "schemaVersion": 1,
-                "dataKind": "ranking-year",
-                "indicatorId": indicator_id,
-                "year": int(year),
-                "valuesByCountry": dict(sorted(values_by_country.items())),
-            }
-            for year, values_by_country in sorted(data_by_year.items(), key=lambda item: int(item[0]))
-        }
+        indicator_id: build_ranking_year_data(indicator_id, data_by_year)
         for indicator_id, data_by_year in sorted(values_by_indicator_and_year.items())
     }
     return manifest, data_by_indicator
+
+
+def build_ranking_year_data(indicator_id: str, data_by_year: dict[str, dict[str, float | int]]) -> dict[str, dict]:
+    latest_values_by_country: dict[str, float | int] = {}
+    latest_years_by_country: dict[str, int] = {}
+    ranking_data_by_year: dict[str, dict] = {}
+
+    for year, values_by_country in sorted(data_by_year.items(), key=lambda item: int(item[0])):
+        numeric_year = int(year)
+
+        for country_code, value in values_by_country.items():
+            latest_values_by_country[country_code] = value
+            latest_years_by_country[country_code] = numeric_year
+
+        fallback_years_by_country = {
+            country_code: latest_year
+            for country_code, latest_year in latest_years_by_country.items()
+            if latest_year != numeric_year
+        }
+        year_data = {
+            "schemaVersion": 1,
+            "dataKind": "ranking-year",
+            "indicatorId": indicator_id,
+            "year": numeric_year,
+            "valuesByCountry": dict(sorted(latest_values_by_country.items())),
+        }
+
+        if fallback_years_by_country:
+            year_data["yearsByCountry"] = dict(sorted(fallback_years_by_country.items()))
+
+        ranking_data_by_year[year] = year_data
+
+    return ranking_data_by_year
 
 
 def get_numeric_points(values: dict) -> list[tuple[str, float | int]]:
@@ -201,14 +228,24 @@ def get_numeric_points(values: dict) -> list[tuple[str, float | int]]:
     )
 
 
-def remove_previous_ranking_data(output_path: Path, ranking_output_dir: Path) -> None:
+def remove_legacy_ranking_data(output_path: Path) -> None:
     legacy_output_path = output_path.parent / "rankings" / output_path.name
 
     if legacy_output_path.exists():
         legacy_output_path.unlink()
 
-    if ranking_output_dir.exists():
-        shutil.rmtree(ranking_output_dir)
+
+def remove_stale_ranking_data(ranking_output_dir: Path, expected_json_paths: set[Path]) -> None:
+    for json_path in ranking_output_dir.rglob("*.json"):
+        if json_path not in expected_json_paths:
+            json_path.unlink()
+
+    for directory in sorted(ranking_output_dir.rglob("*"), reverse=True):
+        if directory.is_dir():
+            try:
+                directory.rmdir()
+            except OSError:
+                pass
 
 
 def print_data_source_summary(result: dict, indicator_ids: list[str] | tuple[str, ...] | None = None) -> None:
