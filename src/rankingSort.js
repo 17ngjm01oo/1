@@ -14,7 +14,6 @@ export function initializeRankingSort({ initialValue = "highest", onChange }) {
   }
 
   const sortControl = createRankingDropdown({
-    className: "ranking-sort-order",
     toggleText: () => "Sort by",
     toggleAriaLabel: "Choose ranking sort order",
     menuAriaLabel: "Ranking sort order",

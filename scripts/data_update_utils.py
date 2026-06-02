@@ -4,6 +4,8 @@ import json
 import re
 from pathlib import Path
 
+from ranking_data_config import get_ranking_indicator_ids
+
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 COUNTRIES_JS = ROOT_DIR / "src" / "countries.js"
@@ -157,20 +159,21 @@ def get_ranking_output_dir(output_path: Path) -> Path:
 def build_ranking_data(result: dict) -> tuple[dict, dict[str, dict[str, dict]]]:
     values_by_indicator_and_year: dict[str, dict[str, dict[str, float | int]]] = {}
     years_by_indicator: dict[str, set[int]] = {}
+    ranking_indicator_ids = get_ranking_indicator_ids(result)
 
     for country_code, economy in result["economies"].items():
         for indicator_id, series in economy["series"].items():
+            if indicator_id not in ranking_indicator_ids:
+                continue
+
             for year, value in get_numeric_points(series.get("values", {})):
                 years_by_indicator.setdefault(indicator_id, set()).add(int(year))
                 year_values = values_by_indicator_and_year.setdefault(indicator_id, {}).setdefault(year, {})
                 year_values[country_code] = value
 
-    years = sorted({year for indicator_years in years_by_indicator.values() for year in indicator_years})
     manifest = {
         "schemaVersion": 1,
         "dataKind": "ranking-manifest",
-        "source": result.get("source", {}),
-        "years": years,
         "yearsByIndicator": {
             indicator_id: sorted(indicator_years)
             for indicator_id, indicator_years in sorted(years_by_indicator.items())

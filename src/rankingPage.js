@@ -217,11 +217,7 @@ function updateRankingTitle(config, scope) {
 }
 
 function filterRankingRows(rankingRows, scope, showTerritories) {
-  const rankingCountries = countries.filter((country) => country.includeInRankings !== false);
-  const scopedCountryCodes = new Set(filterCountriesByScope(rankingCountries, scope).map((country) => country.code));
-  return rankingRows.filter((country) => {
-    return scopedCountryCodes.has(country.code) && (showTerritories || !isTerritory(country));
-  });
+  return filterCountriesByScope(rankingRows, scope).filter((country) => showTerritories || !isTerritory(country));
 }
 
 function renderRankingTable(config, rankingRows) {

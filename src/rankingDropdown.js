@@ -1,5 +1,5 @@
 export function createRankingDropdown({
-  className,
+  menuClassName = "",
   toggleText,
   toggleAriaLabel,
   menuAriaLabel,
@@ -8,21 +8,21 @@ export function createRankingDropdown({
   onChange,
 }) {
   const control = document.createElement("details");
-  control.className = `ranking-sort ${className}`;
+  control.className = "ranking-dropdown";
 
   const toggle = document.createElement("summary");
-  toggle.className = "ranking-sort-toggle";
+  toggle.className = "ranking-dropdown-toggle";
   toggle.textContent = toggleText(initialValue);
   toggle.setAttribute("aria-label", toggleAriaLabel);
 
   const menu = document.createElement("div");
-  menu.className = "ranking-sort-menu";
+  menu.className = `ranking-dropdown-menu${menuClassName ? ` ${menuClassName}` : ""}`;
   menu.setAttribute("role", "group");
   menu.setAttribute("aria-label", menuAriaLabel);
 
   options.forEach((option) => {
     const button = document.createElement("button");
-    button.className = "ranking-sort-option";
+    button.className = "ranking-dropdown-option";
     button.type = "button";
     button.dataset.rankingOption = option.value;
     button.setAttribute("aria-pressed", String(option.value === initialValue));

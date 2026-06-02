@@ -52,7 +52,7 @@ data/weo/rankings/current-prices/manifest.json
 data/weo/rankings/current-prices/INDICATOR_ID/YYYY.json
 ```
 
-自動取得でも手動Excelでも、最終的には同じ国別グラフ用JSONと指標・年別ランキング用JSONを生成します。ランキングページは最初にマニフェストと対象指標の最新年だけを読み込み、年代変更時に選択年だけを追加取得します。更新スクリプトは WEO Entire Dataset Excel から `NGDPD`、`NGDPDPC`、`NGDP`、`NGDPPC`、`NGDP_R`、`NGDPRPC` を抽出し、サイト内部で使う共通JSON形式に変換します。
+自動取得でも手動Excelでも、最終的には同じ国別グラフ用JSONと指標・年別ランキング用JSONを生成します。ランキング用JSONはランキングページが存在する指標だけを生成します。ランキングページは最初にマニフェストと対象指標の最新年だけを読み込み、年代変更時に選択年だけを追加取得します。更新スクリプトは WEO Entire Dataset Excel から `NGDPD`、`NGDPDPC`、`NGDP`、`NGDPPC`、`NGDP_R`、`NGDPRPC` を抽出し、サイト内部で使う共通JSON形式に変換します。
 
 外部データを再取得せず、既存の国別グラフ用JSONからランキング用JSONだけを再生成する場合:
 
