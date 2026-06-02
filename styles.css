@@ -6,7 +6,7 @@
   --muted: #617083;
   --border: #d9e0e7;
   --accent: #176b87;
-  --accent-soft: rgba(23, 107, 135, 0.12);
+  --accent-soft: rgba(70, 160, 210, 0.2);
   --error: #9f2f2f;
   --error-bg: #fff0f0;
   --territory-bg: #fffced;
@@ -586,7 +586,7 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
 .country-overview-category-button:hover,
 .country-overview-category-button:focus-visible,
 .country-overview-category-button[aria-selected="true"] {
-  color: var(--accent);
+  color: var(--text);
 }
 
 #countryRelatedPageNav {
@@ -877,7 +877,7 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
 .compare-clear-button:hover,
 .compare-clear-button:focus-visible {
   background: var(--accent-soft);
-  color: var(--accent);
+  color: var(--text);
 }
 
 .compare-clear-button:focus-visible {
@@ -1004,6 +1004,11 @@ body[data-page-kind="country-hub"] .hub-section > .world-map {
 
 .world-map-country.is-clickable {
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.world-map-country.is-clickable:focus {
+  outline: none;
 }
 
 .world-map-country.is-clickable:hover,
@@ -1037,14 +1042,6 @@ body[data-page-kind="country-hub"] .hub-section > .world-map {
 }
 
 @media (hover: none), (pointer: coarse) {
-  .world-map-country.is-clickable {
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .world-map-country.is-clickable:focus {
-    outline: none;
-  }
-
   .world-map-tooltip {
     display: none;
   }
@@ -1563,8 +1560,9 @@ body[data-country-code] .subtitle {
 }
 
 .ranking-card-header h2 {
-  grid-column: 1;
+  grid-column: 1 / -1;
   margin: 0;
+  white-space: nowrap;
 }
 
 .ranking-summary {
@@ -1592,7 +1590,7 @@ body[data-country-code] .subtitle {
   justify-content: flex-end;
   gap: 6px;
   grid-column: 2;
-  grid-row: 1 / span 3;
+  grid-row: 2 / span 2;
   align-self: end;
 }
 
@@ -1608,8 +1606,8 @@ body[data-country-code] .subtitle {
   display: flex;
   align-items: center;
   gap: 9px;
-  min-height: 28px;
-  padding: 3px 10px;
+  min-height: 26px;
+  padding: 2px 10px;
   border: 1px solid var(--border);
   border-radius: var(--radius-component);
   background: #fbfcfd;
@@ -1676,15 +1674,17 @@ body[data-country-code] .subtitle {
 .ranking-sort-menu {
   position: absolute;
   top: calc(100% + 4px);
-  right: 0;
+  left: 50%;
   z-index: 10;
   display: grid;
-  min-width: 68px;
+  width: calc(100% - 6px);
+  min-width: 0;
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: var(--radius-component);
   background: #ffffff;
   box-shadow: 0 12px 28px rgba(23, 32, 42, 0.14);
+  transform: translateX(-50%);
 }
 
 .ranking-sort-option {
@@ -1707,7 +1707,7 @@ body[data-country-code] .subtitle {
 .ranking-sort-option:hover,
 .ranking-sort-option:focus-visible {
   background: var(--accent-soft);
-  color: var(--accent);
+  color: var(--text);
   outline: none;
 }
 

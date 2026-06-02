@@ -1,6 +1,7 @@
 import { formatCompactDisplayValue, getDisplayScale } from "./chart.js";
 import { seriesConfigs } from "./config.js";
 import { countries } from "./countries.js";
+import { officialLanguagesByCountryCode } from "./countryLanguages.js";
 import { getCountryCurrencyDisplay } from "./currencyCodes.js";
 import { getFlagEmoji } from "./flags.js";
 import { rankingCategories } from "./rankingCategories.js";
@@ -266,10 +267,12 @@ function renderBasicInformationSection() {
 
 function getBasicInformationItems() {
   const capitals = Array.isArray(selectedCountry.capitals) ? selectedCountry.capitals : [];
+  const officialLanguages = officialLanguagesByCountryCode[selectedCountry.code] ?? [];
 
   return [
     { label: "Official name", value: selectedCountry.officialName ?? "" },
     { label: capitals.length > 1 ? "Capitals" : "Capital", value: capitals.join(", ") },
+    { label: officialLanguages.length > 1 ? "Official languages" : "Official language", value: officialLanguages.join(", ") },
     { label: "Region", value: selectedCountry.region ?? "" },
     { label: "Currency", value: getCountryCurrencyDisplay(selectedCountry.code) },
   ];
