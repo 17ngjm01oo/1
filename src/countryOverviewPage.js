@@ -1,4 +1,4 @@
-import { formatCompactDisplayValue, getDisplayScale } from "./chart.js";
+import { formatCompactDisplayValue, getSingleValueDisplayScale } from "./displayFormat.js";
 import { seriesConfigs } from "./config.js";
 import { countries } from "./countries.js";
 import { getCountryCurrencyDisplay } from "./currencyCodes.js";
@@ -328,7 +328,7 @@ function renderIndicatorRow(indicator, dataByPath) {
   yearCell.className = "country-overview-year";
 
   if (countryRow) {
-    const displayScale = getDisplayScale([{ year: countryRow.year, value: countryRow.value }], config);
+    const displayScale = getSingleValueDisplayScale(countryRow.value, config);
     valueCell.append(buildValueLink(indicator, formatCompactDisplayValue(countryRow.value, displayScale)));
     rankCell.append(buildRankingLink(indicator, `${countryRow.rank} / ${rankingRows.length}`));
     yearCell.textContent = String(countryRow.year);

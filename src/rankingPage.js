@@ -2,10 +2,10 @@ import { countries } from "./countries.js";
 import { filterCountriesByScope } from "./countryFilters.js";
 import { initializeCountrySelector } from "./countrySelector.js";
 import { appendTerritoryNote, isTerritory, markTerritoryElement } from "./countryTypes.js";
-import { formatCompactDisplayValue, getDisplayScale } from "./chart.js";
+import { formatCompactDisplayValue, getSingleValueDisplayScale } from "./displayFormat.js";
 import { getFlagEmoji } from "./flags.js";
 import { initializeRankingFilters } from "./rankingFilters.js";
-import { showRankingLoadError, updateRankingSummaryDisplay } from "./rankingSummary.js";
+import { showRankingCount, showRankingLoading, showRankingLoadError } from "./rankingStatus.js";
 import { initializeRankingSort } from "./rankingSort.js";
 import { initializeRankingTerritoryToggle } from "./rankingTerritoryToggle.js";
 import { appendRankingValueCell } from "./rankingValueBar.js";
@@ -25,6 +25,11 @@ export function initializeRankingPage(config) {
     rankingManifestUrl: null,
     rankingManifest: null,
     rankingDataByYear: new Map(),
+    elements: {
+      count: document.querySelector("#rankingCount"),
+      tableBody: document.querySelector("#rankingTableBody"),
+      tableTitle: document.querySelector("#ranking-table-title"),
+    },
   };
 
   state.showTerritories = initializeRankingTerritoryToggle({
@@ -45,7 +50,7 @@ export function initializeRankingPage(config) {
 
   initializeRanking(config, state).catch((error) => {
     console.error(`[Ranking] Failed to initialize ${config.logName} ranking.`, error);
-    showRankingError();
+    showRankingError(state);
   });
 }
 
@@ -90,11 +95,13 @@ async function initializeRanking(config, state) {
     initialValue: state.selectedYear,
     onChange(year) {
       state.selectedYear = year;
-      showRankingLoading();
+      showRankingLoading({
+        countElement: state.elements.count,
+      });
       loadRankingYear(config, state, year).catch((error) => {
         console.error(`[Ranking] Failed to load ${config.logName} ranking for ${year}.`, error);
         if (year === state.selectedYear) {
-          showRankingError();
+          showRankingError(state);
         }
       });
     },
@@ -195,9 +202,9 @@ function renderScopedRanking(config, state) {
     filterRankingRows(state.allRankingRows, state.activeScope, state.showTerritories),
     state.sortOrder,
   );
-  updateRankingTitle(config, state.activeScope);
-  renderRankingTable(config, rankingRows);
-  updateRankingSummary(rankingRows);
+  updateRankingTitle(state, state.activeScope);
+  renderRankingTable(config, state, rankingRows);
+  updateRankingCount(state, rankingRows);
 }
 
 function sortRankingRows(rankingRows, sortOrder) {
@@ -205,8 +212,8 @@ function sortRankingRows(rankingRows, sortOrder) {
   return [...rankingRows].sort((countryA, countryB) => direction * (countryA.value - countryB.value));
 }
 
-function updateRankingTitle(config, scope) {
-  const rankingTableTitle = document.querySelector("#ranking-table-title");
+function updateRankingTitle(state, scope) {
+  const rankingTableTitle = state.elements.tableTitle;
 
   if (!rankingTableTitle) {
     return;
@@ -220,10 +227,11 @@ function filterRankingRows(rankingRows, scope, showTerritories) {
   return filterCountriesByScope(rankingRows, scope).filter((country) => showTerritories || !isTerritory(country));
 }
 
-function renderRankingTable(config, rankingRows) {
-  const rankingTableBody = document.querySelector("#rankingTableBody");
+function renderRankingTable(config, state, rankingRows) {
+  const rankingTableBody = state.elements.tableBody;
   const rootHref = document.body.dataset.rootHref ?? "../../";
   const valueBarScale = getValueBarScale(rankingRows);
+  const pagePathSegment = getCountryPagePathSegment(config);
 
   if (!rankingTableBody) {
     return;
@@ -242,6 +250,8 @@ function renderRankingTable(config, rankingRows) {
     return;
   }
 
+  const fragment = document.createDocumentFragment();
+
   rankingRows.forEach((country, index) => {
     const row = document.createElement("tr");
     markTerritoryElement(row, country);
@@ -250,7 +260,7 @@ function renderRankingTable(config, rankingRows) {
     const countryCell = document.createElement("td");
     const valueCell = document.createElement("td");
     const yearCell = document.createElement("td");
-    const displayScale = getDisplayScale([{ year: country.year, value: country.value }], config.displayScaleConfig);
+    const displayScale = getSingleValueDisplayScale(country.value, config.displayScaleConfig);
 
     rankCell.textContent = String(index + 1);
     flagCell.className = "ranking-flag";
@@ -272,7 +282,6 @@ function renderRankingTable(config, rankingRows) {
     countryLink.append(countryLinkText, countryLinkArrow);
     countryCell.append(countryLink);
 
-    const pagePathSegment = getCountryPagePathSegment(config);
     appendRankingValueCell(valueCell, {
       href: pagePathSegment ? `${rootHref}countries/${country.slug}/${pagePathSegment}/` : "",
       text: formatCompactDisplayValue(country.value, displayScale),
@@ -283,8 +292,10 @@ function renderRankingTable(config, rankingRows) {
     yearCell.textContent = String(country.year);
 
     row.append(rankCell, flagCell, countryCell, valueCell, yearCell);
-    rankingTableBody.append(row);
+    fragment.append(row);
   });
+
+  rankingTableBody.append(fragment);
 }
 
 function getValueBarScale(rankingRows) {
@@ -306,39 +317,22 @@ function getValueBarScale(rankingRows) {
   );
 }
 
-function updateRankingSummary(rankingRows) {
-  updateRankingSummaryDisplay({
-    summaryElement: document.querySelector("#rankingSummary"),
-    countElement: document.querySelector("#rankingCount"),
+function updateRankingCount(state, rankingRows) {
+  showRankingCount({
+    countElement: state.elements.count,
     rowCount: rankingRows.length,
   });
 }
 
-function showRankingError() {
+function showRankingError(state) {
   showRankingLoadError({
-    summaryElement: document.querySelector("#rankingSummary"),
-    countElement: document.querySelector("#rankingCount"),
+    countElement: state?.elements?.count ?? document.querySelector("#rankingCount"),
   });
 
-  const rankingTableBody = document.querySelector("#rankingTableBody");
+  const rankingTableBody = state?.elements?.tableBody ?? document.querySelector("#rankingTableBody");
 
   if (rankingTableBody) {
     rankingTableBody.innerHTML = "";
-  }
-}
-
-function showRankingLoading() {
-  const summaryElement = document.querySelector("#rankingSummary");
-  const countElement = document.querySelector("#rankingCount");
-
-  if (summaryElement) {
-    summaryElement.hidden = false;
-    summaryElement.textContent = "Loading ranking data...";
-    summaryElement.classList.remove("is-error");
-  }
-
-  if (countElement) {
-    countElement.textContent = "";
   }
 }
 

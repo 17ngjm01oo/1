@@ -6,7 +6,7 @@
   --muted: #617083;
   --border: #d9e0e7;
   --accent: #176b87;
-  --accent-soft: rgba(70, 160, 210, 0.2);
+  --accent-soft: rgba(105, 190, 235, 0.28);
   --error: #9f2f2f;
   --error-bg: #fff0f0;
   --territory-bg: #fffced;
@@ -1564,22 +1564,15 @@ body[data-country-code] .subtitle {
   white-space: nowrap;
 }
 
-.ranking-summary {
-  grid-column: 1;
-  margin: 0;
-  color: var(--muted);
-  font-weight: 700;
-}
-
-.ranking-summary.is-error {
-  color: var(--error);
-}
-
 .ranking-count {
   margin: 0;
   color: var(--accent);
   font-size: 0.86rem;
   font-weight: 700;
+}
+
+.ranking-count.is-error {
+  color: var(--error);
 }
 
 .ranking-card-header .ranking-count {
@@ -1608,9 +1601,9 @@ body[data-country-code] .subtitle {
 .ranking-dropdown-toggle {
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 7px;
   min-height: 26px;
-  padding: 2px 10px;
+  padding: 2px 8px;
   border: 1px solid var(--border);
   border-radius: var(--radius-component);
   background: #fbfcfd;

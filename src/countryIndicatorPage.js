@@ -7,7 +7,8 @@ import { countryPageRankings, rankingCategoryById } from "./rankingCategories.js
 import { renderTopNavigationLinks } from "./siteNavigation.js";
 import { buildStaticDataRequestUrls, fetchStaticData } from "./staticData.js";
 import { transformSeriesData } from "./transform.js";
-import { clearLineChart, formatCompactDisplayValue, getDisplayScale, renderLineChart } from "./chart.js";
+import { clearLineChart, renderLineChart } from "./chart.js";
+import { formatCompactDisplayValue, getDisplayScale } from "./displayFormat.js";
 
 const pageDefinitions = {
   gdp: {
