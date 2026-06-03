@@ -1,6 +1,7 @@
 import { countries, countryCategories, countryRegions } from "./countries.js";
 import { filterCountriesByScope } from "./countryFilters.js";
 import { initializeCountrySelector, sortCountriesByName } from "./countrySelector.js";
+import { renderEntityCountSummary } from "./entityCountSummary.js";
 import { appendTerritoryNote, markTerritoryElement } from "./countryTypes.js";
 import { initializeFilterPanels } from "./filterPanels.js";
 import { getFlagEmoji } from "./flags.js";
@@ -17,11 +18,17 @@ const categoryList = document.querySelector("#categoryList");
 const regionPanel = document.querySelector("#region-heading")?.closest(".category-panel");
 const categoryPanel = document.querySelector("#category-heading")?.closest(".category-panel");
 let activeScope = null;
+let worldMap = null;
 
-const worldMap = await renderWorldMap({
+renderWorldMap({
   countryList: hubCountries,
   rootHref,
   defaultZoom: 1.11,
+}).then((map) => {
+  worldMap = map;
+  updateMapScope();
+}).catch((error) => {
+  console.error("[Country hub] Failed to initialize map.", error);
 });
 
 const countrySearch = initializeCountrySelector({
@@ -86,10 +93,35 @@ function appendFilterButton(list, label, scope, regionId = null) {
 
 function renderCountryTable() {
   const matchingCountries = sortCountriesByName(filterCountriesByScope(hubCountries, activeScope));
-  tableBody.replaceChildren(...matchingCountries.map(createCountryTableRow));
-  countElement.textContent = `Showing: ${matchingCountries.length}`;
-  worldMap?.focusRegion(activeScope?.type === "region" ? activeScope.id : null);
+  const fragment = document.createDocumentFragment();
+
+  matchingCountries.forEach((country) => {
+    fragment.append(createCountryTableRow(country));
+  });
+
+  tableBody.replaceChildren(fragment);
+  renderEntityCountSummary(countElement, matchingCountries);
+  updateMapScope();
   updateFilterButtons();
+}
+
+function updateMapScope() {
+  if (!worldMap) {
+    return;
+  }
+
+  if (activeScope?.type === "category") {
+    worldMap.setScope({
+      highlightedCountryCodes: new Set(
+        filterCountriesByScope(hubCountries, activeScope).map((country) => country.code),
+      ),
+    });
+    return;
+  }
+
+  worldMap.setScope({
+    regionId: activeScope?.type === "region" ? activeScope.id : "",
+  });
 }
 
 function createCountryTableRow(country) {

@@ -33,6 +33,7 @@ const countryCode = document.body.dataset.countryCode;
 const selectedCountry = countries.find((country) => country.code === countryCode);
 let activeCategoryId = overviewCategory.id;
 let loadedDataByPath = null;
+let rankingRowsBySeriesId = new Map();
 
 initializeCountryOverview().catch((error) => {
   console.error("[Country overview] Failed to initialize page.", error);
@@ -50,6 +51,7 @@ async function initializeCountryOverview() {
   renderCategoryControls();
 
   loadedDataByPath = await loadDataByPath(getRequiredStaticDataPaths());
+  rankingRowsBySeriesId = buildRankingRowsBySeriesId(loadedDataByPath);
   renderOverview();
 }
 
@@ -312,8 +314,7 @@ function renderGroup(group, dataByPath, { showHeading = true } = {}) {
 
 function renderIndicatorRow(indicator, dataByPath) {
   const config = getSeriesConfig(indicator);
-  const data = dataByPath.get(config.staticDataPath);
-  const rankingRows = buildRankingRows(data, config);
+  const rankingRows = getCachedRankingRows(indicator, dataByPath);
   const countryRow = rankingRows.find((row) => row.code === selectedCountry.code);
   const row = document.createElement("tr");
   const labelCell = document.createElement("th");
@@ -340,6 +341,30 @@ function renderIndicatorRow(indicator, dataByPath) {
 
   row.append(labelCell, valueCell, rankCell, yearCell);
   return row;
+}
+
+function buildRankingRowsBySeriesId(dataByPath) {
+  const rankingRows = new Map();
+
+  overviewGroups.forEach((group) => {
+    group.indicators.forEach((indicator) => {
+      const config = getSeriesConfig(indicator);
+      const data = dataByPath.get(config.staticDataPath);
+      rankingRows.set(indicator.seriesId, buildRankingRows(data, config));
+    });
+  });
+
+  return rankingRows;
+}
+
+function getCachedRankingRows(indicator, dataByPath) {
+  if (!rankingRowsBySeriesId.has(indicator.seriesId)) {
+    const config = getSeriesConfig(indicator);
+    const data = dataByPath.get(config.staticDataPath);
+    rankingRowsBySeriesId.set(indicator.seriesId, buildRankingRows(data, config));
+  }
+
+  return rankingRowsBySeriesId.get(indicator.seriesId) ?? [];
 }
 
 function buildValueLink(indicator, text) {

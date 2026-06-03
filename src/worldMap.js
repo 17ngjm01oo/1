@@ -6,6 +6,7 @@ const MAP_WIDTH = 960;
 const MAP_HEIGHT = 420;
 const MAP_PADDING = -18;
 const MAP_DATA_PATH = "data/geo/countries-50m.json";
+const INACTIVE_COUNTRY_COLOR = "#d8dee6";
 const hoverTooltipMedia = window.matchMedia("(hover: hover) and (pointer: fine)");
 const REGION_COLORS = {
   Asia: "#D3B25A",
@@ -73,6 +74,19 @@ export async function renderWorldMap({
     renderMapPaths({ svg, tooltip, container, mapCountries, countryLookup, focusCountryCode, defaultZoom });
 
     return {
+      setScope({ regionId = "", highlightedCountryCodes = null } = {}) {
+        hideMapTooltip(tooltip);
+        renderMapPaths({
+          svg,
+          tooltip,
+          container,
+          mapCountries,
+          countryLookup,
+          regionId,
+          defaultZoom,
+          highlightedCountryCodes,
+        });
+      },
       focusRegion(regionId) {
         hideMapTooltip(tooltip);
         renderMapPaths({ svg, tooltip, container, mapCountries, countryLookup, regionId, defaultZoom });
@@ -97,6 +111,7 @@ function renderMapPaths({
   regionId = "",
   focusCountryCode = "",
   defaultZoom = 1,
+  highlightedCountryCodes = null,
 }) {
   const projection = geoEqualEarth().fitExtent(
     [
@@ -120,8 +135,11 @@ function renderMapPaths({
     const countryRecord = findCountryRecord(country, countryLookup);
     const countryPath = appendPath(svg, path(country), "world-map-country");
 
+    if (countryPath) {
+      colorCountryPath(countryPath, countryRecord?.country, highlightedCountryCodes);
+    }
+
     if (countryPath && countryRecord) {
-      colorCountryPath(countryPath, countryRecord.country);
       makeCountryPathClickable(countryPath, countryRecord, mapName, container, tooltip);
     }
   }
@@ -230,8 +248,13 @@ function findCountryRecord(mapCountry, countryLookup) {
     ?? countryLookup.byName.get(normalizeName(mapCountry.properties?.name));
 }
 
-function colorCountryPath(path, country) {
-  const color = REGION_COLORS[country.region?.trim()];
+function colorCountryPath(path, country, highlightedCountryCodes = null) {
+  if (highlightedCountryCodes && !highlightedCountryCodes.has(country?.code)) {
+    path.style.setProperty("--world-map-country-fill", INACTIVE_COUNTRY_COLOR);
+    return;
+  }
+
+  const color = REGION_COLORS[country?.region?.trim()];
 
   if (color) {
     path.style.setProperty("--world-map-country-fill", color);

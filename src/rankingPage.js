@@ -320,7 +320,7 @@ function getValueBarScale(rankingRows) {
 function updateRankingCount(state, rankingRows) {
   showRankingCount({
     countElement: state.elements.count,
-    rowCount: rankingRows.length,
+    rankingRows,
   });
 }
 

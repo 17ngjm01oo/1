@@ -6,7 +6,7 @@
   --muted: #617083;
   --border: #d9e0e7;
   --accent: #176b87;
-  --accent-soft: rgba(105, 190, 235, 0.28);
+  --accent-soft: rgba(125, 202, 240, 0.28);
   --error: #9f2f2f;
   --error-bg: #fff0f0;
   --territory-bg: #fffced;
@@ -22,8 +22,8 @@
   --nav-card-padding-mobile: 10px;
   --footer-card-padding: 6px 18px;
   --footer-card-padding-mobile: 3px 10px;
-  --home-entry-copy-padding: 20px 24px;
-  --home-entry-copy-padding-mobile: 12px;
+  --home-entry-copy-padding: 14px 24px;
+  --home-entry-copy-padding-mobile: 9px 12px;
   --radius-component: 8px;
   --radius-round: 999px;
   --control-gap: 6px;
@@ -143,7 +143,7 @@ body {
   display: flex;
   align-items: stretch;
   min-width: 0;
-  min-height: 148px;
+  min-height: 132px;
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: var(--radius-component);
@@ -159,8 +159,14 @@ body {
 
 .home-entry-card:hover,
 .home-entry-card:focus-visible {
-  box-shadow: 0 12px 25px rgba(23, 32, 42, 0.09);
-  transform: translateY(-2px);
+  box-shadow: 0 7px 18px rgba(23, 32, 42, 0.06);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .home-entry-card:hover,
+  .home-entry-card:focus-visible {
+    transform: translateY(-2px);
+  }
 }
 
 .home-entry-icon {
@@ -228,7 +234,7 @@ body {
 .home-entry-copy {
   display: grid;
   flex: 1 1 auto;
-  gap: 7px;
+  gap: 4px;
   align-content: center;
   min-width: 0;
   padding: var(--home-entry-copy-padding);
@@ -244,11 +250,11 @@ body {
   max-width: 700px;
   color: var(--muted);
   font-size: 1rem;
-  line-height: 1.55;
+  line-height: 1.35;
 }
 
 .home-entry-action {
-  margin-top: 5px;
+  margin-top: 2px;
   color: var(--accent);
   font-size: 0.94rem;
   font-weight: 650;
@@ -958,6 +964,8 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
 .country-search-panel {
   position: relative;
   display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: start;
   gap: 10px;
   min-width: 0;
 }
@@ -1068,20 +1076,25 @@ body[data-page-kind="country-hub"] .hub-section > .world-map {
 }
 
 .search-input-wrap {
+  grid-column: 1 / -1;
   position: relative;
   min-width: 0;
 }
 
 .filter-panel-row {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
   margin-top: 0;
   min-width: 0;
 }
 
 .filter-label + .filter-panel-row {
-  margin-top: -3px;
+  margin-top: 0;
+}
+
+.filter-label {
+  align-self: center;
 }
 
 .country-search-input {
@@ -1119,6 +1132,7 @@ body[data-page-kind="country-hub"] .hub-section > .world-map {
 
 .category-panel {
   display: grid;
+  width: max-content;
   min-width: 0;
   border: 1px solid var(--border);
   border-radius: var(--radius-component);
@@ -1130,11 +1144,13 @@ body[data-page-kind="country-hub"] .hub-section > .world-map {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 7px;
   width: 100%;
   margin: 0;
-  padding: 8px 12px;
+  min-height: 26px;
+  padding: 2px 8px;
   color: var(--text);
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 700;
   cursor: pointer;
   list-style: none;
@@ -1168,12 +1184,18 @@ body[data-page-kind="country-hub"] .hub-section > .world-map {
 }
 
 .filter-option-list {
+  grid-column: 1 / -1;
   margin-top: -2px;
   padding: 0;
 }
 
 .filter-option-list[hidden] {
   display: none;
+}
+
+.country-search-panel > .ranking-count,
+.country-search-panel > .country-hub-table {
+  grid-column: 1 / -1;
 }
 
 .category-button {
@@ -1541,13 +1563,19 @@ body[data-country-code] .subtitle {
 
 .ranking-filter-panel {
   display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: start;
   gap: 10px;
   min-width: 0;
 }
 
+.ranking-country-search-panel {
+  grid-column: 1 / -1;
+}
+
 .filter-label {
   margin: 0;
-  color: var(--accent);
+  color: var(--muted);
   font-size: 0.86rem;
   font-weight: 700;
 }
@@ -1573,6 +1601,10 @@ body[data-country-code] .subtitle {
 
 .ranking-count.is-error {
   color: var(--error);
+}
+
+.entity-count-detail {
+  color: var(--muted);
 }
 
 .ranking-card-header .ranking-count {
@@ -1673,7 +1705,7 @@ body[data-country-code] .subtitle {
   left: 50%;
   z-index: 10;
   display: grid;
-  width: 72%;
+  width: 82%;
   min-width: 0;
   overflow: hidden;
   scrollbar-width: thin;
@@ -1932,7 +1964,7 @@ body[data-country-code] .subtitle {
   }
 
   .home-entry-copy {
-    gap: 5px;
+    gap: 3px;
     padding: var(--home-entry-copy-padding-mobile);
   }
 
@@ -1945,7 +1977,7 @@ body[data-country-code] .subtitle {
   }
 
   .home-entry-action {
-    margin-top: 3px;
+    margin-top: 1px;
     font-size: 0.9rem;
   }
 

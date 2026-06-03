@@ -1,9 +1,11 @@
+import { renderEntityCountSummary } from "./entityCountSummary.js";
+
 export function showRankingCount({
   countElement,
-  rowCount,
+  rankingRows,
 }) {
   if (countElement) {
-    countElement.textContent = `Showing: ${rowCount}`;
+    renderEntityCountSummary(countElement, rankingRows);
     countElement.classList.remove("is-error");
   }
 }
