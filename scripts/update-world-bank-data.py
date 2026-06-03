@@ -88,13 +88,6 @@ DATASETS = {
         "outputPath": ROOT_DIR / "data" / "world-bank" / "environment.json",
         "sourceUrl": "https://databank.worldbank.org/source/world-development-indicators",
         "indicators": {
-            "AG.LND.AGRI.ZS": {
-                "label": "Agricultural Land",
-                "slug": "agricultural-land",
-                "description": "Agricultural land, percent of land area",
-                "scale": "Units",
-                "unit": "%",
-            },
             "AG.LND.FRST.ZS": {
                 "label": "Forest Area",
                 "slug": "forest-area",

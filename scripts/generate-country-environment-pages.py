@@ -9,23 +9,6 @@ ENVIRONMENT_SUBTITLE = "Select a country to view historical environmental indica
 
 ENVIRONMENT_PAGE_CONFIGS = (
     CountryPageConfig(
-        page_kind="agricultural-land",
-        title_suffix="Agricultural Land",
-        chart_title="Agricultural Land Chart by Country",
-        subtitle=ENVIRONMENT_SUBTITLE,
-        generated_label="agricultural land percent of land area",
-        source_note=WORLD_BANK_COUNTRY_SOURCE_NOTE,
-        related_nav_label="Environment page navigation",
-        indicators=(
-            IndicatorBlockConfig(
-                series_id="agriculturalLandPercentOfLandArea",
-                title="Agricultural Land - % of Land Area",
-                canvas_label="Agricultural land percent of land area line chart",
-                compare_label="Agricultural Land",
-            ),
-        ),
-    ),
-    CountryPageConfig(
         page_kind="forest-area",
         title_suffix="Forest Area",
         chart_title="Forest Area Chart by Country",

@@ -155,12 +155,6 @@ const pageDefinitions = {
     documentTitleMetric: "Total Reserves",
     seriesIds: ["totalReservesIncludingGold"],
   },
-  "agricultural-land": {
-    logPrefix: "Agricultural land percent of land area page",
-    group: "environment",
-    documentTitleMetric: "Agricultural Land",
-    seriesIds: ["agriculturalLandPercentOfLandArea"],
-  },
   "forest-area": {
     logPrefix: "Forest area percent of land area page",
     group: "environment",
@@ -265,10 +259,7 @@ function getSeriesChartTitle(seriesConfig, currencyCode) {
   if (seriesConfig.id === "populationDensity") {
     return `${title} - /km²`;
   }
-  if (
-    seriesConfig.id === "agriculturalLandPercentOfLandArea" ||
-    seriesConfig.id === "forestAreaPercentOfLandArea"
-  ) {
+  if (seriesConfig.id === "forestAreaPercentOfLandArea") {
     return `${title} - % of Land Area`;
   }
   if (

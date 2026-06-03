@@ -340,17 +340,6 @@ export const seriesConfigs = [
     ...valueFormats.areaMagnitude,
   },
   {
-    id: "agriculturalLandPercentOfLandArea",
-    canvasId: "agriculturalLandPercentOfLandAreaChart",
-    chartCardId: "agriculturalLandPercentOfLandAreaChartCard",
-    overlayId: "agriculturalLandPercentOfLandAreaOverlay",
-    statusId: "agriculturalLandPercentOfLandAreaStatus",
-    ...worldBankEnvironment,
-    indicatorCode: "AG.LND.AGRI.ZS",
-    titleTemplate: "Agricultural Land",
-    ...valueFormats.percentOneDecimal,
-  },
-  {
     id: "forestAreaPercentOfLandArea",
     canvasId: "forestAreaPercentOfLandAreaChart",
     chartCardId: "forestAreaPercentOfLandAreaChartCard",
