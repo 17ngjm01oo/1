@@ -305,13 +305,7 @@ function updateCountryHeading(country) {
   const profileLink = document.createElement("a");
   profileLink.className = "country-profile-link";
   profileLink.href = "../";
-  profileLink.append(document.createTextNode("Country Profile"));
-
-  const profileLinkArrow = document.createElement("span");
-  profileLinkArrow.className = "ranking-value-link-arrow";
-  profileLinkArrow.setAttribute("aria-hidden", "true");
-  profileLinkArrow.textContent = "↗";
-  profileLink.append(profileLinkArrow);
+  profileLink.append(document.createTextNode("View Country Profile"));
 
   title.append(nameElement);
 
@@ -762,7 +756,7 @@ function renderMainSeriesOnly(seriesId) {
   });
 }
 
-function updateGlobalRankLabel(seriesConfig, rank) {
+function updateGlobalRankLabel(seriesConfig, rankingPosition) {
   const rankElement = getOrCreateGlobalRankElement(seriesConfig);
 
   if (!rankElement) {
@@ -771,14 +765,14 @@ function updateGlobalRankLabel(seriesConfig, rank) {
 
   rankElement.innerHTML = "";
 
-  if (rank) {
+  if (rankingPosition) {
     const rankLink = document.createElement("a");
     rankLink.href = getRankingHref(seriesConfig);
-    rankLink.textContent = `Global rank: #${rank} ↗`;
+    rankLink.textContent = `Global rank: ${rankingPosition.rank}/${rankingPosition.total}`;
     rankElement.append(rankLink);
   }
 
-  rankElement.hidden = !rank;
+  rankElement.hidden = !rankingPosition;
 }
 
 function getOrCreateGlobalRankElement(seriesConfig) {
@@ -832,7 +826,12 @@ function getGlobalRank(data, seriesConfig) {
 
   const rowIndex = rankingRows.findIndex((row) => row.countryCode === selectedCountry.code);
 
-  return rowIndex >= 0 ? rowIndex + 1 : null;
+  return rowIndex >= 0
+    ? {
+        rank: rowIndex + 1,
+        total: rankingRows.length,
+      }
+    : null;
 }
 
 function getLatestNumericPoint(series, seriesConfig) {

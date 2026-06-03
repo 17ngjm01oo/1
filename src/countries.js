@@ -13,9 +13,9 @@ export const countryRegions = [
   { id: "Asia", label: "Asia" },
   { id: "Europe", label: "Europe" },
   { id: "Oceania", label: "Oceania" },
+  { id: "Africa", label: "Africa" },
   { id: "North America", label: "North America" },
   { id: "South America", label: "South America" },
-  { id: "Africa", label: "Africa" },
 ];
 
 // Country search also reads officialName and optional aliases arrays.

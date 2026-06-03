@@ -497,31 +497,29 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
 }
 
 .flag-image {
+  --flag-aspect: 1.38;
   display: block;
-  width: 1.38em;
+  width: calc(1em * var(--flag-aspect));
   height: 1em;
   border: 0.5px solid rgba(148, 163, 184, 0.28);
   object-fit: cover;
   border-radius: 2px;
-  filter: saturate(0.86) brightness(1.04);
 }
 
 .flag-image:is(.flag-image-ch, .flag-image-va) {
-  width: 1em;
+  --flag-aspect: 1;
 }
 
 .flag-image-np {
+  --flag-aspect: 0.8;
   border: 0;
+  object-fit: contain;
 }
 
 .country-flag.flag-image {
   flex: 0 0 auto;
-  width: 1.38em;
+  width: calc(1em * var(--flag-aspect));
   height: 1em;
-}
-
-.country-flag.flag-image:is(.flag-image-ch, .flag-image-va) {
-  width: 1em;
 }
 
 .country-name {
@@ -751,8 +749,7 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
   border-bottom: 0;
 }
 
-.country-overview-table a,
-.ranking-country a {
+.country-overview-table a {
   display: inline-flex;
   align-items: baseline;
   gap: 0.22em;
@@ -776,11 +773,9 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
 
 .ranking-country a {
   display: inline;
-}
-
-.ranking-country .ranking-value-link-arrow {
-  display: inline;
-  margin-left: 0.22em;
+  color: var(--accent);
+  text-decoration: none;
+  overflow-wrap: anywhere;
 }
 
 .country-overview-value {
@@ -1001,6 +996,10 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
   min-width: 0;
 }
 
+.hub-section > .page-header + .country-search-panel {
+  margin-top: -6px;
+}
+
 .world-map {
   position: relative;
   width: 100%;
@@ -1093,12 +1092,8 @@ body[data-page-kind="country-hub"] .hub-section > .world-map {
 }
 
 .world-map-tooltip-flag .flag-image {
-  width: 1.72rem;
   height: 1.25rem;
-}
-
-.world-map-tooltip-flag .flag-image:is(.flag-image-ch, .flag-image-va) {
-  width: 1.25rem;
+  width: calc(1.25rem * var(--flag-aspect));
 }
 
 .world-map-tooltip-name {
@@ -1145,8 +1140,8 @@ body[data-page-kind="country-hub"] .hub-section > .world-map {
 .country-search-input {
   width: 100%;
   min-width: 0;
-  min-height: 42px;
-  padding: 8px 12px;
+  min-height: 38px;
+  padding: 7px 12px;
   border: 1px solid var(--border);
   border-radius: var(--radius-component);
   background: #fbfcfd;
@@ -1622,6 +1617,7 @@ body[data-country-code] .subtitle {
 
 .ranking-country-search-panel {
   grid-column: 1 / -1;
+  margin-top: -3px;
 }
 
 .filter-label {
@@ -1706,8 +1702,7 @@ body[data-country-code] .subtitle {
 .country-overview-category-button[aria-selected="true"],
 .site-nav a.is-current,
 .site-nav a[aria-current="page"],
-.category-button[aria-pressed="true"],
-.territory-toggle[aria-pressed="true"] {
+.category-button[aria-pressed="true"] {
   background: var(--accent-soft);
 }
 
@@ -1715,7 +1710,6 @@ body[data-country-code] .subtitle {
 .site-nav a.is-current,
 .site-nav a[aria-current="page"],
 .category-button[aria-pressed="true"],
-.territory-toggle[aria-pressed="true"],
 .ranking-dropdown-option[aria-pressed="true"] {
   color: var(--text);
 }
@@ -1754,7 +1748,7 @@ body[data-country-code] .subtitle {
   left: 50%;
   z-index: 10;
   display: grid;
-  width: 82%;
+  width: 88%;
   min-width: 0;
   overflow: hidden;
   scrollbar-width: thin;
@@ -1765,13 +1759,13 @@ body[data-country-code] .subtitle {
   transform: translateX(-50%);
 }
 
-.ranking-dropdown-menu::-webkit-scrollbar {
-  width: 6px;
-}
-
 .ranking-year-menu {
   max-height: min(360px, 60vh);
   overflow-y: auto;
+}
+
+.ranking-dropdown-menu::-webkit-scrollbar {
+  width: 6px;
 }
 
 .ranking-dropdown-option {
@@ -1895,14 +1889,8 @@ body[data-country-code] .subtitle {
 }
 
 .ranking-value a {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.22em;
-}
-
-.ranking-value-link-arrow {
-  font-size: 0.86em;
-  line-height: 1;
+  color: var(--accent);
+  text-decoration: none;
 }
 
 .ranking-value {
@@ -1943,14 +1931,9 @@ body[data-country-code] .subtitle {
 
 .ranking-flag .flag-image,
 .country-hub-result-flag .flag-image {
-  width: 2.04rem;
   height: 1.48rem;
+  width: calc(1.48rem * var(--flag-aspect));
   margin: 0 auto;
-}
-
-.ranking-flag .flag-image:is(.flag-image-ch, .flag-image-va),
-.country-hub-result-flag .flag-image:is(.flag-image-ch, .flag-image-va) {
-  width: 1.48rem;
 }
 
 .ranking-empty {

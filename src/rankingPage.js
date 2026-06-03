@@ -277,12 +277,7 @@ function renderRankingTable(config, state, rankingRows) {
     const countryLinkText = document.createElement("span");
     countryLinkText.textContent = country.name;
 
-    const countryLinkArrow = document.createElement("span");
-    countryLinkArrow.className = "ranking-value-link-arrow";
-    countryLinkArrow.setAttribute("aria-hidden", "true");
-    countryLinkArrow.textContent = "↗";
-
-    countryLink.append(countryLinkText, countryLinkArrow);
+    countryLink.append(countryLinkText);
     countryCell.append(countryLink);
 
     appendRankingValueCell(valueCell, {

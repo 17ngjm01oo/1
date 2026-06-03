@@ -10,7 +10,7 @@ export function initializeRankingYear({ years, initialValue, onChange }) {
 
   const yearControl = createRankingDropdown({
     menuClassName: "ranking-year-menu",
-    toggleText: (year) => `Year: ${year}`,
+    toggleText: (year) => String(year),
     toggleAriaLabel: "Choose ranking year",
     menuAriaLabel: "Ranking year",
     options: years.map((year) => ({ value: String(year), label: String(year) })),
