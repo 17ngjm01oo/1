@@ -30,5 +30,5 @@ export function initializeTerritoryToggle({
 function updateButton(button, isEnabled, ariaContext) {
   button.setAttribute("aria-pressed", String(isEnabled));
   button.setAttribute("aria-label", `${isEnabled ? "Hide" : "Show"} territories in ${ariaContext}`);
-  button.textContent = `Territories: ${isEnabled ? "ON" : "OFF"}`;
+  button.textContent = "Territories";
 }

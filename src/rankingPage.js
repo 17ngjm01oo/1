@@ -32,14 +32,6 @@ export function initializeRankingPage(config) {
     },
   };
 
-  state.showTerritories = initializeTerritoryToggle({
-    initialValue: state.showTerritories,
-    onChange(showTerritories) {
-      state.showTerritories = showTerritories;
-      renderScopedRanking(config, state);
-    },
-  });
-
   state.sortOrder = initializeRankingSort({
     initialValue: state.sortOrder,
     onChange(sortOrder) {
@@ -104,6 +96,14 @@ async function initializeRanking(config, state) {
           showRankingError(state);
         }
       });
+    },
+  });
+
+  state.showTerritories = initializeTerritoryToggle({
+    initialValue: state.showTerritories,
+    onChange(showTerritories) {
+      state.showTerritories = showTerritories;
+      renderScopedRanking(config, state);
     },
   });
 

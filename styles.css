@@ -774,6 +774,15 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
   text-decoration: underline;
 }
 
+.ranking-country a {
+  display: inline;
+}
+
+.ranking-country .ranking-value-link-arrow {
+  display: inline;
+  margin-left: 0.22em;
+}
+
 .country-overview-value {
   width: 28%;
   white-space: nowrap;
@@ -1691,7 +1700,8 @@ body[data-country-code] .subtitle {
 .country-overview-category-button[aria-selected="true"],
 .site-nav a.is-current,
 .site-nav a[aria-current="page"],
-.category-button[aria-pressed="true"] {
+.category-button[aria-pressed="true"],
+.territory-toggle[aria-pressed="true"] {
   background: var(--accent-soft);
 }
 
@@ -1699,6 +1709,7 @@ body[data-country-code] .subtitle {
 .site-nav a.is-current,
 .site-nav a[aria-current="page"],
 .category-button[aria-pressed="true"],
+.territory-toggle[aria-pressed="true"],
 .ranking-dropdown-option[aria-pressed="true"] {
   color: var(--text);
 }
@@ -1826,27 +1837,34 @@ body[data-country-code] .subtitle {
 }
 
 .ranking-table td:nth-child(1) {
-  width: 64px;
+  width: 52px;
 }
 
 .ranking-table tbody td {
   font-weight: 700;
 }
 
-.ranking-table td:nth-child(2) {
-  width: 58px;
+.ranking-table td:nth-child(1),
+.ranking-table td:nth-child(2),
+.ranking-table td:nth-child(5),
+.country-hub-table td:nth-child(1) {
   padding-right: 6px;
   padding-left: 6px;
   text-align: center;
 }
 
+.ranking-table td:nth-child(2),
+.country-hub-table td:nth-child(1) {
+  width: 58px;
+}
+
 .ranking-table td:nth-child(3) {
-  width: 38%;
+  width: 43%;
   text-align: left;
 }
 
 .ranking-table td:nth-child(5) {
-  width: 78px;
+  width: 62px;
 }
 
 .ranking-table tbody tr:last-child td,
@@ -1858,10 +1876,6 @@ body[data-country-code] .subtitle {
 .country-hub-table a {
   color: var(--accent);
   text-decoration: none;
-}
-
-.country-hub-table td:nth-child(1) {
-  width: 58px;
 }
 
 .country-hub-table td:nth-child(3) {
@@ -1918,10 +1932,6 @@ body[data-country-code] .subtitle {
 .ranking-flag,
 .country-hub-result-flag {
   line-height: 1;
-}
-
-.ranking-flag {
-  display: table-cell;
   text-align: center;
 }
 
@@ -2184,30 +2194,36 @@ body[data-country-code] .subtitle {
     padding: 3px 5px;
   }
 
-  .country-hub-table td:nth-child(1) {
-    width: 38px;
-  }
-
   .country-hub-table td:nth-child(3) {
     width: 112px;
   }
 
   .ranking-table td:nth-child(1) {
-    width: 42px;
+    width: 34px;
   }
 
   .ranking-table td:nth-child(2) {
     width: 38px;
+  }
+
+  .ranking-table td:nth-child(1),
+  .ranking-table td:nth-child(2),
+  .ranking-table td:nth-child(5),
+  .country-hub-table td:nth-child(1) {
     padding-right: 2px;
     padding-left: 2px;
   }
 
+  .country-hub-table td:nth-child(1) {
+    width: 38px;
+  }
+
   .ranking-table td:nth-child(3) {
-    width: 34%;
+    width: 39%;
   }
 
   .ranking-table td:nth-child(5) {
-    width: 48px;
+    width: 40px;
   }
 
   .status-bar {
