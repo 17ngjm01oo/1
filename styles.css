@@ -500,7 +500,7 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
   display: block;
   width: 1.38em;
   height: 1em;
-  border: 1px solid rgba(148, 163, 184, 0.28);
+  border: 0.5px solid rgba(148, 163, 184, 0.28);
   object-fit: cover;
   border-radius: 2px;
   filter: saturate(0.86) brightness(1.04);
@@ -1258,6 +1258,12 @@ body[data-page-kind="country-hub"] .hub-section > .world-map {
   cursor: pointer;
 }
 
+.filter-option-list .category-button {
+  min-height: 29px;
+  padding: 4px 8px;
+  font-size: 0.88rem;
+}
+
 .category-button:hover {
   background: #ffffff;
 }
@@ -1859,12 +1865,12 @@ body[data-country-code] .subtitle {
 }
 
 .ranking-table td:nth-child(3) {
-  width: 43%;
+  width: 41%;
   text-align: left;
 }
 
 .ranking-table td:nth-child(5) {
-  width: 62px;
+  width: 78px;
 }
 
 .ranking-table tbody tr:last-child td,
@@ -2219,11 +2225,11 @@ body[data-country-code] .subtitle {
   }
 
   .ranking-table td:nth-child(3) {
-    width: 39%;
+    width: 37%;
   }
 
   .ranking-table td:nth-child(5) {
-    width: 40px;
+    width: 48px;
   }
 
   .status-bar {
