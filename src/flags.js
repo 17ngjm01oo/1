@@ -234,20 +234,46 @@ const countryCodeToIso2 = {
   ZWE: "ZW",
 };
 
-export function getFlagEmoji(countryCode) {
-  if (countryCode === "G001") {
-    return "🌏";
-  }
+export function getFlagImagePath(countryCode, rootHref = getDefaultRootHref()) {
+  const flagId = getFlagId(countryCode);
 
-  const iso2Code = countryCodeToIso2[countryCode];
-
-  if (!iso2Code) {
+  if (!flagId) {
     return "";
   }
 
-  return iso2Code
-    .toUpperCase()
-    .split("")
-    .map((letter) => String.fromCodePoint(127397 + letter.charCodeAt(0)))
-    .join("");
+  return `${rootHref}public/flags/${flagId}.svg`;
+}
+
+export function createFlagImage(countryCode, { className = "", rootHref, alt = "", ariaHidden = true } = {}) {
+  const flagId = getFlagId(countryCode);
+
+  if (!flagId) {
+    return null;
+  }
+
+  const image = document.createElement("img");
+  const flagClasses = ["flag-image", `flag-image-${flagId}`, className].filter(Boolean);
+  image.className = flagClasses.join(" ");
+  image.src = getFlagImagePath(countryCode, rootHref);
+  image.alt = alt;
+  image.loading = "lazy";
+  image.decoding = "async";
+
+  if (ariaHidden) {
+    image.setAttribute("aria-hidden", "true");
+  }
+
+  return image;
+}
+
+function getFlagId(countryCode) {
+  if (countryCode === "G001") {
+    return "world";
+  }
+
+  return countryCodeToIso2[countryCode]?.toLowerCase() ?? "";
+}
+
+function getDefaultRootHref() {
+  return document.body.dataset.rootHref ?? "./";
 }

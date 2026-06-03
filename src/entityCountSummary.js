@@ -6,18 +6,11 @@ export function renderEntityCountSummary(element, items = []) {
   }
 
   const { totalCount, countryCount, territoryCount } = getEntityCounts(items);
-  const total = document.createElement("span");
-  const detail = document.createElement("span");
-
-  total.textContent = `${totalCount} total`;
-  detail.className = "entity-count-detail";
-  detail.textContent = ` - ${formatCount(countryCount, "country", "countries")} - ${formatCount(
-    territoryCount,
-    "territory",
-    "territories",
-  )}`;
-
-  element.replaceChildren(total, detail);
+  element.textContent = `Showing: ${totalCount} (${formatCount(
+    countryCount,
+    "country",
+    "countries",
+  )}, ${formatCount(territoryCount, "territory", "territories")})`;
 }
 
 function getEntityCounts(items) {

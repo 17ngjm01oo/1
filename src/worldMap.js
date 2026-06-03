@@ -1,6 +1,6 @@
 import { geoEqualEarth, geoPath } from "https://cdn.jsdelivr.net/npm/d3-geo@3/+esm";
 import { feature } from "https://cdn.jsdelivr.net/npm/topojson-client@3/+esm";
-import { getFlagEmoji } from "./flags.js";
+import { createFlagImage } from "./flags.js";
 
 const MAP_WIDTH = 960;
 const MAP_HEIGHT = 420;
@@ -342,7 +342,12 @@ function createMapTooltip() {
 }
 
 function showMapTooltip(tooltip, container, country, event = null, path = null) {
-  tooltip.querySelector(".world-map-tooltip-flag").textContent = getFlagEmoji(country.code);
+  const flag = tooltip.querySelector(".world-map-tooltip-flag");
+  const flagImage = createFlagImage(country.code);
+  flag.replaceChildren();
+  if (flagImage) {
+    flag.append(flagImage);
+  }
   tooltip.querySelector(".world-map-tooltip-name").textContent = country.name;
   tooltip.hidden = false;
 

@@ -1,29 +1,34 @@
 import { getRankingControls } from "./rankingControls.js";
 
-export function initializeRankingTerritoryToggle({ initialValue = true, onChange }) {
-  const controls = getRankingControls();
+export function initializeTerritoryToggle({
+  initialValue = true,
+  onChange,
+  container = getRankingControls(),
+  ariaContext = "ranking",
+} = {}) {
+  const controls = container;
 
   if (!controls) {
     return initialValue;
   }
 
   const button = document.createElement("button");
-  button.className = "ranking-territory-toggle";
+  button.className = "territory-toggle";
   button.type = "button";
-  updateButton(button, initialValue);
 
   button.addEventListener("click", () => {
     const nextValue = button.getAttribute("aria-pressed") !== "true";
-    updateButton(button, nextValue);
+    updateButton(button, nextValue, ariaContext);
     onChange?.(nextValue);
   });
 
+  updateButton(button, initialValue, ariaContext);
   controls.append(button);
   return initialValue;
 }
 
-function updateButton(button, isEnabled) {
+function updateButton(button, isEnabled, ariaContext) {
   button.setAttribute("aria-pressed", String(isEnabled));
-  button.setAttribute("aria-label", `${isEnabled ? "Hide" : "Show"} territories in ranking`);
+  button.setAttribute("aria-label", `${isEnabled ? "Hide" : "Show"} territories in ${ariaContext}`);
   button.textContent = `Territories: ${isEnabled ? "ON" : "OFF"}`;
 }

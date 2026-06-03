@@ -3,11 +3,11 @@ import { filterCountriesByScope } from "./countryFilters.js";
 import { initializeCountrySelector } from "./countrySelector.js";
 import { appendTerritoryNote, isTerritory, markTerritoryElement } from "./countryTypes.js";
 import { formatCompactDisplayValue, getSingleValueDisplayScale } from "./displayFormat.js";
-import { getFlagEmoji } from "./flags.js";
+import { createFlagImage } from "./flags.js";
 import { initializeRankingFilters } from "./rankingFilters.js";
 import { showRankingCount, showRankingLoading, showRankingLoadError } from "./rankingStatus.js";
 import { initializeRankingSort } from "./rankingSort.js";
-import { initializeRankingTerritoryToggle } from "./rankingTerritoryToggle.js";
+import { initializeTerritoryToggle } from "./territoryToggle.js";
 import { appendRankingValueCell } from "./rankingValueBar.js";
 import { initializeRankingYear } from "./rankingYear.js";
 import "./rankingTopNav.js";
@@ -32,7 +32,7 @@ export function initializeRankingPage(config) {
     },
   };
 
-  state.showTerritories = initializeRankingTerritoryToggle({
+  state.showTerritories = initializeTerritoryToggle({
     initialValue: state.showTerritories,
     onChange(showTerritories) {
       state.showTerritories = showTerritories;
@@ -264,7 +264,10 @@ function renderRankingTable(config, state, rankingRows) {
 
     rankCell.textContent = String(index + 1);
     flagCell.className = "ranking-flag";
-    flagCell.textContent = getFlagEmoji(country.code);
+    const flagImage = createFlagImage(country.code, { rootHref });
+    if (flagImage) {
+      flagCell.append(flagImage);
+    }
     countryCell.className = "ranking-country";
 
     const countryLink = document.createElement("a");

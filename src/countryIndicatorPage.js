@@ -2,7 +2,7 @@ import { seriesConfigs } from "./config.js";
 import { countries } from "./countries.js";
 import { filterCountries, formatCountryMetaText, initializeCountrySelector } from "./countrySelector.js";
 import { getCurrencyCode } from "./currencyCodes.js";
-import { getFlagEmoji } from "./flags.js";
+import { createFlagImage } from "./flags.js";
 import { countryPageRankings, rankingCategoryById } from "./rankingCategories.js";
 import { renderTopNavigationLinks } from "./siteNavigation.js";
 import { buildStaticDataRequestUrls, fetchStaticData } from "./staticData.js";
@@ -301,13 +301,9 @@ function updateCountryHeading(country) {
   }
 
   title.innerHTML = "";
-  const flagEmoji = getFlagEmoji(country.code);
+  const flagElement = createFlagImage(country.code, { className: "country-flag", rootHref: "../../../" });
 
-  if (flagEmoji) {
-    const flagElement = document.createElement("span");
-    flagElement.className = "country-flag";
-    flagElement.setAttribute("aria-hidden", "true");
-    flagElement.textContent = flagEmoji;
+  if (flagElement) {
     title.append(flagElement);
   }
 

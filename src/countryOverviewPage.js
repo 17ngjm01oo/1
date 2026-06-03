@@ -2,7 +2,7 @@ import { formatCompactDisplayValue, getSingleValueDisplayScale } from "./display
 import { seriesConfigs } from "./config.js";
 import { countries } from "./countries.js";
 import { getCountryCurrencyDisplay } from "./currencyCodes.js";
-import { getFlagEmoji } from "./flags.js";
+import { createFlagImage } from "./flags.js";
 import { rankingCategories } from "./rankingCategories.js";
 import { getIndicatorSeriesMap } from "./seriesData.js";
 import { renderWorldMap } from "./worldMap.js";
@@ -65,15 +65,17 @@ function updateCountryHeading() {
 
   heading.innerHTML = "";
 
-  const flag = document.createElement("span");
-  flag.className = "country-flag";
-  flag.textContent = getFlagEmoji(selectedCountry.code);
+  const flag = createFlagImage(selectedCountry.code, { className: "country-flag" });
 
   const name = document.createElement("span");
   name.className = "country-name";
   name.textContent = selectedCountry.name;
 
-  heading.append(flag, name);
+  if (flag) {
+    heading.append(flag);
+  }
+
+  heading.append(name);
 }
 
 function renderCountryMap() {

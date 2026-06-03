@@ -2,9 +2,10 @@ import { countries, countryCategories, countryRegions } from "./countries.js";
 import { filterCountriesByScope } from "./countryFilters.js";
 import { initializeCountrySelector, sortCountriesByName } from "./countrySelector.js";
 import { renderEntityCountSummary } from "./entityCountSummary.js";
-import { appendTerritoryNote, markTerritoryElement } from "./countryTypes.js";
+import { appendTerritoryNote, isTerritory, markTerritoryElement } from "./countryTypes.js";
 import { initializeFilterPanels } from "./filterPanels.js";
-import { getFlagEmoji } from "./flags.js";
+import { createFlagImage } from "./flags.js";
+import { initializeTerritoryToggle } from "./territoryToggle.js";
 import { renderWorldMap } from "./worldMap.js";
 import "./rankingTopNav.js";
 
@@ -17,7 +18,9 @@ const regionList = document.querySelector("#regionList");
 const categoryList = document.querySelector("#categoryList");
 const regionPanel = document.querySelector("#region-heading")?.closest(".category-panel");
 const categoryPanel = document.querySelector("#category-heading")?.closest(".category-panel");
+const countryHubControls = document.querySelector("#countryHubControls");
 let activeScope = null;
+let showTerritories = true;
 let worldMap = null;
 
 renderWorldMap({
@@ -48,6 +51,17 @@ const filterPanels = initializeFilterPanels({
 });
 
 initializeHubFilters();
+showTerritories = initializeTerritoryToggle({
+  initialValue: showTerritories,
+  container: countryHubControls,
+  ariaContext: "country list",
+  onChange(nextShowTerritories) {
+    countrySearch.close();
+    filterPanels.close();
+    showTerritories = nextShowTerritories;
+    renderCountryTable();
+  },
+});
 renderCountryTable();
 appendTerritoryNote(document.querySelector(".hub-section"));
 
@@ -92,7 +106,7 @@ function appendFilterButton(list, label, scope, regionId = null) {
 }
 
 function renderCountryTable() {
-  const matchingCountries = sortCountriesByName(filterCountriesByScope(hubCountries, activeScope));
+  const matchingCountries = getMatchingCountries();
   const fragment = document.createDocumentFragment();
 
   matchingCountries.forEach((country) => {
@@ -101,20 +115,24 @@ function renderCountryTable() {
 
   tableBody.replaceChildren(fragment);
   renderEntityCountSummary(countElement, matchingCountries);
-  updateMapScope();
+  updateMapScope(matchingCountries);
   updateFilterButtons();
 }
 
-function updateMapScope() {
+function getMatchingCountries() {
+  return sortCountriesByName(
+    filterCountriesByScope(hubCountries, activeScope).filter((country) => showTerritories || !isTerritory(country)),
+  );
+}
+
+function updateMapScope(matchingCountries = getMatchingCountries()) {
   if (!worldMap) {
     return;
   }
 
   if (activeScope?.type === "category") {
     worldMap.setScope({
-      highlightedCountryCodes: new Set(
-        filterCountriesByScope(hubCountries, activeScope).map((country) => country.code),
-      ),
+      highlightedCountryCodes: new Set(matchingCountries.map((country) => country.code)),
     });
     return;
   }
@@ -131,7 +149,10 @@ function createCountryTableRow(country) {
 
   const flag = document.createElement("span");
   flag.className = "ranking-flag country-hub-result-flag";
-  flag.textContent = getFlagEmoji(country.code);
+  const flagImage = createFlagImage(country.code, { rootHref });
+  if (flagImage) {
+    flag.append(flagImage);
+  }
 
   const name = document.createElement("a");
   name.className = "country-hub-result-name";
