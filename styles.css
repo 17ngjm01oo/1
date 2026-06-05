@@ -1010,7 +1010,6 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
   background: #ffffff;
 }
 
-body[data-page-kind="country-hub"] .hub-section > .world-map,
 body[data-page-kind="country-hub"] .country-hub-map-content > .world-map {
   width: auto;
   margin: calc(-1 * var(--card-padding-block)) calc(-1 * var(--card-padding-inline)) 0;
@@ -1024,10 +1023,6 @@ body[data-page-kind="country-hub"] .country-hub-map-content > .world-map {
 @media (min-width: 641px) {
   .country-hub-map-toggle,
   .country-hub-map-content {
-    display: contents;
-  }
-
-  .country-hub-map-toggle:not([open]) > .country-hub-map-content {
     display: contents;
   }
 }
@@ -1049,7 +1044,7 @@ body[data-page-kind="country-hub"] .country-hub-map-content > .world-map {
   fill: #d3e7f4;
 }
 
-body[data-page-kind="country-hub"] .world-map-sphere {
+body[data-page-kind="country-hub"] .country-hub-map-content .world-map-sphere {
   stroke: var(--border);
   stroke-width: 0.65;
   vector-effect: non-scaling-stroke;
@@ -1663,7 +1658,7 @@ body[data-country-code] .subtitle {
 
 .ranking-count {
   margin: 0;
-  color: var(--accent);
+  color: var(--muted);
   font-size: 0.86rem;
   font-weight: 700;
 }
@@ -2058,7 +2053,6 @@ body[data-country-code] .subtitle {
     gap: var(--section-gap-compact);
   }
 
-  body[data-page-kind="country-hub"] .hub-section > .world-map,
   body[data-page-kind="country-hub"] .country-hub-map-content > .world-map {
     margin:
       calc(-1 * var(--card-padding-block-mobile))

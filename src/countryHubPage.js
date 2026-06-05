@@ -24,19 +24,10 @@ const mobileMapToggleMedia = window.matchMedia("(max-width: 640px)");
 let activeScope = null;
 let showTerritories = true;
 let worldMap = null;
+let worldMapRequest = null;
 
 initializeMapToggle();
-
-renderWorldMap({
-  countryList: hubCountries,
-  rootHref,
-  defaultZoom: 1.11,
-}).then((map) => {
-  worldMap = map;
-  updateMapScope();
-}).catch((error) => {
-  console.error("[Country hub] Failed to initialize map.", error);
-});
+initializeWorldMapWhenVisible();
 
 const countrySearch = initializeCountrySelector({
   countryPool: hubCountries,
@@ -76,6 +67,7 @@ function initializeMapToggle() {
 
   syncMapToggleState(mobileMapToggleMedia);
   mobileMapToggleMedia.addEventListener("change", syncMapToggleState);
+  mapToggle.addEventListener("toggle", initializeWorldMapWhenVisible);
 }
 
 function syncMapToggleState(event) {
@@ -84,6 +76,25 @@ function syncMapToggleState(event) {
   }
 
   mapToggle.open = !event.matches;
+  initializeWorldMapWhenVisible();
+}
+
+function initializeWorldMapWhenVisible() {
+  if ((mapToggle && !mapToggle.open) || worldMap || worldMapRequest) {
+    return;
+  }
+
+  worldMapRequest = renderWorldMap({
+    countryList: hubCountries,
+    rootHref,
+    defaultZoom: 1.11,
+  }).then((map) => {
+    worldMap = map;
+    updateMapScope();
+  }).catch((error) => {
+    worldMapRequest = null;
+    console.error("[Country hub] Failed to initialize map.", error);
+  });
 }
 
 function initializeHubFilters() {
