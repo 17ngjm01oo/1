@@ -31,7 +31,12 @@ const seriesConfigById = new Map(seriesConfigs.map((config) => [config.id, confi
 const rankingCountries = countries.filter((country) => country.includeInRankings !== false);
 const countryCode = document.body.dataset.countryCode;
 const selectedCountry = countries.find((country) => country.code === countryCode);
-let activeCategoryId = overviewCategory.id;
+const requestedCategoryId = document.body.dataset.countryOverviewCategory ?? overviewCategory.id;
+const activeCategoryId = overviewCategories.some((category) => category.id === requestedCategoryId)
+  ? requestedCategoryId
+  : overviewCategory.id;
+const rootHref = document.body.dataset.rootHref ?? "../../";
+const countryRootHref = document.body.dataset.countryRootHref ?? "./";
 let loadedDataByPath = null;
 let rankingRowsBySeriesId = new Map();
 
@@ -102,7 +107,7 @@ function renderCountryMap() {
   renderWorldMap({
     containerSelector: "#countryOverviewMap",
     countryList: countries.filter((country) => country.slug),
-    rootHref: document.body.dataset.rootHref ?? "../../",
+    rootHref,
     focusCountryCode: selectedCountry.code,
   });
 }
@@ -124,28 +129,24 @@ function renderCategoryControls() {
 
   const list = document.createElement("div");
   list.className = "country-overview-category-list";
-  list.setAttribute("role", "tablist");
   list.setAttribute("aria-label", "Country profile categories");
 
   for (const category of overviewCategories) {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "country-overview-category-button";
-    button.dataset.countryOverviewCategory = category.id;
-    button.setAttribute("role", "tab");
-    button.textContent = category.title;
-    button.addEventListener("click", () => {
-      activeCategoryId = category.id;
-      updateCategorySelection();
-      renderOverview();
-    });
+    const link = document.createElement("a");
+    link.className = "country-overview-category-button";
+    link.href = getCategoryHref(category.id);
+    link.dataset.countryOverviewCategory = category.id;
+    link.textContent = category.title;
 
-    list.append(button);
+    if (category.id === activeCategoryId) {
+      link.setAttribute("aria-current", "page");
+    }
+
+    list.append(link);
   }
 
   panel.append(label, list);
   content.prepend(panel);
-  updateCategorySelection();
 }
 
 function prepareCountryOverviewLayout() {
@@ -167,17 +168,10 @@ function prepareCountryOverviewLayout() {
   content.append(groups);
 }
 
-function updateCategorySelection() {
-  document.querySelectorAll("[data-country-overview-category]").forEach((button) => {
-    const isActive = button.dataset.countryOverviewCategory === activeCategoryId;
-    button.setAttribute("aria-selected", String(isActive));
-  });
-}
-
 function getRequiredStaticDataPaths() {
   const paths = new Set();
 
-  for (const group of overviewGroups) {
+  for (const group of getActiveGroups()) {
     for (const indicator of group.indicators) {
       const config = getSeriesConfig(indicator);
       paths.add(config.staticDataPath);
@@ -190,7 +184,7 @@ function getRequiredStaticDataPaths() {
 async function loadDataByPath(staticDataPaths) {
   const entries = await Promise.all(
     staticDataPaths.map(async (staticDataPath) => {
-      const dataUrl = new URL(staticDataPath.replace(/^\.\//, "../../"), window.location.href);
+      const dataUrl = new URL(`${rootHref}${staticDataPath.replace(/^\.\//, "")}`, window.location.href);
       const response = await fetch(dataUrl, { headers: { Accept: "application/json" } });
 
       if (!response.ok) {
@@ -375,7 +369,7 @@ function buildValueLink(indicator, text) {
   }
 
   const link = document.createElement("a");
-  link.href = `./${indicator.pagePathSegment}/`;
+  link.href = `${countryRootHref}${indicator.pagePathSegment}/`;
   appendLinkContent(link, text);
   return link;
 }
@@ -388,9 +382,15 @@ function buildMissingValueLink(indicator, text) {
 
 function buildRankingLink(indicator, text) {
   const link = document.createElement("a");
-  link.href = `../../rankings/${indicator.rankingDirectory}/world/`;
+  link.href = `${rootHref}rankings/${indicator.rankingDirectory}/world/`;
   appendLinkContent(link, text);
   return link;
+}
+
+function getCategoryHref(categoryId) {
+  return categoryId === overviewCategory.id
+    ? countryRootHref
+    : `${countryRootHref}categories/${categoryId}/`;
 }
 
 function appendLinkContent(link, text) {

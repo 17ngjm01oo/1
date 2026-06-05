@@ -607,11 +607,12 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
   line-height: 1.1;
   letter-spacing: 0;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .country-overview-category-button:hover,
 .country-overview-category-button:focus-visible,
-.country-overview-category-button[aria-selected="true"] {
+.country-overview-category-button[aria-current="page"] {
   color: var(--text);
 }
 
@@ -1716,7 +1717,7 @@ body[data-country-code] .subtitle {
 
 .country-overview-category-button:hover,
 .country-overview-category-button:focus-visible,
-.country-overview-category-button[aria-selected="true"],
+.country-overview-category-button[aria-current="page"],
 .site-nav a.is-current,
 .site-nav a[aria-current="page"],
 .category-button[aria-pressed="true"],
@@ -1724,7 +1725,7 @@ body[data-country-code] .subtitle {
   background: var(--accent-soft);
 }
 
-.country-overview-category-button[aria-selected="true"],
+.country-overview-category-button[aria-current="page"],
 .site-nav a.is-current,
 .site-nav a[aria-current="page"],
 .category-button[aria-pressed="true"],
