@@ -15,11 +15,16 @@
       <section class="top-nav-card" aria-label="Site navigation"></section>
 
       <section class="hub-section" aria-label="Countries">
-        <div class="world-map" id="worldMap" role="region" aria-label="World map" aria-live="polite">
-          <p class="world-map-loading">Loading map...</p>
-        </div>
+        <details class="country-hub-map-toggle">
+          <summary class="country-hub-map-summary">World map</summary>
+          <div class="country-hub-map-content">
+            <div class="world-map" id="worldMap" role="region" aria-label="World map" aria-live="polite">
+              <p class="world-map-loading">Loading map...</p>
+            </div>
 
-        <p class="world-map-instruction">Tap any place to open its data page.</p>
+            <p class="world-map-instruction">Tap any place to open its data page.</p>
+          </div>
+        </details>
 
         <div class="country-search-panel country-hub-search-panel">
           <div class="search-input-wrap">

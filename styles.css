@@ -1010,10 +1010,26 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
   background: #ffffff;
 }
 
-body[data-page-kind="country-hub"] .hub-section > .world-map {
+body[data-page-kind="country-hub"] .hub-section > .world-map,
+body[data-page-kind="country-hub"] .country-hub-map-content > .world-map {
   width: auto;
   margin: calc(-1 * var(--card-padding-block)) calc(-1 * var(--card-padding-inline)) 0;
   border-radius: var(--radius-component) var(--radius-component) 0 0;
+}
+
+.country-hub-map-summary {
+  display: none;
+}
+
+@media (min-width: 641px) {
+  .country-hub-map-toggle,
+  .country-hub-map-content {
+    display: contents;
+  }
+
+  .country-hub-map-toggle:not([open]) > .country-hub-map-content {
+    display: contents;
+  }
 }
 
 .world-map-instruction {
@@ -2036,15 +2052,72 @@ body[data-country-code] .subtitle {
     gap: var(--section-gap-compact);
   }
 
-  body[data-page-kind="country-hub"] .hub-section > .world-map {
+  body[data-page-kind="country-hub"] .hub-section > .world-map,
+  body[data-page-kind="country-hub"] .country-hub-map-content > .world-map {
     margin:
       calc(-1 * var(--card-padding-block-mobile))
       calc(-1 * var(--card-padding-inline-mobile))
       0;
   }
 
+  .country-hub-map-toggle {
+    display: block;
+    margin:
+      calc(-1 * var(--card-padding-block-mobile))
+      calc(-1 * var(--card-padding-inline-mobile))
+      0;
+    overflow: hidden;
+    border-radius: var(--radius-component) var(--radius-component) 0 0;
+    background: #ffffff;
+  }
+
+  .country-hub-map-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 38px;
+    padding: 8px var(--card-padding-inline-mobile);
+    color: var(--text);
+    font-size: 0.95rem;
+    font-weight: 800;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .country-hub-map-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .country-hub-map-summary::after {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-right: 1.5px solid var(--muted);
+    border-bottom: 1.5px solid var(--muted);
+    transform: rotate(45deg);
+    transition: transform 160ms ease;
+  }
+
+  .country-hub-map-toggle[open] .country-hub-map-summary::after {
+    transform: rotate(225deg);
+  }
+
+  .country-hub-map-summary:focus-visible {
+    outline: none;
+  }
+
+  .country-hub-map-toggle[open] > .country-hub-map-content {
+    display: block;
+  }
+
+  body[data-page-kind="country-hub"] .country-hub-map-content > .world-map {
+    margin: 0;
+    border-radius: 0;
+  }
+
   .world-map-instruction {
     margin-block: -8px;
+    padding-inline: var(--card-padding-inline-mobile);
   }
 
   .country-overview-card {
