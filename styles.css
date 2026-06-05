@@ -2108,6 +2108,7 @@ body[data-country-code] .subtitle {
 
   .country-hub-map-toggle[open] > .country-hub-map-content {
     display: block;
+    padding-bottom: 10px;
   }
 
   body[data-page-kind="country-hub"] .country-hub-map-content > .world-map {
@@ -2116,7 +2117,7 @@ body[data-country-code] .subtitle {
   }
 
   .world-map-instruction {
-    margin-block: -8px;
+    margin: 8px 0 0;
     padding-inline: var(--card-padding-inline-mobile);
   }
 
