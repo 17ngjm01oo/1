@@ -1033,7 +1033,7 @@ body[data-page-kind="country-hub"] .country-hub-map-content > .world-map {
 }
 
 .world-map-instruction {
-  margin: -10px 0;
+  margin: 8px 0 0;
   color: var(--muted);
   font-size: 0.88rem;
   font-weight: 700;
@@ -2065,8 +2065,9 @@ body[data-country-code] .subtitle {
     margin:
       calc(-1 * var(--card-padding-block-mobile))
       calc(-1 * var(--card-padding-inline-mobile))
-      0;
+      2px;
     overflow: hidden;
+    border-top: 1px solid var(--border);
     border-radius: var(--radius-component) var(--radius-component) 0 0;
     background: #ffffff;
   }
@@ -2108,16 +2109,17 @@ body[data-country-code] .subtitle {
 
   .country-hub-map-toggle[open] > .country-hub-map-content {
     display: block;
-    padding-bottom: 10px;
+    padding-bottom: 4px;
   }
 
   body[data-page-kind="country-hub"] .country-hub-map-content > .world-map {
     margin: 0;
+    border-top: 1px solid var(--border);
     border-radius: 0;
   }
 
   .world-map-instruction {
-    margin: 8px 0 0;
+    margin: 5px 0 0;
     padding-inline: var(--card-padding-inline-mobile);
   }
 
