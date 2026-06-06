@@ -1,32 +1,37 @@
 export const tradeRankings = [
   {
-    seriesId: "currentAccountBalance",
-    directory: "current-account-balance",
-    label: "Current Account Balance",
-    countryPageKind: "current-account-balance",
-  },
-  {
-    seriesId: "currentAccountBalancePercentGdp",
-    directory: "current-account-balance-percent-gdp",
-    label: "Current Account Balance (% of GDP)",
-    countryPageKind: "current-account-balance-percent-gdp",
-  },
-  {
     seriesId: "goodsExports",
     directory: "goods-exports",
     label: "Goods Exports",
     countryPageKind: "goods-exports",
+    profileSection: "Goods Trade",
   },
   {
     seriesId: "goodsImports",
     directory: "goods-imports",
     label: "Goods Imports",
     countryPageKind: "goods-imports",
+    profileSection: "Goods Trade",
   },
   {
     seriesId: "goodsTradeBalance",
     directory: "goods-trade-balance",
     label: "Goods Trade Balance",
     countryPageKind: "goods-trade-balance",
+    profileSection: "Goods Trade",
+  },
+  {
+    seriesId: "currentAccountBalance",
+    directory: "current-account-balance",
+    label: "Current Account Balance",
+    countryPageKind: "current-account-balance",
+    profileSection: "Current Account",
+  },
+  {
+    seriesId: "currentAccountBalancePercentGdp",
+    directory: "current-account-balance-percent-gdp",
+    label: "Current Account Balance (% of GDP)",
+    countryPageKind: "current-account-balance-percent-gdp",
+    profileSection: "Current Account",
   },
 ];

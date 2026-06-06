@@ -41,6 +41,8 @@ const categoryDefinitions = [
 
 export const rankingCategories = categoryDefinitions.map((category) => ({
   ...category,
+  overviewRankings: category.overviewRankings ?? category.rankings,
+  profileRankings: category.profileRankings ?? category.rankings,
   indicatorLinks: getCountryIndicatorLinks(category.rankings),
 }));
 

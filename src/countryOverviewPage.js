@@ -10,9 +10,12 @@ import "./rankingTopNav.js";
 
 const GVA_BY_INDUSTRY_DATA_PATH = "./data/un-national-accounts/gva-by-industry.json";
 const AGE_COMPOSITION_DATA_PATH = "./data/world-bank/age-composition.json";
+const TRADE_PARTNERS_DATA_PATH = "./data/un-comtrade/trade-partners.json";
 const ECONOMY_CATEGORY_ID = "economy";
 const POPULATION_CATEGORY_ID = "population";
+const TRADE_CATEGORY_ID = "trade";
 const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
+const PIE_LABEL_MIN_SHARE = 7;
 const GVA_INDUSTRY_COLORS = [
   "#60a5fa",
   "#34d399",
@@ -23,23 +26,28 @@ const GVA_INDUSTRY_COLORS = [
   "#fb923c",
 ];
 
-function buildOverviewIndicators(rankings) {
-  return rankings.map(buildOverviewIndicator);
+function buildOverviewIndicators(rankings, { includeProfileSection = false } = {}) {
+  return rankings.map((ranking) => buildOverviewIndicator(ranking, { includeProfileSection }));
 }
 
-function buildOverviewIndicator({ seriesId, directory, countryPageKind, profileLabel }) {
+function buildOverviewIndicator(
+  { seriesId, directory, countryPageKind, profileLabel, profileSection },
+  { includeProfileSection = false } = {},
+) {
   return {
     seriesId,
     rankingDirectory: directory,
     ...(countryPageKind ? { pagePathSegment: countryPageKind } : {}),
     ...(profileLabel ? { label: profileLabel } : {}),
+    ...(includeProfileSection && profileSection ? { profileSection } : {}),
   };
 }
 
-const overviewGroups = rankingCategories.map(({ id, label, rankings, profileRankings }) => ({
+const overviewGroups = rankingCategories.map(({ id, label, overviewRankings, profileRankings }) => ({
   id,
   title: label,
-  indicators: buildOverviewIndicators(profileRankings ?? rankings),
+  overviewIndicators: buildOverviewIndicators(overviewRankings),
+  profileIndicators: buildOverviewIndicators(profileRankings, { includeProfileSection: true }),
 }));
 
 const overviewCategory = { id: "overview", title: "Overview" };
@@ -198,6 +206,10 @@ function getRequiredStaticDataPaths() {
     paths.add(AGE_COMPOSITION_DATA_PATH);
   }
 
+  if (activeCategoryId === TRADE_CATEGORY_ID) {
+    paths.add(TRADE_PARTNERS_DATA_PATH);
+  }
+
   for (const group of getActiveGroups()) {
     for (const indicator of group.indicators) {
       const config = getSeriesConfig(indicator);
@@ -244,10 +256,20 @@ function renderOverview() {
 
 function getActiveGroups() {
   if (isOverviewActive()) {
-    return overviewGroups;
+    return overviewGroups.map((group) => ({
+      id: group.id,
+      title: group.title,
+      indicators: group.overviewIndicators,
+    }));
   }
 
-  return overviewGroups.filter((group) => group.id === activeCategoryId);
+  return overviewGroups
+    .filter((group) => group.id === activeCategoryId)
+    .map((group) => ({
+      id: group.id,
+      title: group.title,
+      indicators: group.profileIndicators,
+    }));
 }
 
 function isOverviewActive() {
@@ -307,6 +329,57 @@ function renderGroup(group, dataByPath, { showHeading = true } = {}) {
     }
   }
 
+  if (!isOverviewActive() && group.id === TRADE_CATEGORY_ID) {
+    const tradePartnersBlock = renderTradePartnersBlock(dataByPath);
+
+    if (tradePartnersBlock) {
+      section.append(tradePartnersBlock);
+    }
+  }
+
+  appendProfileIndicatorTables(section, group.indicators, dataByPath);
+
+  return section;
+}
+
+function appendProfileIndicatorTables(section, indicators, dataByPath) {
+  const sectionedIndicators = new Map();
+  const baseIndicators = [];
+
+  for (const indicator of indicators) {
+    if (indicator.profileSection) {
+      if (!sectionedIndicators.has(indicator.profileSection)) {
+        sectionedIndicators.set(indicator.profileSection, []);
+      }
+
+      sectionedIndicators.get(indicator.profileSection).push(indicator);
+    } else {
+      baseIndicators.push(indicator);
+    }
+  }
+
+  if (baseIndicators.length) {
+    section.append(renderIndicatorTable(baseIndicators, dataByPath));
+  }
+
+  for (const [title, profileIndicators] of sectionedIndicators) {
+    section.append(renderProfileIndicatorSection(title, profileIndicators, dataByPath));
+  }
+}
+
+function renderProfileIndicatorSection(title, indicators, dataByPath) {
+  const block = document.createElement("div");
+  block.className = "country-profile-indicator-section";
+
+  const heading = document.createElement("h3");
+  heading.className = "country-profile-indicator-heading";
+  heading.textContent = title;
+
+  block.append(heading, renderIndicatorTable(indicators, dataByPath));
+  return block;
+}
+
+function renderIndicatorTable(indicators, dataByPath) {
   const tableWrap = document.createElement("div");
   tableWrap.className = "country-overview-table-wrap";
 
@@ -314,15 +387,13 @@ function renderGroup(group, dataByPath, { showHeading = true } = {}) {
   table.className = "country-overview-table";
 
   const tbody = document.createElement("tbody");
-  group.indicators.forEach((indicator) => {
+  indicators.forEach((indicator) => {
     tbody.append(renderIndicatorRow(indicator, dataByPath));
   });
 
   table.append(tbody);
   tableWrap.append(table);
-  section.append(tableWrap);
-
-  return section;
+  return tableWrap;
 }
 
 function renderAgeCompositionBlock(dataByPath) {
@@ -399,24 +470,102 @@ function renderGvaByIndustryBlock(dataByPath) {
   return block;
 }
 
-function renderGvaIndustryChart(sectors) {
-  const chart = document.createElement("div");
-  chart.className = "country-gva-industry-chart";
+function renderTradePartnersBlock(dataByPath) {
+  const tradePartnersData = dataByPath.get(TRADE_PARTNERS_DATA_PATH);
+  const countryData = tradePartnersData?.economies?.[selectedCountry.code];
 
-  const pieSectors = sectors
-    .map((sector, index) => ({
-      ...sector,
-      color: GVA_INDUSTRY_COLORS[index % GVA_INDUSTRY_COLORS.length],
-      share: Number(sector.share),
+  if (!countryData) {
+    return null;
+  }
+
+  const exportPanel = renderTradePartnerPanel("Export partners", countryData.exports);
+  const importPanel = renderTradePartnerPanel("Import partners", countryData.imports);
+
+  if (!exportPanel && !importPanel) {
+    return null;
+  }
+
+  const block = document.createElement("div");
+  block.className = "country-trade-partners";
+
+  const body = document.createElement("div");
+  body.className = "country-trade-partners-body";
+
+  if (exportPanel) {
+    body.append(exportPanel);
+  }
+
+  if (importPanel) {
+    body.append(importPanel);
+  }
+
+  const note = document.createElement("p");
+  note.className = "country-trade-partners-note";
+  note.textContent = `Share of goods trade value, ${countryData.year}. Source: UN Comtrade.`;
+
+  block.append(body, note);
+  return block;
+}
+
+function renderTradePartnerPanel(label, flowData) {
+  const partners = flowData?.partners ?? [];
+
+  if (!partners.length) {
+    return null;
+  }
+
+  const panel = document.createElement("div");
+  panel.className = "country-trade-partner-panel";
+
+  const heading = document.createElement("h3");
+  heading.className = "country-trade-partner-heading";
+  heading.textContent = label;
+
+  const chart = renderPieChart(
+    partners.map((partner) => ({
+      label: partner.name,
+      share: partner.share,
+    })),
+    {
+      ariaLabel: `${label} chart`,
+      className: "country-trade-partner-chart",
+    },
+  );
+  const grid = renderDefinitionGrid(
+    partners.map((partner) => ({
+      label: partner.name,
+      value: formatPercentShare(partner.share),
+    })),
+    "country-trade-partner-grid",
+  );
+  grid.setAttribute("aria-label", `${label}, ${flowData.year}`);
+
+  panel.append(heading, chart, grid);
+  return panel;
+}
+
+function renderGvaIndustryChart(sectors) {
+  return renderPieChart(sectors, { ariaLabel: "GDP composition by industry chart" });
+}
+
+function renderPieChart(items, { ariaLabel, className = "" } = {}) {
+  const chart = document.createElement("div");
+  chart.className = ["country-gva-industry-chart", className].filter(Boolean).join(" ");
+
+  const pieSectors = items
+    .map((item, index) => ({
+      ...item,
+      color: item.color ?? GVA_INDUSTRY_COLORS[index % GVA_INDUSTRY_COLORS.length],
+      share: Number(item.share),
     }))
-    .filter((sector) => Number.isFinite(sector.share) && sector.share > 0);
+    .filter((item) => Number.isFinite(item.share) && item.share > 0);
   const totalShare = pieSectors.reduce((total, sector) => total + sector.share, 0);
 
   const svg = document.createElementNS(SVG_NAMESPACE, "svg");
   svg.setAttribute("class", "country-gva-industry-pie");
   svg.setAttribute("viewBox", "0 0 100 100");
   svg.setAttribute("role", "img");
-  svg.setAttribute("aria-label", "GDP composition by industry chart");
+  svg.setAttribute("aria-label", ariaLabel ?? "Pie chart");
 
   const tooltip = document.createElement("div");
   tooltip.className = "country-gva-industry-tooltip";
@@ -434,14 +583,14 @@ function renderGvaIndustryChart(sectors) {
     if (useTapTooltip) {
       path.addEventListener("pointerup", (event) => {
         event.stopPropagation();
-        showGvaIndustryTooltip(tooltip, chart, formatGvaIndustryLabel(sector), event);
+        showPieTooltip(tooltip, chart, formatPieItemLabel(sector), event);
       });
     } else {
       path.addEventListener("pointerenter", (event) => {
-        showGvaIndustryTooltip(tooltip, chart, formatGvaIndustryLabel(sector), event);
+        showPieTooltip(tooltip, chart, formatPieItemLabel(sector), event);
       });
       path.addEventListener("pointermove", (event) => {
-        positionGvaIndustryTooltip(tooltip, chart, event);
+        positionPieTooltip(tooltip, chart, event);
       });
       path.addEventListener("pointerleave", () => {
         tooltip.hidden = true;
@@ -449,6 +598,17 @@ function renderGvaIndustryChart(sectors) {
     }
 
     svg.append(path);
+
+    if (sector.share >= PIE_LABEL_MIN_SHARE) {
+      const labelPosition = getPointOnCircle(50, 50, 31, (startAngle + endAngle) / 2);
+      const label = document.createElementNS(SVG_NAMESPACE, "text");
+      label.setAttribute("class", "country-pie-share-label");
+      label.setAttribute("x", labelPosition.x.toFixed(2));
+      label.setAttribute("y", labelPosition.y.toFixed(2));
+      label.textContent = formatPercentShare(sector.share);
+      svg.append(label);
+    }
+
     startAngle = endAngle;
   }
 
@@ -462,7 +622,7 @@ function renderGvaIndustryChart(sectors) {
     marker.style.backgroundColor = sector.color;
 
     const label = document.createElement("span");
-    label.textContent = formatGvaIndustryLabel(sector);
+    label.textContent = sector.label;
 
     item.append(marker, label);
     legend.append(item);
@@ -478,17 +638,17 @@ function renderGvaIndustryChart(sectors) {
   return chart;
 }
 
-function formatGvaIndustryLabel(sector) {
-  return `${sector.label}: ${formatPercentShare(sector.share)}`;
+function formatPieItemLabel(item) {
+  return `${item.label}: ${formatPercentShare(item.share)}`;
 }
 
-function showGvaIndustryTooltip(tooltip, container, label, event) {
+function showPieTooltip(tooltip, container, label, event) {
   tooltip.textContent = label;
   tooltip.hidden = false;
-  positionGvaIndustryTooltip(tooltip, container, event);
+  positionPieTooltip(tooltip, container, event);
 }
 
-function positionGvaIndustryTooltip(tooltip, container, event) {
+function positionPieTooltip(tooltip, container, event) {
   const containerRect = container.getBoundingClientRect();
   tooltip.style.left = `${event.clientX - containerRect.left}px`;
   tooltip.style.top = `${event.clientY - containerRect.top}px`;
@@ -579,7 +739,7 @@ function renderIndicatorRow(indicator, dataByPath) {
 function buildRankingRowsBySeriesId(dataByPath) {
   const rankingRows = new Map();
 
-  overviewGroups.forEach((group) => {
+  getActiveGroups().forEach((group) => {
     group.indicators.forEach((indicator) => {
       const config = getSeriesConfig(indicator);
       const data = dataByPath.get(config.staticDataPath);
