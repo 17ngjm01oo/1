@@ -415,16 +415,21 @@ function renderAgeCompositionBlock(dataByPath) {
     ariaLabel: `Population by age group chart, ${countryData.year}`,
     className: "country-age-composition-chart",
   });
+  const grid = renderDefinitionGrid(
+    countryData.groups.map((group) => ({
+      label: group.label,
+      value: formatPercentShare(group.share),
+    })),
+    "country-age-composition-grid",
+  );
+  grid.setAttribute("aria-label", `Population by age group, ${countryData.year}`);
+  const tableToggle = renderProfileTableToggle(grid);
 
   const note = document.createElement("p");
   note.className = "country-age-composition-note";
-  note.append(
-    `Share of total population, ${countryData.year}.`,
-    document.createElement("br"),
-    "Source: World Bank WDI, based on UN WPP 2024.",
-  );
+  note.textContent = "Source: World Bank WDI, based on UN WPP 2024.";
 
-  block.append(heading, chart, note);
+  block.append(heading, chart, tableToggle, note);
   return block;
 }
 
@@ -445,16 +450,25 @@ function renderGvaByIndustryBlock(dataByPath) {
   heading.textContent = "GDP Composition by Industry";
 
   const chart = renderGvaIndustryChart(sectors);
+  const grid = renderDefinitionGrid(
+    sectors.map((sector) => ({
+      label: sector.label,
+      value: formatPercentShare(sector.share),
+    })),
+    "country-gva-industry-grid",
+  );
+  grid.setAttribute("aria-label", `Gross value added by industry, ${countryData.year}`);
+  const tableToggle = renderProfileTableToggle(grid);
 
   const note = document.createElement("p");
   note.className = "country-gva-industry-note";
   note.append(
-    `Share of total gross value added, ${countryData.year}.`,
+    "Share of total gross value added.",
     document.createElement("br"),
-    "Source: UN National Accounts.",
+    `Source: UN National Accounts, ${countryData.year}.`,
   );
 
-  block.append(heading, chart, note);
+  block.append(heading, chart, tableToggle, note);
   return block;
 }
 
@@ -489,7 +503,7 @@ function renderTradePartnersBlock(dataByPath) {
 
   const note = document.createElement("p");
   note.className = "country-trade-partners-note";
-  note.textContent = `Share of goods trade value, ${countryData.year}. Source: UN Comtrade.`;
+  note.textContent = `Source: UN Comtrade, ${countryData.year}.`;
 
   block.append(body, note);
   return block;
@@ -516,9 +530,29 @@ function renderTradePartnerPanel(label, flowData) {
     })),
     { ariaLabel: `${label} chart` },
   );
+  const grid = renderDefinitionGrid(
+    partners.map((partner) => ({
+      label: partner.name,
+      value: formatPercentShare(partner.share),
+    })),
+    "country-trade-partner-grid",
+  );
+  grid.setAttribute("aria-label", `${label}, ${flowData.year}`);
+  const tableToggle = renderProfileTableToggle(grid);
 
-  panel.append(heading, chart);
+  panel.append(heading, chart, tableToggle);
   return panel;
+}
+
+function renderProfileTableToggle(table) {
+  const details = document.createElement("details");
+  details.className = "country-profile-table-toggle";
+
+  const summary = document.createElement("summary");
+  summary.textContent = "Show table";
+
+  details.append(summary, table);
+  return details;
 }
 
 function renderGvaIndustryChart(sectors) {

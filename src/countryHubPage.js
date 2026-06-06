@@ -58,7 +58,7 @@ showTerritories = initializeTerritoryToggle({
   },
 });
 renderCountryTable();
-appendTerritoryNote(document.querySelector(".hub-section"));
+appendTerritoryNote(document.querySelector(".country-hub-panel"));
 
 function initializeMapToggle() {
   if (!mapToggle) {
@@ -180,19 +180,19 @@ function createCountryTableRow(country) {
   markTerritoryElement(row, country);
 
   const flag = document.createElement("span");
-  flag.className = "ranking-flag country-hub-result-flag";
+  flag.className = "ranking-flag country-hub-table-flag";
   const flagImage = createFlagImage(country.code, { rootHref });
   if (flagImage) {
     flag.append(flagImage);
   }
 
   const name = document.createElement("a");
-  name.className = "country-hub-result-name";
+  name.className = "country-hub-table-name";
   name.href = `${rootHref}countries/${country.slug}/`;
   name.textContent = country.name;
 
   const region = document.createElement("span");
-  region.className = "country-hub-result-region";
+  region.className = "country-hub-table-region";
   region.textContent = country.region || "-";
 
   [flag, name, region].forEach((content) => {
