@@ -1,5 +1,3 @@
-import { getCountryIndicatorLinks } from "./rankingLinks.js";
-
 export const populationRankings = [
   {
     seriesId: "population",
@@ -38,5 +36,3 @@ export const populationRankings = [
     countryPageKind: "unemployment-rate",
   },
 ];
-
-export const populationIndicatorLinks = getCountryIndicatorLinks(populationRankings);

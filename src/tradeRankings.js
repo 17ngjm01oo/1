@@ -1,5 +1,3 @@
-import { getCountryIndicatorLinks } from "./rankingLinks.js";
-
 export const tradeRankings = [
   {
     seriesId: "currentAccountBalance",
@@ -32,5 +30,3 @@ export const tradeRankings = [
     countryPageKind: "goods-trade-balance",
   },
 ];
-
-export const tradeIndicatorLinks = getCountryIndicatorLinks(tradeRankings);

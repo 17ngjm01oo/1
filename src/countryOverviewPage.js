@@ -22,17 +22,22 @@ const GVA_INDUSTRY_COLORS = [
 ];
 
 function buildOverviewIndicators(rankings) {
-  return rankings.map(({ seriesId, directory, countryPageKind }) => ({
+  return rankings.map(buildOverviewIndicator);
+}
+
+function buildOverviewIndicator({ seriesId, directory, countryPageKind, profileLabel }) {
+  return {
     seriesId,
     rankingDirectory: directory,
     ...(countryPageKind ? { pagePathSegment: countryPageKind } : {}),
-  }));
+    ...(profileLabel ? { label: profileLabel } : {}),
+  };
 }
 
-const overviewGroups = rankingCategories.map(({ id, label, rankings }) => ({
+const overviewGroups = rankingCategories.map(({ id, label, rankings, profileRankings }) => ({
   id,
   title: label,
-  indicators: buildOverviewIndicators(rankings),
+  indicators: buildOverviewIndicators(profileRankings ?? rankings),
 }));
 
 const overviewCategory = { id: "overview", title: "Overview" };
@@ -325,6 +330,7 @@ function renderGvaByIndustryBlock(dataByPath) {
       label: sector.label,
       value: formatPercentShare(sector.share),
     })),
+    "country-gva-industry-grid",
   );
   grid.setAttribute("aria-label", `Gross value added by industry, ${countryData.year}`);
 
@@ -364,21 +370,30 @@ function renderGvaIndustryChart(sectors) {
   tooltip.setAttribute("role", "tooltip");
   tooltip.hidden = true;
 
+  const useTapTooltip = isTouchTooltipPreferred();
   let startAngle = -90;
   for (const sector of pieSectors) {
     const endAngle = startAngle + (sector.share / totalShare) * 360;
     const path = document.createElementNS(SVG_NAMESPACE, "path");
     path.setAttribute("d", createPieSlicePathData(50, 50, 42, startAngle, endAngle));
     path.setAttribute("fill", sector.color);
-    path.addEventListener("pointerenter", (event) => {
-      showGvaIndustryTooltip(tooltip, chart, formatGvaIndustryLabel(sector), event);
-    });
-    path.addEventListener("pointermove", (event) => {
-      positionGvaIndustryTooltip(tooltip, chart, event);
-    });
-    path.addEventListener("pointerleave", () => {
-      tooltip.hidden = true;
-    });
+
+    if (useTapTooltip) {
+      path.addEventListener("pointerup", (event) => {
+        event.stopPropagation();
+        showGvaIndustryTooltip(tooltip, chart, formatGvaIndustryLabel(sector), event);
+      });
+    } else {
+      path.addEventListener("pointerenter", (event) => {
+        showGvaIndustryTooltip(tooltip, chart, formatGvaIndustryLabel(sector), event);
+      });
+      path.addEventListener("pointermove", (event) => {
+        positionGvaIndustryTooltip(tooltip, chart, event);
+      });
+      path.addEventListener("pointerleave", () => {
+        tooltip.hidden = true;
+      });
+    }
 
     svg.append(path);
     startAngle = endAngle;
@@ -400,6 +415,12 @@ function renderGvaIndustryChart(sectors) {
     legend.append(item);
   }
 
+  if (useTapTooltip) {
+    chart.addEventListener("pointerup", () => {
+      tooltip.hidden = true;
+    });
+  }
+
   chart.append(svg, legend, tooltip);
   return chart;
 }
@@ -418,6 +439,10 @@ function positionGvaIndustryTooltip(tooltip, container, event) {
   const containerRect = container.getBoundingClientRect();
   tooltip.style.left = `${event.clientX - containerRect.left}px`;
   tooltip.style.top = `${event.clientY - containerRect.top}px`;
+}
+
+function isTouchTooltipPreferred() {
+  return window.matchMedia?.("(hover: none), (pointer: coarse)")?.matches ?? false;
 }
 
 function createPieSlicePathData(centerX, centerY, radius, startAngle, endAngle) {
@@ -485,7 +510,7 @@ function renderIndicatorRow(indicator, dataByPath) {
   const yearCell = document.createElement("td");
 
   labelCell.scope = "row";
-  labelCell.textContent = config.titleTemplate;
+  labelCell.textContent = indicator.label ?? config.titleTemplate;
   valueCell.className = "country-overview-value";
   rankCell.className = "country-overview-rank";
   yearCell.className = "country-overview-year";
@@ -493,11 +518,11 @@ function renderIndicatorRow(indicator, dataByPath) {
   if (countryRow) {
     const displayScale = getSingleValueDisplayScale(countryRow.value, config);
     valueCell.append(buildValueLink(indicator, formatCompactDisplayValue(countryRow.value, displayScale)));
-    rankCell.append(buildRankingLink(indicator, `${countryRow.rank} / ${rankingRows.length}`));
+    rankCell.append(buildRankingText(indicator, `${countryRow.rank} / ${rankingRows.length}`));
     yearCell.textContent = String(countryRow.year);
   } else {
     valueCell.append(buildMissingValueLink(indicator, "No data"));
-    rankCell.append(buildRankingLink(indicator, "-"));
+    rankCell.append(buildRankingText(indicator, "-"));
     yearCell.textContent = "-";
   }
 
@@ -541,9 +566,17 @@ function buildValueLink(indicator, text) {
 }
 
 function buildMissingValueLink(indicator, text) {
-  return indicator.pagePathSegment
-    ? buildValueLink(indicator, text)
-    : buildRankingLink(indicator, text);
+  if (indicator.pagePathSegment) {
+    return buildValueLink(indicator, text);
+  }
+
+  return buildRankingText(indicator, text);
+}
+
+function buildRankingText(indicator, text) {
+  return indicator.rankingDirectory
+    ? buildRankingLink(indicator, text)
+    : document.createTextNode("-");
 }
 
 function buildRankingLink(indicator, text) {

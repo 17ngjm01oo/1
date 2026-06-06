@@ -1,46 +1,48 @@
-import { economyIndicatorLinks, economyRankings } from "./economyRankings.js";
-import { environmentIndicatorLinks, environmentRankings } from "./environmentRankings.js";
-import { financeIndicatorLinks, financeRankings } from "./financeRankings.js";
-import { populationIndicatorLinks, populationRankings } from "./populationRankings.js";
-import { tradeIndicatorLinks, tradeRankings } from "./tradeRankings.js";
+import { economyProfileRankings, economyRankings } from "./economyRankings.js";
+import { environmentRankings } from "./environmentRankings.js";
+import { financeRankings } from "./financeRankings.js";
+import { populationRankings } from "./populationRankings.js";
+import { getCountryIndicatorLinks } from "./rankingLinks.js";
+import { tradeRankings } from "./tradeRankings.js";
 
-export const rankingCategories = [
+const categoryDefinitions = [
   {
     id: "economy",
     label: "Economy",
     navSelector: "#economyTopNav, #rankingTopNav",
     rankings: economyRankings,
-    indicatorLinks: economyIndicatorLinks,
+    profileRankings: economyProfileRankings,
   },
   {
     id: "population",
     label: "Population",
     navSelector: "#populationTopNav",
     rankings: populationRankings,
-    indicatorLinks: populationIndicatorLinks,
   },
   {
     id: "environment",
     label: "Environment",
     navSelector: "#environmentTopNav",
     rankings: environmentRankings,
-    indicatorLinks: environmentIndicatorLinks,
   },
   {
     id: "trade",
     label: "Trade",
     navSelector: "#tradeTopNav",
     rankings: tradeRankings,
-    indicatorLinks: tradeIndicatorLinks,
   },
   {
     id: "finance",
     label: "Finance",
     navSelector: "#financeTopNav",
     rankings: financeRankings,
-    indicatorLinks: financeIndicatorLinks,
   },
 ];
+
+export const rankingCategories = categoryDefinitions.map((category) => ({
+  ...category,
+  indicatorLinks: getCountryIndicatorLinks(category.rankings),
+}));
 
 export const rankingCategoryById = Object.fromEntries(
   rankingCategories.map((category) => [category.id, category]),

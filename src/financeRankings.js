@@ -1,5 +1,3 @@
-import { getCountryIndicatorLinks } from "./rankingLinks.js";
-
 export const financeRankings = [
   {
     seriesId: "governmentGrossDebt",
@@ -44,5 +42,3 @@ export const financeRankings = [
     countryPageKind: "total-reserves",
   },
 ];
-
-export const financeIndicatorLinks = getCountryIndicatorLinks(financeRankings);

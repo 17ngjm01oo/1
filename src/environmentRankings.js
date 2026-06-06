@@ -1,5 +1,3 @@
-import { getCountryIndicatorLinks } from "./rankingLinks.js";
-
 export const environmentRankings = [
   {
     seriesId: "area",
@@ -25,5 +23,3 @@ export const environmentRankings = [
     countryPageKind: "forest-area",
   },
 ];
-
-export const environmentIndicatorLinks = getCountryIndicatorLinks(environmentRankings);
