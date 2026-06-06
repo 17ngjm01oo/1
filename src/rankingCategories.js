@@ -5,12 +5,18 @@ import { populationRankings } from "./populationRankings.js";
 import { getCountryIndicatorLinks } from "./rankingLinks.js";
 import { tradeRankings } from "./tradeRankings.js";
 
+function pickRankings(rankings, seriesIds) {
+  const rankingBySeriesId = new Map(rankings.map((ranking) => [ranking.seriesId, ranking]));
+  return seriesIds.map((seriesId) => rankingBySeriesId.get(seriesId)).filter(Boolean);
+}
+
 const categoryDefinitions = [
   {
     id: "economy",
     label: "Economy",
     navSelector: "#economyTopNav, #rankingTopNav",
     rankings: economyRankings,
+    overviewRankings: pickRankings(economyRankings, ["gdp", "gdpPerCapita"]),
     profileRankings: economyProfileRankings,
   },
   {
@@ -18,24 +24,35 @@ const categoryDefinitions = [
     label: "Population",
     navSelector: "#populationTopNav",
     rankings: populationRankings,
-  },
-  {
-    id: "environment",
-    label: "Environment",
-    navSelector: "#environmentTopNav",
-    rankings: environmentRankings,
+    overviewRankings: pickRankings(populationRankings, [
+      "population",
+      "fertilityRate",
+      "unemploymentRate",
+    ]),
   },
   {
     id: "trade",
     label: "Trade",
     navSelector: "#tradeTopNav",
     rankings: tradeRankings,
+    overviewRankings: pickRankings(tradeRankings, ["goodsExports", "goodsImports"]),
   },
   {
     id: "finance",
     label: "Finance",
     navSelector: "#financeTopNav",
     rankings: financeRankings,
+    overviewRankings: pickRankings(financeRankings, [
+      "governmentGrossDebt",
+      "totalReservesIncludingGold",
+    ]),
+  },
+  {
+    id: "environment",
+    label: "Environment",
+    navSelector: "#environmentTopNav",
+    rankings: environmentRankings,
+    overviewRankings: pickRankings(environmentRankings, ["area"]),
   },
 ];
 

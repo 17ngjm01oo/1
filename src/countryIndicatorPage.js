@@ -768,7 +768,7 @@ function updateGlobalRankLabel(seriesConfig, rankingPosition) {
   if (rankingPosition) {
     const rankLink = document.createElement("a");
     rankLink.href = getRankingHref(seriesConfig);
-    rankLink.textContent = `Global rank: ${rankingPosition.rank}/${rankingPosition.total}`;
+    rankLink.textContent = `Global rank: ${formatRankPosition(rankingPosition.rank, rankingPosition.total)}`;
     rankElement.append(rankLink);
   }
 
@@ -804,6 +804,10 @@ function getOrCreateGlobalRankElement(seriesConfig) {
 function getRankingHref(seriesConfig) {
   const rankingDirectory = rankingDirectoryBySeriesId[seriesConfig.id];
   return rankingDirectory ? `../../../rankings/${rankingDirectory}/world/` : "../../../";
+}
+
+function formatRankPosition(rank, total) {
+  return `#${rank} / ${total}`;
 }
 
 function getGlobalRank(data, seriesConfig) {

@@ -12,9 +12,9 @@ PROFILE_CATEGORIES = (
     OVERVIEW_CATEGORY,
     {"id": "economy", "title": "Economy"},
     {"id": "population", "title": "Population"},
-    {"id": "environment", "title": "Environment"},
     {"id": "trade", "title": "Trade"},
     {"id": "finance", "title": "Finance"},
+    {"id": "environment", "title": "Environment"},
 )
 
 

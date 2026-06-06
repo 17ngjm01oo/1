@@ -17,13 +17,13 @@ const TRADE_CATEGORY_ID = "trade";
 const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
 const PIE_LABEL_MIN_SHARE = 7;
 const GVA_INDUSTRY_COLORS = [
-  "#60a5fa",
-  "#34d399",
-  "#fbbf24",
-  "#f87171",
-  "#a78bfa",
-  "#2dd4bf",
-  "#fb923c",
+  "#2563eb",
+  "#059669",
+  "#b45309",
+  "#dc2626",
+  "#7c3aed",
+  "#0891b2",
+  "#c2410c",
 ];
 
 function buildOverviewIndicators(rankings, { includeProfileSection = false } = {}) {
@@ -411,14 +411,10 @@ function renderAgeCompositionBlock(dataByPath) {
   heading.className = "country-age-composition-heading";
   heading.textContent = "Population by Age Group";
 
-  const grid = renderDefinitionGrid(
-    countryData.groups.map((group) => ({
-      label: group.label,
-      value: formatPercentShare(group.share),
-    })),
-    "country-age-composition-grid",
-  );
-  grid.setAttribute("aria-label", `Population by age group, ${countryData.year}`);
+  const chart = renderPieChart(countryData.groups, {
+    ariaLabel: `Population by age group chart, ${countryData.year}`,
+    className: "country-age-composition-chart",
+  });
 
   const note = document.createElement("p");
   note.className = "country-age-composition-note";
@@ -428,7 +424,7 @@ function renderAgeCompositionBlock(dataByPath) {
     "Source: World Bank WDI, based on UN WPP 2024.",
   );
 
-  block.append(heading, grid, note);
+  block.append(heading, chart, note);
   return block;
 }
 
@@ -449,14 +445,6 @@ function renderGvaByIndustryBlock(dataByPath) {
   heading.textContent = "GDP Composition by Industry";
 
   const chart = renderGvaIndustryChart(sectors);
-  const grid = renderDefinitionGrid(
-    sectors.map((sector) => ({
-      label: sector.label,
-      value: formatPercentShare(sector.share),
-    })),
-    "country-gva-industry-grid",
-  );
-  grid.setAttribute("aria-label", `Gross value added by industry, ${countryData.year}`);
 
   const note = document.createElement("p");
   note.className = "country-gva-industry-note";
@@ -466,7 +454,7 @@ function renderGvaByIndustryBlock(dataByPath) {
     "Source: UN National Accounts.",
   );
 
-  block.append(heading, chart, grid, note);
+  block.append(heading, chart, note);
   return block;
 }
 
@@ -526,21 +514,10 @@ function renderTradePartnerPanel(label, flowData) {
       label: partner.name,
       share: partner.share,
     })),
-    {
-      ariaLabel: `${label} chart`,
-      className: "country-trade-partner-chart",
-    },
+    { ariaLabel: `${label} chart` },
   );
-  const grid = renderDefinitionGrid(
-    partners.map((partner) => ({
-      label: partner.name,
-      value: formatPercentShare(partner.share),
-    })),
-    "country-trade-partner-grid",
-  );
-  grid.setAttribute("aria-label", `${label}, ${flowData.year}`);
 
-  panel.append(heading, chart, grid);
+  panel.append(heading, chart);
   return panel;
 }
 
@@ -622,7 +599,7 @@ function renderPieChart(items, { ariaLabel, className = "" } = {}) {
     marker.style.backgroundColor = sector.color;
 
     const label = document.createElement("span");
-    label.textContent = sector.label;
+    label.textContent = formatPieItemLabel(sector);
 
     item.append(marker, label);
     legend.append(item);
@@ -724,7 +701,7 @@ function renderIndicatorRow(indicator, dataByPath) {
   if (countryRow) {
     const displayScale = getSingleValueDisplayScale(countryRow.value, config);
     valueCell.append(buildValueLink(indicator, formatCompactDisplayValue(countryRow.value, displayScale)));
-    rankCell.append(buildRankingText(indicator, `${countryRow.rank} / ${rankingRows.length}`));
+    rankCell.append(buildRankingText(indicator, formatRankPosition(countryRow.rank, rankingRows.length)));
     yearCell.textContent = String(countryRow.year);
   } else {
     valueCell.append(buildMissingValueLink(indicator, "No data"));
@@ -734,6 +711,10 @@ function renderIndicatorRow(indicator, dataByPath) {
 
   row.append(labelCell, valueCell, rankCell, yearCell);
   return row;
+}
+
+function formatRankPosition(rank, total) {
+  return `#${rank} / ${total}`;
 }
 
 function buildRankingRowsBySeriesId(dataByPath) {
