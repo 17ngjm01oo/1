@@ -44,7 +44,7 @@ def render_country_overview_page(country: dict[str, str], category: dict[str, st
     country_name = html.escape(country["name"])
     country_code = html.escape(country["code"])
     category_id = html.escape(category["id"])
-    page_title = country_name if category["id"] == OVERVIEW_CATEGORY["id"] else f"{country_name} {html.escape(category['title'])}"
+    page_title = get_country_profile_page_title(country_name, category)
     root_href = "../../" if category["id"] == OVERVIEW_CATEGORY["id"] else "../../../../"
     country_root_href = "./" if category["id"] == OVERVIEW_CATEGORY["id"] else "../../"
 
@@ -67,7 +67,7 @@ def render_country_overview_page(country: dict[str, str], category: dict[str, st
       <section class="indicators-section" aria-labelledby="country-overview-title">
         <div class="indicators-card">
           <header class="page-header country-data-header">
-            <h1 id="country-overview-title">{country_name}</h1>
+            <h1 id="country-overview-title">{page_title}</h1>
           </header>
 
           <div class="country-overview-groups" id="countryOverviewGroups" aria-live="polite">
@@ -79,6 +79,13 @@ def render_country_overview_page(country: dict[str, str], category: dict[str, st
   </body>
 </html>
 """
+
+
+def get_country_profile_page_title(country_name: str, category: dict[str, str]) -> str:
+    if category["id"] == OVERVIEW_CATEGORY["id"]:
+        return country_name
+
+    return f"{html.escape(category['title'])} of {country_name}"
 
 
 if __name__ == "__main__":

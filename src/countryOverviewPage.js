@@ -8,6 +8,19 @@ import { getIndicatorSeriesMap } from "./seriesData.js";
 import { renderWorldMap } from "./worldMap.js";
 import "./rankingTopNav.js";
 
+const GVA_BY_INDUSTRY_DATA_PATH = "./data/un-national-accounts/gva-by-industry.json";
+const ECONOMY_CATEGORY_ID = "economy";
+const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
+const GVA_INDUSTRY_COLORS = [
+  "#60a5fa",
+  "#34d399",
+  "#fbbf24",
+  "#f87171",
+  "#a78bfa",
+  "#2dd4bf",
+  "#fb923c",
+];
+
 function buildOverviewIndicators(rankings) {
   return rankings.map(({ seriesId, directory, countryPageKind }) => ({
     seriesId,
@@ -61,20 +74,19 @@ async function initializeCountryOverview() {
 }
 
 function updateCountryHeading() {
-  document.title = selectedCountry.name;
-
   const heading = document.querySelector("#country-overview-title");
   if (!heading) {
     return;
   }
 
+  const headingText = heading.textContent.trim() || selectedCountry.name;
   heading.innerHTML = "";
 
   const flag = createFlagImage(selectedCountry.code, { className: "country-flag" });
 
   const name = document.createElement("span");
   name.className = "country-name";
-  name.textContent = selectedCountry.name;
+  name.textContent = headingText;
 
   if (flag) {
     heading.append(flag);
@@ -171,6 +183,10 @@ function prepareCountryOverviewLayout() {
 function getRequiredStaticDataPaths() {
   const paths = new Set();
 
+  if (activeCategoryId === ECONOMY_CATEGORY_ID) {
+    paths.add(GVA_BY_INDUSTRY_DATA_PATH);
+  }
+
   for (const group of getActiveGroups()) {
     for (const indicator of group.indicators) {
       const config = getSeriesConfig(indicator);
@@ -208,24 +224,11 @@ function renderOverview() {
 
   if (isOverviewActive()) {
     container.append(renderBasicInformationSection());
-  } else {
-    container.append(renderActiveCategoryHeading());
   }
 
   for (const group of getActiveGroups()) {
     container.append(renderGroup(group, loadedDataByPath, { showHeading: isOverviewActive() }));
   }
-}
-
-function renderActiveCategoryHeading() {
-  const heading = document.createElement("h2");
-  heading.className = "country-overview-active-title";
-  heading.textContent = getActiveCategory().title;
-  return heading;
-}
-
-function getActiveCategory() {
-  return overviewCategories.find((category) => category.id === activeCategoryId) ?? overviewCategory;
 }
 
 function getActiveGroups() {
@@ -245,20 +248,7 @@ function renderBasicInformationSection() {
   section.className = "country-overview-section country-basic-information";
   section.setAttribute("aria-label", "Basic Information");
 
-  const grid = document.createElement("dl");
-  grid.className = "country-basic-information-grid";
-
-  getBasicInformationItems().forEach((item) => {
-    const term = document.createElement("dt");
-    term.textContent = item.label;
-
-    const description = document.createElement("dd");
-    description.textContent = item.value;
-
-    grid.append(term, description);
-  });
-
-  section.append(grid);
+  section.append(renderDefinitionGrid(getBasicInformationItems()));
   return section;
 }
 
@@ -290,6 +280,10 @@ function renderGroup(group, dataByPath, { showHeading = true } = {}) {
     section.append(heading);
   }
 
+  if (!isOverviewActive() && group.id === ECONOMY_CATEGORY_ID) {
+    section.append(renderGvaByIndustryBlock(dataByPath));
+  }
+
   const tableWrap = document.createElement("div");
   tableWrap.className = "country-overview-table-wrap";
 
@@ -306,6 +300,178 @@ function renderGroup(group, dataByPath, { showHeading = true } = {}) {
   section.append(tableWrap);
 
   return section;
+}
+
+function renderGvaByIndustryBlock(dataByPath) {
+  const block = document.createElement("div");
+  block.className = "country-gva-industry";
+
+  const gvaData = dataByPath.get(GVA_BY_INDUSTRY_DATA_PATH);
+  const countryData = gvaData?.economies?.[selectedCountry.code];
+
+  if (!countryData) {
+    block.append(renderEmptyMessage("No industry value added data available."));
+    return block;
+  }
+
+  const sectors = countryData.shares ?? [];
+  const heading = document.createElement("h3");
+  heading.className = "country-gva-industry-heading";
+  heading.textContent = "GDP Composition by Industry";
+
+  const chart = renderGvaIndustryChart(sectors);
+  const grid = renderDefinitionGrid(
+    sectors.map((sector) => ({
+      label: sector.label,
+      value: formatPercentShare(sector.share),
+    })),
+  );
+  grid.setAttribute("aria-label", `Gross value added by industry, ${countryData.year}`);
+
+  const note = document.createElement("p");
+  note.className = "country-gva-industry-note";
+  note.append(
+    `Share of total gross value added, ${countryData.year}.`,
+    document.createElement("br"),
+    "Source: UN National Accounts.",
+  );
+
+  block.append(heading, chart, grid, note);
+  return block;
+}
+
+function renderGvaIndustryChart(sectors) {
+  const chart = document.createElement("div");
+  chart.className = "country-gva-industry-chart";
+
+  const pieSectors = sectors
+    .map((sector, index) => ({
+      ...sector,
+      color: GVA_INDUSTRY_COLORS[index % GVA_INDUSTRY_COLORS.length],
+      share: Number(sector.share),
+    }))
+    .filter((sector) => Number.isFinite(sector.share) && sector.share > 0);
+  const totalShare = pieSectors.reduce((total, sector) => total + sector.share, 0);
+
+  const svg = document.createElementNS(SVG_NAMESPACE, "svg");
+  svg.setAttribute("class", "country-gva-industry-pie");
+  svg.setAttribute("viewBox", "0 0 100 100");
+  svg.setAttribute("role", "img");
+  svg.setAttribute("aria-label", "GDP composition by industry chart");
+
+  const tooltip = document.createElement("div");
+  tooltip.className = "country-gva-industry-tooltip";
+  tooltip.setAttribute("role", "tooltip");
+  tooltip.hidden = true;
+
+  let startAngle = -90;
+  for (const sector of pieSectors) {
+    const endAngle = startAngle + (sector.share / totalShare) * 360;
+    const path = document.createElementNS(SVG_NAMESPACE, "path");
+    path.setAttribute("d", createPieSlicePathData(50, 50, 42, startAngle, endAngle));
+    path.setAttribute("fill", sector.color);
+    path.addEventListener("pointerenter", (event) => {
+      showGvaIndustryTooltip(tooltip, chart, formatGvaIndustryLabel(sector), event);
+    });
+    path.addEventListener("pointermove", (event) => {
+      positionGvaIndustryTooltip(tooltip, chart, event);
+    });
+    path.addEventListener("pointerleave", () => {
+      tooltip.hidden = true;
+    });
+
+    svg.append(path);
+    startAngle = endAngle;
+  }
+
+  const legend = document.createElement("ul");
+  legend.className = "country-gva-industry-legend";
+
+  for (const sector of pieSectors) {
+    const item = document.createElement("li");
+    const marker = document.createElement("span");
+    marker.className = "country-gva-industry-legend-marker";
+    marker.style.backgroundColor = sector.color;
+
+    const label = document.createElement("span");
+    label.textContent = formatGvaIndustryLabel(sector);
+
+    item.append(marker, label);
+    legend.append(item);
+  }
+
+  chart.append(svg, legend, tooltip);
+  return chart;
+}
+
+function formatGvaIndustryLabel(sector) {
+  return `${sector.label}: ${formatPercentShare(sector.share)}`;
+}
+
+function showGvaIndustryTooltip(tooltip, container, label, event) {
+  tooltip.textContent = label;
+  tooltip.hidden = false;
+  positionGvaIndustryTooltip(tooltip, container, event);
+}
+
+function positionGvaIndustryTooltip(tooltip, container, event) {
+  const containerRect = container.getBoundingClientRect();
+  tooltip.style.left = `${event.clientX - containerRect.left}px`;
+  tooltip.style.top = `${event.clientY - containerRect.top}px`;
+}
+
+function createPieSlicePathData(centerX, centerY, radius, startAngle, endAngle) {
+  if (endAngle - startAngle >= 359.99) {
+    return [
+      `M ${centerX} ${centerY - radius}`,
+      `A ${radius} ${radius} 0 1 1 ${centerX - 0.01} ${centerY - radius}`,
+      `A ${radius} ${radius} 0 1 1 ${centerX} ${centerY - radius}`,
+      "Z",
+    ].join(" ");
+  }
+
+  const start = getPointOnCircle(centerX, centerY, radius, endAngle);
+  const end = getPointOnCircle(centerX, centerY, radius, startAngle);
+  const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+
+  return [
+    `M ${centerX} ${centerY}`,
+    `L ${start.x} ${start.y}`,
+    `A ${radius} ${radius} 0 ${largeArcFlag} 0 ${end.x} ${end.y}`,
+    "Z",
+  ].join(" ");
+}
+
+function getPointOnCircle(centerX, centerY, radius, angle) {
+  const radians = (angle * Math.PI) / 180;
+  return {
+    x: centerX + radius * Math.cos(radians),
+    y: centerY + radius * Math.sin(radians),
+  };
+}
+
+function renderDefinitionGrid(items, extraClassName = "") {
+  const grid = document.createElement("dl");
+  grid.className = ["country-basic-information-grid", extraClassName].filter(Boolean).join(" ");
+
+  for (const item of items) {
+    const term = document.createElement("dt");
+    term.textContent = item.label;
+
+    const description = document.createElement("dd");
+    description.textContent = item.value;
+
+    grid.append(term, description);
+  }
+
+  return grid;
+}
+
+function renderEmptyMessage(message) {
+  const empty = document.createElement("p");
+  empty.className = "ranking-empty";
+  empty.textContent = message;
+  return empty;
 }
 
 function renderIndicatorRow(indicator, dataByPath) {
@@ -397,6 +563,11 @@ function appendLinkContent(link, text) {
   const linkText = document.createElement("span");
   linkText.textContent = text;
   link.append(linkText);
+}
+
+function formatPercentShare(value) {
+  const numericValue = Number(value);
+  return Number.isFinite(numericValue) ? `${numericValue.toFixed(1)}%` : "-";
 }
 
 function buildRankingRows(data, config) {
