@@ -45,6 +45,17 @@ body {
   touch-action: manipulation;
 }
 
+canvas,
+svg,
+svg *,
+table,
+th,
+td,
+dt,
+dd {
+  touch-action: manipulation;
+}
+
 html {
   scrollbar-gutter: stable;
 }
@@ -663,14 +674,16 @@ body[data-country-overview-category] .country-data-header h1 {
   letter-spacing: 0;
 }
 
-.country-gva-industry {
+.country-gva-industry,
+.country-age-composition {
   display: grid;
   gap: 8px;
   margin-bottom: 10px;
   min-width: 0;
 }
 
-.country-gva-industry-heading {
+.country-gva-industry-heading,
+.country-age-composition-heading {
   margin: 0;
   color: var(--text);
   font-size: 1.08rem;
@@ -784,7 +797,8 @@ body[data-country-overview-category] .country-data-header h1 {
   border-bottom: 0;
 }
 
-.country-gva-industry-note {
+.country-gva-industry-note,
+.country-age-composition-note {
   margin: -4px 0 0;
   color: var(--muted);
   font-size: 0.84rem;
@@ -2262,7 +2276,7 @@ body[data-country-code] .subtitle {
   }
 
   .country-gva-industry-grid {
-    grid-template-columns: minmax(0, 1fr) max-content;
+    grid-template-columns: minmax(0, 1fr) minmax(4.5rem, max-content);
   }
 
   .country-gva-industry-grid dt {
@@ -2270,6 +2284,8 @@ body[data-country-code] .subtitle {
   }
 
   .country-gva-industry-grid dd {
+    display: flex;
+    align-items: center;
     white-space: nowrap;
   }
 

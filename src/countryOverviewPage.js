@@ -9,7 +9,9 @@ import { renderWorldMap } from "./worldMap.js";
 import "./rankingTopNav.js";
 
 const GVA_BY_INDUSTRY_DATA_PATH = "./data/un-national-accounts/gva-by-industry.json";
+const AGE_COMPOSITION_DATA_PATH = "./data/world-bank/age-composition.json";
 const ECONOMY_CATEGORY_ID = "economy";
+const POPULATION_CATEGORY_ID = "population";
 const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
 const GVA_INDUSTRY_COLORS = [
   "#60a5fa",
@@ -192,6 +194,10 @@ function getRequiredStaticDataPaths() {
     paths.add(GVA_BY_INDUSTRY_DATA_PATH);
   }
 
+  if (activeCategoryId === POPULATION_CATEGORY_ID) {
+    paths.add(AGE_COMPOSITION_DATA_PATH);
+  }
+
   for (const group of getActiveGroups()) {
     for (const indicator of group.indicators) {
       const config = getSeriesConfig(indicator);
@@ -286,7 +292,19 @@ function renderGroup(group, dataByPath, { showHeading = true } = {}) {
   }
 
   if (!isOverviewActive() && group.id === ECONOMY_CATEGORY_ID) {
-    section.append(renderGvaByIndustryBlock(dataByPath));
+    const gvaByIndustryBlock = renderGvaByIndustryBlock(dataByPath);
+
+    if (gvaByIndustryBlock) {
+      section.append(gvaByIndustryBlock);
+    }
+  }
+
+  if (!isOverviewActive() && group.id === POPULATION_CATEGORY_ID) {
+    const ageCompositionBlock = renderAgeCompositionBlock(dataByPath);
+
+    if (ageCompositionBlock) {
+      section.append(ageCompositionBlock);
+    }
   }
 
   const tableWrap = document.createElement("div");
@@ -307,6 +325,42 @@ function renderGroup(group, dataByPath, { showHeading = true } = {}) {
   return section;
 }
 
+function renderAgeCompositionBlock(dataByPath) {
+  const ageCompositionData = dataByPath.get(AGE_COMPOSITION_DATA_PATH);
+  const countryData = ageCompositionData?.economies?.[selectedCountry.code];
+
+  if (!countryData) {
+    return null;
+  }
+
+  const block = document.createElement("div");
+  block.className = "country-age-composition";
+
+  const heading = document.createElement("h3");
+  heading.className = "country-age-composition-heading";
+  heading.textContent = "Population by Age Group";
+
+  const grid = renderDefinitionGrid(
+    countryData.groups.map((group) => ({
+      label: group.label,
+      value: formatPercentShare(group.share),
+    })),
+    "country-age-composition-grid",
+  );
+  grid.setAttribute("aria-label", `Population by age group, ${countryData.year}`);
+
+  const note = document.createElement("p");
+  note.className = "country-age-composition-note";
+  note.append(
+    `Share of total population, ${countryData.year}.`,
+    document.createElement("br"),
+    "Source: World Bank WDI, based on UN WPP 2024.",
+  );
+
+  block.append(heading, grid, note);
+  return block;
+}
+
 function renderGvaByIndustryBlock(dataByPath) {
   const block = document.createElement("div");
   block.className = "country-gva-industry";
@@ -315,8 +369,7 @@ function renderGvaByIndustryBlock(dataByPath) {
   const countryData = gvaData?.economies?.[selectedCountry.code];
 
   if (!countryData) {
-    block.append(renderEmptyMessage("No industry value added data available."));
-    return block;
+    return null;
   }
 
   const sectors = countryData.shares ?? [];
@@ -490,13 +543,6 @@ function renderDefinitionGrid(items, extraClassName = "") {
   }
 
   return grid;
-}
-
-function renderEmptyMessage(message) {
-  const empty = document.createElement("p");
-  empty.className = "ranking-empty";
-  empty.textContent = message;
-  return empty;
 }
 
 function renderIndicatorRow(indicator, dataByPath) {
