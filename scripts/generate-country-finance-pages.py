@@ -7,6 +7,7 @@ from country_page_generator import CountryPageConfig, IndicatorBlockConfig, gene
 
 GOVERNMENT_DEBT_SUBTITLE = "Select a country to view historical trends."
 FISCAL_BALANCE_SUBTITLE = "Select a country to view historical trends."
+GOVERNMENT_REVENUE_EXPENDITURE_SUBTITLE = "Select a country to view historical trends."
 PERCENT_GDP_SUBTITLE = (
     "Select a country to view historical trends. "
     "Values are shown as a percentage of nominal GDP in local currency."
@@ -86,38 +87,36 @@ FINANCE_PAGE_CONFIGS = (
         ),
     ),
     CountryPageConfig(
-        page_kind="government-revenue",
-        title_suffix="Government Revenue",
-        chart_title="Government Revenue Chart by Country",
-        subtitle=PERCENT_GDP_SUBTITLE,
-        generated_label="government revenue",
+        page_kind="government-revenue-expenditure",
+        title_suffix="Government Revenue and Expenditure",
+        chart_title="Government Revenue and Expenditure Chart by Country",
+        subtitle=GOVERNMENT_REVENUE_EXPENDITURE_SUBTITLE,
+        generated_label="government revenue and expenditure",
         source_note=WEO_COUNTRY_SOURCE_NOTE,
         data_note=WEO_COUNTRY_DATA_NOTE,
         related_nav_label="Finance page navigation",
         indicators=(
             IndicatorBlockConfig(
                 series_id="governmentRevenue",
-                title="Government Revenue",
+                title="Government Revenue (% of GDP)",
                 canvas_label="Government revenue line chart",
-                compare_label="Government Revenue",
+                compare_label="Government Revenue (% of GDP)",
             ),
-        ),
-    ),
-    CountryPageConfig(
-        page_kind="government-expenditure",
-        title_suffix="Government Expenditure",
-        chart_title="Government Expenditure Chart by Country",
-        subtitle=PERCENT_GDP_SUBTITLE,
-        generated_label="government expenditure",
-        source_note=WEO_COUNTRY_SOURCE_NOTE,
-        data_note=WEO_COUNTRY_DATA_NOTE,
-        related_nav_label="Finance page navigation",
-        indicators=(
             IndicatorBlockConfig(
                 series_id="governmentExpenditure",
-                title="Government Expenditure",
+                title="Government Expenditure (% of GDP)",
                 canvas_label="Government expenditure line chart",
-                compare_label="Government Expenditure",
+                compare_label="Government Expenditure (% of GDP)",
+            ),
+            IndicatorBlockConfig(
+                series_id="governmentRevenueNational",
+                title="Government Revenue - Local currency",
+                canvas_label="Government revenue in national currency line chart",
+            ),
+            IndicatorBlockConfig(
+                series_id="governmentExpenditureNational",
+                title="Government Expenditure - Local currency",
+                canvas_label="Government expenditure in national currency line chart",
             ),
         ),
     ),

@@ -58,15 +58,29 @@ export const financeProfileRankings = [
   {
     seriesId: "governmentRevenue",
     directory: "government-revenue",
-    label: "Government Revenue",
-    countryPageKind: "government-revenue",
+    label: "Government Revenue (% of GDP)",
+    countryPageKind: "government-revenue-expenditure",
+    countryPageLabel: "Government Revenue and Expenditure",
     profileSection: "Government Finance",
   },
   {
     seriesId: "governmentExpenditure",
     directory: "government-expenditure",
-    label: "Government Expenditure",
-    countryPageKind: "government-expenditure",
+    label: "Government Expenditure (% of GDP)",
+    countryPageKind: "government-revenue-expenditure",
+    countryPageLabel: "Government Revenue and Expenditure",
+    profileSection: "Government Finance",
+  },
+  {
+    seriesId: "governmentRevenueNational",
+    profileLabel: "Government Revenue - Local currency",
+    countryPageKind: "government-revenue-expenditure",
+    profileSection: "Government Finance",
+  },
+  {
+    seriesId: "governmentExpenditureNational",
+    profileLabel: "Government Expenditure - Local currency",
+    countryPageKind: "government-revenue-expenditure",
     profileSection: "Government Finance",
   },
   {

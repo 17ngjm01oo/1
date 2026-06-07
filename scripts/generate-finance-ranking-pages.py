@@ -32,13 +32,13 @@ RANKING_TYPES = [
     },
     {
         "directory": "government-revenue",
-        "title": "Government Revenue Ranking by Country",
+        "title": "Government Revenue (% of GDP) Ranking by Country",
         "script": "governmentRevenueRanking.js",
         "subtitle": PERCENT_GDP_SUBTITLE,
     },
     {
         "directory": "government-expenditure",
-        "title": "Government Expenditure Ranking by Country",
+        "title": "Government Expenditure (% of GDP) Ranking by Country",
         "script": "governmentExpenditureRanking.js",
         "subtitle": PERCENT_GDP_SUBTITLE,
     },

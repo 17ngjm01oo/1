@@ -6,7 +6,7 @@ initializeRankingPage({
   logName: "government expenditure",
   staticDataPath: dataSources.weoCurrentPrices.rankingStaticDataPath,
   indicatorCode: "GGX_NGDP",
-  rankingTitleBase: "Government Expenditure Ranking",
-  linkAriaMetric: "Government Expenditure",
+  rankingTitleBase: "Government Expenditure (% of GDP) Ranking",
+  linkAriaMetric: "Government Expenditure (% of GDP)",
   displayScaleConfig: valueFormats.percentOneDecimal,
 });

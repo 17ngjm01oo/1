@@ -135,17 +135,16 @@ const pageDefinitions = {
       "primaryFiscalBalanceNational",
     ],
   },
-  "government-revenue": {
-    logPrefix: "Government revenue page",
+  "government-revenue-expenditure": {
+    logPrefix: "Government revenue and expenditure page",
     group: "finance",
-    documentTitleMetric: "Government Revenue",
-    seriesIds: ["governmentRevenue"],
-  },
-  "government-expenditure": {
-    logPrefix: "Government expenditure page",
-    group: "finance",
-    documentTitleMetric: "Government Expenditure",
-    seriesIds: ["governmentExpenditure"],
+    documentTitleMetric: "Government Revenue and Expenditure",
+    seriesIds: [
+      "governmentRevenue",
+      "governmentExpenditure",
+      "governmentRevenueNational",
+      "governmentExpenditureNational",
+    ],
   },
   "total-reserves": {
     logPrefix: "Total reserves including gold page",

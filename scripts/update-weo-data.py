@@ -122,9 +122,17 @@ TARGET_INDICATORS = {
         "label": "Government Revenue",
         "description": "General government revenue, Percent of GDP",
     },
+    "GGR": {
+        "label": "Government Revenue",
+        "description": "General government revenue, Domestic currency",
+    },
     "GGX_NGDP": {
         "label": "Government Expenditure",
         "description": "General government total expenditure, Percent of GDP",
+    },
+    "GGX": {
+        "label": "Government Expenditure",
+        "description": "General government total expenditure, Domestic currency",
     },
 }
 SHEET_NAMES = ("Countries", "Country Groups")
@@ -407,6 +415,8 @@ def add_series_row(
         "GGXWDN",
         "GGXCNL",
         "GGXONLB",
+        "GGR",
+        "GGX",
     ):
         currency_code = get_currency_code(economy_code)
 

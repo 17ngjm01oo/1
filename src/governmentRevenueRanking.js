@@ -6,7 +6,7 @@ initializeRankingPage({
   logName: "government revenue",
   staticDataPath: dataSources.weoCurrentPrices.rankingStaticDataPath,
   indicatorCode: "GGR_NGDP",
-  rankingTitleBase: "Government Revenue Ranking",
-  linkAriaMetric: "Government Revenue",
+  rankingTitleBase: "Government Revenue (% of GDP) Ranking",
+  linkAriaMetric: "Government Revenue (% of GDP)",
   displayScaleConfig: valueFormats.percentOneDecimal,
 });
