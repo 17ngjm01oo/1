@@ -12,7 +12,7 @@ def main() -> None:
             page_kind="goods-trade",
             title_suffix="Goods Exports, Imports and Trade Balance",
             chart_title="Goods Exports, Imports and Trade Balance by Country",
-            subtitle="Select a country to view historical trends.",
+            subtitle="",
             generated_label="goods trade",
             related_nav_label="Trade page navigation",
             source_note=UNCTAD_SOURCE_NOTE,

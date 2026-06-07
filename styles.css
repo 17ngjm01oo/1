@@ -917,20 +917,23 @@ body[data-country-overview-category] .country-data-header h1 {
   overflow-wrap: anywhere;
 }
 
-.country-overview-value {
+.country-overview-table .country-overview-value {
   width: 28%;
+  vertical-align: middle;
   white-space: nowrap;
 }
 
-.country-overview-rank {
+.country-overview-table .country-overview-rank {
   width: 20%;
   text-align: right;
+  vertical-align: middle;
   white-space: nowrap;
 }
 
-.country-overview-year {
+.country-overview-table .country-overview-year {
   width: 12%;
   text-align: right;
+  vertical-align: middle;
   white-space: nowrap;
 }
 
@@ -989,6 +992,7 @@ body[data-country-overview-category] .country-data-header h1 {
 .compare-control {
   position: relative;
   display: grid;
+  align-self: end;
   gap: 6px;
   min-width: 0;
 }
@@ -2373,16 +2377,16 @@ body[data-country-code] .subtitle {
     width: 34%;
   }
 
-  .country-overview-value {
+  .country-overview-table .country-overview-value {
     width: 24%;
   }
 
-  .country-overview-rank {
+  .country-overview-table .country-overview-rank {
     width: 28%;
     text-align: left;
   }
 
-  .country-overview-year {
+  .country-overview-table .country-overview-year {
     width: 14%;
     text-align: left;
   }

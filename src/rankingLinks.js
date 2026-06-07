@@ -1,3 +1,7 @@
+import { seriesConfigs } from "./config.js";
+
+const seriesConfigById = new Map(seriesConfigs.map((config) => [config.id, config]));
+
 export function renderRankingLinks(
   nav,
   rankings,
@@ -8,6 +12,7 @@ export function renderRankingLinks(
     currentScopeSlug = "world",
     highlightCurrent = true,
     replace = true,
+    useDisplayUnitLabels = false,
   } = {},
 ) {
   if (!nav) {
@@ -19,6 +24,17 @@ export function renderRankingLinks(
   }
 
   rankings.forEach((ranking) => {
+    if (useDisplayUnitLabels) {
+      nav.append(createRankingHubLink(ranking, {
+        rootHref,
+        currentScopeSlug,
+        currentPageKind,
+        currentRankingDirectory,
+        highlightCurrent,
+      }));
+      return;
+    }
+
     const link = document.createElement("a");
     link.href = `${rootHref}rankings/${ranking.directory}/${currentScopeSlug}/`;
     link.textContent = ranking.label;
@@ -30,6 +46,33 @@ export function renderRankingLinks(
 
     nav.append(link);
   });
+}
+
+function createRankingHubLink(
+  ranking,
+  { rootHref, currentScopeSlug, currentPageKind, currentRankingDirectory, highlightCurrent },
+) {
+  const link = document.createElement("a");
+  const seriesConfig = seriesConfigById.get(ranking.seriesId);
+  const displayUnit = seriesConfig?.displayUnit ?? "";
+
+  link.href = `${rootHref}rankings/${ranking.directory}/${currentScopeSlug}/`;
+  link.textContent = seriesConfig?.titleTemplate ?? ranking.label;
+
+  if (highlightCurrent && isCurrentRankingLink(ranking, { currentPageKind, currentRankingDirectory })) {
+    link.className = "is-current";
+    link.setAttribute("aria-current", "page");
+  }
+
+  if (displayUnit) {
+    link.append(document.createTextNode(" "));
+    const unitElement = document.createElement("span");
+    unitElement.className = "indicator-display-unit";
+    unitElement.textContent = `(${displayUnit})`;
+    link.append(unitElement);
+  }
+
+  return link;
 }
 
 function isCurrentRankingLink(ranking, { currentPageKind, currentRankingDirectory }) {

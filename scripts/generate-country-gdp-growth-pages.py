@@ -11,7 +11,7 @@ def main() -> None:
             page_kind="gdp-growth",
             title_suffix="GDP Growth",
             chart_title="GDP Growth Chart by Country",
-            subtitle="Select a country to view historical GDP growth trends. GDP growth is the annual percentage change in real GDP in national currency.",
+            subtitle="GDP growth is the annual percentage change in real GDP in national currency.",
             generated_label="GDP growth",
             related_nav_label="Economy page navigation",
             source_note=WEO_COUNTRY_SOURCE_NOTE,

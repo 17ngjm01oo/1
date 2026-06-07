@@ -11,7 +11,7 @@ def main() -> None:
             page_kind="gdp-per-capita",
             title_suffix="GDP per capita",
             chart_title="GDP per Capita Chart by Country",
-            subtitle="Select a country to view historical GDP per capita trends.",
+            subtitle="",
             generated_label="GDP per capita",
             related_nav_label="Economy page navigation",
             source_note=WEO_COUNTRY_SOURCE_NOTE,

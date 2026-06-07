@@ -11,7 +11,7 @@ def main() -> None:
             page_kind="current-account-balance",
             title_suffix="Current Account Balance",
             chart_title="Current Account Balance Chart by Country",
-            subtitle="Select a country to view historical trends.",
+            subtitle="",
             generated_label="current account balance",
             source_note=WEO_COUNTRY_SOURCE_NOTE,
             data_note=WEO_COUNTRY_DATA_NOTE,

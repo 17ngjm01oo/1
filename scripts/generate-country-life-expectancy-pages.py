@@ -11,7 +11,7 @@ def main() -> None:
             page_kind="life-expectancy",
             title_suffix="Life Expectancy",
             chart_title="Life Expectancy Chart by Country",
-            subtitle="Select a country to view historical life expectancy trends.",
+            subtitle="",
             generated_label="life expectancy",
             source_note=WORLD_BANK_COUNTRY_SOURCE_NOTE,
             related_nav_label="Population page navigation",

@@ -34,7 +34,7 @@ function formatConfiguredDisplayUnit(unit, currencyCode) {
   }
 
   if (unit === "Local currency" && currencyCode) {
-    return `${unit} (${currencyCode})`;
+    return `${unit} - ${currencyCode}`;
   }
 
   return unit;

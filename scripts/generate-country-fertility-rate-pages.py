@@ -11,7 +11,7 @@ def main() -> None:
             page_kind="fertility-rate",
             title_suffix="Fertility Rate",
             chart_title="Fertility Rate Chart by Country",
-            subtitle="Select a country to view historical fertility rate trends.",
+            subtitle="",
             generated_label="fertility rate",
             source_note=WORLD_BANK_COUNTRY_SOURCE_NOTE,
             related_nav_label="Population page navigation",

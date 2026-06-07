@@ -11,7 +11,7 @@ def main() -> None:
             page_kind="ppp-gdp",
             title_suffix="PPP GDP",
             chart_title="PPP GDP Chart by Country",
-            subtitle="Select a country to view historical PPP trends.",
+            subtitle="",
             generated_label="PPP",
             related_nav_label="Economy page navigation",
             source_note=WEO_COUNTRY_SOURCE_NOTE,

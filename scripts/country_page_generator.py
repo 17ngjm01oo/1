@@ -65,6 +65,7 @@ def render_country_page(country: dict[str, str], config: CountryPageConfig) -> s
     country_code = html.escape(country["code"])
     indicator_blocks = "\n\n".join(render_indicator_block(indicator) for indicator in config.indicators)
     notes_markup = render_notes(config)
+    subtitle_markup = render_subtitle(config.subtitle)
 
     return f"""<!doctype html>
 <html lang="en">
@@ -86,7 +87,7 @@ def render_country_page(country: dict[str, str], config: CountryPageConfig) -> s
       <section class="hub-section" aria-labelledby="country-hub-title">
         <header class="page-header">
           <h1 id="country-hub-title" class="page-title">{html.escape(config.chart_title)}</h1>
-          <p class="subtitle">{html.escape(config.subtitle)}</p>
+{subtitle_markup}
         </header>
 
         <div class="country-search-panel">
@@ -122,6 +123,13 @@ def render_country_page(country: dict[str, str], config: CountryPageConfig) -> s
   </body>
 </html>
 """
+
+
+def render_subtitle(subtitle: str) -> str:
+    if not subtitle:
+        return ""
+
+    return f'          <p class="subtitle">{html.escape(subtitle)}</p>'
 
 
 def render_notes(config: CountryPageConfig) -> str:

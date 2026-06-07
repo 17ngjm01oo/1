@@ -11,7 +11,7 @@ def main() -> None:
             page_kind="gdp",
             title_suffix="GDP",
             chart_title="GDP Chart by Country",
-            subtitle="Select a country to view historical GDP trends.",
+            subtitle="",
             generated_label="GDP",
             related_nav_label="Economy page navigation",
             source_note=WEO_COUNTRY_SOURCE_NOTE,

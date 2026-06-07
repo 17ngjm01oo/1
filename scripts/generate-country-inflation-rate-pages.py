@@ -11,10 +11,7 @@ def main() -> None:
             page_kind="inflation-rate",
             title_suffix="Inflation Rate",
             chart_title="Inflation Rate Chart by Country",
-            subtitle=(
-                "Select a country to view historical inflation rate trends. "
-                "Inflation rate is the annual percentage change in the consumer price index."
-            ),
+            subtitle="Inflation rate is the annual percentage change in the consumer price index.",
             generated_label="inflation rate",
             related_nav_label="Economy page navigation",
             source_note=WEO_COUNTRY_SOURCE_NOTE,

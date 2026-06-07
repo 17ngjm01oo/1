@@ -11,7 +11,7 @@ def main() -> None:
             page_kind="population-density",
             title_suffix="Population Density",
             chart_title="Population Density Chart by Country",
-            subtitle="Select a country to view historical population density trends.",
+            subtitle="",
             generated_label="population density",
             source_note=WORLD_BANK_COUNTRY_SOURCE_NOTE,
             related_nav_label="Population page navigation",

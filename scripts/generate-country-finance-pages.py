@@ -5,17 +5,10 @@ from data_source_notes import WEO_COUNTRY_DATA_NOTE, WEO_COUNTRY_SOURCE_NOTE, WO
 from country_page_generator import CountryPageConfig, IndicatorBlockConfig, generate_country_pages
 
 
-GOVERNMENT_DEBT_SUBTITLE = "Select a country to view historical trends."
-FISCAL_BALANCE_SUBTITLE = "Select a country to view historical trends."
-GOVERNMENT_REVENUE_EXPENDITURE_SUBTITLE = "Select a country to view historical trends."
-PERCENT_GDP_SUBTITLE = (
-    "Select a country to view historical trends. "
-    "Values are shown as a percentage of nominal GDP in local currency."
-)
-TOTAL_RESERVES_SUBTITLE = (
-    "Select a country to view historical total reserves including gold trends. "
-    "Values are shown in current U.S. dollars."
-)
+GOVERNMENT_DEBT_SUBTITLE = ""
+FISCAL_BALANCE_SUBTITLE = ""
+GOVERNMENT_REVENUE_EXPENDITURE_SUBTITLE = ""
+TOTAL_RESERVES_SUBTITLE = "Values are shown in current U.S. dollars."
 
 FINANCE_PAGE_CONFIGS = (
     CountryPageConfig(

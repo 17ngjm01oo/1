@@ -6,6 +6,7 @@ renderTopNavigationLinks({
   rootHref,
   currentRankingDirectory: document.body.dataset.rankingDirectory ?? "",
   currentScopeSlug: document.body.dataset.rankingScopeSlug ?? "world",
+  useDisplayUnitLabels: document.body.dataset.pageKind === "rankings-hub",
 });
 
 initializeRankingsHubCategoryFilter();

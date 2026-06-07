@@ -55,6 +55,7 @@ export function renderTopNavigationLinks({
   currentScopeSlug = "world",
   currentPageKind = "",
   highlightCurrent = true,
+  useDisplayUnitLabels = false,
 } = {}) {
   renderSiteHubLinks({ rootHref });
   renderSiteFooter({ rootHref });
@@ -66,6 +67,7 @@ export function renderTopNavigationLinks({
       currentScopeSlug,
       currentPageKind,
       highlightCurrent,
+      useDisplayUnitLabels,
     });
   });
 }

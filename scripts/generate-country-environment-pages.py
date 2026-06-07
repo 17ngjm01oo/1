@@ -5,8 +5,8 @@ from data_source_notes import WORLD_BANK_COUNTRY_SOURCE_NOTE
 from country_page_generator import CountryPageConfig, IndicatorBlockConfig, generate_country_pages
 
 
-ENVIRONMENT_SUBTITLE = "Select a country to view historical environmental indicator trends."
-CO2_EMISSIONS_SUBTITLE = "Select a country to view historical trends."
+ENVIRONMENT_SUBTITLE = ""
+CO2_EMISSIONS_SUBTITLE = ""
 
 ENVIRONMENT_PAGE_CONFIGS = (
     CountryPageConfig(

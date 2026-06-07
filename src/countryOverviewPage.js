@@ -34,14 +34,13 @@ function buildOverviewIndicators(rankings, { includeProfileSection = false } = {
 }
 
 function buildOverviewIndicator(
-  { seriesId, directory, countryPageKind, profileLabel, profileSection },
+  { seriesId, directory, countryPageKind, profileSection },
   { includeProfileSection = false } = {},
 ) {
   return {
     seriesId,
     rankingDirectory: directory,
     ...(countryPageKind ? { pagePathSegment: countryPageKind } : {}),
-    ...(profileLabel ? { label: profileLabel } : {}),
     ...(includeProfileSection && profileSection ? { profileSection } : {}),
   };
 }

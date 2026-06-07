@@ -11,7 +11,7 @@ def main() -> None:
             page_kind="unemployment-rate",
             title_suffix="Unemployment Rate",
             chart_title="Unemployment Rate Chart by Country",
-            subtitle="Select a country to view historical unemployment rate trends.",
+            subtitle="",
             generated_label="unemployment rate",
             source_note=WEO_COUNTRY_SOURCE_NOTE,
             related_nav_label="Population page navigation",

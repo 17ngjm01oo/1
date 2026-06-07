@@ -11,7 +11,7 @@ def main() -> None:
             page_kind="population",
             title_suffix="Population",
             chart_title="Population Chart by Country",
-            subtitle="Select a country to view historical population trends.",
+            subtitle="",
             generated_label="population",
             source_note=WORLD_BANK_COUNTRY_SOURCE_NOTE,
             source_note_overridable=True,

@@ -11,7 +11,7 @@ def main() -> None:
             page_kind="employment",
             title_suffix="Employment",
             chart_title="Employment Chart by Country",
-            subtitle="Select a country to view historical employment trends.",
+            subtitle="",
             generated_label="employment",
             source_note=WEO_COUNTRY_SOURCE_NOTE,
             related_nav_label="Population page navigation",
