@@ -10,5 +10,6 @@ initializeRankingPage({
   endYear: 2025,
   rankingTitleBase: "Goods Trade Balance Ranking",
   linkAriaMetric: "Goods Trade Balance",
+  countryPageKind: "goods-trade",
   displayScaleConfig: valueFormats.usdMillionsMagnitude,
 });

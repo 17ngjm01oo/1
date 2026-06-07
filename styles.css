@@ -686,16 +686,16 @@ body[data-country-overview-category] .country-data-header h1 {
 .country-gva-industry-chart {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(9.5rem, 12.5rem) minmax(0, 1fr);
+  grid-template-columns: minmax(10.5rem, 14rem) minmax(0, 1fr);
   align-items: center;
-  gap: 14px;
+  gap: 16px;
   min-width: 0;
 }
 
 .country-gva-industry-pie {
   display: block;
   width: 100%;
-  max-width: 12.5rem;
+  max-width: 14rem;
   aspect-ratio: 1;
 }
 
@@ -722,12 +722,12 @@ body[data-country-overview-category] .country-data-header h1 {
 
 .country-gva-industry-legend {
   display: grid;
-  gap: 6px;
+  gap: 7px;
   min-width: 0;
   margin: 0;
   padding: 0;
   color: var(--text);
-  font-size: 0.9rem;
+  font-size: 0.96rem;
   font-weight: 700;
   line-height: 1.25;
   list-style: none;
@@ -741,8 +741,8 @@ body[data-country-overview-category] .country-data-header h1 {
 }
 
 .country-gva-industry-legend-marker {
-  width: 0.62rem;
-  height: 0.62rem;
+  width: 0.68rem;
+  height: 0.68rem;
   flex: 0 0 auto;
   border-radius: 999px;
 }
@@ -2336,7 +2336,7 @@ body[data-country-code] .subtitle {
 
   .country-gva-industry-legend {
     gap: 5px;
-    font-size: 0.82rem;
+    font-size: 0.88rem;
     line-height: 1.2;
   }
 

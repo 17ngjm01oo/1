@@ -11,9 +11,11 @@ import "./rankingTopNav.js";
 const GVA_BY_INDUSTRY_DATA_PATH = "./data/un-national-accounts/gva-by-industry.json";
 const AGE_COMPOSITION_DATA_PATH = "./data/world-bank/age-composition.json";
 const TRADE_PARTNERS_DATA_PATH = "./data/un-comtrade/trade-partners.json";
+const TAX_REVENUE_COMPOSITION_DATA_PATH = "./data/oecd/tax-revenue-composition.json";
 const ECONOMY_CATEGORY_ID = "economy";
 const POPULATION_CATEGORY_ID = "population";
 const TRADE_CATEGORY_ID = "trade";
+const FINANCE_CATEGORY_ID = "finance";
 const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
 const PIE_LABEL_MIN_SHARE = 7;
 const GVA_INDUSTRY_COLORS = [
@@ -210,6 +212,10 @@ function getRequiredStaticDataPaths() {
     paths.add(TRADE_PARTNERS_DATA_PATH);
   }
 
+  if (activeCategoryId === FINANCE_CATEGORY_ID) {
+    paths.add(TAX_REVENUE_COMPOSITION_DATA_PATH);
+  }
+
   for (const group of getActiveGroups()) {
     for (const indicator of group.indicators) {
       const config = getSeriesConfig(indicator);
@@ -334,6 +340,14 @@ function renderGroup(group, dataByPath, { showHeading = true } = {}) {
 
     if (tradePartnersBlock) {
       section.append(tradePartnersBlock);
+    }
+  }
+
+  if (!isOverviewActive() && group.id === FINANCE_CATEGORY_ID) {
+    const taxRevenueCompositionBlock = renderTaxRevenueCompositionBlock(dataByPath);
+
+    if (taxRevenueCompositionBlock) {
+      section.append(taxRevenueCompositionBlock);
     }
   }
 
@@ -544,6 +558,44 @@ function renderTradePartnerPanel(label, flowData) {
   return panel;
 }
 
+function renderTaxRevenueCompositionBlock(dataByPath) {
+  const taxRevenueData = dataByPath.get(TAX_REVENUE_COMPOSITION_DATA_PATH);
+  const countryData = taxRevenueData?.economies?.[selectedCountry.code];
+  const shares = countryData?.shares ?? [];
+
+  if (!shares.length) {
+    return null;
+  }
+
+  const block = document.createElement("div");
+  block.className = "country-gva-industry country-tax-revenue-composition";
+
+  const heading = document.createElement("h3");
+  heading.className = "country-gva-industry-heading country-tax-revenue-composition-heading";
+  heading.textContent = "Tax Revenue Composition";
+
+  const chart = renderPieChart(shares, {
+    ariaLabel: `Tax revenue composition chart, ${countryData.year}`,
+    className: "country-tax-revenue-composition-chart",
+  });
+  const grid = renderDefinitionGrid(
+    shares.map((category) => ({
+      label: category.label,
+      value: formatPercentShare(category.share),
+    })),
+    "country-gva-industry-grid country-tax-revenue-composition-grid",
+  );
+  grid.setAttribute("aria-label", `Tax revenue composition, ${countryData.year}`);
+  const tableToggle = renderProfileTableToggle(grid);
+
+  const note = document.createElement("p");
+  note.className = "country-gva-industry-note country-tax-revenue-composition-note";
+  note.textContent = `Source: OECD Global Revenue Statistics Database, ${countryData.year}.`;
+
+  block.append(heading, chart, tableToggle, note);
+  return block;
+}
+
 function renderProfileTableToggle(table) {
   const details = document.createElement("details");
   details.className = "country-profile-table-toggle";
@@ -578,12 +630,14 @@ function renderPieChart(items, { ariaLabel, className = "" } = {}) {
   svg.setAttribute("role", "img");
   svg.setAttribute("aria-label", ariaLabel ?? "Pie chart");
 
-  const tooltip = document.createElement("div");
-  tooltip.className = "country-gva-industry-tooltip";
-  tooltip.setAttribute("role", "tooltip");
-  tooltip.hidden = true;
+  const useHoverTooltip = !isTouchTooltipPreferred();
+  const tooltip = useHoverTooltip ? document.createElement("div") : null;
+  if (tooltip) {
+    tooltip.className = "country-gva-industry-tooltip";
+    tooltip.setAttribute("role", "tooltip");
+    tooltip.hidden = true;
+  }
 
-  const useTapTooltip = isTouchTooltipPreferred();
   let startAngle = -90;
   for (const sector of pieSectors) {
     const endAngle = startAngle + (sector.share / totalShare) * 360;
@@ -591,12 +645,7 @@ function renderPieChart(items, { ariaLabel, className = "" } = {}) {
     path.setAttribute("d", createPieSlicePathData(50, 50, 42, startAngle, endAngle));
     path.setAttribute("fill", sector.color);
 
-    if (useTapTooltip) {
-      path.addEventListener("pointerup", (event) => {
-        event.stopPropagation();
-        showPieTooltip(tooltip, chart, formatPieItemLabel(sector), event);
-      });
-    } else {
+    if (tooltip) {
       path.addEventListener("pointerenter", (event) => {
         showPieTooltip(tooltip, chart, formatPieItemLabel(sector), event);
       });
@@ -639,13 +688,10 @@ function renderPieChart(items, { ariaLabel, className = "" } = {}) {
     legend.append(item);
   }
 
-  if (useTapTooltip) {
-    chart.addEventListener("pointerup", () => {
-      tooltip.hidden = true;
-    });
+  chart.append(svg, legend);
+  if (tooltip) {
+    chart.append(tooltip);
   }
-
-  chart.append(svg, legend, tooltip);
   return chart;
 }
 

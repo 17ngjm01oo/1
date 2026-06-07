@@ -11,7 +11,7 @@ def main() -> None:
             page_kind="current-account-balance",
             title_suffix="Current Account Balance",
             chart_title="Current Account Balance Chart by Country",
-            subtitle="Select a country to view historical current account balance trends.",
+            subtitle="Select a country to view historical trends.",
             generated_label="current account balance",
             source_note=WEO_COUNTRY_SOURCE_NOTE,
             data_note=WEO_COUNTRY_DATA_NOTE,
@@ -22,6 +22,12 @@ def main() -> None:
                     title="Current Account Balance - USD",
                     canvas_label="Current account balance line chart",
                     compare_label="Current Account Balance",
+                ),
+                IndicatorBlockConfig(
+                    series_id="currentAccountBalancePercentGdp",
+                    title="Current Account Balance (% of GDP)",
+                    canvas_label="Current account balance percent of GDP line chart",
+                    compare_label="Current Account Balance (% of GDP)",
                 ),
             ),
         )

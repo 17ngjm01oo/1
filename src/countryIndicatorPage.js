@@ -87,31 +87,13 @@ const pageDefinitions = {
     logPrefix: "Current account balance page",
     group: "trade",
     documentTitleMetric: "Current Account Balance",
-    seriesIds: ["currentAccountBalance"],
+    seriesIds: ["currentAccountBalance", "currentAccountBalancePercentGdp"],
   },
-  "current-account-balance-percent-gdp": {
-    logPrefix: "Current account balance percent of GDP page",
+  "goods-trade": {
+    logPrefix: "Goods trade page",
     group: "trade",
-    documentTitleMetric: "Current Account Balance (% of GDP)",
-    seriesIds: ["currentAccountBalancePercentGdp"],
-  },
-  "goods-exports": {
-    logPrefix: "Goods exports page",
-    group: "trade",
-    documentTitleMetric: "Goods Exports",
-    seriesIds: ["goodsExports"],
-  },
-  "goods-imports": {
-    logPrefix: "Goods imports page",
-    group: "trade",
-    documentTitleMetric: "Goods Imports",
-    seriesIds: ["goodsImports"],
-  },
-  "goods-trade-balance": {
-    logPrefix: "Goods trade balance page",
-    group: "trade",
-    documentTitleMetric: "Goods Trade Balance",
-    seriesIds: ["goodsTradeBalance"],
+    documentTitleMetric: "Goods Exports, Imports and Trade Balance",
+    seriesIds: ["goodsTradeBalance", "goodsExports", "goodsImports"],
   },
   "government-debt": {
     logPrefix: "Government debt page",

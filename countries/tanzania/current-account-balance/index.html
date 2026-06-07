@@ -18,7 +18,7 @@
       <section class="hub-section" aria-labelledby="country-hub-title">
         <header class="page-header">
           <h1 id="country-hub-title" class="page-title">Current Account Balance Chart by Country</h1>
-          <p class="subtitle">Select a country to view historical current account balance trends.</p>
+          <p class="subtitle">Select a country to view historical trends.</p>
         </header>
 
         <div class="country-search-panel">
@@ -77,6 +77,41 @@
             <details class="data-table-toggle" id="currentAccountBalanceTableToggle">
               <summary>Show data table</summary>
               <div class="data-table-wrap" id="currentAccountBalanceTableWrap"></div>
+            </details>
+          </section>
+
+          <section class="indicator-block" aria-labelledby="currentAccountBalancePercentGdp-title">
+            <header class="indicator-header">
+              <div class="indicator-title-group">
+                <h2 id="currentAccountBalancePercentGdp-title">Current Account Balance (% of GDP)</h2>
+              </div>
+              <div class="compare-control" data-series-id="currentAccountBalancePercentGdp">
+                <div class="compare-input-wrap">
+                  <input
+                    id="currentAccountBalancePercentGdpCompareInput"
+                    class="compare-search-input"
+                    type="search"
+                    autocomplete="off"
+                    placeholder="Compare with..."
+                    aria-controls="currentAccountBalancePercentGdpCompareResults"
+                    role="combobox"
+                    aria-autocomplete="list"
+                    aria-expanded="false"
+                  />
+                </div>
+                <p class="compare-selected" id="currentAccountBalancePercentGdpCompareSelected"></p>
+                <div class="country-results compare-results" id="currentAccountBalancePercentGdpCompareResults" role="listbox" aria-label="Current Account Balance (% of GDP) comparison country results" hidden></div>
+              </div>
+            </header>
+
+            <div class="chart-card" id="currentAccountBalancePercentGdpChartCard">
+              <canvas id="currentAccountBalancePercentGdpChart" aria-label="Current account balance percent of GDP line chart" role="img"></canvas>
+              <div class="chart-overlay" id="currentAccountBalancePercentGdpOverlay" aria-hidden="true"></div>
+            </div>
+
+            <details class="data-table-toggle" id="currentAccountBalancePercentGdpTableToggle">
+              <summary>Show data table</summary>
+              <div class="data-table-wrap" id="currentAccountBalancePercentGdpTableWrap"></div>
             </details>
           </section>
 

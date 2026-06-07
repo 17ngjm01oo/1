@@ -8,5 +8,6 @@ initializeRankingPage({
   indicatorCode: "GGX_NGDP",
   rankingTitleBase: "Government Expenditure (% of GDP) Ranking",
   linkAriaMetric: "Government Expenditure (% of GDP)",
+  countryPageKind: "government-revenue-expenditure",
   displayScaleConfig: valueFormats.percentOneDecimal,
 });

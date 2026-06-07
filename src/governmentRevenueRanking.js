@@ -8,5 +8,6 @@ initializeRankingPage({
   indicatorCode: "GGR_NGDP",
   rankingTitleBase: "Government Revenue (% of GDP) Ranking",
   linkAriaMetric: "Government Revenue (% of GDP)",
+  countryPageKind: "government-revenue-expenditure",
   displayScaleConfig: valueFormats.percentOneDecimal,
 });
