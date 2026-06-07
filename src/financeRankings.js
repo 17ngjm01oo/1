@@ -8,17 +8,17 @@ export const financeProfileRankings = [
     profileSection: "Government Debt",
   },
   {
+    seriesId: "governmentGrossDebtNational",
+    profileLabel: "Government Gross Debt - Local currency",
+    countryPageKind: "government-debt",
+    profileSection: "Government Debt",
+  },
+  {
     seriesId: "governmentNetDebt",
     directory: "government-net-debt",
     label: "Government Net Debt (% of GDP)",
     countryPageKind: "government-debt",
     countryPageLabel: "Government Debt",
-    profileSection: "Government Debt",
-  },
-  {
-    seriesId: "governmentGrossDebtNational",
-    profileLabel: "Government Gross Debt - Local currency",
-    countryPageKind: "government-debt",
     profileSection: "Government Debt",
   },
   {
@@ -36,17 +36,17 @@ export const financeProfileRankings = [
     profileSection: "Government Finance",
   },
   {
+    seriesId: "fiscalBalanceNational",
+    profileLabel: "Fiscal Balance - Local currency",
+    countryPageKind: "fiscal-balance",
+    profileSection: "Government Finance",
+  },
+  {
     seriesId: "primaryFiscalBalance",
     directory: "primary-fiscal-balance",
     label: "Primary Fiscal Balance (% of GDP)",
     countryPageKind: "fiscal-balance",
     countryPageLabel: "Fiscal Balance",
-    profileSection: "Government Finance",
-  },
-  {
-    seriesId: "fiscalBalanceNational",
-    profileLabel: "Fiscal Balance - Local currency",
-    countryPageKind: "fiscal-balance",
     profileSection: "Government Finance",
   },
   {
@@ -64,17 +64,17 @@ export const financeProfileRankings = [
     profileSection: "Government Finance",
   },
   {
+    seriesId: "governmentRevenueNational",
+    profileLabel: "Government Revenue - Local currency",
+    countryPageKind: "government-revenue-expenditure",
+    profileSection: "Government Finance",
+  },
+  {
     seriesId: "governmentExpenditure",
     directory: "government-expenditure",
     label: "Government Expenditure (% of GDP)",
     countryPageKind: "government-revenue-expenditure",
     countryPageLabel: "Government Revenue and Expenditure",
-    profileSection: "Government Finance",
-  },
-  {
-    seriesId: "governmentRevenueNational",
-    profileLabel: "Government Revenue - Local currency",
-    countryPageKind: "government-revenue-expenditure",
     profileSection: "Government Finance",
   },
   {

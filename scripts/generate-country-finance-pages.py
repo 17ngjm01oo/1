@@ -35,15 +35,15 @@ FINANCE_PAGE_CONFIGS = (
                 compare_label="Government Gross Debt (% of GDP)",
             ),
             IndicatorBlockConfig(
+                series_id="governmentGrossDebtNational",
+                title="Government Gross Debt - Local currency",
+                canvas_label="Government gross debt in national currency line chart",
+            ),
+            IndicatorBlockConfig(
                 series_id="governmentNetDebt",
                 title="Government Net Debt (% of GDP)",
                 canvas_label="Government net debt line chart",
                 compare_label="Government Net Debt (% of GDP)",
-            ),
-            IndicatorBlockConfig(
-                series_id="governmentGrossDebtNational",
-                title="Government Gross Debt - Local currency",
-                canvas_label="Government gross debt in national currency line chart",
             ),
             IndicatorBlockConfig(
                 series_id="governmentNetDebtNational",
@@ -69,15 +69,15 @@ FINANCE_PAGE_CONFIGS = (
                 compare_label="Fiscal Balance (% of GDP)",
             ),
             IndicatorBlockConfig(
+                series_id="fiscalBalanceNational",
+                title="Fiscal Balance - Local currency",
+                canvas_label="Fiscal balance in national currency line chart",
+            ),
+            IndicatorBlockConfig(
                 series_id="primaryFiscalBalance",
                 title="Primary Fiscal Balance (% of GDP)",
                 canvas_label="Primary fiscal balance line chart",
                 compare_label="Primary Fiscal Balance (% of GDP)",
-            ),
-            IndicatorBlockConfig(
-                series_id="fiscalBalanceNational",
-                title="Fiscal Balance - Local currency",
-                canvas_label="Fiscal balance in national currency line chart",
             ),
             IndicatorBlockConfig(
                 series_id="primaryFiscalBalanceNational",
@@ -103,15 +103,15 @@ FINANCE_PAGE_CONFIGS = (
                 compare_label="Government Revenue (% of GDP)",
             ),
             IndicatorBlockConfig(
+                series_id="governmentRevenueNational",
+                title="Government Revenue - Local currency",
+                canvas_label="Government revenue in national currency line chart",
+            ),
+            IndicatorBlockConfig(
                 series_id="governmentExpenditure",
                 title="Government Expenditure (% of GDP)",
                 canvas_label="Government expenditure line chart",
                 compare_label="Government Expenditure (% of GDP)",
-            ),
-            IndicatorBlockConfig(
-                series_id="governmentRevenueNational",
-                title="Government Revenue - Local currency",
-                canvas_label="Government revenue in national currency line chart",
             ),
             IndicatorBlockConfig(
                 series_id="governmentExpenditureNational",

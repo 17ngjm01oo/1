@@ -2334,10 +2334,24 @@ body[data-country-code] .subtitle {
     white-space: nowrap;
   }
 
+  .country-gva-industry-chart {
+    grid-template-columns: minmax(9.5rem, 12.5rem) minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .country-gva-industry-pie {
+    max-width: 12.5rem;
+  }
+
   .country-gva-industry-legend {
-    gap: 5px;
-    font-size: 0.88rem;
-    line-height: 1.2;
+    gap: 6px;
+    font-size: 0.9rem;
+    line-height: 1.25;
+  }
+
+  .country-gva-industry-legend-marker {
+    width: 0.62rem;
+    height: 0.62rem;
   }
 
   .country-overview-table th,

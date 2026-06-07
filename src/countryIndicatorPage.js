@@ -101,8 +101,8 @@ const pageDefinitions = {
     documentTitleMetric: "Government Debt",
     seriesIds: [
       "governmentGrossDebt",
-      "governmentNetDebt",
       "governmentGrossDebtNational",
+      "governmentNetDebt",
       "governmentNetDebtNational",
     ],
   },
@@ -112,8 +112,8 @@ const pageDefinitions = {
     documentTitleMetric: "Fiscal Balance",
     seriesIds: [
       "fiscalBalance",
-      "primaryFiscalBalance",
       "fiscalBalanceNational",
+      "primaryFiscalBalance",
       "primaryFiscalBalanceNational",
     ],
   },
@@ -123,8 +123,8 @@ const pageDefinitions = {
     documentTitleMetric: "Government Revenue and Expenditure",
     seriesIds: [
       "governmentRevenue",
-      "governmentExpenditure",
       "governmentRevenueNational",
+      "governmentExpenditure",
       "governmentExpenditureNational",
     ],
   },

@@ -1,5 +1,13 @@
 export const tradeRankings = [
   {
+    seriesId: "goodsTradeBalance",
+    directory: "goods-trade-balance",
+    label: "Goods Trade Balance",
+    countryPageKind: "goods-trade",
+    countryPageLabel: "Goods Trade",
+    profileSection: "Goods Trade",
+  },
+  {
     seriesId: "goodsExports",
     directory: "goods-exports",
     label: "Goods Exports",
@@ -11,14 +19,6 @@ export const tradeRankings = [
     seriesId: "goodsImports",
     directory: "goods-imports",
     label: "Goods Imports",
-    countryPageKind: "goods-trade",
-    countryPageLabel: "Goods Trade",
-    profileSection: "Goods Trade",
-  },
-  {
-    seriesId: "goodsTradeBalance",
-    directory: "goods-trade-balance",
-    label: "Goods Trade Balance",
     countryPageKind: "goods-trade",
     countryPageLabel: "Goods Trade",
     profileSection: "Goods Trade",
