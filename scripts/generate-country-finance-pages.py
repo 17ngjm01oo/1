@@ -6,6 +6,7 @@ from country_page_generator import CountryPageConfig, IndicatorBlockConfig, gene
 
 
 GOVERNMENT_DEBT_SUBTITLE = "Select a country to view historical trends."
+FISCAL_BALANCE_SUBTITLE = "Select a country to view historical trends."
 PERCENT_GDP_SUBTITLE = (
     "Select a country to view historical trends. "
     "Values are shown as a percentage of nominal GDP in local currency."
@@ -38,13 +39,23 @@ FINANCE_PAGE_CONFIGS = (
                 canvas_label="Government net debt line chart",
                 compare_label="Government Net Debt (% of GDP)",
             ),
+            IndicatorBlockConfig(
+                series_id="governmentGrossDebtNational",
+                title="Government Gross Debt - Local currency",
+                canvas_label="Government gross debt in national currency line chart",
+            ),
+            IndicatorBlockConfig(
+                series_id="governmentNetDebtNational",
+                title="Government Net Debt - Local currency",
+                canvas_label="Government net debt in national currency line chart",
+            ),
         ),
     ),
     CountryPageConfig(
         page_kind="fiscal-balance",
         title_suffix="Fiscal Balance",
         chart_title="Fiscal Balance Chart by Country",
-        subtitle=PERCENT_GDP_SUBTITLE,
+        subtitle=FISCAL_BALANCE_SUBTITLE,
         generated_label="fiscal balance",
         source_note=WEO_COUNTRY_SOURCE_NOTE,
         data_note=WEO_COUNTRY_DATA_NOTE,
@@ -52,27 +63,25 @@ FINANCE_PAGE_CONFIGS = (
         indicators=(
             IndicatorBlockConfig(
                 series_id="fiscalBalance",
-                title="Fiscal Balance",
+                title="Fiscal Balance (% of GDP)",
                 canvas_label="Fiscal balance line chart",
-                compare_label="Fiscal Balance",
+                compare_label="Fiscal Balance (% of GDP)",
             ),
-        ),
-    ),
-    CountryPageConfig(
-        page_kind="primary-fiscal-balance",
-        title_suffix="Primary Fiscal Balance",
-        chart_title="Primary Fiscal Balance Chart by Country",
-        subtitle=PERCENT_GDP_SUBTITLE,
-        generated_label="primary fiscal balance",
-        source_note=WEO_COUNTRY_SOURCE_NOTE,
-        data_note=WEO_COUNTRY_DATA_NOTE,
-        related_nav_label="Finance page navigation",
-        indicators=(
             IndicatorBlockConfig(
                 series_id="primaryFiscalBalance",
-                title="Primary Fiscal Balance",
+                title="Primary Fiscal Balance (% of GDP)",
                 canvas_label="Primary fiscal balance line chart",
-                compare_label="Primary Fiscal Balance",
+                compare_label="Primary Fiscal Balance (% of GDP)",
+            ),
+            IndicatorBlockConfig(
+                series_id="fiscalBalanceNational",
+                title="Fiscal Balance - Local currency",
+                canvas_label="Fiscal balance in national currency line chart",
+            ),
+            IndicatorBlockConfig(
+                series_id="primaryFiscalBalanceNational",
+                title="Primary Fiscal Balance - Local currency",
+                canvas_label="Primary fiscal balance in national currency line chart",
             ),
         ),
     ),

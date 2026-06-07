@@ -6,7 +6,7 @@ initializeRankingPage({
   logName: "fiscal balance",
   staticDataPath: dataSources.weoCurrentPrices.rankingStaticDataPath,
   indicatorCode: "GGXCNL_NGDP",
-  rankingTitleBase: "Fiscal Balance Ranking",
-  linkAriaMetric: "Fiscal Balance",
+  rankingTitleBase: "Fiscal Balance (% of GDP) Ranking",
+  linkAriaMetric: "Fiscal Balance (% of GDP)",
   displayScaleConfig: valueFormats.percentOneDecimal,
 });

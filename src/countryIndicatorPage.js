@@ -117,19 +117,23 @@ const pageDefinitions = {
     logPrefix: "Government debt page",
     group: "finance",
     documentTitleMetric: "Government Debt",
-    seriesIds: ["governmentGrossDebt", "governmentNetDebt"],
+    seriesIds: [
+      "governmentGrossDebt",
+      "governmentNetDebt",
+      "governmentGrossDebtNational",
+      "governmentNetDebtNational",
+    ],
   },
   "fiscal-balance": {
     logPrefix: "Fiscal balance page",
     group: "finance",
     documentTitleMetric: "Fiscal Balance",
-    seriesIds: ["fiscalBalance"],
-  },
-  "primary-fiscal-balance": {
-    logPrefix: "Primary fiscal balance page",
-    group: "finance",
-    documentTitleMetric: "Primary Fiscal Balance",
-    seriesIds: ["primaryFiscalBalance"],
+    seriesIds: [
+      "fiscalBalance",
+      "primaryFiscalBalance",
+      "fiscalBalanceNational",
+      "primaryFiscalBalanceNational",
+    ],
   },
   "government-revenue": {
     logPrefix: "Government revenue page",
@@ -262,16 +266,14 @@ function getSeriesChartTitle(seriesConfig, currencyCode) {
   ) {
     return `${title} - CO2e`;
   }
-  const isGdpCurrencySeries =
-    title.includes("GDP") &&
-    (seriesConfig.usesCountryCurrency || seriesConfig.currencyCode);
+  if (seriesConfig.usesCountryCurrency) {
+    return currencyCode ? `${title} - Local currency (${currencyCode})` : `${title} - Local currency`;
+  }
+
+  const isGdpCurrencySeries = title.includes("GDP") && seriesConfig.currencyCode;
 
   if (!isGdpCurrencySeries || !currencyCode) {
     return title;
-  }
-
-  if (seriesConfig.usesCountryCurrency) {
-    return `${title} - Local currency (${currencyCode})`;
   }
 
   return `${title} - ${currencyCode}`;

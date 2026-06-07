@@ -90,17 +90,33 @@ TARGET_INDICATORS = {
         "label": "Government Gross Debt",
         "description": "General government gross debt, Percent of GDP",
     },
+    "GGXWDG": {
+        "label": "Government Gross Debt",
+        "description": "General government gross debt, Domestic currency",
+    },
     "GGXWDN_NGDP": {
         "label": "Government Net Debt",
         "description": "General government net debt, Percent of GDP",
+    },
+    "GGXWDN": {
+        "label": "Government Net Debt",
+        "description": "General government net debt, Domestic currency",
     },
     "GGXCNL_NGDP": {
         "label": "Fiscal Balance",
         "description": "General government net lending/borrowing, Percent of GDP",
     },
+    "GGXCNL": {
+        "label": "Fiscal Balance",
+        "description": "General government net lending/borrowing, Domestic currency",
+    },
     "GGXONLB_NGDP": {
         "label": "Primary Fiscal Balance",
         "description": "General government primary net lending/borrowing, Percent of GDP",
+    },
+    "GGXONLB": {
+        "label": "Primary Fiscal Balance",
+        "description": "General government primary net lending/borrowing, Domestic currency",
     },
     "GGR_NGDP": {
         "label": "Government Revenue",
@@ -382,7 +398,16 @@ def add_series_row(
         "values": values,
     }
 
-    if indicator_id in ("NGDP", "NGDPPC", "NGDP_R", "NGDPRPC"):
+    if indicator_id in (
+        "NGDP",
+        "NGDPPC",
+        "NGDP_R",
+        "NGDPRPC",
+        "GGXWDG",
+        "GGXWDN",
+        "GGXCNL",
+        "GGXONLB",
+    ):
         currency_code = get_currency_code(economy_code)
 
         if currency_code:

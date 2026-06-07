@@ -20,13 +20,13 @@ RANKING_TYPES = [
     },
     {
         "directory": "fiscal-balance",
-        "title": "Fiscal Balance Ranking by Country",
+        "title": "Fiscal Balance (% of GDP) Ranking by Country",
         "script": "fiscalBalanceRanking.js",
         "subtitle": PERCENT_GDP_SUBTITLE,
     },
     {
         "directory": "primary-fiscal-balance",
-        "title": "Primary Fiscal Balance Ranking by Country",
+        "title": "Primary Fiscal Balance (% of GDP) Ranking by Country",
         "script": "primaryFiscalBalanceRanking.js",
         "subtitle": PERCENT_GDP_SUBTITLE,
     },

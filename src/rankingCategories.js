@@ -1,6 +1,6 @@
 import { economyProfileRankings, economyRankings } from "./economyRankings.js";
 import { environmentRankings } from "./environmentRankings.js";
-import { financeRankings } from "./financeRankings.js";
+import { financeProfileRankings, financeRankings } from "./financeRankings.js";
 import { populationRankings } from "./populationRankings.js";
 import { getCountryIndicatorLinks } from "./rankingLinks.js";
 import { tradeRankings } from "./tradeRankings.js";
@@ -46,6 +46,7 @@ const categoryDefinitions = [
       "governmentGrossDebt",
       "totalReservesIncludingGold",
     ]),
+    profileRankings: financeProfileRankings,
   },
   {
     id: "environment",

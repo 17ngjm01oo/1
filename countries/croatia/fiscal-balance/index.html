@@ -18,7 +18,7 @@
       <section class="hub-section" aria-labelledby="country-hub-title">
         <header class="page-header">
           <h1 id="country-hub-title" class="page-title">Fiscal Balance Chart by Country</h1>
-          <p class="subtitle">Select a country to view historical trends. Values are shown as a percentage of nominal GDP in local currency.</p>
+          <p class="subtitle">Select a country to view historical trends.</p>
         </header>
 
         <div class="country-search-panel">
@@ -48,7 +48,7 @@
           <section class="indicator-block" aria-labelledby="fiscalBalance-title">
             <header class="indicator-header">
               <div class="indicator-title-group">
-                <h2 id="fiscalBalance-title">Fiscal Balance</h2>
+                <h2 id="fiscalBalance-title">Fiscal Balance (% of GDP)</h2>
               </div>
               <div class="compare-control" data-series-id="fiscalBalance">
                 <div class="compare-input-wrap">
@@ -65,7 +65,7 @@
                   />
                 </div>
                 <p class="compare-selected" id="fiscalBalanceCompareSelected"></p>
-                <div class="country-results compare-results" id="fiscalBalanceCompareResults" role="listbox" aria-label="Fiscal Balance comparison country results" hidden></div>
+                <div class="country-results compare-results" id="fiscalBalanceCompareResults" role="listbox" aria-label="Fiscal Balance (% of GDP) comparison country results" hidden></div>
               </div>
             </header>
 
@@ -77,6 +77,77 @@
             <details class="data-table-toggle" id="fiscalBalanceTableToggle">
               <summary>Show data table</summary>
               <div class="data-table-wrap" id="fiscalBalanceTableWrap"></div>
+            </details>
+          </section>
+
+          <section class="indicator-block" aria-labelledby="primaryFiscalBalance-title">
+            <header class="indicator-header">
+              <div class="indicator-title-group">
+                <h2 id="primaryFiscalBalance-title">Primary Fiscal Balance (% of GDP)</h2>
+              </div>
+              <div class="compare-control" data-series-id="primaryFiscalBalance">
+                <div class="compare-input-wrap">
+                  <input
+                    id="primaryFiscalBalanceCompareInput"
+                    class="compare-search-input"
+                    type="search"
+                    autocomplete="off"
+                    placeholder="Compare with..."
+                    aria-controls="primaryFiscalBalanceCompareResults"
+                    role="combobox"
+                    aria-autocomplete="list"
+                    aria-expanded="false"
+                  />
+                </div>
+                <p class="compare-selected" id="primaryFiscalBalanceCompareSelected"></p>
+                <div class="country-results compare-results" id="primaryFiscalBalanceCompareResults" role="listbox" aria-label="Primary Fiscal Balance (% of GDP) comparison country results" hidden></div>
+              </div>
+            </header>
+
+            <div class="chart-card" id="primaryFiscalBalanceChartCard">
+              <canvas id="primaryFiscalBalanceChart" aria-label="Primary fiscal balance line chart" role="img"></canvas>
+              <div class="chart-overlay" id="primaryFiscalBalanceOverlay" aria-hidden="true"></div>
+            </div>
+
+            <details class="data-table-toggle" id="primaryFiscalBalanceTableToggle">
+              <summary>Show data table</summary>
+              <div class="data-table-wrap" id="primaryFiscalBalanceTableWrap"></div>
+            </details>
+          </section>
+
+          <section class="indicator-block" aria-labelledby="fiscalBalanceNational-title">
+            <header class="indicator-header">
+              <div class="indicator-title-group">
+                <h2 id="fiscalBalanceNational-title">Fiscal Balance - Local currency</h2>
+              </div>
+            </header>
+
+            <div class="chart-card" id="fiscalBalanceNationalChartCard">
+              <canvas id="fiscalBalanceNationalChart" aria-label="Fiscal balance in national currency line chart" role="img"></canvas>
+              <div class="chart-overlay" id="fiscalBalanceNationalOverlay" aria-hidden="true"></div>
+            </div>
+
+            <details class="data-table-toggle" id="fiscalBalanceNationalTableToggle">
+              <summary>Show data table</summary>
+              <div class="data-table-wrap" id="fiscalBalanceNationalTableWrap"></div>
+            </details>
+          </section>
+
+          <section class="indicator-block" aria-labelledby="primaryFiscalBalanceNational-title">
+            <header class="indicator-header">
+              <div class="indicator-title-group">
+                <h2 id="primaryFiscalBalanceNational-title">Primary Fiscal Balance - Local currency</h2>
+              </div>
+            </header>
+
+            <div class="chart-card" id="primaryFiscalBalanceNationalChartCard">
+              <canvas id="primaryFiscalBalanceNationalChart" aria-label="Primary fiscal balance in national currency line chart" role="img"></canvas>
+              <div class="chart-overlay" id="primaryFiscalBalanceNationalOverlay" aria-hidden="true"></div>
+            </div>
+
+            <details class="data-table-toggle" id="primaryFiscalBalanceNationalTableToggle">
+              <summary>Show data table</summary>
+              <div class="data-table-wrap" id="primaryFiscalBalanceNationalTableWrap"></div>
             </details>
           </section>
 

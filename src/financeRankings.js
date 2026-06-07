@@ -1,4 +1,4 @@
-export const financeRankings = [
+export const financeProfileRankings = [
   {
     seriesId: "governmentGrossDebt",
     directory: "government-gross-debt",
@@ -16,17 +16,43 @@ export const financeRankings = [
     profileSection: "Government Debt",
   },
   {
+    seriesId: "governmentGrossDebtNational",
+    profileLabel: "Government Gross Debt - Local currency",
+    countryPageKind: "government-debt",
+    profileSection: "Government Debt",
+  },
+  {
+    seriesId: "governmentNetDebtNational",
+    profileLabel: "Government Net Debt - Local currency",
+    countryPageKind: "government-debt",
+    profileSection: "Government Debt",
+  },
+  {
     seriesId: "fiscalBalance",
     directory: "fiscal-balance",
-    label: "Fiscal Balance",
+    label: "Fiscal Balance (% of GDP)",
     countryPageKind: "fiscal-balance",
+    countryPageLabel: "Fiscal Balance",
     profileSection: "Government Finance",
   },
   {
     seriesId: "primaryFiscalBalance",
     directory: "primary-fiscal-balance",
-    label: "Primary Fiscal Balance",
-    countryPageKind: "primary-fiscal-balance",
+    label: "Primary Fiscal Balance (% of GDP)",
+    countryPageKind: "fiscal-balance",
+    countryPageLabel: "Fiscal Balance",
+    profileSection: "Government Finance",
+  },
+  {
+    seriesId: "fiscalBalanceNational",
+    profileLabel: "Fiscal Balance - Local currency",
+    countryPageKind: "fiscal-balance",
+    profileSection: "Government Finance",
+  },
+  {
+    seriesId: "primaryFiscalBalanceNational",
+    profileLabel: "Primary Fiscal Balance - Local currency",
+    countryPageKind: "fiscal-balance",
     profileSection: "Government Finance",
   },
   {
@@ -51,3 +77,5 @@ export const financeRankings = [
     profileSection: "International Reserves",
   },
 ];
+
+export const financeRankings = financeProfileRankings.filter(({ directory }) => directory);
