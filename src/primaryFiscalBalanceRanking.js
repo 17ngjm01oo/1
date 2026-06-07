@@ -8,6 +8,5 @@ initializeRankingPage({
   indicatorCode: "GGXONLB_NGDP",
   rankingTitleBase: "Primary Fiscal Balance (% of GDP) Ranking",
   linkAriaMetric: "Primary Fiscal Balance (% of GDP)",
-  countryPageKind: "fiscal-balance",
   displayScaleConfig: valueFormats.percentOneDecimal,
 });

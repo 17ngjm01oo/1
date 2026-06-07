@@ -8,6 +8,5 @@ initializeRankingPage({
   indicatorCode: "GGXWDG_NGDP",
   rankingTitleBase: "Government Gross Debt (% of GDP) Ranking",
   linkAriaMetric: "Government Gross Debt (% of GDP)",
-  countryPageKind: "government-debt",
   displayScaleConfig: valueFormats.percentOneDecimal,
 });

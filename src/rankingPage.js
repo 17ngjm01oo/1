@@ -10,6 +10,7 @@ import { initializeRankingSort } from "./rankingSort.js";
 import { initializeTerritoryToggle } from "./territoryToggle.js";
 import { appendRankingValueCell } from "./rankingValueBar.js";
 import { initializeRankingYear } from "./rankingYear.js";
+import { countryPageKindByRankingDirectory } from "./rankingCategories.js";
 import "./rankingTopNav.js";
 
 export function initializeRankingPage(config) {
@@ -66,7 +67,8 @@ function getCountryPagePathSegment(config) {
     return "";
   }
 
-  return config.countryPageKind ?? document.body.dataset.rankingDirectory ?? "";
+  const rankingDirectory = document.body.dataset.rankingDirectory ?? "";
+  return config.countryPageKind ?? countryPageKindByRankingDirectory[rankingDirectory] ?? rankingDirectory;
 }
 
 async function initializeRanking(config, state) {

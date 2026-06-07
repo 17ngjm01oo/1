@@ -8,20 +8,6 @@ AREA_SUBTITLE = "Total area includes both land and water area and is shown in km
 
 RANKING_TYPES = [
     {
-        **CIA_RANKING_NOTES,
-        "directory": "area",
-        "title": "Area (km²) Ranking by Country",
-        "script": "areaRanking.js",
-        "subtitle": AREA_SUBTITLE,
-    },
-    {
-        **WORLD_BANK_RANKING_NOTES,
-        "directory": "forest-area",
-        "title": "Forest Area Ranking by Country",
-        "script": "forestAreaPercentOfLandAreaRanking.js",
-        "subtitle": PERCENT_LAND_AREA_SUBTITLE,
-    },
-    {
         **WORLD_BANK_RANKING_NOTES,
         "directory": "co2-emissions",
         "title": "CO2 Emissions Ranking by Country",
@@ -34,6 +20,20 @@ RANKING_TYPES = [
         "title": "CO2 Emissions per Capita Ranking by Country",
         "script": "co2EmissionsPerCapitaRanking.js",
         "subtitle": "CO2 emissions excluding LULUCF per capita are measured in CO2e.",
+    },
+    {
+        **CIA_RANKING_NOTES,
+        "directory": "area",
+        "title": "Area (km²) Ranking by Country",
+        "script": "areaRanking.js",
+        "subtitle": AREA_SUBTITLE,
+    },
+    {
+        **WORLD_BANK_RANKING_NOTES,
+        "directory": "forest-area",
+        "title": "Forest Area Ranking by Country",
+        "script": "forestAreaPercentOfLandAreaRanking.js",
+        "subtitle": PERCENT_LAND_AREA_SUBTITLE,
     },
 ]
 

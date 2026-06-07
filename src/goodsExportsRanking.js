@@ -10,6 +10,5 @@ initializeRankingPage({
   endYear: 2025,
   rankingTitleBase: "Goods Exports Ranking",
   linkAriaMetric: "Goods Exports",
-  countryPageKind: "goods-trade",
   displayScaleConfig: valueFormats.usdMillionsMagnitude,
 });

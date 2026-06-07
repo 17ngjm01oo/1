@@ -8,6 +8,5 @@ initializeRankingPage({
   indicatorCode: "BCA_NGDPD",
   rankingTitleBase: "Current Account Balance (% of GDP) Ranking",
   linkAriaMetric: "Current Account Balance (% of GDP)",
-  countryPageKind: "current-account-balance",
   displayScaleConfig: valueFormats.percentOneDecimal,
 });

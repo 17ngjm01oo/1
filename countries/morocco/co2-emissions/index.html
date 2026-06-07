@@ -18,7 +18,7 @@
       <section class="hub-section" aria-labelledby="country-hub-title">
         <header class="page-header">
           <h1 id="country-hub-title" class="page-title">CO2 Emissions Chart by Country</h1>
-          <p class="subtitle">Select a country to view historical environmental indicator trends.</p>
+          <p class="subtitle">Select a country to view historical trends.</p>
         </header>
 
         <div class="country-search-panel">
@@ -77,6 +77,41 @@
             <details class="data-table-toggle" id="co2EmissionsTableToggle">
               <summary>Show data table</summary>
               <div class="data-table-wrap" id="co2EmissionsTableWrap"></div>
+            </details>
+          </section>
+
+          <section class="indicator-block" aria-labelledby="co2EmissionsPerCapita-title">
+            <header class="indicator-header">
+              <div class="indicator-title-group">
+                <h2 id="co2EmissionsPerCapita-title">CO2 Emissions per Capita - CO2e</h2>
+              </div>
+              <div class="compare-control" data-series-id="co2EmissionsPerCapita">
+                <div class="compare-input-wrap">
+                  <input
+                    id="co2EmissionsPerCapitaCompareInput"
+                    class="compare-search-input"
+                    type="search"
+                    autocomplete="off"
+                    placeholder="Compare with..."
+                    aria-controls="co2EmissionsPerCapitaCompareResults"
+                    role="combobox"
+                    aria-autocomplete="list"
+                    aria-expanded="false"
+                  />
+                </div>
+                <p class="compare-selected" id="co2EmissionsPerCapitaCompareSelected"></p>
+                <div class="country-results compare-results" id="co2EmissionsPerCapitaCompareResults" role="listbox" aria-label="CO2 Emissions per Capita comparison country results" hidden></div>
+              </div>
+            </header>
+
+            <div class="chart-card" id="co2EmissionsPerCapitaChartCard">
+              <canvas id="co2EmissionsPerCapitaChart" aria-label="CO2 emissions per capita line chart" role="img"></canvas>
+              <div class="chart-overlay" id="co2EmissionsPerCapitaOverlay" aria-hidden="true"></div>
+            </div>
+
+            <details class="data-table-toggle" id="co2EmissionsPerCapitaTableToggle">
+              <summary>Show data table</summary>
+              <div class="data-table-wrap" id="co2EmissionsPerCapitaTableWrap"></div>
             </details>
           </section>
 

@@ -15,146 +15,108 @@ const pageDefinitions = {
     logPrefix: "GDP page",
     group: "economy",
     documentTitleMetric: "GDP",
-    seriesIds: ["gdp", "gdpNational", "realGdp"],
   },
   "gdp-per-capita": {
     logPrefix: "GDP per capita page",
     group: "economy",
     documentTitleMetric: "GDP per capita",
-    seriesIds: ["gdpPerCapita", "gdpNationalPerCapita", "realGdpPerCapita"],
   },
   "gdp-growth": {
     logPrefix: "GDP growth page",
     group: "economy",
     documentTitleMetric: "GDP Growth",
-    seriesIds: ["gdpGrowth"],
   },
   "inflation-rate": {
     logPrefix: "Inflation rate page",
     group: "economy",
     documentTitleMetric: "Inflation Rate",
-    seriesIds: ["inflationRate"],
   },
   population: {
     logPrefix: "Population page",
     group: "population",
     documentTitleMetric: "Population",
-    seriesIds: ["population"],
   },
   "population-density": {
     logPrefix: "Population density page",
     group: "population",
     documentTitleMetric: "Population Density",
-    seriesIds: ["populationDensity"],
   },
   employment: {
     logPrefix: "Employment page",
     group: "population",
     documentTitleMetric: "Employment",
-    seriesIds: ["employment"],
   },
   "unemployment-rate": {
     logPrefix: "Unemployment rate page",
     group: "population",
     documentTitleMetric: "Unemployment Rate",
-    seriesIds: ["unemploymentRate"],
   },
   "life-expectancy": {
     logPrefix: "Life expectancy page",
     group: "population",
     documentTitleMetric: "Life Expectancy",
-    seriesIds: ["lifeExpectancy"],
   },
   "fertility-rate": {
     logPrefix: "Fertility rate page",
     group: "population",
     documentTitleMetric: "Fertility Rate",
-    seriesIds: ["fertilityRate"],
   },
   "ppp-gdp": {
     logPrefix: "PPP page",
     group: "economy",
     documentTitleMetric: "PPP GDP",
-    seriesIds: ["ppp"],
   },
   "ppp-gdp-per-capita": {
     logPrefix: "PPP per capita page",
     group: "economy",
     documentTitleMetric: "PPP GDP per Capita",
-    seriesIds: ["pppPerCapita"],
   },
   "current-account-balance": {
     logPrefix: "Current account balance page",
     group: "trade",
     documentTitleMetric: "Current Account Balance",
-    seriesIds: ["currentAccountBalance", "currentAccountBalancePercentGdp"],
   },
   "goods-trade": {
     logPrefix: "Goods trade page",
     group: "trade",
     documentTitleMetric: "Goods Exports, Imports and Trade Balance",
-    seriesIds: ["goodsTradeBalance", "goodsExports", "goodsImports"],
   },
   "government-debt": {
     logPrefix: "Government debt page",
     group: "finance",
     documentTitleMetric: "Government Debt",
-    seriesIds: [
-      "governmentGrossDebt",
-      "governmentGrossDebtNational",
-      "governmentNetDebt",
-      "governmentNetDebtNational",
-    ],
   },
   "fiscal-balance": {
     logPrefix: "Fiscal balance page",
     group: "finance",
     documentTitleMetric: "Fiscal Balance",
-    seriesIds: [
-      "fiscalBalance",
-      "fiscalBalanceNational",
-      "primaryFiscalBalance",
-      "primaryFiscalBalanceNational",
-    ],
   },
   "government-revenue-expenditure": {
     logPrefix: "Government revenue and expenditure page",
     group: "finance",
     documentTitleMetric: "Government Revenue and Expenditure",
-    seriesIds: [
-      "governmentRevenue",
-      "governmentRevenueNational",
-      "governmentExpenditure",
-      "governmentExpenditureNational",
-    ],
   },
   "total-reserves": {
     logPrefix: "Total reserves including gold page",
     group: "finance",
     documentTitleMetric: "Total Reserves",
-    seriesIds: ["totalReservesIncludingGold"],
   },
   "forest-area": {
     logPrefix: "Forest area percent of land area page",
     group: "environment",
     documentTitleMetric: "Forest Area",
-    seriesIds: ["forestAreaPercentOfLandArea"],
   },
   "co2-emissions": {
     logPrefix: "CO2 emissions page",
     group: "environment",
     documentTitleMetric: "CO2 Emissions",
-    seriesIds: ["co2Emissions"],
-  },
-  "co2-emissions-per-capita": {
-    logPrefix: "CO2 emissions per capita page",
-    group: "environment",
-    documentTitleMetric: "CO2 Emissions per Capita",
-    seriesIds: ["co2EmissionsPerCapita"],
   },
 };
 const pageKind = pageDefinitions[document.body.dataset.pageKind] ? document.body.dataset.pageKind : "gdp";
-const pageDefinition = pageDefinitions[pageKind];
+const pageDefinition = {
+  ...pageDefinitions[pageKind],
+  seriesIds: getCountryPageSeriesIds(pageKind, pageDefinitions[pageKind]),
+};
 const pageSeriesIds = new Set(pageDefinition.seriesIds);
 const pageSeriesConfigs = seriesConfigs.filter((seriesConfig) => pageSeriesIds.has(seriesConfig.id));
 const countryCode = document.body.dataset.countryCode;
@@ -165,6 +127,13 @@ const rankingDirectoryBySeriesId = Object.fromEntries(
 const rankedSeriesIds = new Set(Object.keys(rankingDirectoryBySeriesId));
 const comparableSeriesIds = rankedSeriesIds;
 const seriesRuntimeState = new Map();
+
+function getCountryPageSeriesIds(targetPageKind, { group }) {
+  const category = rankingCategoryById[group];
+  return (category?.profileRankings ?? [])
+    .filter((ranking) => ranking.countryPageKind === targetPageKind)
+    .map((ranking) => ranking.seriesId);
+}
 
 initializePage().catch((error) => {
   console.error(`[${pageDefinition.logPrefix}] Failed to initialize page.`, error);
@@ -320,13 +289,14 @@ async function updateRelatedPageLinks() {
 }
 
 async function doesIndicatorPageHaveData(targetPageKind) {
-  const targetPageDefinition = pageDefinitions[targetPageKind];
-  if (!targetPageDefinition) {
+  const targetBasePageDefinition = pageDefinitions[targetPageKind];
+  if (!targetBasePageDefinition) {
     return true;
   }
 
+  const targetSeriesIds = getCountryPageSeriesIds(targetPageKind, targetBasePageDefinition);
   const targetSeriesConfigs = seriesConfigs
-    .filter((seriesConfig) => targetPageDefinition.seriesIds.includes(seriesConfig.id))
+    .filter((seriesConfig) => targetSeriesIds.includes(seriesConfig.id))
     .map((seriesConfig) => buildCountrySeriesConfig(seriesConfig, selectedCountry))
     .filter(shouldShowSeriesConfig);
 

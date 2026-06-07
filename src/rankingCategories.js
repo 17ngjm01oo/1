@@ -75,3 +75,7 @@ export const rankingCategoryById = Object.fromEntries(
 export const countryPageRankings = rankingCategories
   .flatMap((category) => category.rankings)
   .filter((ranking) => ranking.countryPageKind);
+
+export const countryPageKindByRankingDirectory = Object.fromEntries(
+  countryPageRankings.map((ranking) => [ranking.directory, ranking.countryPageKind]),
+);

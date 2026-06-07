@@ -8,6 +8,5 @@ initializeRankingPage({
   indicatorCode: "GGXWDN_NGDP",
   rankingTitleBase: "Government Net Debt (% of GDP) Ranking",
   linkAriaMetric: "Government Net Debt (% of GDP)",
-  countryPageKind: "government-debt",
   displayScaleConfig: valueFormats.percentOneDecimal,
 });
