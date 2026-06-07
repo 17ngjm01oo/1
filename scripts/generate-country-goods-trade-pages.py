@@ -20,20 +20,23 @@ def main() -> None:
             indicators=(
                 IndicatorBlockConfig(
                     series_id="goodsTradeBalance",
-                    title="Goods Trade Balance - USD",
+                    title="Goods Trade Balance",
                     canvas_label="Goods trade balance line chart",
+                    display_unit="USD",
                     compare_label="Goods Trade Balance",
                 ),
                 IndicatorBlockConfig(
                     series_id="goodsExports",
-                    title="Goods Exports - USD",
+                    title="Goods Exports",
                     canvas_label="Goods exports line chart",
+                    display_unit="USD",
                     compare_label="Goods Exports",
                 ),
                 IndicatorBlockConfig(
                     series_id="goodsImports",
-                    title="Goods Imports - USD",
+                    title="Goods Imports",
                     canvas_label="Goods imports line chart",
+                    display_unit="USD",
                     compare_label="Goods Imports",
                 ),
             ),

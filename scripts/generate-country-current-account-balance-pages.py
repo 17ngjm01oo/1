@@ -19,14 +19,16 @@ def main() -> None:
             indicators=(
                 IndicatorBlockConfig(
                     series_id="currentAccountBalance",
-                    title="Current Account Balance - USD",
+                    title="Current Account Balance",
                     canvas_label="Current account balance line chart",
+                    display_unit="USD",
                     compare_label="Current Account Balance",
                 ),
                 IndicatorBlockConfig(
                     series_id="currentAccountBalancePercentGdp",
-                    title="Current Account Balance (% of GDP)",
+                    title="Current Account Balance",
                     canvas_label="Current account balance percent of GDP line chart",
+                    display_unit="% of GDP",
                     compare_label="Current Account Balance (% of GDP)",
                 ),
             ),

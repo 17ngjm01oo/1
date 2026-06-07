@@ -20,8 +20,9 @@ def main() -> None:
             indicators=(
                 IndicatorBlockConfig(
                     series_id="populationDensity",
-                    title="Population Density - /km²",
+                    title="Population Density",
                     canvas_label="Population density line chart",
+                    display_unit="/km²",
                     compare_label="Population Density",
                 ),
             ),

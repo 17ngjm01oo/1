@@ -960,9 +960,12 @@ body[data-country-overview-category] .country-data-header h1 {
 }
 
 .indicator-display-unit {
+  display: inline-block;
+  vertical-align: middle;
   color: var(--muted);
-  font-size: 0.9em;
-  font-weight: 400;
+  font-size: 0.72em;
+  font-weight: 700;
+  line-height: 1;
 }
 
 .indicator-rank {

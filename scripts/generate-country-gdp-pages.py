@@ -19,19 +19,22 @@ def main() -> None:
             indicators=(
                 IndicatorBlockConfig(
                     series_id="gdp",
-                    title="GDP - USD",
+                    title="GDP",
                     canvas_label="GDP line chart",
+                    display_unit="USD",
                     compare_label="GDP",
                 ),
                 IndicatorBlockConfig(
                     series_id="gdpNational",
-                    title="GDP - Local currency",
+                    title="GDP",
                     canvas_label="GDP in national currency line chart",
+                    display_unit="Local currency",
                 ),
                 IndicatorBlockConfig(
                     series_id="realGdp",
-                    title="Real GDP - Local currency",
+                    title="Real GDP",
                     canvas_label="Real GDP in constant national currency line chart",
+                    display_unit="Local currency",
                 ),
             ),
         )

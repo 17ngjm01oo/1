@@ -11,16 +11,6 @@ from page_templates import render_rankings_top_nav
 ROOT_DIR = Path(__file__).resolve().parents[1]
 COUNTRIES_FILE = ROOT_DIR / "src" / "countries.js"
 OUTPUT_DIR = ROOT_DIR / "countries"
-DISPLAY_UNIT_PATTERNS = (
-    (re.compile(r"\s+-\s+Local currency(?:\s+\([^)]+\))?$"), "Local currency"),
-    (re.compile(r"\s+-\s+USD$"), "USD"),
-    (re.compile(r"\s+-\s+Int\$$"), "Int$"),
-    (re.compile(r"\s+-\s+/km²$"), "/km²"),
-    (re.compile(r"\s+-\s+CO2e$"), "CO2e"),
-    (re.compile(r"\s+-\s+% of Land Area$"), "% of Land Area"),
-    (re.compile(r"\s+\(% of GDP\)$"), "% of GDP"),
-    (re.compile(r"\s+\(km²\)$"), "km²"),
-)
 
 
 @dataclass(frozen=True)
@@ -28,6 +18,7 @@ class IndicatorBlockConfig:
     series_id: str
     title: str
     canvas_label: str
+    display_unit: str = ""
     compare_label: str | None = None
 
 
@@ -148,7 +139,7 @@ def render_notes(config: CountryPageConfig) -> str:
 
 def render_indicator_block(indicator: IndicatorBlockConfig) -> str:
     compare_control = render_compare_control(indicator) if indicator.compare_label else ""
-    title_markup = render_indicator_title(indicator.title)
+    title_markup = render_indicator_title(indicator)
 
     return f"""          <section class="indicator-block" aria-labelledby="{indicator.series_id}-title">
             <header class="indicator-header">
@@ -169,22 +160,13 @@ def render_indicator_block(indicator: IndicatorBlockConfig) -> str:
           </section>"""
 
 
-def render_indicator_title(title: str) -> str:
-    label, unit = split_indicator_title(title)
-    label_markup = html.escape(label)
+def render_indicator_title(indicator: IndicatorBlockConfig) -> str:
+    label_markup = html.escape(indicator.title)
 
-    if not unit:
+    if not indicator.display_unit:
         return label_markup
 
-    return f'{label_markup} <span class="indicator-display-unit">{html.escape(unit)}</span>'
-
-
-def split_indicator_title(title: str) -> tuple[str, str]:
-    for pattern, unit in DISPLAY_UNIT_PATTERNS:
-        if pattern.search(title):
-            return pattern.sub("", title), unit
-
-    return title, ""
+    return f'{label_markup} <span class="indicator-display-unit">({html.escape(indicator.display_unit)})</span>'
 
 
 def render_compare_control(indicator: IndicatorBlockConfig) -> str:

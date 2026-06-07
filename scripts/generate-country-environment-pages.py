@@ -20,8 +20,9 @@ ENVIRONMENT_PAGE_CONFIGS = (
         indicators=(
             IndicatorBlockConfig(
                 series_id="forestAreaPercentOfLandArea",
-                title="Forest Area - % of Land Area",
+                title="Forest Area",
                 canvas_label="Forest area percent of land area line chart",
+                display_unit="% of Land Area",
                 compare_label="Forest Area",
             ),
         ),
@@ -37,14 +38,16 @@ ENVIRONMENT_PAGE_CONFIGS = (
         indicators=(
             IndicatorBlockConfig(
                 series_id="co2Emissions",
-                title="CO2 Emissions - CO2e",
+                title="CO2 Emissions",
                 canvas_label="CO2 emissions line chart",
+                display_unit="CO2e",
                 compare_label="CO2 Emissions",
             ),
             IndicatorBlockConfig(
                 series_id="co2EmissionsPerCapita",
-                title="CO2 Emissions per Capita - CO2e",
+                title="CO2 Emissions per Capita",
                 canvas_label="CO2 emissions per capita line chart",
+                display_unit="CO2e",
                 compare_label="CO2 Emissions per Capita",
             ),
         ),
