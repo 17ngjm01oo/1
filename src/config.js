@@ -262,7 +262,7 @@ export const seriesConfigs = [
     statusId: "governmentGrossDebtStatus",
     ...weoCurrentPrices,
     indicatorCode: "GGXWDG_NGDP",
-    titleTemplate: "Government Gross Debt",
+    titleTemplate: "Government Gross Debt (% of GDP)",
     ...valueFormats.percentOneDecimal,
   },
   {
@@ -273,7 +273,7 @@ export const seriesConfigs = [
     statusId: "governmentNetDebtStatus",
     ...weoCurrentPrices,
     indicatorCode: "GGXWDN_NGDP",
-    titleTemplate: "Government Net Debt",
+    titleTemplate: "Government Net Debt (% of GDP)",
     ...valueFormats.percentOneDecimal,
   },
   {

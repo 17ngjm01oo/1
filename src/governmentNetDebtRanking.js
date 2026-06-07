@@ -6,7 +6,8 @@ initializeRankingPage({
   logName: "government net debt",
   staticDataPath: dataSources.weoCurrentPrices.rankingStaticDataPath,
   indicatorCode: "GGXWDN_NGDP",
-  rankingTitleBase: "Government Net Debt Ranking",
-  linkAriaMetric: "Government Net Debt",
+  rankingTitleBase: "Government Net Debt (% of GDP) Ranking",
+  linkAriaMetric: "Government Net Debt (% of GDP)",
+  countryPageKind: "government-debt",
   displayScaleConfig: valueFormats.percentOneDecimal,
 });

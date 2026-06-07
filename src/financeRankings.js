@@ -2,15 +2,17 @@ export const financeRankings = [
   {
     seriesId: "governmentGrossDebt",
     directory: "government-gross-debt",
-    label: "Government Gross Debt",
-    countryPageKind: "government-gross-debt",
+    label: "Government Gross Debt (% of GDP)",
+    countryPageKind: "government-debt",
+    countryPageLabel: "Government Debt",
     profileSection: "Government Debt",
   },
   {
     seriesId: "governmentNetDebt",
     directory: "government-net-debt",
-    label: "Government Net Debt",
-    countryPageKind: "government-net-debt",
+    label: "Government Net Debt (% of GDP)",
+    countryPageKind: "government-debt",
+    countryPageLabel: "Government Debt",
     profileSection: "Government Debt",
   },
   {

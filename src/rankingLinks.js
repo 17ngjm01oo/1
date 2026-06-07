@@ -45,11 +45,21 @@ function isCurrentRankingLink(ranking, { currentPageKind, currentRankingDirector
 }
 
 export function getCountryIndicatorLinks(rankings) {
-  return rankings
+  const linksByPageKind = new Map();
+
+  rankings
     .filter((ranking) => ranking.countryPageKind)
-    .map((ranking) => ({
-      pageKind: ranking.countryPageKind,
-      href: `../${ranking.countryPageKind}/`,
-      label: ranking.label,
-    }));
+    .forEach((ranking) => {
+      if (linksByPageKind.has(ranking.countryPageKind)) {
+        return;
+      }
+
+      linksByPageKind.set(ranking.countryPageKind, {
+        pageKind: ranking.countryPageKind,
+        href: `../${ranking.countryPageKind}/`,
+        label: ranking.countryPageLabel ?? ranking.label,
+      });
+    });
+
+  return Array.from(linksByPageKind.values());
 }

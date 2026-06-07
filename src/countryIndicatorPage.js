@@ -113,17 +113,11 @@ const pageDefinitions = {
     documentTitleMetric: "Goods Trade Balance",
     seriesIds: ["goodsTradeBalance"],
   },
-  "government-gross-debt": {
-    logPrefix: "Government gross debt page",
+  "government-debt": {
+    logPrefix: "Government debt page",
     group: "finance",
-    documentTitleMetric: "Government Gross Debt",
-    seriesIds: ["governmentGrossDebt"],
-  },
-  "government-net-debt": {
-    logPrefix: "Government net debt page",
-    group: "finance",
-    documentTitleMetric: "Government Net Debt",
-    seriesIds: ["governmentNetDebt"],
+    documentTitleMetric: "Government Debt",
+    seriesIds: ["governmentGrossDebt", "governmentNetDebt"],
   },
   "fiscal-balance": {
     logPrefix: "Fiscal balance page",

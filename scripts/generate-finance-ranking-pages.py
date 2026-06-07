@@ -8,13 +8,13 @@ PERCENT_GDP_SUBTITLE = "Measured as a share of nominal GDP in local currency."
 RANKING_TYPES = [
     {
         "directory": "government-gross-debt",
-        "title": "Government Gross Debt Ranking by Country",
+        "title": "Government Gross Debt (% of GDP) Ranking by Country",
         "script": "governmentGrossDebtRanking.js",
         "subtitle": PERCENT_GDP_SUBTITLE,
     },
     {
         "directory": "government-net-debt",
-        "title": "Government Net Debt Ranking by Country",
+        "title": "Government Net Debt (% of GDP) Ranking by Country",
         "script": "governmentNetDebtRanking.js",
         "subtitle": PERCENT_GDP_SUBTITLE,
     },

@@ -62,7 +62,11 @@ function initializeRankingCountrySearch(config) {
 }
 
 function getCountryPagePathSegment(config) {
-  return config.hasCountryIndicatorPage === false ? "" : document.body.dataset.rankingDirectory ?? "";
+  if (config.hasCountryIndicatorPage === false) {
+    return "";
+  }
+
+  return config.countryPageKind ?? document.body.dataset.rankingDirectory ?? "";
 }
 
 async function initializeRanking(config, state) {

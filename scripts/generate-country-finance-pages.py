@@ -5,45 +5,38 @@ from data_source_notes import WEO_COUNTRY_DATA_NOTE, WEO_COUNTRY_SOURCE_NOTE, WO
 from country_page_generator import CountryPageConfig, IndicatorBlockConfig, generate_country_pages
 
 
+GOVERNMENT_DEBT_SUBTITLE = "Select a country to view historical trends."
 PERCENT_GDP_SUBTITLE = (
     "Select a country to view historical trends. "
     "Values are shown as a percentage of nominal GDP in local currency."
 )
+TOTAL_RESERVES_SUBTITLE = (
+    "Select a country to view historical total reserves including gold trends. "
+    "Values are shown in current U.S. dollars."
+)
 
 FINANCE_PAGE_CONFIGS = (
     CountryPageConfig(
-        page_kind="government-gross-debt",
-        title_suffix="Government Gross Debt",
-        chart_title="Government Gross Debt Chart by Country",
-        subtitle=PERCENT_GDP_SUBTITLE,
-        generated_label="government gross debt",
+        page_kind="government-debt",
+        title_suffix="Government Debt",
+        chart_title="Government Debt Chart by Country",
+        subtitle=GOVERNMENT_DEBT_SUBTITLE,
+        generated_label="government debt",
         source_note=WEO_COUNTRY_SOURCE_NOTE,
         data_note=WEO_COUNTRY_DATA_NOTE,
         related_nav_label="Finance page navigation",
         indicators=(
             IndicatorBlockConfig(
                 series_id="governmentGrossDebt",
-                title="Government Gross Debt",
+                title="Government Gross Debt (% of GDP)",
                 canvas_label="Government gross debt line chart",
-                compare_label="Government Gross Debt",
+                compare_label="Government Gross Debt (% of GDP)",
             ),
-        ),
-    ),
-    CountryPageConfig(
-        page_kind="government-net-debt",
-        title_suffix="Government Net Debt",
-        chart_title="Government Net Debt Chart by Country",
-        subtitle=PERCENT_GDP_SUBTITLE,
-        generated_label="government net debt",
-        source_note=WEO_COUNTRY_SOURCE_NOTE,
-        data_note=WEO_COUNTRY_DATA_NOTE,
-        related_nav_label="Finance page navigation",
-        indicators=(
             IndicatorBlockConfig(
                 series_id="governmentNetDebt",
-                title="Government Net Debt",
+                title="Government Net Debt (% of GDP)",
                 canvas_label="Government net debt line chart",
-                compare_label="Government Net Debt",
+                compare_label="Government Net Debt (% of GDP)",
             ),
         ),
     ),
@@ -123,7 +116,7 @@ FINANCE_PAGE_CONFIGS = (
         page_kind="total-reserves",
         title_suffix="Total Reserves",
         chart_title="Total Reserves Chart by Country",
-        subtitle="Select a country to view historical total reserves including gold trends. Values are shown in current U.S. dollars.",
+        subtitle=TOTAL_RESERVES_SUBTITLE,
         generated_label="total reserves including gold",
         source_note=WORLD_BANK_COUNTRY_SOURCE_NOTE,
         related_nav_label="Finance page navigation",
