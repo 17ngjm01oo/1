@@ -959,6 +959,12 @@ body[data-country-overview-category] .country-data-header h1 {
   letter-spacing: 0;
 }
 
+.indicator-display-unit {
+  color: var(--muted);
+  font-size: 0.9em;
+  font-weight: 400;
+}
+
 .indicator-rank {
   margin: 0;
   color: var(--accent);

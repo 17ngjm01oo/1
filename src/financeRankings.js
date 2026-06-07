@@ -9,7 +9,6 @@ export const financeProfileRankings = [
   },
   {
     seriesId: "governmentGrossDebtNational",
-    profileLabel: "Government Gross Debt - Local currency",
     countryPageKind: "government-debt",
     profileSection: "Government Debt",
   },
@@ -23,7 +22,6 @@ export const financeProfileRankings = [
   },
   {
     seriesId: "governmentNetDebtNational",
-    profileLabel: "Government Net Debt - Local currency",
     countryPageKind: "government-debt",
     profileSection: "Government Debt",
   },
@@ -37,7 +35,6 @@ export const financeProfileRankings = [
   },
   {
     seriesId: "fiscalBalanceNational",
-    profileLabel: "Fiscal Balance - Local currency",
     countryPageKind: "fiscal-balance",
     profileSection: "Government Finance",
   },
@@ -51,7 +48,6 @@ export const financeProfileRankings = [
   },
   {
     seriesId: "primaryFiscalBalanceNational",
-    profileLabel: "Primary Fiscal Balance - Local currency",
     countryPageKind: "fiscal-balance",
     profileSection: "Government Finance",
   },
@@ -65,7 +61,6 @@ export const financeProfileRankings = [
   },
   {
     seriesId: "governmentRevenueNational",
-    profileLabel: "Government Revenue - Local currency",
     countryPageKind: "government-revenue-expenditure",
     profileSection: "Government Finance",
   },
@@ -79,7 +74,6 @@ export const financeProfileRankings = [
   },
   {
     seriesId: "governmentExpenditureNational",
-    profileLabel: "Government Expenditure - Local currency",
     countryPageKind: "government-revenue-expenditure",
     profileSection: "Government Finance",
   },

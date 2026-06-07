@@ -1,8 +1,9 @@
 import { formatCompactDisplayValue, getSingleValueDisplayScale } from "./displayFormat.js";
 import { seriesConfigs } from "./config.js";
 import { countries } from "./countries.js";
-import { getCountryCurrencyDisplay } from "./currencyCodes.js";
+import { getCountryCurrencyDisplay, getCurrencyCode } from "./currencyCodes.js";
 import { createFlagImage } from "./flags.js";
+import { renderIndicatorLabel } from "./indicatorLabels.js";
 import { rankingCategories } from "./rankingCategories.js";
 import { getIndicatorSeriesMap } from "./seriesData.js";
 import { renderWorldMap } from "./worldMap.js";
@@ -773,7 +774,10 @@ function renderIndicatorRow(indicator, dataByPath) {
   const yearCell = document.createElement("td");
 
   labelCell.scope = "row";
-  labelCell.textContent = indicator.label ?? config.titleTemplate;
+  renderIndicatorLabel(labelCell, config, {
+    label: indicator.label,
+    currencyCode: config.usesCountryCurrency ? getCurrencyCode(selectedCountry.code) : config.currencyCode,
+  });
   valueCell.className = "country-overview-value";
   rankCell.className = "country-overview-rank";
   yearCell.className = "country-overview-year";

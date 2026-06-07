@@ -3,6 +3,7 @@ import { countries } from "./countries.js";
 import { filterCountries, formatCountryMetaText, initializeCountrySelector } from "./countrySelector.js";
 import { getCurrencyCode } from "./currencyCodes.js";
 import { createFlagImage } from "./flags.js";
+import { getIndicatorDisplayText, renderIndicatorLabel } from "./indicatorLabels.js";
 import { countryPageRankings, rankingCategoryById } from "./rankingCategories.js";
 import { renderTopNavigationLinks } from "./siteNavigation.js";
 import { buildStaticDataRequestUrls, fetchStaticData } from "./staticData.js";
@@ -191,6 +192,7 @@ function buildCountrySeriesConfig(seriesConfig, country) {
     countryCode: country.code,
     countryName: country.name,
     chartTitle: getSeriesChartTitle(seriesConfig, currencyCode),
+    chartTitleCurrencyCode: currencyCode,
   };
 }
 
@@ -203,30 +205,7 @@ function getCountryPageStaticDataPath(seriesConfig) {
 }
 
 function getSeriesChartTitle(seriesConfig, currencyCode) {
-  const title = seriesConfig.titleTemplate;
-  if (seriesConfig.id === "populationDensity") {
-    return `${title} - /km²`;
-  }
-  if (seriesConfig.id === "forestAreaPercentOfLandArea") {
-    return `${title} - % of Land Area`;
-  }
-  if (
-    seriesConfig.id === "co2Emissions" ||
-    seriesConfig.id === "co2EmissionsPerCapita"
-  ) {
-    return `${title} - CO2e`;
-  }
-  if (seriesConfig.usesCountryCurrency) {
-    return currencyCode ? `${title} - Local currency (${currencyCode})` : `${title} - Local currency`;
-  }
-
-  const isGdpCurrencySeries = title.includes("GDP") && seriesConfig.currencyCode;
-
-  if (!isGdpCurrencySeries || !currencyCode) {
-    return title;
-  }
-
-  return `${title} - ${currencyCode}`;
+  return getIndicatorDisplayText(seriesConfig, { currencyCode });
 }
 
 function updateCountryHeading(country) {
@@ -324,7 +303,9 @@ function updateSeriesHeadings(countrySeriesConfigs) {
     const canvas = document.querySelector(`#${seriesConfig.canvasId}`);
 
     if (titleElement) {
-      titleElement.textContent = seriesConfig.chartTitle;
+      renderIndicatorLabel(titleElement, seriesConfig, {
+        currencyCode: seriesConfig.chartTitleCurrencyCode,
+      });
     }
 
     if (canvas) {

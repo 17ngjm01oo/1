@@ -11,6 +11,16 @@ from page_templates import render_rankings_top_nav
 ROOT_DIR = Path(__file__).resolve().parents[1]
 COUNTRIES_FILE = ROOT_DIR / "src" / "countries.js"
 OUTPUT_DIR = ROOT_DIR / "countries"
+DISPLAY_UNIT_PATTERNS = (
+    (re.compile(r"\s+-\s+Local currency(?:\s+\([^)]+\))?$"), "Local currency"),
+    (re.compile(r"\s+-\s+USD$"), "USD"),
+    (re.compile(r"\s+-\s+Int\$$"), "Int$"),
+    (re.compile(r"\s+-\s+/km²$"), "/km²"),
+    (re.compile(r"\s+-\s+CO2e$"), "CO2e"),
+    (re.compile(r"\s+-\s+% of Land Area$"), "% of Land Area"),
+    (re.compile(r"\s+\(% of GDP\)$"), "% of GDP"),
+    (re.compile(r"\s+\(km²\)$"), "km²"),
+)
 
 
 @dataclass(frozen=True)
@@ -138,11 +148,12 @@ def render_notes(config: CountryPageConfig) -> str:
 
 def render_indicator_block(indicator: IndicatorBlockConfig) -> str:
     compare_control = render_compare_control(indicator) if indicator.compare_label else ""
+    title_markup = render_indicator_title(indicator.title)
 
     return f"""          <section class="indicator-block" aria-labelledby="{indicator.series_id}-title">
             <header class="indicator-header">
               <div class="indicator-title-group">
-                <h2 id="{indicator.series_id}-title">{html.escape(indicator.title)}</h2>
+                <h2 id="{indicator.series_id}-title">{title_markup}</h2>
               </div>{compare_control}
             </header>
 
@@ -156,6 +167,24 @@ def render_indicator_block(indicator: IndicatorBlockConfig) -> str:
               <div class="data-table-wrap" id="{indicator.series_id}TableWrap"></div>
             </details>
           </section>"""
+
+
+def render_indicator_title(title: str) -> str:
+    label, unit = split_indicator_title(title)
+    label_markup = html.escape(label)
+
+    if not unit:
+        return label_markup
+
+    return f'{label_markup} <span class="indicator-display-unit">{html.escape(unit)}</span>'
+
+
+def split_indicator_title(title: str) -> tuple[str, str]:
+    for pattern, unit in DISPLAY_UNIT_PATTERNS:
+        if pattern.search(title):
+            return pattern.sub("", title), unit
+
+    return title, ""
 
 
 def render_compare_control(indicator: IndicatorBlockConfig) -> str:
