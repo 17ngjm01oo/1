@@ -1099,7 +1099,7 @@ body[data-country-overview-category] .country-data-header h1 {
 
 .country-view-other-charts-card {
   display: grid;
-  gap: 8px;
+  gap: 10px;
   padding: var(--card-padding);
   border: 1px solid var(--border);
   border-radius: var(--radius-component);
@@ -1119,6 +1119,8 @@ body[data-country-overview-category] .country-data-header h1 {
 .country-view-other-charts-list {
   display: grid;
   gap: 4px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
 }
 
 .country-view-other-charts-link {
@@ -1133,6 +1135,34 @@ body[data-country-overview-category] .country-data-header h1 {
 .country-view-other-charts-link:hover,
 .country-view-other-charts-link:focus-visible {
   text-decoration: underline;
+}
+
+.country-view-other-charts-profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: var(--accent);
+  font-size: 0.94rem;
+  font-weight: 650;
+  line-height: 1.35;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.country-view-other-charts-profile:hover,
+.country-view-other-charts-profile:focus-visible {
+  text-decoration: underline;
+}
+
+.country-view-other-charts-profile-label {
+  min-width: 0;
+}
+
+.country-view-other-charts-flag {
+  flex: 0 0 auto;
+  width: calc(1em * var(--flag-aspect));
+  height: 1em;
 }
 
 .ranking-card > .shared-notes {
@@ -2361,7 +2391,7 @@ body[data-country-code] .subtitle {
   }
 
   .country-view-other-charts-card {
-    gap: 6px;
+    gap: 8px;
     padding: var(--card-padding-mobile);
   }
 

@@ -287,24 +287,38 @@ function renderViewOtherChartsSection() {
 
   const card = document.createElement("section");
   card.className = "country-view-other-charts-card";
-  card.setAttribute("aria-labelledby", "view-other-charts-title");
+  card.setAttribute("aria-labelledby", "key-charts-title");
 
   const heading = document.createElement("h2");
-  heading.id = "view-other-charts-title";
-  heading.textContent = `Other Charts for ${selectedCountry.name}`;
+  heading.id = "key-charts-title";
+  heading.textContent = `Key Charts for ${selectedCountry.name}`;
 
-  const list = document.createElement("div");
-  list.className = "country-view-other-charts-list";
+  const chartList = document.createElement("div");
+  chartList.className = "country-view-other-charts-list";
 
   for (const linkConfig of links) {
     const link = document.createElement("a");
     link.className = "country-view-other-charts-link";
     link.href = `../../../countries/${selectedCountry.slug}/${linkConfig.pageKind}/`;
     link.textContent = linkConfig.label;
-    list.append(link);
+    chartList.append(link);
   }
 
-  card.append(heading, list);
+  const profileLink = document.createElement("a");
+  profileLink.className = "country-view-other-charts-profile";
+  profileLink.href = "../";
+
+  const flag = createFlagImage(selectedCountry.code, { className: "country-view-other-charts-flag", rootHref: "../../../" });
+  if (flag) {
+    profileLink.append(flag);
+  }
+
+  const profileLabel = document.createElement("span");
+  profileLabel.className = "country-view-other-charts-profile-label";
+  profileLabel.textContent = "View Country Profile";
+  profileLink.append(profileLabel);
+
+  card.append(heading, chartList, profileLink);
   pageShell.insertBefore(card, footerCard);
 }
 
