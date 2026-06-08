@@ -5,12 +5,12 @@ export const financeProfileRankings = [
     label: "Government Gross Debt (% of GDP)",
     countryPageKind: "government-debt",
     countryPageLabel: "Government Debt",
-    profileSection: "Government Debt",
+    profileSection: "Public Debt",
   },
   {
     seriesId: "governmentGrossDebtNational",
     countryPageKind: "government-debt",
-    profileSection: "Government Debt",
+    profileSection: "Public Debt",
   },
   {
     seriesId: "governmentNetDebt",
@@ -18,12 +18,12 @@ export const financeProfileRankings = [
     label: "Government Net Debt (% of GDP)",
     countryPageKind: "government-debt",
     countryPageLabel: "Government Debt",
-    profileSection: "Government Debt",
+    profileSection: "Public Debt",
   },
   {
     seriesId: "governmentNetDebtNational",
     countryPageKind: "government-debt",
-    profileSection: "Government Debt",
+    profileSection: "Public Debt",
   },
   {
     seriesId: "fiscalBalance",
@@ -31,12 +31,12 @@ export const financeProfileRankings = [
     label: "Fiscal Balance (% of GDP)",
     countryPageKind: "fiscal-balance",
     countryPageLabel: "Fiscal Balance",
-    profileSection: "Government Finance",
+    profileSection: "Fiscal Balance",
   },
   {
     seriesId: "fiscalBalanceNational",
     countryPageKind: "fiscal-balance",
-    profileSection: "Government Finance",
+    profileSection: "Fiscal Balance",
   },
   {
     seriesId: "primaryFiscalBalance",
@@ -44,12 +44,12 @@ export const financeProfileRankings = [
     label: "Primary Fiscal Balance (% of GDP)",
     countryPageKind: "fiscal-balance",
     countryPageLabel: "Fiscal Balance",
-    profileSection: "Government Finance",
+    profileSection: "Fiscal Balance",
   },
   {
     seriesId: "primaryFiscalBalanceNational",
     countryPageKind: "fiscal-balance",
-    profileSection: "Government Finance",
+    profileSection: "Fiscal Balance",
   },
   {
     seriesId: "governmentRevenue",
@@ -57,12 +57,12 @@ export const financeProfileRankings = [
     label: "Government Revenue (% of GDP)",
     countryPageKind: "government-revenue-expenditure",
     countryPageLabel: "Government Revenue and Expenditure",
-    profileSection: "Government Finance",
+    profileSection: "Revenue and Expenditure",
   },
   {
     seriesId: "governmentRevenueNational",
     countryPageKind: "government-revenue-expenditure",
-    profileSection: "Government Finance",
+    profileSection: "Revenue and Expenditure",
   },
   {
     seriesId: "governmentExpenditure",
@@ -70,12 +70,12 @@ export const financeProfileRankings = [
     label: "Government Expenditure (% of GDP)",
     countryPageKind: "government-revenue-expenditure",
     countryPageLabel: "Government Revenue and Expenditure",
-    profileSection: "Government Finance",
+    profileSection: "Revenue and Expenditure",
   },
   {
     seriesId: "governmentExpenditureNational",
     countryPageKind: "government-revenue-expenditure",
-    profileSection: "Government Finance",
+    profileSection: "Revenue and Expenditure",
   },
   {
     seriesId: "totalReservesIncludingGold",

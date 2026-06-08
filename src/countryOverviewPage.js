@@ -13,10 +13,6 @@ const GVA_BY_INDUSTRY_DATA_PATH = "./data/un-national-accounts/gva-by-industry.j
 const AGE_COMPOSITION_DATA_PATH = "./data/world-bank/age-composition.json";
 const TRADE_PARTNERS_DATA_PATH = "./data/un-comtrade/trade-partners.json";
 const TAX_REVENUE_COMPOSITION_DATA_PATH = "./data/oecd/tax-revenue-composition.json";
-const ECONOMY_CATEGORY_ID = "economy";
-const POPULATION_CATEGORY_ID = "population";
-const TRADE_CATEGORY_ID = "trade";
-const FINANCE_CATEGORY_ID = "finance";
 const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
 const PIE_LABEL_MIN_SHARE = 7;
 const GVA_INDUSTRY_COLORS = [
@@ -28,6 +24,32 @@ const GVA_INDUSTRY_COLORS = [
   "#0891b2",
   "#c2410c",
 ];
+const profileCategoryBlocks = {
+  economy: [
+    {
+      dataPath: GVA_BY_INDUSTRY_DATA_PATH,
+      render: renderGvaByIndustryBlock,
+    },
+  ],
+  population: [
+    {
+      dataPath: AGE_COMPOSITION_DATA_PATH,
+      render: renderAgeCompositionBlock,
+    },
+  ],
+  trade: [
+    {
+      dataPath: TRADE_PARTNERS_DATA_PATH,
+      render: renderTradePartnersBlock,
+    },
+  ],
+  finance: [
+    {
+      dataPath: TAX_REVENUE_COMPOSITION_DATA_PATH,
+      render: renderTaxRevenueCompositionBlock,
+    },
+  ],
+};
 
 function buildOverviewIndicators(rankings, { includeProfileSection = false } = {}) {
   return rankings.map((ranking) => buildOverviewIndicator(ranking, { includeProfileSection }));
@@ -200,21 +222,7 @@ function prepareCountryOverviewLayout() {
 function getRequiredStaticDataPaths() {
   const paths = new Set();
 
-  if (activeCategoryId === ECONOMY_CATEGORY_ID) {
-    paths.add(GVA_BY_INDUSTRY_DATA_PATH);
-  }
-
-  if (activeCategoryId === POPULATION_CATEGORY_ID) {
-    paths.add(AGE_COMPOSITION_DATA_PATH);
-  }
-
-  if (activeCategoryId === TRADE_CATEGORY_ID) {
-    paths.add(TRADE_PARTNERS_DATA_PATH);
-  }
-
-  if (activeCategoryId === FINANCE_CATEGORY_ID) {
-    paths.add(TAX_REVENUE_COMPOSITION_DATA_PATH);
-  }
+  getActiveProfileCategoryBlocks().forEach(({ dataPath }) => paths.add(dataPath));
 
   for (const group of getActiveGroups()) {
     for (const indicator of group.indicators) {
@@ -293,7 +301,7 @@ function renderBasicInformationSection() {
 
 function getBasicInformationItems() {
   const capitals = Array.isArray(selectedCountry.capitals) ? selectedCountry.capitals : [];
-  const officialLanguages = Array.isArray(selectedCountry.officialLanguages)
+  const languages = Array.isArray(selectedCountry.officialLanguages)
     ? selectedCountry.officialLanguages
     : [];
 
@@ -301,7 +309,7 @@ function getBasicInformationItems() {
     { label: "Official name", value: selectedCountry.officialName ?? "" },
     { label: "Region", value: selectedCountry.region ?? "" },
     { label: capitals.length > 1 ? "Capitals" : "Capital", value: capitals.join(", ") },
-    { label: officialLanguages.length > 1 ? "Official languages" : "Official language", value: officialLanguages.join(", ") },
+    { label: languages.length > 1 ? "Languages" : "Language", value: languages.join(", ") },
     { label: "Currency", value: getCountryCurrencyDisplay(selectedCountry.code) },
   ];
 }
@@ -319,58 +327,33 @@ function renderGroup(group, dataByPath, { showHeading = true } = {}) {
     section.append(heading);
   }
 
-  if (!isOverviewActive() && group.id === ECONOMY_CATEGORY_ID) {
-    const gvaByIndustryBlock = renderGvaByIndustryBlock(dataByPath);
-
-    if (gvaByIndustryBlock) {
-      section.append(gvaByIndustryBlock);
-    }
-  }
-
-  if (!isOverviewActive() && group.id === POPULATION_CATEGORY_ID) {
-    const ageCompositionBlock = renderAgeCompositionBlock(dataByPath);
-
-    if (ageCompositionBlock) {
-      section.append(ageCompositionBlock);
-    }
-  }
-
-  if (!isOverviewActive() && group.id === TRADE_CATEGORY_ID) {
-    const tradePartnersBlock = renderTradePartnersBlock(dataByPath);
-
-    if (tradePartnersBlock) {
-      section.append(tradePartnersBlock);
-    }
-  }
-
-  if (!isOverviewActive() && group.id === FINANCE_CATEGORY_ID) {
-    const taxRevenueCompositionBlock = renderTaxRevenueCompositionBlock(dataByPath);
-
-    if (taxRevenueCompositionBlock) {
-      section.append(taxRevenueCompositionBlock);
-    }
-  }
+  appendProfileCategoryBlocks(section, group.id, dataByPath);
 
   appendProfileIndicatorTables(section, group.indicators, dataByPath);
 
   return section;
 }
 
-function appendProfileIndicatorTables(section, indicators, dataByPath) {
-  const sectionedIndicators = new Map();
-  const baseIndicators = [];
+function getActiveProfileCategoryBlocks() {
+  return isOverviewActive() ? [] : (profileCategoryBlocks[activeCategoryId] ?? []);
+}
 
-  for (const indicator of indicators) {
-    if (indicator.profileSection) {
-      if (!sectionedIndicators.has(indicator.profileSection)) {
-        sectionedIndicators.set(indicator.profileSection, []);
-      }
+function appendProfileCategoryBlocks(section, categoryId, dataByPath) {
+  if (isOverviewActive()) {
+    return;
+  }
 
-      sectionedIndicators.get(indicator.profileSection).push(indicator);
-    } else {
-      baseIndicators.push(indicator);
+  for (const { render } of profileCategoryBlocks[categoryId] ?? []) {
+    const block = render(dataByPath);
+
+    if (block) {
+      section.append(block);
     }
   }
+}
+
+function appendProfileIndicatorTables(section, indicators, dataByPath) {
+  const { baseIndicators, sectionedIndicators } = groupProfileIndicators(indicators);
 
   if (baseIndicators.length) {
     section.append(renderIndicatorTable(baseIndicators, dataByPath));
@@ -379,6 +362,25 @@ function appendProfileIndicatorTables(section, indicators, dataByPath) {
   for (const [title, profileIndicators] of sectionedIndicators) {
     section.append(renderProfileIndicatorSection(title, profileIndicators, dataByPath));
   }
+}
+
+function groupProfileIndicators(indicators) {
+  return indicators.reduce((groups, indicator) => {
+    if (!indicator.profileSection) {
+      groups.baseIndicators.push(indicator);
+      return groups;
+    }
+
+    if (!groups.sectionedIndicators.has(indicator.profileSection)) {
+      groups.sectionedIndicators.set(indicator.profileSection, []);
+    }
+
+    groups.sectionedIndicators.get(indicator.profileSection).push(indicator);
+    return groups;
+  }, {
+    baseIndicators: [],
+    sectionedIndicators: new Map(),
+  });
 }
 
 function renderProfileIndicatorSection(title, indicators, dataByPath) {

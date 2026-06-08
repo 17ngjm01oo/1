@@ -5,6 +5,7 @@ export const environmentRankings = [
     label: "CO2 Emissions",
     countryPageKind: "co2-emissions",
     countryPageLabel: "CO2 Emissions",
+    profileSection: "Environment",
   },
   {
     seriesId: "co2EmissionsPerCapita",
@@ -12,16 +13,19 @@ export const environmentRankings = [
     label: "CO2 Emissions per Capita",
     countryPageKind: "co2-emissions",
     countryPageLabel: "CO2 Emissions",
+    profileSection: "Environment",
   },
   {
     seriesId: "area",
     directory: "area",
     label: "Area (km²)",
+    profileSection: "Geography",
   },
   {
     seriesId: "forestAreaPercentOfLandArea",
     directory: "forest-area",
     label: "Forest Area",
     countryPageKind: "forest-area",
+    profileSection: "Geography",
   },
 ];

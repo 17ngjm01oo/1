@@ -7,13 +7,6 @@ export const economyProfileRankings = [
     countryPageKind: "gdp",
   },
   {
-    seriesId: "ppp",
-    directory: "ppp-gdp",
-    label: "PPP GDP",
-    profileSection: "GDP",
-    countryPageKind: "ppp-gdp",
-  },
-  {
     seriesId: "gdpNational",
     profileSection: "GDP",
     countryPageKind: "gdp",
@@ -24,28 +17,35 @@ export const economyProfileRankings = [
     countryPageKind: "gdp",
   },
   {
+    seriesId: "ppp",
+    directory: "ppp-gdp",
+    label: "PPP GDP",
+    profileSection: "GDP",
+    countryPageKind: "ppp-gdp",
+  },
+  {
     seriesId: "gdpPerCapita",
     directory: "gdp-per-capita",
     label: "GDP per Capita",
-    profileSection: "GDP",
+    profileSection: "GDP per capita",
+    countryPageKind: "gdp-per-capita",
+  },
+  {
+    seriesId: "gdpNationalPerCapita",
+    profileSection: "GDP per capita",
+    countryPageKind: "gdp-per-capita",
+  },
+  {
+    seriesId: "realGdpPerCapita",
+    profileSection: "GDP per capita",
     countryPageKind: "gdp-per-capita",
   },
   {
     seriesId: "pppPerCapita",
     directory: "ppp-gdp-per-capita",
     label: "PPP GDP per Capita",
-    profileSection: "GDP",
+    profileSection: "GDP per capita",
     countryPageKind: "ppp-gdp-per-capita",
-  },
-  {
-    seriesId: "gdpNationalPerCapita",
-    profileSection: "GDP",
-    countryPageKind: "gdp-per-capita",
-  },
-  {
-    seriesId: "realGdpPerCapita",
-    profileSection: "GDP",
-    countryPageKind: "gdp-per-capita",
   },
   {
     seriesId: "gdpGrowth",

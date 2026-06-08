@@ -18,8 +18,8 @@ export const countryRegions = [
   { id: "South America", label: "South America" },
 ];
 
-// Country search also reads officialName and optional aliases arrays.
-// officialLanguages follows Wikipedia's statewide "Official language(s)" column only.
+// Country search also reads officialName, officialLanguages, and optional aliases arrays.
+// officialLanguages stores languages listed for national-level official or commonly recognized usage.
 export const countries = [
   { code: "G001", name: "World", slug: "world", externalIds: { weo: { countryId: "G001" }, unctad: { m49: "0000" }, worldBank: { countryId: "WLD" } }, aliases: ["Earth", "Global", "Worldwide"], officialName: "", capitals: [], officialLanguages: [], region: "", categories: [], includeInRankings: false },
   { code: "USA", name: "United States", slug: "united-states", externalIds: { weo: { countryId: "USA" }, unctad: { m49: "840" }, worldBank: { countryId: "USA" } }, aliases: [], officialName: "United States of America", capitals: ["Washington D.C."], officialLanguages: ["English"], region: "North America", categories: ["G20", "G7", "NATO", "OECD"] },
@@ -168,7 +168,7 @@ export const countries = [
   { code: "BEL", name: "Belgium", slug: "belgium", externalIds: { weo: { countryId: "BEL" }, unctad: { m49: "056" }, worldBank: { countryId: "BEL" } }, aliases: [], officialName: "Kingdom of Belgium", capitals: ["Brussels"], officialLanguages: ["Dutch", "French", "German"], region: "Europe", categories: ["EU", "NATO", "Eurozone", "OECD"] },
   { code: "BGR", name: "Bulgaria", slug: "bulgaria", externalIds: { weo: { countryId: "BGR" }, unctad: { m49: "100" }, worldBank: { countryId: "BGR" } }, aliases: [], officialName: "Republic of Bulgaria", capitals: ["Sofia"], officialLanguages: ["Bulgarian"], region: "Europe", categories: ["EU", "NATO", "Eurozone"] },
   { code: "HRV", name: "Croatia", slug: "croatia", externalIds: { weo: { countryId: "HRV" }, unctad: { m49: "191" }, worldBank: { countryId: "HRV" } }, aliases: [], officialName: "Republic of Croatia", capitals: ["Zagreb"], officialLanguages: ["Croatian"], region: "Europe", categories: ["EU", "NATO", "Eurozone"] },
-  { code: "CYP", name: "Cyprus", slug: "cyprus", externalIds: { weo: { countryId: "CYP" }, unctad: { m49: "196" }, worldBank: { countryId: "CYP" } }, aliases: [], officialName: "Republic of Cyprus", capitals: ["Nicosia"], officialLanguages: ["Greek", "Turkish"], region: "Europe", categories: ["EU", "Eurozone"] },
+  { code: "CYP", name: "Cyprus", slug: "cyprus", externalIds: { weo: { countryId: "CYP" }, unctad: { m49: "196" }, worldBank: { countryId: "CYP" } }, aliases: [], officialName: "Republic of Cyprus", capitals: ["Nicosia"], officialLanguages: ["Greek", "Turkish"], region: "Asia", categories: ["EU", "Eurozone"] },
   { code: "CZE", name: "Czechia", slug: "czechia", externalIds: { weo: { countryId: "CZE" }, unctad: { m49: "203" }, worldBank: { countryId: "CZE" } }, aliases: [], officialName: "Czech Republic", capitals: ["Prague"], officialLanguages: ["Czech"], region: "Europe", categories: ["EU", "NATO", "OECD"] },
   { code: "DNK", name: "Denmark", slug: "denmark", externalIds: { weo: { countryId: "DNK" }, unctad: { m49: "208" }, worldBank: { countryId: "DNK" } }, aliases: [], officialName: "Denmark", capitals: ["Copenhagen"], officialLanguages: ["Danish"], region: "Europe", categories: ["EU", "NATO", "OECD"] },
   { code: "EST", name: "Estonia", slug: "estonia", externalIds: { weo: { countryId: "EST" }, unctad: { m49: "233" }, worldBank: { countryId: "EST" } }, aliases: [], officialName: "Republic of Estonia", capitals: ["Tallinn"], officialLanguages: ["Estonian"], region: "Europe", categories: ["EU", "NATO", "Eurozone", "OECD"] },

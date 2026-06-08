@@ -118,8 +118,10 @@ const pageDefinition = {
   ...pageDefinitions[pageKind],
   seriesIds: getCountryPageSeriesIds(pageKind, pageDefinitions[pageKind]),
 };
-const pageSeriesIds = new Set(pageDefinition.seriesIds);
-const pageSeriesConfigs = seriesConfigs.filter((seriesConfig) => pageSeriesIds.has(seriesConfig.id));
+const seriesConfigById = new Map(seriesConfigs.map((config) => [config.id, config]));
+const pageSeriesConfigs = pageDefinition.seriesIds
+  .map((seriesId) => seriesConfigById.get(seriesId))
+  .filter(Boolean);
 const countryCode = document.body.dataset.countryCode;
 const selectedCountry = countries.find((country) => country.code === countryCode);
 const rankingDirectoryBySeriesId = Object.fromEntries(
