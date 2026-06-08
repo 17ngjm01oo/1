@@ -309,7 +309,7 @@ function getBasicInformationItems() {
     { label: "Official name", value: selectedCountry.officialName ?? "" },
     { label: "Region", value: selectedCountry.region ?? "" },
     { label: capitals.length > 1 ? "Capitals" : "Capital", value: capitals.join(", ") },
-    { label: languages.length > 1 ? "Languages" : "Language", value: languages.join(", ") },
+    { label: languages.length > 1 ? "Official languages" : "Official language", value: languages.join(", ") },
     { label: "Currency", value: getCountryCurrencyDisplay(selectedCountry.code) },
   ];
 }

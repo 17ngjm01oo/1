@@ -10,6 +10,7 @@ import { buildStaticDataRequestUrls, fetchStaticData } from "./staticData.js";
 import { transformSeriesData } from "./transform.js";
 import { clearLineChart, renderLineChart } from "./chart.js";
 import { formatCompactDisplayValue, getDisplayScale } from "./displayFormat.js";
+import { getCountryOverviewChartLinks } from "./countryProfileLinks.js";
 
 const pageDefinitions = {
   gdp: {
@@ -157,6 +158,7 @@ async function initializePage() {
   });
   updateTopRankingLinks();
   updateCountryHeading(selectedCountry);
+  renderViewOtherChartsSection();
 
   const countrySeriesConfigs = pageSeriesConfigs.map((seriesConfig) =>
     buildCountrySeriesConfig(seriesConfig, selectedCountry),
@@ -267,6 +269,43 @@ async function updateRelatedPageLinks() {
     }
     nav.append(link);
   }
+}
+
+function renderViewOtherChartsSection() {
+  const pageShell = document.querySelector("main.page-shell");
+  const footerCard = pageShell?.querySelector(".site-footer-card");
+
+  if (!pageShell || !footerCard || pageShell.querySelector(".country-view-other-charts-card")) {
+    return;
+  }
+
+  const links = getCountryOverviewChartLinks({ currentPageKind: pageKind });
+
+  if (!links.length) {
+    return;
+  }
+
+  const card = document.createElement("section");
+  card.className = "country-view-other-charts-card";
+  card.setAttribute("aria-labelledby", "view-other-charts-title");
+
+  const heading = document.createElement("h2");
+  heading.id = "view-other-charts-title";
+  heading.textContent = `Other Charts for ${selectedCountry.name}`;
+
+  const list = document.createElement("div");
+  list.className = "country-view-other-charts-list";
+
+  for (const linkConfig of links) {
+    const link = document.createElement("a");
+    link.className = "country-view-other-charts-link";
+    link.href = `../../../countries/${selectedCountry.slug}/${linkConfig.pageKind}/`;
+    link.textContent = linkConfig.label;
+    list.append(link);
+  }
+
+  card.append(heading, list);
+  pageShell.insertBefore(card, footerCard);
 }
 
 async function doesIndicatorPageHaveData(targetPageKind) {
