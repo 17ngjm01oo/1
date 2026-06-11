@@ -2307,6 +2307,20 @@ body[data-country-code] .subtitle {
     list-style: none;
   }
 
+  .country-hub-map-summary-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .country-hub-map-icon {
+    width: 15px;
+    height: 15px;
+    flex: 0 0 auto;
+    color: var(--muted);
+  }
+
   .country-hub-map-summary::-webkit-details-marker {
     display: none;
   }
