@@ -93,10 +93,10 @@ const pageDefinitions = {
     group: "finance",
     documentTitleMetric: "Fiscal Balance",
   },
-  "government-revenue-expenditure": {
+  "government-revenue-spending": {
     logPrefix: "Government revenue and expenditure page",
     group: "finance",
-    documentTitleMetric: "Government Revenue and Expenditure",
+    documentTitleMetric: "Government Revenue and Spending",
   },
   "total-reserves": {
     logPrefix: "Total reserves including gold page",

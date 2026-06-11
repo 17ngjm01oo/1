@@ -694,7 +694,8 @@ body[data-country-overview-category] .country-data-header h1 {
   aspect-ratio: 1;
 }
 
-.country-gva-industry-pie path {
+.country-gva-industry-pie path,
+.country-gva-industry-pie circle {
   stroke: #fff;
   stroke-width: 1;
 }
@@ -710,7 +711,8 @@ body[data-country-overview-category] .country-data-header h1 {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .country-gva-industry-pie path:hover {
+  .country-gva-industry-pie path:hover,
+  .country-gva-industry-pie circle:hover {
     filter: brightness(0.94);
   }
 }

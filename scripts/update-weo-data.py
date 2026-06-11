@@ -127,11 +127,11 @@ TARGET_INDICATORS = {
         "description": "General government revenue, Domestic currency",
     },
     "GGX_NGDP": {
-        "label": "Government Expenditure",
+        "label": "Government Spending",
         "description": "General government total expenditure, Percent of GDP",
     },
     "GGX": {
-        "label": "Government Expenditure",
+        "label": "Government Spending",
         "description": "General government total expenditure, Domestic currency",
     },
 }

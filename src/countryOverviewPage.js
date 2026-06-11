@@ -625,6 +625,7 @@ function renderPieChart(items, { ariaLabel, className = "" } = {}) {
     }))
     .filter((item) => Number.isFinite(item.share) && item.share > 0);
   const totalShare = pieSectors.reduce((total, sector) => total + sector.share, 0);
+  const isSingleSector = pieSectors.length === 1;
 
   const svg = document.createElementNS(SVG_NAMESPACE, "svg");
   svg.setAttribute("class", "country-gva-industry-pie");
@@ -643,26 +644,34 @@ function renderPieChart(items, { ariaLabel, className = "" } = {}) {
   let startAngle = -90;
   for (const sector of pieSectors) {
     const endAngle = startAngle + (sector.share / totalShare) * 360;
-    const path = document.createElementNS(SVG_NAMESPACE, "path");
-    path.setAttribute("d", createPieSlicePathData(50, 50, 42, startAngle, endAngle));
-    path.setAttribute("fill", sector.color);
+    const slice = document.createElementNS(SVG_NAMESPACE, isSingleSector ? "circle" : "path");
+    if (isSingleSector) {
+      slice.setAttribute("cx", "50");
+      slice.setAttribute("cy", "50");
+      slice.setAttribute("r", "42");
+    } else {
+      slice.setAttribute("d", createPieSlicePathData(50, 50, 42, startAngle, endAngle));
+    }
+    slice.setAttribute("fill", sector.color);
 
     if (tooltip) {
-      path.addEventListener("pointerenter", (event) => {
+      slice.addEventListener("pointerenter", (event) => {
         showPieTooltip(tooltip, chart, formatPieItemLabel(sector), event);
       });
-      path.addEventListener("pointermove", (event) => {
+      slice.addEventListener("pointermove", (event) => {
         positionPieTooltip(tooltip, chart, event);
       });
-      path.addEventListener("pointerleave", () => {
+      slice.addEventListener("pointerleave", () => {
         tooltip.hidden = true;
       });
     }
 
-    svg.append(path);
+    svg.append(slice);
 
     if (sector.share >= PIE_LABEL_MIN_SHARE) {
-      const labelPosition = getPointOnCircle(50, 50, 31, (startAngle + endAngle) / 2);
+      const labelPosition = isSingleSector
+        ? { x: 50, y: 50 }
+        : getPointOnCircle(50, 50, 31, (startAngle + endAngle) / 2);
       const label = document.createElementNS(SVG_NAMESPACE, "text");
       label.setAttribute("class", "country-pie-share-label");
       label.setAttribute("x", labelPosition.x.toFixed(2));

@@ -37,9 +37,9 @@ RANKING_TYPES = [
         "subtitle": PERCENT_GDP_SUBTITLE,
     },
     {
-        "directory": "government-expenditure",
-        "title": "Government Expenditure (% of GDP) Ranking by Country",
-        "script": "governmentExpenditureRanking.js",
+        "directory": "government-spending",
+        "title": "Government Spending (% of GDP) Ranking by Country",
+        "script": "governmentSpendingRanking.js",
         "subtitle": PERCENT_GDP_SUBTITLE,
     },
     {
