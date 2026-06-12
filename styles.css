@@ -2315,10 +2315,9 @@ body[data-country-code] .subtitle {
   }
 
   .country-hub-map-icon {
-    width: 15px;
-    height: 15px;
+    width: 18px;
+    height: 18px;
     flex: 0 0 auto;
-    color: var(--muted);
   }
 
   .country-hub-map-summary::-webkit-details-marker {
