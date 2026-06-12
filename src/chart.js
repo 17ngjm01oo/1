@@ -167,13 +167,15 @@ function buildDataset({
     borderColor: baseColor,
     backgroundColor: baseColor,
     borderWidth: isCompactViewport ? 2 : 3,
+    borderCapStyle: "round",
+    borderJoinStyle: "round",
     spanGaps: true,
     pointBackgroundColor: baseColor,
     pointBorderColor: baseColor,
     pointRadius: isCompactViewport ? 0 : 2,
     pointHoverRadius: 5,
     pointHitRadius: isCompactViewport ? 20 : 16,
-    tension: 0.25,
+    tension: 0,
     fill: false,
   };
 }
