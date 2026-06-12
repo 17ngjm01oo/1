@@ -63,6 +63,11 @@ const pageDefinitions = {
     group: "population",
     documentTitleMetric: "Fertility Rate",
   },
+  immigrants: {
+    logPrefix: "Immigrants page",
+    group: "population",
+    documentTitleMetric: "Immigrants",
+  },
   "ppp-gdp": {
     logPrefix: "PPP page",
     group: "economy",
@@ -94,7 +99,7 @@ const pageDefinitions = {
     documentTitleMetric: "Fiscal Balance",
   },
   "government-revenue-spending": {
-    logPrefix: "Government revenue and expenditure page",
+    logPrefix: "Government revenue and spending page",
     group: "finance",
     documentTitleMetric: "Government Revenue and Spending",
   },
@@ -102,6 +107,11 @@ const pageDefinitions = {
     logPrefix: "Total reserves including gold page",
     group: "finance",
     documentTitleMetric: "Total Reserves",
+  },
+  "military-spending": {
+    logPrefix: "Military spending page",
+    group: "society",
+    documentTitleMetric: "Military Spending",
   },
   "forest-area": {
     logPrefix: "Forest area percent of land area page",

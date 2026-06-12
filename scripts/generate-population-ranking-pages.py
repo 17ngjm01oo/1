@@ -1,6 +1,9 @@
 from __future__ import annotations
 
-from data_source_notes import WEO_RANKING_NOTES, WORLD_BANK_RANKING_NOTES
+from data_source_notes import (
+    WEO_RANKING_NOTES,
+    WORLD_BANK_RANKING_NOTES,
+)
 from ranking_page_generator import generate_ranking_pages
 
 RANKING_TYPES = [
@@ -31,6 +34,20 @@ RANKING_TYPES = [
         "title": "Fertility Rate Ranking by Country",
         "script": "fertilityRateRanking.js",
         "subtitle": "Total fertility rate estimates the average number of children a woman would have over her lifetime, based on age-specific birth rates for ages 15-49.",
+    },
+    {
+        **WORLD_BANK_RANKING_NOTES,
+        "directory": "immigrants",
+        "title": "Immigrants Ranking by Country",
+        "script": "immigrantsRanking.js",
+        "subtitle": "International migrant stock at mid-year.",
+    },
+    {
+        **WORLD_BANK_RANKING_NOTES,
+        "directory": "immigrants-percent-population",
+        "title": "Immigrants (% of Population) Ranking by Country",
+        "script": "immigrantsPercentPopulationRanking.js",
+        "subtitle": "International migrant stock shown as a share of population.",
     },
     {
         "directory": "employment",

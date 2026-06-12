@@ -17,3 +17,10 @@ CIA_RANKING_NOTES = {
     "source_note": "Source: CIA World Factbook.",
     "data_note": "",
 }
+
+SIPRI_RANKING_NOTES = {
+    "source_note": "Source: SIPRI Military Expenditure Database.",
+    "data_note": "",
+}
+
+SIPRI_COUNTRY_SOURCE_NOTE = "Source: SIPRI Military Expenditure Database."

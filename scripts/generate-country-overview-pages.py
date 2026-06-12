@@ -14,6 +14,7 @@ PROFILE_CATEGORIES = (
     {"id": "population", "title": "Population"},
     {"id": "trade", "title": "Trade"},
     {"id": "finance", "title": "Finance"},
+    {"id": "society", "title": "Society"},
     {"id": "environment", "title": "Environment"},
 )
 

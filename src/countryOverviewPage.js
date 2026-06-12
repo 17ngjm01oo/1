@@ -270,11 +270,13 @@ function renderOverview() {
 
 function getActiveGroups() {
   if (isOverviewActive()) {
-    return overviewGroups.map((group) => ({
-      id: group.id,
-      title: group.title,
-      indicators: group.overviewIndicators,
-    }));
+    return overviewGroups
+      .filter((group) => group.id !== "society")
+      .map((group) => ({
+        id: group.id,
+        title: group.title,
+        indicators: group.overviewIndicators,
+      }));
   }
 
   return overviewGroups

@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Moldova Immigrants</title>
+    <link rel="stylesheet" href="../../../styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+    <script type="module" src="../../../src/countryIndicatorPage.js"></script>
+  </head>
+  <body data-country-code="MDA" data-page-kind="immigrants">
+    <header class="site-header">
+      <a class="site-home-link" href="../../../">HOME</a>
+    </header>
+    <main class="page-shell">
+      <section class="top-nav-card" aria-label="Site navigation"></section>
+
+      <section class="hub-section" aria-labelledby="country-hub-title">
+        <header class="page-header">
+          <h1 id="country-hub-title" class="page-title">Immigrants Chart by Country</h1>
+          <p class="subtitle">Values are based on World Bank World Development Indicators.</p>
+        </header>
+
+        <div class="country-search-panel">
+          <div class="search-input-wrap">
+            <input
+              id="countrySearchInput"
+              class="country-search-input"
+              type="search"
+              autocomplete="off"
+              aria-controls="countrySearchResults"
+              role="combobox"
+              aria-autocomplete="list"
+              aria-expanded="false"
+            />
+            <div class="country-results" id="countrySearchResults" role="listbox" aria-label="Country search results" hidden></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="indicators-section" aria-labelledby="country-data-title">
+        <div class="indicators-card">
+          <header class="page-header country-data-header">
+            <h1 id="country-data-title">Moldova</h1>
+            <nav class="site-nav" id="countryRelatedPageNav" aria-label="Population page navigation"></nav>
+          </header>
+
+          <section class="indicator-block" aria-labelledby="immigrants-title">
+            <header class="indicator-header">
+              <div class="indicator-title-group">
+                <h2 id="immigrants-title">Immigrants</h2>
+              </div>
+              <div class="compare-control" data-series-id="immigrants">
+                <div class="compare-input-wrap">
+                  <input
+                    id="immigrantsCompareInput"
+                    class="compare-search-input"
+                    type="search"
+                    autocomplete="off"
+                    placeholder="Compare with..."
+                    aria-controls="immigrantsCompareResults"
+                    role="combobox"
+                    aria-autocomplete="list"
+                    aria-expanded="false"
+                  />
+                </div>
+                <p class="compare-selected" id="immigrantsCompareSelected"></p>
+                <div class="country-results compare-results" id="immigrantsCompareResults" role="listbox" aria-label="Immigrants comparison country results" hidden></div>
+              </div>
+            </header>
+
+            <div class="chart-card" id="immigrantsChartCard">
+              <canvas id="immigrantsChart" aria-label="Immigrants line chart" role="img"></canvas>
+              <div class="chart-overlay" id="immigrantsOverlay" aria-hidden="true"></div>
+            </div>
+
+            <details class="data-table-toggle" id="immigrantsTableToggle">
+              <summary>Show data table</summary>
+              <div class="data-table-wrap" id="immigrantsTableWrap"></div>
+            </details>
+          </section>
+
+          <section class="indicator-block" aria-labelledby="immigrantsPercentPopulation-title">
+            <header class="indicator-header">
+              <div class="indicator-title-group">
+                <h2 id="immigrantsPercentPopulation-title">Immigrants <span class="indicator-display-unit">(% of Population)</span></h2>
+              </div>
+              <div class="compare-control" data-series-id="immigrantsPercentPopulation">
+                <div class="compare-input-wrap">
+                  <input
+                    id="immigrantsPercentPopulationCompareInput"
+                    class="compare-search-input"
+                    type="search"
+                    autocomplete="off"
+                    placeholder="Compare with..."
+                    aria-controls="immigrantsPercentPopulationCompareResults"
+                    role="combobox"
+                    aria-autocomplete="list"
+                    aria-expanded="false"
+                  />
+                </div>
+                <p class="compare-selected" id="immigrantsPercentPopulationCompareSelected"></p>
+                <div class="country-results compare-results" id="immigrantsPercentPopulationCompareResults" role="listbox" aria-label="Immigrants (% of Population) comparison country results" hidden></div>
+              </div>
+            </header>
+
+            <div class="chart-card" id="immigrantsPercentPopulationChartCard">
+              <canvas id="immigrantsPercentPopulationChart" aria-label="Immigrants percent of population line chart" role="img"></canvas>
+              <div class="chart-overlay" id="immigrantsPercentPopulationOverlay" aria-hidden="true"></div>
+            </div>
+
+            <details class="data-table-toggle" id="immigrantsPercentPopulationTableToggle">
+              <summary>Show data table</summary>
+              <div class="data-table-wrap" id="immigrantsPercentPopulationTableWrap"></div>
+            </details>
+          </section>
+
+          <footer class="shared-notes" aria-label="Chart notes">
+            <p>Source: World Bank World Development Indicators.</p>
+          </footer>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

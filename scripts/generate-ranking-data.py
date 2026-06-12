@@ -15,6 +15,7 @@ SOURCE_PATHS = (
     ROOT_DIR / "data" / "world-bank" / "population-demographics.json",
     ROOT_DIR / "data" / "world-bank" / "environment.json",
     ROOT_DIR / "data" / "cia" / "area.json",
+    ROOT_DIR / "data" / "sipri" / "military-spending.json",
 )
 
 

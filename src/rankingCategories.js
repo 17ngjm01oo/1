@@ -3,6 +3,7 @@ import { environmentRankings } from "./environmentRankings.js";
 import { financeProfileRankings, financeRankings } from "./financeRankings.js";
 import { populationRankings } from "./populationRankings.js";
 import { getCountryIndicatorLinks } from "./rankingLinks.js";
+import { societyProfileRankings, societyRankings } from "./societyRankings.js";
 import { tradeRankings } from "./tradeRankings.js";
 
 function pickRankings(rankings, seriesIds) {
@@ -51,6 +52,14 @@ const categoryDefinitions = [
       "totalReservesIncludingGold",
     ]),
     profileRankings: financeProfileRankings,
+  },
+  {
+    id: "society",
+    label: "Society",
+    navSelector: "#societyTopNav",
+    rankings: societyRankings,
+    overviewRankings: pickRankings(societyRankings, ["militarySpending"]),
+    profileRankings: societyProfileRankings,
   },
   {
     id: "environment",

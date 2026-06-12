@@ -66,4 +66,14 @@ export const dataSources = {
     endYear: 2025,
     subtitle: "CIA World Factbook, 2025",
   }),
+  sipriMilitarySpending: defineDataSource({
+    dataSource: "SIPRI Military Expenditure Database",
+    dataset: "SIPRI Military Spending",
+    staticDataPath: "./data/sipri/military-spending.json",
+    rankingStaticDataPath: "../data/sipri/rankings/military-spending/manifest.json",
+    sourceUrl: "https://www.sipri.org/databases/milex",
+    startYear: 1949,
+    endYear: 2025,
+    subtitle: "SIPRI Military Expenditure Database, 1949-2025",
+  }),
 };

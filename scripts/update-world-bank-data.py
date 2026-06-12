@@ -60,6 +60,20 @@ DATASETS = {
                 "scale": "Units",
                 "unit": "",
             },
+            "SM.POP.TOTL": {
+                "label": "Immigrants",
+                "slug": "immigrants",
+                "description": "International migrant stock, total",
+                "scale": "Units",
+                "unit": "Persons",
+            },
+            "SM.POP.TOTL.ZS": {
+                "label": "Immigrants (% of Population)",
+                "slug": "immigrants-percent-population",
+                "description": "International migrant stock, percent of population",
+                "scale": "Units",
+                "unit": "%",
+            },
             "EN.POP.DNST": {
                 "label": "Population Density",
                 "slug": "population-density",

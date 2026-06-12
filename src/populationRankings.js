@@ -28,6 +28,21 @@ export const populationRankings = [
     profileSection: "Demographics",
   },
   {
+    seriesId: "immigrants",
+    directory: "immigrants",
+    label: "Immigrants",
+    countryPageKind: "immigrants",
+    profileSection: "Demographics",
+  },
+  {
+    seriesId: "immigrantsPercentPopulation",
+    directory: "immigrants-percent-population",
+    label: "Immigrants (% of Population)",
+    countryPageKind: "immigrants",
+    countryPageLabel: "Immigrants",
+    profileSection: "Demographics",
+  },
+  {
     seriesId: "employment",
     directory: "employment",
     label: "Employment",

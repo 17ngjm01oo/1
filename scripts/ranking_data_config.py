@@ -20,6 +20,10 @@ RANKING_INDICATOR_IDS_BY_DATASET = {
         "PPPGDP",
         "PPPPC",
     },
+    "SIPRI:MILEX": {
+        "MILITARY_SPENDING_USD",
+        "MILITARY_SPENDING_PERCENT_GDP",
+    },
 }
 
 

@@ -2,6 +2,8 @@
   "scripts": {
     "update-data": "python3 scripts/update-weo-data.py",
     "update-data:local": "python3 scripts/update-weo-data-from-local.py",
+    "update-sipri-data": "python3 scripts/update-sipri-military-spending-data.py",
+    "update-world-bank-population-data": "python3 scripts/update-world-bank-data.py --dataset population-demographics",
     "update-unctad-data": "python3 scripts/update-unctad-data.py",
     "generate-ranking-data": "python3 scripts/generate-ranking-data.py"
   }
