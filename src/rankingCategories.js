@@ -17,7 +17,7 @@ const categoryDefinitions = [
     label: "Economy",
     navSelector: "#economyTopNav, #rankingTopNav",
     rankings: economyRankings,
-    overviewRankings: pickRankings(economyRankings, ["gdp", "gdpPerCapita"]),
+    overviewRankings: pickRankings(economyRankings, ["gdp", "gdpPerCapita", "unemploymentRate"]),
     profileRankings: economyProfileRankings,
   },
   {
@@ -25,11 +25,7 @@ const categoryDefinitions = [
     label: "Population",
     navSelector: "#populationTopNav",
     rankings: populationRankings,
-    overviewRankings: pickRankings(populationRankings, [
-      "population",
-      "fertilityRate",
-      "unemploymentRate",
-    ]),
+    overviewRankings: pickRankings(populationRankings, ["population", "fertilityRate"]),
   },
   {
     id: "trade",

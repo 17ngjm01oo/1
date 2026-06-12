@@ -43,14 +43,9 @@ const pageDefinitions = {
     group: "population",
     documentTitleMetric: "Population Density",
   },
-  employment: {
-    logPrefix: "Employment page",
-    group: "population",
-    documentTitleMetric: "Employment",
-  },
   "unemployment-rate": {
     logPrefix: "Unemployment rate page",
-    group: "population",
+    group: "economy",
     documentTitleMetric: "Unemployment Rate",
   },
   "life-expectancy": {

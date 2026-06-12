@@ -110,17 +110,6 @@ export const seriesConfigs = [
     ...valueFormats.decimalOne,
   },
   {
-    id: "employment",
-    canvasId: "employmentChart",
-    chartCardId: "employmentChartCard",
-    overlayId: "employmentOverlay",
-    statusId: "employmentStatus",
-    ...weoCurrentPrices,
-    indicatorCode: "LE",
-    titleTemplate: "Employment",
-    ...valueFormats.populationMagnitude,
-  },
-  {
     id: "unemploymentRate",
     canvasId: "unemploymentRateChart",
     chartCardId: "unemploymentRateChartCard",

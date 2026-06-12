@@ -11,7 +11,6 @@ RANKING_INDICATOR_IDS_BY_DATASET = {
         "GGXWDG_NGDP",
         "GGXWDN_NGDP",
         "GGX_NGDP",
-        "LE",
         "LUR",
         "NGDPD",
         "NGDPDPC",

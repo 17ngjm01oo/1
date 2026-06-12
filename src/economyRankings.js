@@ -61,6 +61,13 @@ export const economyProfileRankings = [
     profileSection: "Inflation",
     countryPageKind: "inflation-rate",
   },
+  {
+    seriesId: "unemploymentRate",
+    directory: "unemployment-rate",
+    label: "Unemployment Rate",
+    profileSection: "Labor Market",
+    countryPageKind: "unemployment-rate",
+  },
 ];
 
 export const economyRankings = economyProfileRankings.filter(({ directory }) => directory);

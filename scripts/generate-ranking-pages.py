@@ -29,6 +29,11 @@ RANKING_TYPES = [
         "subtitle": "Inflation rate is the annual percentage change in the consumer price index.",
     },
     {
+        "directory": "unemployment-rate",
+        "title": "Unemployment Rate Ranking by Country",
+        "script": "unemploymentRateRanking.js",
+    },
+    {
         "directory": "ppp-gdp",
         "title": "PPP GDP Ranking by Country",
         "script": "pppRanking.js",

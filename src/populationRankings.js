@@ -32,7 +32,7 @@ export const populationRankings = [
     directory: "immigrants",
     label: "Immigrants",
     countryPageKind: "immigrants",
-    profileSection: "Demographics",
+    profileSection: "Migration",
   },
   {
     seriesId: "immigrantsPercentPopulation",
@@ -40,20 +40,6 @@ export const populationRankings = [
     label: "Immigrants (% of Population)",
     countryPageKind: "immigrants",
     countryPageLabel: "Immigrants",
-    profileSection: "Demographics",
-  },
-  {
-    seriesId: "employment",
-    directory: "employment",
-    label: "Employment",
-    countryPageKind: "employment",
-    profileSection: "Labor Market",
-  },
-  {
-    seriesId: "unemploymentRate",
-    directory: "unemployment-rate",
-    label: "Unemployment Rate",
-    countryPageKind: "unemployment-rate",
-    profileSection: "Labor Market",
+    profileSection: "Migration",
   },
 ];

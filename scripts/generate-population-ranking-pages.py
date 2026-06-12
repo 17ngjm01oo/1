@@ -49,16 +49,6 @@ RANKING_TYPES = [
         "script": "immigrantsPercentPopulationRanking.js",
         "subtitle": "International migrant stock shown as a share of population.",
     },
-    {
-        "directory": "employment",
-        "title": "Employment Ranking by Country",
-        "script": "employmentRanking.js",
-    },
-    {
-        "directory": "unemployment-rate",
-        "title": "Unemployment Rate Ranking by Country",
-        "script": "unemploymentRateRanking.js",
-    },
 ]
 
 

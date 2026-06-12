@@ -58,10 +58,6 @@ TARGET_INDICATORS = {
         "label": "Population",
         "description": "Population, Persons",
     },
-    "LE": {
-        "label": "Employment",
-        "description": "Employment, Persons",
-    },
     "LUR": {
         "label": "Unemployment Rate",
         "description": "Unemployment rate, Percent of total labor force",

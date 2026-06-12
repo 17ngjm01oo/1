@@ -14,7 +14,7 @@ def main() -> None:
             subtitle="",
             generated_label="unemployment rate",
             source_note=WEO_COUNTRY_SOURCE_NOTE,
-            related_nav_label="Population page navigation",
+            related_nav_label="Economy page navigation",
             notes_label="Data notes",
             data_note="Values may include IMF estimates and projections.",
             indicators=(
