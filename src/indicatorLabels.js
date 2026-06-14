@@ -16,7 +16,10 @@ export function getIndicatorDisplayText(seriesConfig, options = {}) {
 }
 
 export function renderIndicatorLabel(target, seriesConfig, options = {}) {
-  const { label, unit } = getIndicatorDisplayParts(seriesConfig, options);
+  const { label, unit, tooltipPlacement } = {
+    ...getIndicatorDisplayParts(seriesConfig, options),
+    tooltipPlacement: options.tooltipPlacement ?? "country-indicator",
+  };
   target.textContent = label;
 
   if (unit) {
@@ -31,6 +34,7 @@ export function renderIndicatorLabel(target, seriesConfig, options = {}) {
   target.append(createIndicatorInfoButton({
     seriesId: seriesConfig.id,
     label,
+    tooltipPlacement,
   }));
 }
 

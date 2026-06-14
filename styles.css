@@ -489,24 +489,6 @@ body[data-page-kind="rankings-hub"] .rankings-hub-link-row .indicator-info-butto
   font-size: 0.72rem;
 }
 
-body[data-page-kind="rankings-hub"] .rankings-hub-link-row .indicator-info-tooltip {
-  top: 50%;
-  right: calc(100% + 8px);
-  left: auto;
-  transform: translate(0, -50%);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  body[data-page-kind="rankings-hub"] .rankings-hub-link-row .indicator-info-button:hover .indicator-info-tooltip,
-  body[data-page-kind="rankings-hub"] .rankings-hub-link-row .indicator-info-button:focus-visible .indicator-info-tooltip {
-    transform: translate(0, -50%);
-  }
-}
-
-body[data-page-kind="rankings-hub"] .rankings-hub-link-row .indicator-info-button.is-open .indicator-info-tooltip {
-  transform: translate(0, -50%);
-}
-
 .indicators-section {
   display: grid;
   gap: var(--section-gap-compact);
@@ -1018,6 +1000,26 @@ body[data-country-overview-category] .country-data-header h1 {
   font-weight: 700;
   line-height: 1;
   cursor: pointer;
+  --indicator-info-tooltip-left: 50%;
+  --indicator-info-tooltip-right: auto;
+  --indicator-info-tooltip-top: calc(100% + 8px);
+  --indicator-info-tooltip-rest-transform: translate(-50%, 4px);
+  --indicator-info-tooltip-visible-transform: translate(-50%, 0);
+}
+
+.indicator-info-button[data-indicator-info-tooltip-placement="country-overview"] {
+  --indicator-info-tooltip-left: calc(100% - 20px);
+  --indicator-info-tooltip-right: auto;
+  --indicator-info-tooltip-rest-transform: translate(0, 4px);
+  --indicator-info-tooltip-visible-transform: translate(0, 0);
+}
+
+.indicator-info-button[data-indicator-info-tooltip-placement="rankings-hub"] {
+  --indicator-info-tooltip-left: auto;
+  --indicator-info-tooltip-right: calc(100% + 8px);
+  --indicator-info-tooltip-top: 50%;
+  --indicator-info-tooltip-rest-transform: translate(0, -50%);
+  --indicator-info-tooltip-visible-transform: translate(0, -50%);
 }
 
 .indicator-info-button:focus-visible,
@@ -1030,8 +1032,9 @@ body[data-country-overview-category] .country-data-header h1 {
 .indicator-info-tooltip {
   position: absolute;
   z-index: 40;
-  top: calc(100% + 8px);
-  left: 100%;
+  top: var(--indicator-info-tooltip-top);
+  left: var(--indicator-info-tooltip-left);
+  right: var(--indicator-info-tooltip-right);
   box-sizing: border-box;
   width: auto;
   min-width: min(180px, 70vw);
@@ -1054,8 +1057,16 @@ body[data-country-overview-category] .country-data-header h1 {
   white-space: normal;
   opacity: 0;
   pointer-events: none;
-  transform: translate(-44px, 4px);
+  transform: var(--indicator-info-tooltip-rest-transform);
   transition: opacity 120ms ease, transform 120ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .indicator-info-button:hover .indicator-info-tooltip,
+  .indicator-info-button:focus-visible .indicator-info-tooltip {
+    opacity: 1;
+    transform: var(--indicator-info-tooltip-visible-transform);
+  }
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -1064,17 +1075,11 @@ body[data-country-overview-category] .country-data-header h1 {
     color: var(--text);
     outline: none;
   }
-
-  .indicator-info-button:hover .indicator-info-tooltip,
-  .indicator-info-button:focus-visible .indicator-info-tooltip {
-    opacity: 1;
-    transform: translate(-44px, 0);
-  }
 }
 
 .indicator-info-button.is-open .indicator-info-tooltip {
   opacity: 1;
-  transform: translate(-44px, 0);
+  transform: var(--indicator-info-tooltip-visible-transform);
 }
 
 .indicator-rank {

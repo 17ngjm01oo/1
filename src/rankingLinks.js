@@ -78,6 +78,7 @@ function createRankingHubLink(
   row.append(link, createIndicatorInfoButton({
     rankingDirectory: ranking.directory,
     label: ranking.label,
+    tooltipPlacement: "rankings-hub",
   }));
   return row;
 }

@@ -5,15 +5,21 @@ import {
 } from "./indicatorInfo.js";
 
 const tooltipPreferredQuery = "(hover: none), (pointer: coarse)";
-const touchTooltipScrollCloseThreshold = 32;
+const touchTooltipScrollCloseThreshold = 96;
 let touchTooltipScrollStartY = null;
 
-export function createIndicatorInfoButton({ seriesId = "", rankingDirectory = "", label = "indicator" } = {}) {
+export function createIndicatorInfoButton({
+  seriesId = "",
+  rankingDirectory = "",
+  label = "indicator",
+  tooltipPlacement = "country-indicator",
+} = {}) {
   const button = document.createElement("button");
   button.className = "indicator-info-button";
   button.type = "button";
   button.textContent = "i";
   button.setAttribute("aria-label", `${label} information`);
+  button.dataset.indicatorInfoTooltipPlacement = tooltipPlacement;
 
   if (seriesId) {
     button.dataset.indicatorInfoSeriesId = seriesId;

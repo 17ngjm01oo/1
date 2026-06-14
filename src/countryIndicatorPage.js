@@ -367,6 +367,7 @@ function updateSeriesHeadings(countrySeriesConfigs) {
     if (titleElement) {
       renderIndicatorLabel(titleElement, seriesConfig, {
         currencyCode: seriesConfig.chartTitleCurrencyCode,
+        tooltipPlacement: "country-indicator",
       });
     }
 

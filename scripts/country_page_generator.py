@@ -174,6 +174,7 @@ def render_indicator_info_button(series_id: str, label: str) -> str:
     return (
         f'<button class="indicator-info-button" type="button" '
         f'data-indicator-info-series-id="{html.escape(series_id)}" '
+        f'data-indicator-info-tooltip-placement="country-indicator" '
         f'aria-label="{html.escape(label)} information">i</button>'
     )
 

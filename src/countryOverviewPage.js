@@ -791,6 +791,7 @@ function renderIndicatorRow(indicator, dataByPath) {
   renderIndicatorLabel(labelCell, config, {
     label: indicator.label,
     currencyCode: config.usesCountryCurrency ? getCurrencyCode(selectedCountry.code) : config.currencyCode,
+    tooltipPlacement: "country-overview",
   });
   valueCell.className = "country-overview-value";
   rankCell.className = "country-overview-rank";
