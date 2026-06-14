@@ -484,23 +484,27 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav .rankings-hub-
 body[data-page-kind="rankings-hub"] .rankings-hub-link-row .indicator-info-button {
   margin-left: 4px;
   vertical-align: text-bottom;
+  width: 21px;
+  height: 21px;
+  font-size: 0.72rem;
 }
 
 body[data-page-kind="rankings-hub"] .rankings-hub-link-row .indicator-info-tooltip {
-  right: 100%;
+  top: 50%;
+  right: calc(100% + 8px);
   left: auto;
-  transform: translate(44px, 4px);
+  transform: translate(0, -50%);
 }
 
 @media (hover: hover) and (pointer: fine) {
   body[data-page-kind="rankings-hub"] .rankings-hub-link-row .indicator-info-button:hover .indicator-info-tooltip,
   body[data-page-kind="rankings-hub"] .rankings-hub-link-row .indicator-info-button:focus-visible .indicator-info-tooltip {
-    transform: translate(44px, 0);
+    transform: translate(0, -50%);
   }
 }
 
 body[data-page-kind="rankings-hub"] .rankings-hub-link-row .indicator-info-button.is-open .indicator-info-tooltip {
-  transform: translate(44px, 0);
+  transform: translate(0, -50%);
 }
 
 .indicators-section {
@@ -1001,15 +1005,15 @@ body[data-country-overview-category] .country-data-header h1 {
   display: inline-grid;
   place-items: center;
   vertical-align: middle;
-  width: 19px;
-  height: 19px;
+  width: 21px;
+  height: 21px;
   margin-left: 2px;
   border: 1px solid var(--border);
   border-radius: var(--radius-round);
   background: #fbfcfd;
   color: var(--muted);
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   font-style: italic;
   font-weight: 700;
   line-height: 1;
@@ -1032,7 +1036,7 @@ body[data-country-overview-category] .country-data-header h1 {
   width: auto;
   min-width: min(180px, 70vw);
   max-width: min(195px, 70vw);
-  padding: 5px 7px;
+  padding: 4px 6px;
   border: 1px solid var(--border);
   border-radius: var(--radius-component);
   background: var(--surface);
