@@ -883,7 +883,7 @@ body[data-country-overview-category] .country-data-header h1 {
 }
 
 .country-overview-table th {
-  width: 40%;
+  width: 46%;
   font-size: 0.96rem;
   overflow-wrap: anywhere;
 }
@@ -934,21 +934,22 @@ body[data-country-overview-category] .country-data-header h1 {
 }
 
 .country-overview-table .country-overview-value {
-  width: 28%;
+  width: 25%;
+  text-align: center;
   vertical-align: middle;
   white-space: nowrap;
 }
 
 .country-overview-table .country-overview-rank {
-  width: 20%;
-  text-align: right;
+  width: 17%;
+  text-align: center;
   vertical-align: middle;
   white-space: nowrap;
 }
 
 .country-overview-table .country-overview-year {
   width: 12%;
-  text-align: right;
+  text-align: center;
   vertical-align: middle;
   white-space: nowrap;
 }
@@ -2565,21 +2566,21 @@ body[data-country-code] .subtitle {
   }
 
   .country-overview-table th {
-    width: 34%;
+    width: 40%;
   }
 
   .country-overview-table .country-overview-value {
-    width: 24%;
+    width: 21%;
   }
 
   .country-overview-table .country-overview-rank {
-    width: 28%;
-    text-align: left;
+    width: 25%;
+    text-align: center;
   }
 
   .country-overview-table .country-overview-year {
     width: 14%;
-    text-align: left;
+    text-align: center;
   }
 
   .indicator-block {
