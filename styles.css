@@ -877,6 +877,11 @@ body[data-country-overview-category] .country-data-header h1 {
   vertical-align: top;
 }
 
+.country-profile-indicator-section .country-overview-table th,
+.country-profile-indicator-section .country-overview-table td {
+  padding-inline: 10px;
+}
+
 .country-overview-table th {
   width: 40%;
   font-size: 0.96rem;
