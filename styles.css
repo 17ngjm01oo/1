@@ -457,15 +457,17 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav {
 }
 
 .rankings-hub-link-row {
+  display: block;
   width: 100%;
+  padding-block: 8px;
   border-bottom: 1px solid var(--border);
 }
 
 body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav .rankings-hub-link-row a {
-  display: block;
-  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  width: auto;
   padding: 0;
-  padding-block: 8px;
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -1008,8 +1010,9 @@ body[data-country-overview-category] .country-data-header h1 {
   top: calc(100% + 8px);
   left: 100%;
   box-sizing: border-box;
-  width: max-content;
-  max-width: min(280px, 72vw);
+  width: auto;
+  min-width: min(180px, 70vw);
+  max-width: min(250px, 70vw);
   padding: 8px 10px;
   border: 1px solid var(--border);
   border-radius: var(--radius-component);
@@ -1020,10 +1023,11 @@ body[data-country-overview-category] .country-data-header h1 {
   font-weight: 600;
   line-height: 1.35;
   text-align: left;
+  overflow-wrap: break-word;
   white-space: normal;
   opacity: 0;
   pointer-events: none;
-  transform: translate(-28px, 4px);
+  transform: translate(-42px, 4px);
   transition: opacity 120ms ease, transform 120ms ease;
 }
 
@@ -1031,7 +1035,7 @@ body[data-country-overview-category] .country-data-header h1 {
   content: "";
   position: absolute;
   bottom: 100%;
-  left: 28px;
+  left: 42px;
   width: 8px;
   height: 8px;
   border-left: 1px solid var(--border);
@@ -1050,13 +1054,13 @@ body[data-country-overview-category] .country-data-header h1 {
   .indicator-info-button:hover .indicator-info-tooltip,
   .indicator-info-button:focus-visible .indicator-info-tooltip {
     opacity: 1;
-    transform: translate(-28px, 0);
+    transform: translate(-42px, 0);
   }
 }
 
 .indicator-info-button.is-open .indicator-info-tooltip {
   opacity: 1;
-  transform: translate(-28px, 0);
+  transform: translate(-42px, 0);
 }
 
 .indicator-rank {

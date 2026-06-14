@@ -75,11 +75,10 @@ function createRankingHubLink(
     link.append(unitElement);
   }
 
-  link.append(document.createTextNode(" "), createIndicatorInfoButton({
+  row.append(link, document.createTextNode(" "), createIndicatorInfoButton({
     rankingDirectory: ranking.directory,
     label: ranking.label,
   }));
-  row.append(link);
   return row;
 }
 
