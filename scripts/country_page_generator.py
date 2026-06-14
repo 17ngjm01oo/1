@@ -65,7 +65,6 @@ def render_country_page(country: dict[str, str], config: CountryPageConfig) -> s
     country_code = html.escape(country["code"])
     indicator_blocks = "\n\n".join(render_indicator_block(indicator) for indicator in config.indicators)
     notes_markup = render_notes(config)
-    subtitle_markup = render_subtitle(config.subtitle)
 
     return f"""<!doctype html>
 <html lang="en">
@@ -87,7 +86,6 @@ def render_country_page(country: dict[str, str], config: CountryPageConfig) -> s
       <section class="hub-section" aria-labelledby="country-hub-title">
         <header class="page-header">
           <h1 id="country-hub-title" class="page-title">{html.escape(config.chart_title)}</h1>
-{subtitle_markup}
         </header>
 
         <div class="country-search-panel">
@@ -123,13 +121,6 @@ def render_country_page(country: dict[str, str], config: CountryPageConfig) -> s
   </body>
 </html>
 """
-
-
-def render_subtitle(subtitle: str) -> str:
-    if not subtitle:
-        return ""
-
-    return f'          <p class="subtitle">{html.escape(subtitle)}</p>'
 
 
 def render_notes(config: CountryPageConfig) -> str:
@@ -171,10 +162,20 @@ def render_indicator_block(indicator: IndicatorBlockConfig) -> str:
 def render_indicator_title(indicator: IndicatorBlockConfig) -> str:
     label_markup = html.escape(indicator.title)
 
-    if not indicator.display_unit:
-        return label_markup
+    info_button = render_indicator_info_button(indicator.series_id, indicator.title)
 
-    return f'{label_markup} <span class="indicator-display-unit">({html.escape(indicator.display_unit)})</span>'
+    if not indicator.display_unit:
+        return f"{label_markup} {info_button}"
+
+    return f'{label_markup} <span class="indicator-display-unit">({html.escape(indicator.display_unit)})</span> {info_button}'
+
+
+def render_indicator_info_button(series_id: str, label: str) -> str:
+    return (
+        f'<button class="indicator-info-button" type="button" '
+        f'data-indicator-info-series-id="{html.escape(series_id)}" '
+        f'aria-label="{html.escape(label)} information">i</button>'
+    )
 
 
 def render_compare_control(indicator: IndicatorBlockConfig) -> str:

@@ -1,4 +1,5 @@
 import { renderTopNavigationLinks } from "./siteNavigation.js";
+import { initializeIndicatorInfoTooltips } from "./indicatorInfoUi.js";
 
 const rootHref = document.body.dataset.rootHref ?? "../../";
 
@@ -8,6 +9,7 @@ renderTopNavigationLinks({
   currentScopeSlug: document.body.dataset.rankingScopeSlug ?? "world",
   useDisplayUnitLabels: document.body.dataset.pageKind === "rankings-hub",
 });
+initializeIndicatorInfoTooltips();
 
 initializeRankingsHubCategoryFilter();
 

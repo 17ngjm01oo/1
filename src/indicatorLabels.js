@@ -1,3 +1,5 @@
+import { createIndicatorInfoButton } from "./indicatorInfoUi.js";
+
 export function getIndicatorDisplayParts(seriesConfig, { label, currencyCode } = {}) {
   const displayLabel = label ?? seriesConfig.titleTemplate ?? "";
   const unit = formatConfiguredDisplayUnit(seriesConfig.displayUnit, currencyCode);
@@ -17,15 +19,19 @@ export function renderIndicatorLabel(target, seriesConfig, options = {}) {
   const { label, unit } = getIndicatorDisplayParts(seriesConfig, options);
   target.textContent = label;
 
-  if (!unit) {
-    return;
+  if (unit) {
+    target.append(document.createTextNode(" "));
+    const unitElement = document.createElement("span");
+    unitElement.className = "indicator-display-unit";
+    unitElement.textContent = `(${unit})`;
+    target.append(unitElement);
   }
 
   target.append(document.createTextNode(" "));
-  const unitElement = document.createElement("span");
-  unitElement.className = "indicator-display-unit";
-  unitElement.textContent = `(${unit})`;
-  target.append(unitElement);
+  target.append(createIndicatorInfoButton({
+    seriesId: seriesConfig.id,
+    label,
+  }));
 }
 
 function formatConfiguredDisplayUnit(unit, currencyCode) {

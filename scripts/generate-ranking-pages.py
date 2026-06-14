@@ -8,25 +8,21 @@ RANKING_TYPES = [
         "directory": "gdp",
         "title": "GDP Ranking by Country",
         "script": "nominalGdpRanking.js",
-        "subtitle": "GDP is nominal GDP measured in U.S. dollars.",
     },
     {
         "directory": "gdp-per-capita",
         "title": "GDP per Capita Ranking by Country",
         "script": "gdpPerCapitaRanking.js",
-        "subtitle": "GDP per capita is nominal GDP in U.S. dollars divided by population.",
     },
     {
         "directory": "gdp-growth",
         "title": "GDP Growth Ranking by Country",
         "script": "realGdpGrowthRanking.js",
-        "subtitle": "GDP growth is the annual percentage change in real GDP in national currency.",
     },
     {
         "directory": "inflation-rate",
         "title": "Inflation Rate Ranking by Country",
         "script": "inflationRateRanking.js",
-        "subtitle": "Inflation rate is the annual percentage change in the consumer price index.",
     },
     {
         "directory": "unemployment-rate",
@@ -37,13 +33,11 @@ RANKING_TYPES = [
         "directory": "ppp-gdp",
         "title": "PPP GDP Ranking by Country",
         "script": "pppRanking.js",
-        "subtitle": "PPP GDP is GDP measured in international dollars.",
     },
     {
         "directory": "ppp-gdp-per-capita",
         "title": "PPP GDP per Capita Ranking by Country",
         "script": "pppPerCapitaRanking.js",
-        "subtitle": "PPP per capita is PPP GDP in international dollars divided by population.",
     },
 ]
 

@@ -4,6 +4,7 @@ import { countries } from "./countries.js";
 import { getCountryCurrencyDisplay, getCurrencyCode } from "./currencyCodes.js";
 import { createFlagImage } from "./flags.js";
 import { renderIndicatorLabel } from "./indicatorLabels.js";
+import { initializeIndicatorInfoTooltips } from "./indicatorInfoUi.js";
 import { rankingCategories } from "./rankingCategories.js";
 import { getIndicatorSeriesMap } from "./seriesData.js";
 import { renderWorldMap } from "./worldMap.js";
@@ -110,6 +111,7 @@ async function initializeCountryOverview() {
   loadedDataByPath = await loadDataByPath(getRequiredStaticDataPaths());
   rankingRowsBySeriesId = buildRankingRowsBySeriesId(loadedDataByPath);
   renderOverview();
+  initializeIndicatorInfoTooltips();
 }
 
 function updateCountryHeading() {

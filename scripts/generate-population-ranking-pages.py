@@ -19,35 +19,30 @@ RANKING_TYPES = [
         "directory": "population-density",
         "title": "Population Density Ranking by Country",
         "script": "populationDensityRanking.js",
-        "subtitle": "Population density is shown per km².",
     },
     {
         **WORLD_BANK_RANKING_NOTES,
         "directory": "life-expectancy",
         "title": "Life Expectancy Ranking by Country",
         "script": "lifeExpectancyRanking.js",
-        "subtitle": "Life expectancy at birth.",
     },
     {
         **WORLD_BANK_RANKING_NOTES,
         "directory": "fertility-rate",
         "title": "Fertility Rate Ranking by Country",
         "script": "fertilityRateRanking.js",
-        "subtitle": "Total fertility rate estimates the average number of children a woman would have over her lifetime, based on age-specific birth rates for ages 15-49.",
     },
     {
         **WORLD_BANK_RANKING_NOTES,
         "directory": "immigrants",
         "title": "Immigrants Ranking by Country",
         "script": "immigrantsRanking.js",
-        "subtitle": "International migrant stock at mid-year.",
     },
     {
         **WORLD_BANK_RANKING_NOTES,
         "directory": "immigrants-percent-population",
         "title": "Immigrants (% of Population) Ranking by Country",
         "script": "immigrantsPercentPopulationRanking.js",
-        "subtitle": "International migrant stock shown as a share of population.",
     },
 ]
 

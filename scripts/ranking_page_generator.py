@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import html
+import json
 import re
 from pathlib import Path
 
@@ -9,6 +10,8 @@ from page_templates import render_rankings_top_nav
 
 ROOT = Path(__file__).resolve().parents[1]
 COUNTRIES_JS = ROOT / "src" / "countries.js"
+INDICATOR_INFO_JSON = ROOT / "data" / "indicator-info.json"
+_indicator_info_data: dict[str, dict[str, str]] | None = None
 
 
 def generate_ranking_pages(ranking_types: list[dict[str, str]]) -> None:
@@ -65,8 +68,7 @@ def render_ranking_page(ranking_type: dict[str, str], scope: dict[str, str], is_
     root_href = "../../" if is_base_page else "../../../"
     ranking_base_href = "./" if is_base_page else "../"
     page_title = f"{ranking_type['title']} - {scope['label']}"
-    subtitle = ranking_type.get("subtitle", "")
-    subtitle_markup = f'\n          <p class="subtitle">{escape(subtitle)}</p>' if subtitle else ""
+    subtitle_markup = render_subtitle(ranking_type["directory"])
     source_note = ranking_type.get("source_note", "")
     data_note = ranking_type.get("data_note", "")
     notes_markup = "\n".join(
@@ -101,7 +103,8 @@ def render_ranking_page(ranking_type: dict[str, str], scope: dict[str, str], is_
 
       <section class="hub-section" aria-labelledby="ranking-title">
         <header class="page-header">
-          <h1 id="ranking-title" class="page-title ranking-page-title">{escape(ranking_type["title"])}</h1>{subtitle_markup}
+          <h1 id="ranking-title" class="page-title ranking-page-title">{escape(ranking_type["title"])}</h1>
+{subtitle_markup}
         </header>
 
         <div class="ranking-filter-panel">
@@ -168,3 +171,24 @@ def slugify(value: str) -> str:
 
 def escape(value: str) -> str:
     return html.escape(value, quote=True)
+
+
+def render_subtitle(ranking_directory: str) -> str:
+    subtitle = get_ranking_info(ranking_directory)
+    if not subtitle:
+        return ""
+
+    return f'          <p class="subtitle">{escape(subtitle)}</p>'
+
+
+def get_ranking_info(ranking_directory: str) -> str:
+    return load_indicator_info().get("rankings", {}).get(ranking_directory, "")
+
+
+def load_indicator_info() -> dict[str, dict[str, str]]:
+    global _indicator_info_data
+
+    if _indicator_info_data is None:
+        _indicator_info_data = json.loads(INDICATOR_INFO_JSON.read_text(encoding="utf-8"))
+
+    return _indicator_info_data

@@ -1,4 +1,5 @@
 import { seriesConfigs } from "./config.js";
+import { createIndicatorInfoButton } from "./indicatorInfoUi.js";
 
 const seriesConfigById = new Map(seriesConfigs.map((config) => [config.id, config]));
 
@@ -52,10 +53,12 @@ function createRankingHubLink(
   ranking,
   { rootHref, currentScopeSlug, currentPageKind, currentRankingDirectory, highlightCurrent },
 ) {
+  const row = document.createElement("span");
   const link = document.createElement("a");
   const seriesConfig = seriesConfigById.get(ranking.seriesId);
   const displayUnit = seriesConfig?.displayUnit ?? "";
 
+  row.className = "rankings-hub-link-row";
   link.href = `${rootHref}rankings/${ranking.directory}/${currentScopeSlug}/`;
   link.textContent = seriesConfig?.titleTemplate ?? ranking.label;
 
@@ -72,7 +75,12 @@ function createRankingHubLink(
     link.append(unitElement);
   }
 
-  return link;
+  link.append(document.createTextNode(" "), createIndicatorInfoButton({
+    rankingDirectory: ranking.directory,
+    label: ranking.label,
+  }));
+  row.append(link);
+  return row;
 }
 
 function isCurrentRankingLink(ranking, { currentPageKind, currentRankingDirectory }) {

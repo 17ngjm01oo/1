@@ -4,6 +4,7 @@ import { filterCountries, formatCountryMetaText, initializeCountrySelector } fro
 import { getCurrencyCode } from "./currencyCodes.js";
 import { createFlagImage } from "./flags.js";
 import { getIndicatorDisplayText, renderIndicatorLabel } from "./indicatorLabels.js";
+import { initializeIndicatorInfoTooltips } from "./indicatorInfoUi.js";
 import { countryPageRankings, rankingCategoryById } from "./rankingCategories.js";
 import { renderTopNavigationLinks } from "./siteNavigation.js";
 import { buildStaticDataRequestUrls, fetchStaticData } from "./staticData.js";
@@ -172,6 +173,7 @@ async function initializePage() {
 
   updateSeriesVisibility(countrySeriesConfigs);
   updateSeriesHeadings(visibleSeriesConfigs);
+  initializeIndicatorInfoTooltips();
   initializeCompareSearches(visibleSeriesConfigs);
 
   await updateRelatedPageLinks();

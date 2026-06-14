@@ -4,15 +4,12 @@ from __future__ import annotations
 from data_source_notes import SIPRI_COUNTRY_SOURCE_NOTE
 from country_page_generator import CountryPageConfig, IndicatorBlockConfig, generate_country_pages
 
-
-MILITARY_SPENDING_SUBTITLE = "Values are based on the SIPRI Military Expenditure Database."
-
 SOCIETY_PAGE_CONFIGS = (
     CountryPageConfig(
         page_kind="military-spending",
         title_suffix="Military Spending",
         chart_title="Military Spending Chart by Country",
-        subtitle=MILITARY_SPENDING_SUBTITLE,
+        subtitle="",
         generated_label="military spending",
         source_note=SIPRI_COUNTRY_SOURCE_NOTE,
         related_nav_label="Society page navigation",

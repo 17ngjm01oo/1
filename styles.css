@@ -452,27 +452,35 @@ body {
 
 body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav {
   display: grid;
-  justify-items: start;
+  justify-items: stretch;
   gap: 0;
 }
 
-body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a {
+.rankings-hub-link-row {
+  width: 100%;
+  border-bottom: 1px solid var(--border);
+}
+
+body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav .rankings-hub-link-row a {
   display: block;
   width: 100%;
   padding: 0;
   padding-block: 8px;
   border: 0;
-  border-bottom: 1px solid var(--border);
   border-radius: 0;
   background: transparent;
   color: var(--accent);
   font-size: 1rem;
 }
 
-body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav a:hover {
-  border-bottom-color: var(--border);
+body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav .rankings-hub-link-row a:hover {
   background: transparent;
   text-decoration: underline;
+}
+
+body[data-page-kind="rankings-hub"] .rankings-hub-link-row .indicator-info-button {
+  margin-left: 4px;
+  vertical-align: text-bottom;
 }
 
 .indicators-section {
@@ -966,6 +974,89 @@ body[data-country-overview-category] .country-data-header h1 {
   font-size: 0.72em;
   font-weight: 700;
   line-height: 1;
+}
+
+.indicator-info-button {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  vertical-align: middle;
+  width: 19px;
+  height: 19px;
+  margin-left: 2px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-round);
+  background: #fbfcfd;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.indicator-info-button:focus-visible,
+.indicator-info-button.is-open {
+  background: var(--accent-soft);
+  color: var(--text);
+  outline: none;
+}
+
+.indicator-info-tooltip {
+  position: absolute;
+  z-index: 40;
+  top: calc(100% + 8px);
+  left: 100%;
+  box-sizing: border-box;
+  width: max-content;
+  max-width: min(280px, 72vw);
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-component);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-align: left;
+  white-space: normal;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-28px, 4px);
+  transition: opacity 120ms ease, transform 120ms ease;
+}
+
+.indicator-info-tooltip::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 28px;
+  width: 8px;
+  height: 8px;
+  border-left: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  transform: translate(-50%, 4px) rotate(45deg);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .indicator-info-button:hover {
+    background: var(--accent-soft);
+    color: var(--text);
+    outline: none;
+  }
+
+  .indicator-info-button:hover .indicator-info-tooltip,
+  .indicator-info-button:focus-visible .indicator-info-tooltip {
+    opacity: 1;
+    transform: translate(-28px, 0);
+  }
+}
+
+.indicator-info-button.is-open .indicator-info-tooltip {
+  opacity: 1;
+  transform: translate(-28px, 0);
 }
 
 .indicator-rank {

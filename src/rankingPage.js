@@ -11,10 +11,12 @@ import { initializeTerritoryToggle } from "./territoryToggle.js";
 import { appendRankingValueCell } from "./rankingValueBar.js";
 import { initializeRankingYear } from "./rankingYear.js";
 import { countryPageKindByRankingDirectory } from "./rankingCategories.js";
+import { initializeIndicatorInfoTooltips } from "./indicatorInfoUi.js";
 import "./rankingTopNav.js";
 
 export function initializeRankingPage(config) {
   initializeRankingCountrySearch(config);
+  initializeIndicatorInfoTooltips();
   appendTerritoryNote(document.querySelector(".ranking-notes"));
 
   const state = {
