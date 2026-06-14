@@ -75,7 +75,7 @@ function createRankingHubLink(
     link.append(unitElement);
   }
 
-  row.append(link, document.createTextNode(" "), createIndicatorInfoButton({
+  row.append(link, createIndicatorInfoButton({
     rankingDirectory: ranking.directory,
     label: ranking.label,
   }));

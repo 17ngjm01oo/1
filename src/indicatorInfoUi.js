@@ -5,6 +5,8 @@ import {
 } from "./indicatorInfo.js";
 
 const tooltipPreferredQuery = "(hover: none), (pointer: coarse)";
+const touchTooltipScrollCloseThreshold = 32;
+let touchTooltipScrollStartY = null;
 
 export function createIndicatorInfoButton({ seriesId = "", rankingDirectory = "", label = "indicator" } = {}) {
   const button = document.createElement("button");
@@ -44,6 +46,7 @@ export function initializeIndicatorInfoTooltips(root = document) {
       event.stopPropagation();
       closeOpenInfoButtons(button);
       button.classList.toggle("is-open");
+      touchTooltipScrollStartY = button.classList.contains("is-open") ? window.scrollY : null;
     });
   });
 
@@ -75,6 +78,15 @@ export function initializeIndicatorInfoTooltips(root = document) {
       closeOpenInfoButtons();
     }
   });
+  document.addEventListener("scroll", () => {
+    if (!isTouchTooltipPreferred() || touchTooltipScrollStartY === null) {
+      return;
+    }
+
+    if (Math.abs(window.scrollY - touchTooltipScrollStartY) >= touchTooltipScrollCloseThreshold) {
+      closeOpenInfoButtons();
+    }
+  }, { passive: true });
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       closeOpenInfoButtons();
@@ -103,6 +115,10 @@ function closeOpenInfoButtons(exceptButton = null) {
       button.classList.remove("is-open");
     }
   });
+
+  if (!exceptButton || !exceptButton.classList.contains("is-open")) {
+    touchTooltipScrollStartY = null;
+  }
 }
 
 function isTouchTooltipPreferred() {

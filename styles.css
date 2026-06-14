@@ -457,17 +457,18 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav {
 }
 
 .rankings-hub-link-row {
-  display: block;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
   width: 100%;
-  padding-block: 8px;
   border-bottom: 1px solid var(--border);
 }
 
 body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav .rankings-hub-link-row a {
-  display: inline-flex;
-  align-items: center;
-  width: auto;
+  display: block;
+  width: 100%;
   padding: 0;
+  padding-block: 8px;
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -483,6 +484,23 @@ body[data-page-kind="rankings-hub"] .rankings-hub-group .site-nav .rankings-hub-
 body[data-page-kind="rankings-hub"] .rankings-hub-link-row .indicator-info-button {
   margin-left: 4px;
   vertical-align: text-bottom;
+}
+
+body[data-page-kind="rankings-hub"] .rankings-hub-link-row .indicator-info-tooltip {
+  right: 100%;
+  left: auto;
+  transform: translate(44px, 4px);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body[data-page-kind="rankings-hub"] .rankings-hub-link-row .indicator-info-button:hover .indicator-info-tooltip,
+  body[data-page-kind="rankings-hub"] .rankings-hub-link-row .indicator-info-button:focus-visible .indicator-info-tooltip {
+    transform: translate(44px, 0);
+  }
+}
+
+body[data-page-kind="rankings-hub"] .rankings-hub-link-row .indicator-info-button.is-open .indicator-info-tooltip {
+  transform: translate(44px, 0);
 }
 
 .indicators-section {
@@ -1013,8 +1031,8 @@ body[data-country-overview-category] .country-data-header h1 {
   box-sizing: border-box;
   width: auto;
   min-width: min(180px, 70vw);
-  max-width: min(210px, 70vw);
-  padding: 6px 8px;
+  max-width: min(195px, 70vw);
+  padding: 5px 7px;
   border: 1px solid var(--border);
   border-radius: var(--radius-component);
   background: var(--surface);
@@ -1032,7 +1050,7 @@ body[data-country-overview-category] .country-data-header h1 {
   white-space: normal;
   opacity: 0;
   pointer-events: none;
-  transform: translate(-52px, 4px);
+  transform: translate(-44px, 4px);
   transition: opacity 120ms ease, transform 120ms ease;
 }
 
@@ -1046,13 +1064,13 @@ body[data-country-overview-category] .country-data-header h1 {
   .indicator-info-button:hover .indicator-info-tooltip,
   .indicator-info-button:focus-visible .indicator-info-tooltip {
     opacity: 1;
-    transform: translate(-52px, 0);
+    transform: translate(-44px, 0);
   }
 }
 
 .indicator-info-button.is-open .indicator-info-tooltip {
   opacity: 1;
-  transform: translate(-52px, 0);
+  transform: translate(-44px, 0);
 }
 
 .indicator-rank {
