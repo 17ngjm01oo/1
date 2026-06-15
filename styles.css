@@ -731,14 +731,6 @@ body[data-country-overview-category] .country-data-header h1 {
   }
 }
 
-@media (hover: none), (pointer: coarse) {
-  .country-trade-partners .country-gva-industry-pie,
-  .country-trade-partners .country-gva-industry-pie path,
-  .country-trade-partners .country-gva-industry-pie circle {
-    pointer-events: none;
-  }
-}
-
 .country-gva-industry-legend {
   display: grid;
   gap: 7px;
