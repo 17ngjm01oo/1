@@ -2410,12 +2410,7 @@ body[data-country-code] .subtitle {
   }
 
   .country-overview-card {
-    display: grid;
-    gap: 0;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    box-shadow: none;
+    display: contents;
   }
 
   .country-overview-layout {
