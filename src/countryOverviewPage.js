@@ -272,11 +272,13 @@ function renderOverview() {
 
 function getActiveGroups() {
   if (isOverviewActive()) {
-    return overviewGroups.map((group) => ({
-      id: group.id,
-      title: group.title,
-      indicators: group.overviewIndicators,
-    }));
+    return overviewGroups
+      .map((group) => ({
+        id: group.id,
+        title: group.title,
+        indicators: group.overviewIndicators,
+      }))
+      .filter((group) => group.indicators.length > 0);
   }
 
   return overviewGroups
@@ -541,25 +543,37 @@ function renderTradePartnerPanel(label, flowData) {
   heading.className = "country-trade-partner-heading";
   heading.textContent = label;
 
-  const chart = renderPieChart(
+  const grid = renderTradePartnerGrid(partners);
+  grid.setAttribute("aria-label", `${label}, ${flowData.year}`);
+
+  panel.append(heading, grid);
+  return panel;
+}
+
+function renderTradePartnerGrid(partners) {
+  return renderDefinitionGrid(
     partners.map((partner) => ({
-      label: partner.name,
-      share: partner.share,
-    })),
-    { ariaLabel: `${label} chart` },
-  );
-  const grid = renderDefinitionGrid(
-    partners.map((partner) => ({
-      label: partner.name,
+      label: renderTradePartnerName(partner),
       value: formatPercentShare(partner.share),
     })),
     "country-trade-partner-grid",
+    { termClassName: "country-trade-partner-name" },
   );
-  grid.setAttribute("aria-label", `${label}, ${flowData.year}`);
-  const tableToggle = renderProfileTableToggle(grid);
+}
 
-  panel.append(heading, chart, tableToggle);
-  return panel;
+function renderTradePartnerName(partner) {
+  const fragment = document.createDocumentFragment();
+  const flag = createFlagImage(partner.countryCode, { className: "country-trade-partner-flag" });
+
+  if (flag) {
+    fragment.append(flag);
+  }
+
+  const name = document.createElement("span");
+  name.textContent = partner.name;
+  fragment.append(name);
+
+  return fragment;
 }
 
 function renderTaxRevenueCompositionBlock(dataByPath) {
@@ -758,21 +772,31 @@ function getPointOnCircle(centerX, centerY, radius, angle) {
   };
 }
 
-function renderDefinitionGrid(items, extraClassName = "") {
+function renderDefinitionGrid(items, extraClassName = "", { termClassName = "" } = {}) {
   const grid = document.createElement("dl");
   grid.className = ["country-basic-information-grid", extraClassName].filter(Boolean).join(" ");
 
   for (const item of items) {
     const term = document.createElement("dt");
-    term.textContent = item.label;
+    term.className = termClassName;
+    appendDefinitionContent(term, item.label);
 
     const description = document.createElement("dd");
-    description.textContent = item.value;
+    appendDefinitionContent(description, item.value);
 
     grid.append(term, description);
   }
 
   return grid;
+}
+
+function appendDefinitionContent(element, content) {
+  if (content instanceof Node) {
+    element.append(content);
+    return;
+  }
+
+  element.textContent = content ?? "";
 }
 
 function renderIndicatorRow(indicator, dataByPath) {

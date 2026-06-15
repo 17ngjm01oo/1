@@ -777,6 +777,7 @@ body[data-country-overview-category] .country-data-header h1 {
 
 .country-trade-partners-body {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -789,6 +790,28 @@ body[data-country-overview-category] .country-data-header h1 {
 
 .country-trade-partner-grid {
   grid-template-columns: minmax(0, 1fr) minmax(3.8rem, max-content);
+}
+
+.country-trade-partner-grid dt,
+.country-trade-partner-grid dd {
+  font-size: 0.94rem;
+}
+
+.country-trade-partner-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.country-trade-partner-name span {
+  min-width: 0;
+}
+
+.country-trade-partner-flag.flag-image {
+  flex: 0 0 auto;
+  width: calc(1.16em * var(--flag-aspect));
+  height: 1.16em;
 }
 
 .country-profile-table-toggle {

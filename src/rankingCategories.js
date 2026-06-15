@@ -36,7 +36,6 @@ const categoryDefinitions = [
       "tradeBalance",
       "exports",
       "imports",
-      "servicesTradeBalance",
     ]),
   },
   {
@@ -55,7 +54,7 @@ const categoryDefinitions = [
     label: "Society",
     navSelector: "#societyTopNav",
     rankings: societyRankings,
-    overviewRankings: pickRankings(societyRankings, ["militarySpending"]),
+    overviewRankings: [],
     profileRankings: societyProfileRankings,
   },
   {
