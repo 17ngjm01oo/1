@@ -1,4 +1,3 @@
-import "./preventDoubleTapZoom.js";
 import { rankingCategories } from "./rankingCategories.js";
 import { renderRankingLinks } from "./rankingLinks.js";
 
