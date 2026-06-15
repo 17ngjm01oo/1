@@ -39,10 +39,6 @@ const profileCategoryBlocks = {
     },
   ],
   trade: [
-    {
-      dataPath: TRADE_PARTNERS_DATA_PATH,
-      render: renderTradePartnersBlock,
-    },
   ],
   finance: [
     {
