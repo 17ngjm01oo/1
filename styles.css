@@ -699,6 +699,7 @@ body[data-country-overview-category] .country-data-header h1 {
   align-items: center;
   gap: 16px;
   min-width: 0;
+  touch-action: pan-y;
 }
 
 .country-gva-industry-pie {
@@ -706,12 +707,14 @@ body[data-country-overview-category] .country-data-header h1 {
   width: 100%;
   max-width: 14rem;
   aspect-ratio: 1;
+  touch-action: pan-y;
 }
 
 .country-gva-industry-pie path,
 .country-gva-industry-pie circle {
   stroke: #fff;
   stroke-width: 1;
+  touch-action: pan-y;
 }
 
 .country-pie-share-label {
