@@ -674,7 +674,6 @@ body[data-country-overview-category] .country-data-header h1 {
 
 .country-gva-industry,
 .country-age-composition,
-.country-trade-partners,
 .country-profile-indicator-section {
   display: grid;
   gap: 8px;
@@ -684,7 +683,6 @@ body[data-country-overview-category] .country-data-header h1 {
 
 .country-gva-industry-heading,
 .country-age-composition-heading,
-.country-trade-partner-heading,
 .country-profile-indicator-heading {
   margin: 0;
   color: var(--text);
@@ -775,22 +773,6 @@ body[data-country-overview-category] .country-data-header h1 {
   transform: translate(8px, -50%);
 }
 
-.country-trade-partners-body {
-  display: grid;
-  gap: 12px;
-}
-
-.country-trade-partner-panel {
-  display: grid;
-  align-content: start;
-  gap: 7px;
-  min-width: 0;
-}
-
-.country-trade-partner-grid {
-  grid-template-columns: minmax(0, 1fr) minmax(3.8rem, max-content);
-}
-
 .country-profile-table-toggle {
   display: grid;
   gap: 6px;
@@ -850,7 +832,7 @@ body[data-country-overview-category] .country-data-header h1 {
 
 .country-gva-industry-note,
 .country-age-composition-note,
-.country-trade-partners-note {
+.country-tax-revenue-composition-note {
   margin: -4px 0 0;
   color: var(--muted);
   font-size: 0.78rem;

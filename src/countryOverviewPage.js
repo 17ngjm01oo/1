@@ -12,7 +12,6 @@ import "./rankingTopNav.js";
 
 const GVA_BY_INDUSTRY_DATA_PATH = "./data/un-national-accounts/gva-by-industry.json";
 const AGE_COMPOSITION_DATA_PATH = "./data/world-bank/age-composition.json";
-const TRADE_PARTNERS_DATA_PATH = "./data/un-comtrade/trade-partners.json";
 const TAX_REVENUE_COMPOSITION_DATA_PATH = "./data/oecd/tax-revenue-composition.json";
 const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
 const PIE_LABEL_MIN_SHARE = 7;
@@ -36,12 +35,6 @@ const profileCategoryBlocks = {
     {
       dataPath: AGE_COMPOSITION_DATA_PATH,
       render: renderAgeCompositionBlock,
-    },
-  ],
-  trade: [
-    {
-      dataPath: TRADE_PARTNERS_DATA_PATH,
-      render: renderTradePartnersBlock,
     },
   ],
   finance: [
@@ -490,78 +483,6 @@ function renderGvaByIndustryBlock(dataByPath) {
 
   block.append(heading, chart, tableToggle, note);
   return block;
-}
-
-function renderTradePartnersBlock(dataByPath) {
-  const tradePartnersData = dataByPath.get(TRADE_PARTNERS_DATA_PATH);
-  const countryData = tradePartnersData?.economies?.[selectedCountry.code];
-
-  if (!countryData) {
-    return null;
-  }
-
-  const exportPanel = renderTradePartnerPanel("Export partners", countryData.exports);
-  const importPanel = renderTradePartnerPanel("Import partners", countryData.imports);
-
-  if (!exportPanel && !importPanel) {
-    return null;
-  }
-
-  const block = document.createElement("div");
-  block.className = "country-trade-partners";
-
-  const body = document.createElement("div");
-  body.className = "country-trade-partners-body";
-
-  if (exportPanel) {
-    body.append(exportPanel);
-  }
-
-  if (importPanel) {
-    body.append(importPanel);
-  }
-
-  const note = document.createElement("p");
-  note.className = "country-trade-partners-note";
-  note.textContent = `Source: UN Comtrade, ${countryData.year}.`;
-
-  block.append(body, note);
-  return block;
-}
-
-function renderTradePartnerPanel(label, flowData) {
-  const partners = flowData?.partners ?? [];
-
-  if (!partners.length) {
-    return null;
-  }
-
-  const panel = document.createElement("div");
-  panel.className = "country-trade-partner-panel";
-
-  const heading = document.createElement("h3");
-  heading.className = "country-trade-partner-heading";
-  heading.textContent = label;
-
-  const chart = renderPieChart(
-    partners.map((partner) => ({
-      label: partner.name,
-      share: partner.share,
-    })),
-    { ariaLabel: `${label} chart` },
-  );
-  const grid = renderDefinitionGrid(
-    partners.map((partner) => ({
-      label: partner.name,
-      value: formatPercentShare(partner.share),
-    })),
-    "country-trade-partner-grid",
-  );
-  grid.setAttribute("aria-label", `${label}, ${flowData.year}`);
-  const tableToggle = renderProfileTableToggle(grid);
-
-  panel.append(heading, chart, tableToggle);
-  return panel;
 }
 
 function renderTaxRevenueCompositionBlock(dataByPath) {
