@@ -20,32 +20,32 @@ from data_update_utils import (
 )
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
-OUTPUT_PATH = ROOT_DIR / "data" / "unctad" / "goods-trade.json"
+OUTPUT_PATH = ROOT_DIR / "data" / "unctad" / "trade.json"
 UNCTAD_API_BASE_URL = "https://unctadstat-api.unctad.org"
-DATASET_ID = "UNCTADSTAT:GOODS_TRADE"
+DATASET_ID = "UNCTADSTAT:TRADE"
 VALUE_COLUMN = "US$ at current prices in millions"
 
 TARGET_INDICATORS = {
-    "GOODS_EXPORTS": {
-        "label": "Goods Exports",
-        "slug": "goods-exports",
-        "description": "Merchandise exports, US dollars at current prices in millions",
+    "EXPORTS": {
+        "label": "Exports",
+        "slug": "exports",
+        "description": "Goods exports in current USD, excluding services.",
         "report": "US.TradeMerchTotal",
         "flowCode": "02",
         "flowLabel": "Exports",
     },
-    "GOODS_IMPORTS": {
-        "label": "Goods Imports",
-        "slug": "goods-imports",
-        "description": "Merchandise imports, US dollars at current prices in millions",
+    "IMPORTS": {
+        "label": "Imports",
+        "slug": "imports",
+        "description": "Goods imports in current USD, excluding services.",
         "report": "US.TradeMerchTotal",
         "flowCode": "01",
         "flowLabel": "Imports",
     },
-    "GOODS_TRADE_BALANCE": {
-        "label": "Goods Trade Balance",
-        "slug": "goods-trade-balance",
-        "description": "Merchandise trade balance, US dollars at current prices in millions",
+    "TRADE_BALANCE": {
+        "label": "Trade Balance",
+        "slug": "trade-balance",
+        "description": "Goods trade balance in current USD, calculated as goods exports minus goods imports. Services are excluded.",
         "report": "US.TradeMerchBalance",
         "flowCode": "14",
         "flowLabel": "Balance",

@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Russia Services Exports, Imports and Trade Balance</title>
+    <link rel="stylesheet" href="../../../styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+    <script type="module" src="../../../src/countryIndicatorPage.js"></script>
+  </head>
+  <body data-country-code="RUS" data-page-kind="services-trade">
+    <header class="site-header">
+      <a class="site-home-link" href="../../../">HOME</a>
+    </header>
+    <main class="page-shell">
+      <section class="top-nav-card" aria-label="Site navigation"></section>
+
+      <section class="hub-section" aria-labelledby="country-hub-title">
+        <header class="page-header">
+          <h1 id="country-hub-title" class="page-title">Services Exports, Imports and Trade Balance by Country</h1>
+        </header>
+
+        <div class="country-search-panel">
+          <div class="search-input-wrap">
+            <input
+              id="countrySearchInput"
+              class="country-search-input"
+              type="search"
+              autocomplete="off"
+              aria-controls="countrySearchResults"
+              role="combobox"
+              aria-autocomplete="list"
+              aria-expanded="false"
+            />
+            <div class="country-results" id="countrySearchResults" role="listbox" aria-label="Country search results" hidden></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="indicators-section" aria-labelledby="country-data-title">
+        <div class="indicators-card">
+          <header class="page-header country-data-header">
+            <h1 id="country-data-title">Russia</h1>
+            <nav class="site-nav" id="countryRelatedPageNav" aria-label="Services trade page navigation"></nav>
+          </header>
+
+          <section class="indicator-block" aria-labelledby="servicesTradeBalance-title">
+            <header class="indicator-header">
+              <div class="indicator-title-group">
+                <h2 id="servicesTradeBalance-title">Services Trade Balance <span class="indicator-display-unit">(USD)</span> <button class="indicator-info-button" type="button" data-indicator-info-series-id="servicesTradeBalance" data-indicator-info-tooltip-placement="country-indicator" aria-label="Services Trade Balance information">i</button></h2>
+              </div>
+              <div class="compare-control" data-series-id="servicesTradeBalance">
+                <div class="compare-input-wrap">
+                  <input
+                    id="servicesTradeBalanceCompareInput"
+                    class="compare-search-input"
+                    type="search"
+                    autocomplete="off"
+                    placeholder="Compare with..."
+                    aria-controls="servicesTradeBalanceCompareResults"
+                    role="combobox"
+                    aria-autocomplete="list"
+                    aria-expanded="false"
+                  />
+                </div>
+                <p class="compare-selected" id="servicesTradeBalanceCompareSelected"></p>
+                <div class="country-results compare-results" id="servicesTradeBalanceCompareResults" role="listbox" aria-label="Services Trade Balance comparison country results" hidden></div>
+              </div>
+            </header>
+
+            <div class="chart-card" id="servicesTradeBalanceChartCard">
+              <canvas id="servicesTradeBalanceChart" aria-label="Services trade balance line chart" role="img"></canvas>
+              <div class="chart-overlay" id="servicesTradeBalanceOverlay" aria-hidden="true"></div>
+            </div>
+
+            <details class="data-table-toggle" id="servicesTradeBalanceTableToggle">
+              <summary>Show data table</summary>
+              <div class="data-table-wrap" id="servicesTradeBalanceTableWrap"></div>
+            </details>
+          </section>
+
+          <section class="indicator-block" aria-labelledby="servicesExports-title">
+            <header class="indicator-header">
+              <div class="indicator-title-group">
+                <h2 id="servicesExports-title">Services Exports <span class="indicator-display-unit">(USD)</span> <button class="indicator-info-button" type="button" data-indicator-info-series-id="servicesExports" data-indicator-info-tooltip-placement="country-indicator" aria-label="Services Exports information">i</button></h2>
+              </div>
+              <div class="compare-control" data-series-id="servicesExports">
+                <div class="compare-input-wrap">
+                  <input
+                    id="servicesExportsCompareInput"
+                    class="compare-search-input"
+                    type="search"
+                    autocomplete="off"
+                    placeholder="Compare with..."
+                    aria-controls="servicesExportsCompareResults"
+                    role="combobox"
+                    aria-autocomplete="list"
+                    aria-expanded="false"
+                  />
+                </div>
+                <p class="compare-selected" id="servicesExportsCompareSelected"></p>
+                <div class="country-results compare-results" id="servicesExportsCompareResults" role="listbox" aria-label="Services Exports comparison country results" hidden></div>
+              </div>
+            </header>
+
+            <div class="chart-card" id="servicesExportsChartCard">
+              <canvas id="servicesExportsChart" aria-label="Services exports line chart" role="img"></canvas>
+              <div class="chart-overlay" id="servicesExportsOverlay" aria-hidden="true"></div>
+            </div>
+
+            <details class="data-table-toggle" id="servicesExportsTableToggle">
+              <summary>Show data table</summary>
+              <div class="data-table-wrap" id="servicesExportsTableWrap"></div>
+            </details>
+          </section>
+
+          <section class="indicator-block" aria-labelledby="servicesImports-title">
+            <header class="indicator-header">
+              <div class="indicator-title-group">
+                <h2 id="servicesImports-title">Services Imports <span class="indicator-display-unit">(USD)</span> <button class="indicator-info-button" type="button" data-indicator-info-series-id="servicesImports" data-indicator-info-tooltip-placement="country-indicator" aria-label="Services Imports information">i</button></h2>
+              </div>
+              <div class="compare-control" data-series-id="servicesImports">
+                <div class="compare-input-wrap">
+                  <input
+                    id="servicesImportsCompareInput"
+                    class="compare-search-input"
+                    type="search"
+                    autocomplete="off"
+                    placeholder="Compare with..."
+                    aria-controls="servicesImportsCompareResults"
+                    role="combobox"
+                    aria-autocomplete="list"
+                    aria-expanded="false"
+                  />
+                </div>
+                <p class="compare-selected" id="servicesImportsCompareSelected"></p>
+                <div class="country-results compare-results" id="servicesImportsCompareResults" role="listbox" aria-label="Services Imports comparison country results" hidden></div>
+              </div>
+            </header>
+
+            <div class="chart-card" id="servicesImportsChartCard">
+              <canvas id="servicesImportsChart" aria-label="Services imports line chart" role="img"></canvas>
+              <div class="chart-overlay" id="servicesImportsOverlay" aria-hidden="true"></div>
+            </div>
+
+            <details class="data-table-toggle" id="servicesImportsTableToggle">
+              <summary>Show data table</summary>
+              <div class="data-table-wrap" id="servicesImportsTableWrap"></div>
+            </details>
+          </section>
+
+          <footer class="shared-notes" aria-label="Chart notes">
+            <p>Source: UNCTADstat.</p>
+          </footer>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

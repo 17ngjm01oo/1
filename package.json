@@ -5,6 +5,8 @@
     "update-sipri-data": "python3 scripts/update-sipri-military-spending-data.py",
     "update-world-bank-population-data": "python3 scripts/update-world-bank-data.py --dataset population-demographics",
     "update-unctad-data": "python3 scripts/update-unctad-data.py",
+    "update-unctad-services-trade-data": "python3 scripts/update-unctad-services-trade-data.py",
+    "generate-country-services-trade-pages": "python3 scripts/generate-country-services-trade-pages.py",
     "generate-ranking-data": "python3 scripts/generate-ranking-data.py"
   }
 }

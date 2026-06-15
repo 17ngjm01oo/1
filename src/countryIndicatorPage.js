@@ -79,10 +79,15 @@ const pageDefinitions = {
     group: "trade",
     documentTitleMetric: "Current Account Balance",
   },
-  "goods-trade": {
-    logPrefix: "Goods trade page",
+  trade: {
+    logPrefix: "Trade page",
     group: "trade",
-    documentTitleMetric: "Goods Exports, Imports and Trade Balance",
+    documentTitleMetric: "Exports, Imports and Trade Balance",
+  },
+  "services-trade": {
+    logPrefix: "Services trade page",
+    group: "trade",
+    documentTitleMetric: "Services Exports, Imports and Trade Balance",
   },
   "government-debt": {
     logPrefix: "Government debt page",

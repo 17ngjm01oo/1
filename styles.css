@@ -934,19 +934,19 @@ body[data-country-overview-category] .country-data-header h1 {
 }
 
 .country-overview-table .country-overview-value {
-  width: 25%;
+  width: 28%;
   vertical-align: middle;
   white-space: nowrap;
 }
 
 .country-overview-table .country-overview-rank {
-  width: 17%;
+  width: 16%;
   vertical-align: middle;
   white-space: nowrap;
 }
 
 .country-overview-table .country-overview-year {
-  width: 12%;
+  width: 10%;
   vertical-align: middle;
   white-space: nowrap;
 }
@@ -1350,7 +1350,7 @@ body[data-page-kind="country-hub"] .country-hub-map-content > .world-map {
   border-radius: 0;
 }
 
-.country-hub-map-toggle {
+.country-hub-map-content {
   display: block;
   margin:
     calc(-1 * var(--card-padding-block))
@@ -1361,54 +1361,7 @@ body[data-page-kind="country-hub"] .country-hub-map-content > .world-map {
   background: #ffffff;
 }
 
-.country-hub-map-summary {
-  display: none;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 44px;
-  padding: 10px var(--card-padding-inline);
-  color: var(--text);
-  font-size: 0.98rem;
-  font-weight: 800;
-  cursor: pointer;
-  list-style: none;
-}
-
-.country-hub-map-summary-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  min-width: 0;
-}
-
-.country-hub-map-summary::-webkit-details-marker {
-  display: none;
-}
-
-.country-hub-map-summary::after {
-  content: "";
-  width: 8px;
-  height: 8px;
-  border-right: 1.5px solid var(--muted);
-  border-bottom: 1.5px solid var(--muted);
-  transform: rotate(45deg);
-  transition: transform 160ms ease;
-}
-
-.country-hub-map-toggle[open] .country-hub-map-summary::after {
-  transform: rotate(225deg);
-}
-
-.country-hub-map-summary:focus-visible {
-  outline: none;
-}
-
-.country-hub-map-toggle[open] > .country-hub-map-content {
-  display: block;
-  padding-bottom: 4px;
-}
-
-.country-hub-map-toggle + .country-hub-panel {
+.country-hub-map-content + .country-hub-panel {
   margin-top: -10px;
 }
 
@@ -2444,22 +2397,11 @@ body[data-country-code] .subtitle {
     gap: var(--section-gap-compact);
   }
 
-  .country-hub-map-toggle {
+  .country-hub-map-content {
     margin:
       calc(-1 * var(--card-padding-block-mobile))
       calc(-1 * var(--card-padding-inline-mobile))
       0;
-  }
-
-  .country-hub-map-summary {
-    display: flex;
-    min-height: 38px;
-    padding: 8px var(--card-padding-inline-mobile);
-    font-size: 0.95rem;
-  }
-
-  .country-hub-map-summary-label {
-    gap: 6px;
   }
 
   .world-map-instruction {
@@ -2567,15 +2509,15 @@ body[data-country-code] .subtitle {
   }
 
   .country-overview-table .country-overview-value {
-    width: 21%;
-  }
-
-  .country-overview-table .country-overview-rank {
     width: 25%;
   }
 
+  .country-overview-table .country-overview-rank {
+    width: 23%;
+  }
+
   .country-overview-table .country-overview-year {
-    width: 14%;
+    width: 12%;
   }
 
   .indicator-block {

@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kiribati Exports, Imports and Trade Balance</title>
+    <link rel="stylesheet" href="../../../styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+    <script type="module" src="../../../src/countryIndicatorPage.js"></script>
+  </head>
+  <body data-country-code="KIR" data-page-kind="trade">
+    <header class="site-header">
+      <a class="site-home-link" href="../../../">HOME</a>
+    </header>
+    <main class="page-shell">
+      <section class="top-nav-card" aria-label="Site navigation"></section>
+
+      <section class="hub-section" aria-labelledby="country-hub-title">
+        <header class="page-header">
+          <h1 id="country-hub-title" class="page-title">Exports, Imports and Trade Balance by Country</h1>
+        </header>
+
+        <div class="country-search-panel">
+          <div class="search-input-wrap">
+            <input
+              id="countrySearchInput"
+              class="country-search-input"
+              type="search"
+              autocomplete="off"
+              aria-controls="countrySearchResults"
+              role="combobox"
+              aria-autocomplete="list"
+              aria-expanded="false"
+            />
+            <div class="country-results" id="countrySearchResults" role="listbox" aria-label="Country search results" hidden></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="indicators-section" aria-labelledby="country-data-title">
+        <div class="indicators-card">
+          <header class="page-header country-data-header">
+            <h1 id="country-data-title">Kiribati</h1>
+            <nav class="site-nav" id="countryRelatedPageNav" aria-label="Trade page navigation"></nav>
+          </header>
+
+          <section class="indicator-block" aria-labelledby="tradeBalance-title">
+            <header class="indicator-header">
+              <div class="indicator-title-group">
+                <h2 id="tradeBalance-title">Trade Balance <span class="indicator-display-unit">(USD)</span> <button class="indicator-info-button" type="button" data-indicator-info-series-id="tradeBalance" data-indicator-info-tooltip-placement="country-indicator" aria-label="Trade Balance information">i</button></h2>
+              </div>
+              <div class="compare-control" data-series-id="tradeBalance">
+                <div class="compare-input-wrap">
+                  <input
+                    id="tradeBalanceCompareInput"
+                    class="compare-search-input"
+                    type="search"
+                    autocomplete="off"
+                    placeholder="Compare with..."
+                    aria-controls="tradeBalanceCompareResults"
+                    role="combobox"
+                    aria-autocomplete="list"
+                    aria-expanded="false"
+                  />
+                </div>
+                <p class="compare-selected" id="tradeBalanceCompareSelected"></p>
+                <div class="country-results compare-results" id="tradeBalanceCompareResults" role="listbox" aria-label="Trade Balance comparison country results" hidden></div>
+              </div>
+            </header>
+
+            <div class="chart-card" id="tradeBalanceChartCard">
+              <canvas id="tradeBalanceChart" aria-label="Trade balance line chart" role="img"></canvas>
+              <div class="chart-overlay" id="tradeBalanceOverlay" aria-hidden="true"></div>
+            </div>
+
+            <details class="data-table-toggle" id="tradeBalanceTableToggle">
+              <summary>Show data table</summary>
+              <div class="data-table-wrap" id="tradeBalanceTableWrap"></div>
+            </details>
+          </section>
+
+          <section class="indicator-block" aria-labelledby="exports-title">
+            <header class="indicator-header">
+              <div class="indicator-title-group">
+                <h2 id="exports-title">Exports <span class="indicator-display-unit">(USD)</span> <button class="indicator-info-button" type="button" data-indicator-info-series-id="exports" data-indicator-info-tooltip-placement="country-indicator" aria-label="Exports information">i</button></h2>
+              </div>
+              <div class="compare-control" data-series-id="exports">
+                <div class="compare-input-wrap">
+                  <input
+                    id="exportsCompareInput"
+                    class="compare-search-input"
+                    type="search"
+                    autocomplete="off"
+                    placeholder="Compare with..."
+                    aria-controls="exportsCompareResults"
+                    role="combobox"
+                    aria-autocomplete="list"
+                    aria-expanded="false"
+                  />
+                </div>
+                <p class="compare-selected" id="exportsCompareSelected"></p>
+                <div class="country-results compare-results" id="exportsCompareResults" role="listbox" aria-label="Exports comparison country results" hidden></div>
+              </div>
+            </header>
+
+            <div class="chart-card" id="exportsChartCard">
+              <canvas id="exportsChart" aria-label="Exports line chart" role="img"></canvas>
+              <div class="chart-overlay" id="exportsOverlay" aria-hidden="true"></div>
+            </div>
+
+            <details class="data-table-toggle" id="exportsTableToggle">
+              <summary>Show data table</summary>
+              <div class="data-table-wrap" id="exportsTableWrap"></div>
+            </details>
+          </section>
+
+          <section class="indicator-block" aria-labelledby="imports-title">
+            <header class="indicator-header">
+              <div class="indicator-title-group">
+                <h2 id="imports-title">Imports <span class="indicator-display-unit">(USD)</span> <button class="indicator-info-button" type="button" data-indicator-info-series-id="imports" data-indicator-info-tooltip-placement="country-indicator" aria-label="Imports information">i</button></h2>
+              </div>
+              <div class="compare-control" data-series-id="imports">
+                <div class="compare-input-wrap">
+                  <input
+                    id="importsCompareInput"
+                    class="compare-search-input"
+                    type="search"
+                    autocomplete="off"
+                    placeholder="Compare with..."
+                    aria-controls="importsCompareResults"
+                    role="combobox"
+                    aria-autocomplete="list"
+                    aria-expanded="false"
+                  />
+                </div>
+                <p class="compare-selected" id="importsCompareSelected"></p>
+                <div class="country-results compare-results" id="importsCompareResults" role="listbox" aria-label="Imports comparison country results" hidden></div>
+              </div>
+            </header>
+
+            <div class="chart-card" id="importsChartCard">
+              <canvas id="importsChart" aria-label="Imports line chart" role="img"></canvas>
+              <div class="chart-overlay" id="importsOverlay" aria-hidden="true"></div>
+            </div>
+
+            <details class="data-table-toggle" id="importsTableToggle">
+              <summary>Show data table</summary>
+              <div class="data-table-wrap" id="importsTableWrap"></div>
+            </details>
+          </section>
+
+          <footer class="shared-notes" aria-label="Chart notes">
+            <p>Source: UNCTADstat.</p>
+          </footer>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

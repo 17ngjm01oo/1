@@ -19,15 +19,12 @@ const categoryList = document.querySelector("#categoryList");
 const regionPanel = document.querySelector("#region-heading")?.closest(".category-panel");
 const categoryPanel = document.querySelector("#category-heading")?.closest(".category-panel");
 const countryHubControls = document.querySelector("#countryHubControls");
-const mapToggle = document.querySelector(".country-hub-map-toggle");
-const mobileMapToggleMedia = window.matchMedia("(max-width: 640px)");
 let activeScope = null;
 let showTerritories = true;
 let worldMap = null;
 let worldMapRequest = null;
 
-initializeMapToggle();
-initializeWorldMapWhenVisible();
+initializeWorldMap();
 
 const countrySearch = initializeCountrySelector({
   countryPool: hubCountries,
@@ -60,27 +57,8 @@ showTerritories = initializeTerritoryToggle({
 renderCountryTable();
 appendTerritoryNote(document.querySelector(".country-hub-panel"));
 
-function initializeMapToggle() {
-  if (!mapToggle) {
-    return;
-  }
-
-  syncMapToggleState(mobileMapToggleMedia);
-  mobileMapToggleMedia.addEventListener("change", syncMapToggleState);
-  mapToggle.addEventListener("toggle", initializeWorldMapWhenVisible);
-}
-
-function syncMapToggleState(event) {
-  if (!mapToggle) {
-    return;
-  }
-
-  mapToggle.open = !event.matches;
-  initializeWorldMapWhenVisible();
-}
-
-function initializeWorldMapWhenVisible() {
-  if ((mapToggle && !mapToggle.open) || worldMap || worldMapRequest) {
+function initializeWorldMap() {
+  if (worldMap || worldMapRequest) {
     return;
   }
 

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Services Imports Ranking by Country - World</title>
+    <link rel="stylesheet" href="../../../styles.css" />
+    <script type="module" src="../../../src/servicesImportsRanking.js"></script>
+  </head>
+  <body
+    data-root-href="../../../"
+    data-ranking-directory="services-imports"
+    data-ranking-base-href="../"
+    data-ranking-scope-type="world"
+    data-ranking-scope-id="WORLD"
+    data-ranking-scope-label="World"
+    data-ranking-scope-slug="world"
+  >
+    <header class="site-header">
+      <a class="site-home-link" href="../../../">HOME</a>
+    </header>
+    <main class="page-shell ranking-page">
+      <section class="top-nav-card" aria-label="Site navigation"></section>
+
+      <section class="hub-section" aria-labelledby="ranking-title">
+        <header class="page-header">
+          <h1 id="ranking-title" class="page-title ranking-page-title">Services Imports Ranking by Country</h1>
+          <p class="subtitle">Services imports in current USD.</p>
+        </header>
+
+        <div class="ranking-filter-panel">
+          <div class="country-search-panel ranking-country-search-panel">
+            <div class="search-input-wrap">
+              <input
+                id="rankingCountrySearchInput"
+                class="country-search-input"
+                type="search"
+                autocomplete="off"
+                aria-controls="rankingCountrySearchResults"
+                role="combobox"
+                aria-autocomplete="list"
+                aria-expanded="false"
+              />
+              <div
+                class="country-results"
+                id="rankingCountrySearchResults"
+                role="listbox"
+                aria-label="Country search results"
+                hidden
+              ></div>
+            </div>
+          </div>
+          <p class="filter-label">Filter by:</p>
+          <div class="filter-panel-row">
+            <details class="category-panel" aria-labelledby="ranking-region-heading">
+              <summary class="category-heading" id="ranking-region-heading">Regions</summary>
+            </details>
+            <details class="category-panel" aria-labelledby="ranking-category-heading">
+              <summary class="category-heading" id="ranking-category-heading">Categories</summary>
+            </details>
+          </div>
+          <div class="category-list filter-option-list" id="rankingRegionList" hidden></div>
+          <div class="category-list filter-option-list" id="rankingCategoryList" hidden></div>
+        </div>
+      </section>
+
+      <section class="ranking-card" aria-labelledby="ranking-table-title">
+        <header class="ranking-card-header">
+          <h2 id="ranking-table-title">Scope: World</h2>
+          <p id="rankingCount" class="ranking-count" aria-live="polite">Loading ranking data...</p>
+        </header>
+
+        <div class="ranking-table-wrap">
+          <table class="ranking-table">
+            <tbody id="rankingTableBody"></tbody>
+          </table>
+        </div>
+
+        <footer class="shared-notes ranking-notes" aria-label="Ranking notes">
+          <p>Source: UNCTADstat.</p>
+        </footer>
+      </section>
+    </main>
+  </body>
+</html>

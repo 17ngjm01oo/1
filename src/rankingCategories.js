@@ -33,9 +33,10 @@ const categoryDefinitions = [
     navSelector: "#tradeTopNav",
     rankings: tradeRankings,
     overviewRankings: pickRankings(tradeRankings, [
-      "goodsTradeBalance",
-      "goodsExports",
-      "goodsImports",
+      "tradeBalance",
+      "exports",
+      "imports",
+      "servicesTradeBalance",
     ]),
   },
   {

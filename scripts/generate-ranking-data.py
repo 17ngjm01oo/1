@@ -10,7 +10,8 @@ from data_update_utils import format_path_for_log, write_ranking_data
 ROOT_DIR = Path(__file__).resolve().parents[1]
 SOURCE_PATHS = (
     ROOT_DIR / "data" / "weo" / "current-prices.json",
-    ROOT_DIR / "data" / "unctad" / "goods-trade.json",
+    ROOT_DIR / "data" / "unctad" / "trade.json",
+    ROOT_DIR / "data" / "unctad" / "services-trade.json",
     ROOT_DIR / "data" / "world-bank" / "total-reserves.json",
     ROOT_DIR / "data" / "world-bank" / "population-demographics.json",
     ROOT_DIR / "data" / "world-bank" / "environment.json",
