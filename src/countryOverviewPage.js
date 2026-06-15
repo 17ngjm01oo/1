@@ -543,37 +543,25 @@ function renderTradePartnerPanel(label, flowData) {
   heading.className = "country-trade-partner-heading";
   heading.textContent = label;
 
-  const grid = renderTradePartnerGrid(partners);
-  grid.setAttribute("aria-label", `${label}, ${flowData.year}`);
-
-  panel.append(heading, grid);
-  return panel;
-}
-
-function renderTradePartnerGrid(partners) {
-  return renderDefinitionGrid(
+  const chart = renderPieChart(
     partners.map((partner) => ({
-      label: renderTradePartnerName(partner),
+      label: partner.name,
+      share: partner.share,
+    })),
+    { ariaLabel: `${label} chart` },
+  );
+  const grid = renderDefinitionGrid(
+    partners.map((partner) => ({
+      label: partner.name,
       value: formatPercentShare(partner.share),
     })),
     "country-trade-partner-grid",
-    { termClassName: "country-trade-partner-name" },
   );
-}
+  grid.setAttribute("aria-label", `${label}, ${flowData.year}`);
+  const tableToggle = renderProfileTableToggle(grid);
 
-function renderTradePartnerName(partner) {
-  const fragment = document.createDocumentFragment();
-  const flag = createFlagImage(partner.countryCode, { className: "country-trade-partner-flag" });
-
-  if (flag) {
-    fragment.append(flag);
-  }
-
-  const name = document.createElement("span");
-  name.textContent = partner.name;
-  fragment.append(name);
-
-  return fragment;
+  panel.append(heading, chart, tableToggle);
+  return panel;
 }
 
 function renderTaxRevenueCompositionBlock(dataByPath) {
@@ -772,31 +760,21 @@ function getPointOnCircle(centerX, centerY, radius, angle) {
   };
 }
 
-function renderDefinitionGrid(items, extraClassName = "", { termClassName = "" } = {}) {
+function renderDefinitionGrid(items, extraClassName = "") {
   const grid = document.createElement("dl");
   grid.className = ["country-basic-information-grid", extraClassName].filter(Boolean).join(" ");
 
   for (const item of items) {
     const term = document.createElement("dt");
-    term.className = termClassName;
-    appendDefinitionContent(term, item.label);
+    term.textContent = item.label;
 
     const description = document.createElement("dd");
-    appendDefinitionContent(description, item.value);
+    description.textContent = item.value;
 
     grid.append(term, description);
   }
 
   return grid;
-}
-
-function appendDefinitionContent(element, content) {
-  if (content instanceof Node) {
-    element.append(content);
-    return;
-  }
-
-  element.textContent = content ?? "";
 }
 
 function renderIndicatorRow(indicator, dataByPath) {
