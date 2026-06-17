@@ -216,10 +216,11 @@ function prepareCountryOverviewLayout() {
 
 function getRequiredStaticDataPaths() {
   const paths = new Set();
+  const pageConfig = getActivePageConfig();
 
-  getActiveProfileCategoryBlocks().forEach(({ dataPath }) => paths.add(dataPath));
+  pageConfig.categoryBlocks.forEach(({ dataPath }) => paths.add(dataPath));
 
-  for (const group of getActiveGroups()) {
+  for (const group of pageConfig.groups) {
     for (const indicator of group.indicators) {
       const config = getSeriesConfig(indicator);
       paths.add(config.staticDataPath);
@@ -253,38 +254,48 @@ function renderOverview() {
   }
 
   container.innerHTML = "";
+  const pageConfig = getActivePageConfig();
 
-  if (isOverviewActive()) {
+  if (pageConfig.includeBasicInformation) {
     container.append(renderBasicInformationSection());
   }
 
-  for (const group of getActiveGroups()) {
-    container.append(renderGroup(group, loadedDataByPath, { showHeading: isOverviewActive() }));
+  for (const group of pageConfig.groups) {
+    container.append(renderGroup(group, loadedDataByPath, {
+      categoryBlocks: pageConfig.categoryBlocks,
+      showHeading: pageConfig.showGroupHeadings,
+    }));
   }
 }
 
-function getActiveGroups() {
-  if (isOverviewActive()) {
-    return overviewGroups
+function getActivePageConfig() {
+  if (activeCategoryId === overviewCategory.id) {
+    return {
+      categoryBlocks: [],
+      groups: overviewGroups
+        .map((group) => ({
+          id: group.id,
+          title: group.title,
+          indicators: group.overviewIndicators,
+        }))
+        .filter((group) => group.indicators.length > 0),
+      includeBasicInformation: true,
+      showGroupHeadings: true,
+    };
+  }
+
+  return {
+    categoryBlocks: profileCategoryBlocks[activeCategoryId] ?? [],
+    groups: overviewGroups
+      .filter((group) => group.id === activeCategoryId)
       .map((group) => ({
         id: group.id,
         title: group.title,
-        indicators: group.overviewIndicators,
-      }))
-      .filter((group) => group.indicators.length > 0);
-  }
-
-  return overviewGroups
-    .filter((group) => group.id === activeCategoryId)
-    .map((group) => ({
-      id: group.id,
-      title: group.title,
-      indicators: group.profileIndicators,
-    }));
-}
-
-function isOverviewActive() {
-  return activeCategoryId === overviewCategory.id;
+        indicators: group.profileIndicators,
+      })),
+    includeBasicInformation: false,
+    showGroupHeadings: false,
+  };
 }
 
 function renderBasicInformationSection() {
@@ -311,7 +322,7 @@ function getBasicInformationItems() {
   ];
 }
 
-function renderGroup(group, dataByPath, { showHeading = true } = {}) {
+function renderGroup(group, dataByPath, { categoryBlocks = [], showHeading = true } = {}) {
   const section = document.createElement("section");
   section.className = "country-overview-section";
 
@@ -324,23 +335,15 @@ function renderGroup(group, dataByPath, { showHeading = true } = {}) {
     section.append(heading);
   }
 
-  appendProfileCategoryBlocks(section, group.id, dataByPath);
+  appendCategoryBlocks(section, categoryBlocks, dataByPath);
 
   appendProfileIndicatorTables(section, group.indicators, dataByPath);
 
   return section;
 }
 
-function getActiveProfileCategoryBlocks() {
-  return isOverviewActive() ? [] : (profileCategoryBlocks[activeCategoryId] ?? []);
-}
-
-function appendProfileCategoryBlocks(section, categoryId, dataByPath) {
-  if (isOverviewActive()) {
-    return;
-  }
-
-  for (const { render } of profileCategoryBlocks[categoryId] ?? []) {
+function appendCategoryBlocks(section, categoryBlocks, dataByPath) {
+  for (const { render } of categoryBlocks) {
     const block = render(dataByPath);
 
     if (block) {
@@ -740,7 +743,7 @@ function formatRankPosition(rank, total) {
 function buildRankingRowsBySeriesId(dataByPath) {
   const rankingRows = new Map();
 
-  getActiveGroups().forEach((group) => {
+  getActivePageConfig().groups.forEach((group) => {
     group.indicators.forEach((indicator) => {
       const config = getSeriesConfig(indicator);
       const data = dataByPath.get(config.staticDataPath);
