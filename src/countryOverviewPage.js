@@ -13,16 +13,18 @@ import "./rankingTopNav.js";
 const GVA_BY_INDUSTRY_DATA_PATH = "./data/un-national-accounts/gva-by-industry.json";
 const AGE_COMPOSITION_DATA_PATH = "./data/world-bank/age-composition.json";
 const TAX_REVENUE_COMPOSITION_DATA_PATH = "./data/oecd/tax-revenue-composition.json";
+const TRADE_COMMODITY_COMPOSITION_DATA_PATH = "./data/un-comtrade/commodity-composition.json";
 const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
 const PIE_LABEL_MIN_SHARE = 7;
 const GVA_INDUSTRY_COLORS = [
-  "#2563eb",
-  "#059669",
-  "#b45309",
-  "#dc2626",
-  "#7c3aed",
-  "#0891b2",
-  "#c2410c",
+  "#7aa7d9",
+  "#80c7a6",
+  "#e4b36a",
+  "#df8b8b",
+  "#a993d6",
+  "#79c5cf",
+  "#dda184",
+  "#a8adb8",
 ];
 const profileCategoryBlocks = {
   economy: [
@@ -35,6 +37,12 @@ const profileCategoryBlocks = {
     {
       dataPath: AGE_COMPOSITION_DATA_PATH,
       render: renderAgeCompositionBlock,
+    },
+  ],
+  trade: [
+    {
+      dataPath: TRADE_COMMODITY_COMPOSITION_DATA_PATH,
+      render: renderTradeCommodityCompositionBlock,
     },
   ],
   finance: [
@@ -524,6 +532,77 @@ function renderTaxRevenueCompositionBlock(dataByPath) {
 
   block.append(heading, chart, tableToggle, note);
   return block;
+}
+
+function renderTradeCommodityCompositionBlock(dataByPath) {
+  const tradeCommodityData = dataByPath.get(TRADE_COMMODITY_COMPOSITION_DATA_PATH);
+  const countryData = tradeCommodityData?.economies?.[selectedCountry.code];
+  const exportsComposition = countryData?.flows?.exports;
+  const importsComposition = countryData?.flows?.imports;
+
+  if (!hasCompositionItems(exportsComposition) && !hasCompositionItems(importsComposition)) {
+    return null;
+  }
+
+  const block = document.createElement("div");
+  block.className = "country-trade-commodity-composition";
+
+  const heading = document.createElement("h3");
+  heading.className = "country-gva-industry-heading country-trade-commodity-composition-heading";
+  heading.textContent = "Trade by Commodity";
+
+  block.append(heading);
+
+  if (hasCompositionItems(exportsComposition)) {
+    block.append(renderTradeCommodityFlowBlock(exportsComposition, {
+      heading: "Export Commodities",
+      ariaLabel: `Export commodities chart, ${exportsComposition.year}`,
+    }));
+  }
+
+  if (hasCompositionItems(importsComposition)) {
+    block.append(renderTradeCommodityFlowBlock(importsComposition, {
+      heading: "Import Commodities",
+      ariaLabel: `Import commodities chart, ${importsComposition.year}`,
+    }));
+  }
+
+  const note = document.createElement("p");
+  note.className = "country-gva-industry-note country-trade-commodity-composition-note";
+  note.textContent = "HS 2-digit commodity chapters, partner World. Source: UN Comtrade.";
+  block.append(note);
+
+  return block;
+}
+
+function hasCompositionItems(composition) {
+  return Array.isArray(composition?.items) && composition.items.length > 0;
+}
+
+function renderTradeCommodityFlowBlock(composition, { heading, ariaLabel }) {
+  const flowBlock = document.createElement("div");
+  flowBlock.className = "country-trade-commodity-flow";
+
+  const flowHeading = document.createElement("h4");
+  flowHeading.className = "country-trade-commodity-flow-heading";
+  flowHeading.textContent = `${heading}, ${composition.year}`;
+
+  const chart = renderPieChart(composition.items, {
+    ariaLabel,
+    className: "country-trade-commodity-chart",
+  });
+  const grid = renderDefinitionGrid(
+    composition.items.map((item) => ({
+      label: item.label,
+      value: formatPercentShare(item.share),
+    })),
+    "country-gva-industry-grid country-trade-commodity-grid",
+  );
+  grid.setAttribute("aria-label", `${heading}, ${composition.year}`);
+  const tableToggle = renderProfileTableToggle(grid);
+
+  flowBlock.append(flowHeading, chart, tableToggle);
+  return flowBlock;
 }
 
 function renderProfileTableToggle(table) {
