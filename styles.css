@@ -2313,10 +2313,6 @@ body[data-country-code] .subtitle {
 }
 
 @media (max-width: 640px) {
-  body[data-country-overview-category="trade"] .indicator-info-button {
-    display: none;
-  }
-
   .page-shell {
     gap: 6px;
     max-width: none;

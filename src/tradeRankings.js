@@ -5,7 +5,6 @@ export const tradeRankings = [
     label: "Trade Balance",
     countryPageKind: "trade",
     countryPageLabel: "Trade",
-    profileSection: "Trade",
   },
   {
     seriesId: "exports",
@@ -13,7 +12,6 @@ export const tradeRankings = [
     label: "Exports",
     countryPageKind: "trade",
     countryPageLabel: "Trade",
-    profileSection: "Trade",
   },
   {
     seriesId: "imports",
@@ -21,7 +19,6 @@ export const tradeRankings = [
     label: "Imports",
     countryPageKind: "trade",
     countryPageLabel: "Trade",
-    profileSection: "Trade",
   },
   {
     seriesId: "servicesTradeBalance",
@@ -29,7 +26,6 @@ export const tradeRankings = [
     label: "Services Trade Balance",
     countryPageKind: "services-trade",
     countryPageLabel: "Services Trade",
-    profileSection: "Services Trade",
   },
   {
     seriesId: "servicesExports",
@@ -37,7 +33,6 @@ export const tradeRankings = [
     label: "Services Exports",
     countryPageKind: "services-trade",
     countryPageLabel: "Services Trade",
-    profileSection: "Services Trade",
   },
   {
     seriesId: "servicesImports",
@@ -45,20 +40,17 @@ export const tradeRankings = [
     label: "Services Imports",
     countryPageKind: "services-trade",
     countryPageLabel: "Services Trade",
-    profileSection: "Services Trade",
   },
   {
     seriesId: "currentAccountBalance",
     directory: "current-account-balance",
     label: "Current Account Balance",
     countryPageKind: "current-account-balance",
-    profileSection: "Current Account",
   },
   {
     seriesId: "currentAccountBalancePercentGdp",
     directory: "current-account-balance-percent-gdp",
     label: "Current Account Balance (% of GDP)",
     countryPageKind: "current-account-balance",
-    profileSection: "Current Account",
   },
 ];
