@@ -1,4 +1,5 @@
 import { seriesConfigs } from "./config.js";
+import { scrollToCountryIndicatorHash } from "./countryIndicatorAnchors.js";
 import { countries } from "./countries.js";
 import { filterCountries, formatCountryMetaText, initializeCountrySelector } from "./countrySelector.js";
 import { getCurrencyCode } from "./currencyCodes.js";
@@ -183,6 +184,7 @@ async function initializePage() {
 
   await updateRelatedPageLinks();
   await Promise.all(visibleSeriesConfigs.map((seriesConfig) => loadAndRenderSeries(seriesConfig)));
+  scrollToCountryIndicatorHash();
 }
 
 function navigateToCountry(country) {

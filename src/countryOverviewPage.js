@@ -2,6 +2,7 @@ import { formatCompactDisplayValue, getSingleValueDisplayScale } from "./display
 import { seriesConfigs } from "./config.js";
 import { countries } from "./countries.js";
 import { getCountryCurrencyDisplay, getCurrencyCode } from "./currencyCodes.js";
+import { getCountryIndicatorHash } from "./countryIndicatorAnchors.js";
 import { createFlagImage } from "./flags.js";
 import { renderIndicatorLabel } from "./indicatorLabels.js";
 import { initializeIndicatorInfoTooltips } from "./indicatorInfoUi.js";
@@ -849,7 +850,7 @@ function buildValueLink(indicator, text) {
   }
 
   const link = document.createElement("a");
-  link.href = `${countryRootHref}${indicator.pagePathSegment}/`;
+  link.href = `${countryRootHref}${indicator.pagePathSegment}/${getCountryIndicatorHash(indicator.seriesId)}`;
   appendLinkContent(link, text);
   return link;
 }

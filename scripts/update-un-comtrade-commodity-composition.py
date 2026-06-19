@@ -7,6 +7,7 @@ import json
 import time
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
@@ -29,6 +30,8 @@ DEFAULT_END_YEAR = 2019
 TOP_ITEM_COUNT = 7
 PARTNER_CODE_WORLD = "0"
 COMMAND_CODE_HS2 = "AG2"
+REQUEST_RETRIES = 3
+REQUEST_RETRY_DELAY_SECONDS = 2
 FLOW_CONFIGS = {
     "exports": {
         "flowCode": "X",
@@ -87,15 +90,15 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    countries = load_countries()
+    countries = [country for country in load_countries() if country["code"] != "G001"]
     if args.countries:
         requested_codes = {code.strip().upper() for code in args.countries.split(",") if code.strip()}
         countries = [country for country in countries if country["code"] in requested_codes]
 
-    reporter_by_iso3 = fetch_reporters_by_iso3()
+    reporter_lookup = fetch_reporter_lookup()
     result = build_comtrade_commodity_composition(
         countries,
-        reporter_by_iso3,
+        reporter_lookup,
         args.start_year,
         args.end_year,
         args.delay,
@@ -109,7 +112,7 @@ def main() -> None:
 
 def build_comtrade_commodity_composition(
     countries: list[dict],
-    reporter_by_iso3: dict[str, dict],
+    reporter_lookup: dict[str, dict[str, dict]],
     start_year: int,
     end_year: int,
     delay_seconds: float,
@@ -133,7 +136,7 @@ def build_comtrade_commodity_composition(
             executor.submit(
                 process_country,
                 country,
-                reporter_by_iso3,
+                reporter_lookup,
                 years,
                 delay_seconds,
                 timeout_seconds,
@@ -153,12 +156,15 @@ def build_comtrade_commodity_composition(
             if completed_countries == 1 or completed_countries % 10 == 0 or completed_countries == total_countries:
                 print(f"Processed {completed_countries}/{total_countries} countries...", flush=True)
 
+    return build_result(economies, diagnostics)
+
+
+def build_result(economies: dict[str, dict], diagnostics: dict) -> dict:
     coverage_years = sorted({
         int(flow["year"])
         for economy in economies.values()
         for flow in economy["flows"].values()
     })
-
     return {
         "schemaVersion": 1,
         "source": {
@@ -184,7 +190,7 @@ def build_comtrade_commodity_composition(
 
 def process_country(
     country: dict,
-    reporter_by_iso3: dict[str, dict],
+    reporter_lookup: dict[str, dict[str, dict]],
     years: list[int],
     delay_seconds: float,
     timeout_seconds: float,
@@ -197,7 +203,7 @@ def process_country(
         "requestErrors": [],
     }
     country_code = country["code"]
-    reporter = get_reporter_for_country(country, reporter_by_iso3, diagnostics)
+    reporter = get_reporter_for_country(country, reporter_lookup, diagnostics)
 
     if not reporter:
         diagnostics["missingComtradeReporter"].append({
@@ -262,7 +268,7 @@ def merge_diagnostics(target: dict, source: dict) -> None:
         target.setdefault(key, []).extend(entries)
 
 
-def fetch_reporters_by_iso3() -> dict[str, dict]:
+def fetch_reporter_lookup() -> dict[str, dict[str, dict]]:
     request = Request(
         REPORTERS_URL,
         headers={
@@ -275,33 +281,67 @@ def fetch_reporters_by_iso3() -> dict[str, dict]:
         payload = json.loads(response.read().decode("utf-8"))
 
     reporters_by_iso3: dict[str, dict] = {}
+    reporters_by_code: dict[str, dict] = {}
     for reporter in payload.get("results", []):
         iso3 = str(reporter.get("reporterCodeIsoAlpha3", "")).strip().upper()
+        reporter_code = normalize_reporter_code(reporter.get("reporterCode"))
 
-        if not iso3 or reporter.get("isGroup") or reporter.get("entryExpiredDate"):
+        if not reporter_code or reporter.get("isGroup") or reporter.get("entryExpiredDate"):
             continue
 
-        reporters_by_iso3.setdefault(iso3, reporter)
+        reporters_by_code.setdefault(reporter_code, reporter)
 
-    return reporters_by_iso3
+        if iso3:
+            reporters_by_iso3.setdefault(iso3, reporter)
+
+    return {
+        "byIso3": reporters_by_iso3,
+        "byCode": reporters_by_code,
+    }
 
 
-def get_reporter_for_country(country: dict, reporter_by_iso3: dict[str, dict], diagnostics: dict) -> dict | None:
+def get_reporter_for_country(country: dict, reporter_lookup: dict[str, dict[str, dict]], diagnostics: dict) -> dict | None:
+    expected_reporter_code = get_expected_reporter_code(country)
+    reporter_by_code = reporter_lookup["byCode"]
+    reporter_by_iso3 = reporter_lookup["byIso3"]
+
+    if expected_reporter_code:
+        reporter = reporter_by_code.get(expected_reporter_code)
+
+        if reporter:
+            return reporter
+
     for iso3 in get_candidate_iso3s(country):
         reporter = reporter_by_iso3.get(iso3)
 
         if reporter:
-            if iso3 != country["code"]:
-                diagnostics["reporterCodeFallbacks"].append({
-                    "countryCode": country["code"],
-                    "countryName": country["name"],
-                    "fallbackISO": iso3,
-                    "reporterCode": reporter["reporterCode"],
-                    "reporterDesc": reporter["reporterDesc"],
-                })
+            diagnostics["reporterCodeFallbacks"].append({
+                "countryCode": country["code"],
+                "countryName": country["name"],
+                "expectedReporterCode": expected_reporter_code,
+                "fallbackISO": iso3,
+                "reporterCode": reporter["reporterCode"],
+                "reporterDesc": reporter["reporterDesc"],
+            })
             return reporter
 
     return None
+
+
+def get_expected_reporter_code(country: dict) -> str | None:
+    return normalize_reporter_code(get_external_id(country, "unctad", "m49"))
+
+
+def normalize_reporter_code(value: object) -> str | None:
+    if value in (None, ""):
+        return None
+
+    text = str(value).strip()
+
+    if not text.isdigit():
+        return None
+
+    return str(int(text))
 
 
 def get_candidate_iso3s(country: dict) -> list[str]:
@@ -357,8 +397,27 @@ def fetch_comtrade_rows(reporter_code: str, period: str, flow_code: str, timeout
         },
     )
 
-    with urlopen(request, timeout=timeout_seconds) as response:
-        payload = json.loads(response.read().decode("utf-8"))
+    payload = None
+    last_error = None
+
+    for attempt in range(REQUEST_RETRIES):
+        try:
+            with urlopen(request, timeout=timeout_seconds) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+            break
+        except HTTPError as error:
+            last_error = error
+
+            if error.code not in {429, 500, 502, 503, 504}:
+                raise
+        except (TimeoutError, URLError) as error:
+            last_error = error
+
+        if attempt + 1 < REQUEST_RETRIES:
+            time.sleep(REQUEST_RETRY_DELAY_SECONDS * (attempt + 1))
+
+    if payload is None:
+        raise last_error or RuntimeError("UN Comtrade request failed")
 
     if payload.get("error"):
         raise RuntimeError(payload["error"])
@@ -379,7 +438,8 @@ def build_api_url(reporter_code: str, period: str, flow_code: str) -> str:
 
 
 def build_flow_composition(rows: list[dict], flow_id: str, flow_label: str) -> dict | None:
-    chapter_rows = []
+    chapters_by_code = {}
+    source_row_by_code = {}
 
     for row in rows:
         command_code = str(row.get("cmdCode", ""))
@@ -388,11 +448,15 @@ def build_flow_composition(rows: list[dict], flow_id: str, flow_label: str) -> d
         if len(command_code) != 2 or value is None or value <= 0:
             continue
 
-        chapter_rows.append({
+        chapter = chapters_by_code.setdefault(command_code, {
             "code": command_code,
             "label": build_chapter_label(command_code, str(row.get("cmdDesc", "")).strip()),
-            "value": value,
+            "value": 0,
         })
+        chapter["value"] += value
+        source_row_by_code.setdefault(command_code, row)
+
+    chapter_rows = list(chapters_by_code.values())
 
     if not chapter_rows:
         return None
@@ -411,7 +475,7 @@ def build_flow_composition(rows: list[dict], flow_id: str, flow_label: str) -> d
         }, total_value))
 
     first_row = chapter_rows[0]
-    source_row = next((row for row in rows if str(row.get("cmdCode", "")) == first_row["code"]), rows[0])
+    source_row = source_row_by_code.get(first_row["code"], rows[0])
 
     return {
         "flow": flow_label,

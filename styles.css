@@ -633,6 +633,7 @@ body[data-country-overview-category] .country-data-header h1 {
   display: grid;
   gap: 14px;
   min-width: 0;
+  scroll-margin-top: 24px;
 }
 
 .indicator-block[hidden] {
