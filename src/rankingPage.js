@@ -1,7 +1,7 @@
 import { countries } from "./countries.js";
 import { filterCountriesByScope } from "./countryFilters.js";
 import { initializeCountrySelector } from "./countrySelector.js";
-import { appendTerritoryNote, isTerritory, markTerritoryElement } from "./countryTypes.js";
+import { appendNote, appendTerritoryNote, isTerritory, markTerritoryElement } from "./countryTypes.js";
 import { formatCompactDisplayValue, getSingleValueDisplayScale } from "./displayFormat.js";
 import { createFlagImage } from "./flags.js";
 import { initializeRankingFilters } from "./rankingFilters.js";
@@ -17,7 +17,9 @@ import "./rankingTopNav.js";
 export function initializeRankingPage(config) {
   initializeRankingCountrySearch(config);
   initializeIndicatorInfoTooltips();
-  appendTerritoryNote(document.querySelector(".ranking-notes"));
+  const rankingNotes = document.querySelector(".ranking-notes");
+  appendTerritoryNote(rankingNotes);
+  appendRankingSummaryNote(rankingNotes);
 
   const state = {
     allRankingRows: [],
@@ -30,9 +32,12 @@ export function initializeRankingPage(config) {
     rankingDataByYear: new Map(),
     elements: {
       count: document.querySelector("#rankingCount"),
+      summary: null,
       pageTitle: document.querySelector("#ranking-title"),
       tableBody: document.querySelector("#rankingTableBody"),
       tableTitle: document.querySelector("#ranking-table-title"),
+      worldShareValue: null,
+      averageValue: null,
     },
   };
   state.basePageTitle = state.elements.pageTitle?.textContent?.trim() ?? "";
@@ -67,6 +72,13 @@ function initializeRankingCountrySearch(config) {
   });
 }
 
+function appendRankingSummaryNote(container) {
+  appendNote(container, {
+    className: "ranking-summary-note",
+    text: "Average and World Share are calculated from the table and exclude territories.",
+  });
+}
+
 function getCountryPagePathSegment(config) {
   if (config.hasCountryIndicatorPage === false) {
     return "";
@@ -78,6 +90,7 @@ function getCountryPagePathSegment(config) {
 
 async function initializeRanking(config, state) {
   state.activeScope = initializeRankingFilters();
+  ensureRankingSummary(state);
 
   if (!config.staticDataPath) {
     throw new Error(`staticDataPath is required for ${config.logName} ranking.`);
@@ -104,6 +117,7 @@ async function initializeRanking(config, state) {
       showRankingLoading({
         countElement: state.elements.count,
       });
+      showRankingSummaryLoading(state);
       loadRankingYear(config, state, year).catch((error) => {
         console.error(`[Ranking] Failed to load ${config.logName} ranking for ${year}.`, error);
         if (year === state.selectedYear) {
@@ -218,6 +232,7 @@ function renderScopedRanking(config, state) {
   );
   updateRankingTitle(state, state.activeScope);
   renderRankingTable(config, state, rankingRows);
+  renderRankingSummary(config, state, rankingRows);
   updateRankingCount(state, rankingRows);
 }
 
@@ -325,6 +340,70 @@ function renderRankingTable(config, state, rankingRows) {
   rankingTableBody.append(fragment);
 }
 
+function ensureRankingSummary(state) {
+  const rankingCard = document.querySelector(".ranking-card");
+  const rankingTableWrap = document.querySelector(".ranking-table-wrap");
+  const rankingNotes = document.querySelector(".ranking-notes");
+
+  if (!rankingCard || state.elements.summary) {
+    return;
+  }
+
+  const summary = document.createElement("dl");
+  summary.className = "ranking-summary";
+  summary.innerHTML = `
+    <div class="ranking-summary-item">
+      <dt class="ranking-summary-label">Average:</dt>
+      <dd class="ranking-summary-value" data-summary-key="average">-</dd>
+    </div>
+    <div class="ranking-summary-item">
+      <dt class="ranking-summary-label">World Share:</dt>
+      <dd class="ranking-summary-value" data-summary-key="world-share">-</dd>
+    </div>
+  `;
+
+  if (rankingNotes) {
+    rankingNotes.before(summary);
+  } else if (rankingTableWrap) {
+    rankingTableWrap.after(summary);
+  } else {
+    rankingCard.append(summary);
+  }
+
+  state.elements.summary = summary;
+  state.elements.worldShareValue = summary.querySelector('[data-summary-key="world-share"]');
+  state.elements.averageValue = summary.querySelector('[data-summary-key="average"]');
+}
+
+function renderRankingSummary(config, state, rankingRows) {
+  const worldShareElement = state.elements.worldShareValue;
+  const averageElement = state.elements.averageValue;
+
+  if (!worldShareElement || !averageElement) {
+    return;
+  }
+
+  const visibleRows = rankingRows.filter((row) => !isTerritory(row));
+  const worldRows = state.allRankingRows.filter((row) => !isTerritory(row));
+  const visibleTotal = sumRankingValues(visibleRows, true);
+  const worldTotal = sumRankingValues(worldRows, true);
+  const worldShare = worldTotal > 0 ? (visibleTotal / worldTotal) * 100 : null;
+  const average = visibleRows.length > 0 ? sumRankingValues(visibleRows) / visibleRows.length : null;
+
+  worldShareElement.textContent = formatRankingPercent(worldShare);
+  averageElement.textContent = formatRankingAverage(average, config);
+}
+
+function showRankingSummaryLoading(state) {
+  if (state.elements.worldShareValue) {
+    state.elements.worldShareValue.textContent = "Loading...";
+  }
+
+  if (state.elements.averageValue) {
+    state.elements.averageValue.textContent = "Loading...";
+  }
+}
+
 function getValueBarScale(rankingRows) {
   return rankingRows.reduce(
     (scale, row) => {
@@ -355,11 +434,22 @@ function showRankingError(state) {
   showRankingLoadError({
     countElement: state?.elements?.count ?? document.querySelector("#rankingCount"),
   });
+  clearRankingSummary(state);
 
   const rankingTableBody = state?.elements?.tableBody ?? document.querySelector("#rankingTableBody");
 
   if (rankingTableBody) {
     rankingTableBody.innerHTML = "";
+  }
+}
+
+function clearRankingSummary(state) {
+  if (state?.elements?.worldShareValue) {
+    state.elements.worldShareValue.textContent = "—";
+  }
+
+  if (state?.elements?.averageValue) {
+    state.elements.averageValue.textContent = "—";
   }
 }
 
@@ -378,4 +468,33 @@ function normalizeNumericValue(value) {
   }
 
   return null;
+}
+
+function sumRankingValues(rankingRows, useAbsoluteValues = false) {
+  return rankingRows.reduce((total, row) => {
+    if (!Number.isFinite(row.value)) {
+      return total;
+    }
+
+    return total + (useAbsoluteValues ? Math.abs(row.value) : row.value);
+  }, 0);
+}
+
+function formatRankingPercent(value) {
+  if (!Number.isFinite(value)) {
+    return "—";
+  }
+
+  return `${new Intl.NumberFormat("en-US", {
+    maximumFractionDigits: 1,
+  }).format(value)}%`;
+}
+
+function formatRankingAverage(value, config) {
+  if (!Number.isFinite(value)) {
+    return "—";
+  }
+
+  const displayScale = getSingleValueDisplayScale(value, config.displayScaleConfig);
+  return formatCompactDisplayValue(value, displayScale);
 }

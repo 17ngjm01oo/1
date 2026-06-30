@@ -55,12 +55,19 @@ export function markTerritoryElement(element, countryOrCode) {
 }
 
 export function appendTerritoryNote(container) {
-  if (!container || container.querySelector(".territory-note")) {
+  appendNote(container, {
+    className: "territory-note",
+    text: "Yellow backgrounds indicate territories.",
+  });
+}
+
+export function appendNote(container, { className, text }) {
+  if (!container || !className || container.querySelector(`.${className}`)) {
     return;
   }
 
   const note = document.createElement("p");
-  note.className = "territory-note";
-  note.textContent = "Yellow backgrounds indicate territories.";
+  note.className = className;
+  note.textContent = text;
   container.append(note);
 }

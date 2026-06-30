@@ -2178,6 +2178,44 @@ body[data-country-code] .subtitle {
   overflow: hidden;
 }
 
+.ranking-summary {
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  justify-content: start;
+  gap: 0 16px;
+  margin: 10px 0;
+}
+
+.ranking-summary-item {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+}
+
+.ranking-summary-item + .ranking-summary-item {
+  padding-left: 16px;
+  border-left: 1px solid var(--border);
+}
+
+.ranking-summary-label {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: 0;
+  flex: 0 0 auto;
+}
+
+.ranking-summary-value {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.2;
+  flex: 0 0 auto;
+}
+
 .ranking-table,
 .country-hub-table {
   font-size: 1.1rem;
@@ -2379,6 +2417,16 @@ body[data-country-code] .subtitle {
 
   .shared-notes {
     gap: 2px;
+  }
+
+  .ranking-summary {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .ranking-summary-item + .ranking-summary-item {
+    padding-left: 0;
+    border-left: 0;
   }
 
   .home-entry-card {
