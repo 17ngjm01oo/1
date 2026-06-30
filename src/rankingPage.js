@@ -8,7 +8,7 @@ import { initializeRankingFilters } from "./rankingFilters.js";
 import { showRankingCount, showRankingLoading, showRankingLoadError } from "./rankingStatus.js";
 import { initializeRankingSort } from "./rankingSort.js";
 import { initializeTerritoryToggle } from "./territoryToggle.js";
-import { appendRankingValueCell } from "./rankingValueBar.js";
+import { appendRankingValueCells } from "./rankingValueBar.js";
 import { initializeRankingYear } from "./rankingYear.js";
 import { countryPageKindByRankingDirectory } from "./rankingCategories.js";
 import { initializeIndicatorInfoTooltips } from "./indicatorInfoUi.js";
@@ -267,7 +267,7 @@ function renderRankingTable(config, state, rankingRows) {
     const flagCell = document.createElement("td");
     const countryCell = document.createElement("td");
     const valueCell = document.createElement("td");
-    const yearCell = document.createElement("td");
+    const barCell = document.createElement("td");
     const displayScale = getSingleValueDisplayScale(country.value, config.displayScaleConfig);
 
     rankCell.textContent = String(index + 1);
@@ -288,16 +288,15 @@ function renderRankingTable(config, state, rankingRows) {
     countryLink.append(countryLinkText);
     countryCell.append(countryLink);
 
-    appendRankingValueCell(valueCell, {
+    appendRankingValueCells(valueCell, barCell, {
       href: pagePathSegment ? `${rootHref}countries/${country.slug}/${pagePathSegment}/` : "",
       text: formatCompactDisplayValue(country.value, displayScale),
       ariaLabel: `Open ${country.name} ${config.linkAriaMetric} page`,
       value: country.value,
       valueBarScale,
     });
-    yearCell.textContent = String(country.year);
 
-    row.append(rankCell, flagCell, countryCell, valueCell, yearCell);
+    row.append(rankCell, flagCell, countryCell, valueCell, barCell);
     fragment.append(row);
   });
 

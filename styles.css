@@ -2223,7 +2223,6 @@ body[data-country-code] .subtitle {
 
 .ranking-table td:nth-child(1),
 .ranking-table td:nth-child(2),
-.ranking-table td:nth-child(5),
 .country-hub-table td:nth-child(1) {
   padding-right: 6px;
   padding-left: 6px;
@@ -2241,7 +2240,7 @@ body[data-country-code] .subtitle {
 }
 
 .ranking-table td:nth-child(5) {
-  width: 78px;
+  width: 23%;
 }
 
 .ranking-table tbody tr:last-child td,
@@ -2272,13 +2271,12 @@ body[data-country-code] .subtitle {
 
 .ranking-value {
   display: grid;
-  gap: 3px;
   justify-items: end;
   min-width: 0;
 }
 
 .ranking-value-bar {
-  width: min(100%, 170px);
+  width: 100%;
   height: 6px;
   overflow: hidden;
   border-radius: var(--radius-round);
@@ -2621,7 +2619,6 @@ body[data-country-code] .subtitle {
 
   .ranking-table td:nth-child(1),
   .ranking-table td:nth-child(2),
-  .ranking-table td:nth-child(5),
   .country-hub-table td:nth-child(1) {
     padding-right: 2px;
     padding-left: 2px;
@@ -2636,7 +2633,7 @@ body[data-country-code] .subtitle {
   }
 
   .ranking-table td:nth-child(5) {
-    width: 48px;
+    width: 25%;
   }
 
   .status-bar {

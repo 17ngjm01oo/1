@@ -1,4 +1,4 @@
-export function appendRankingValueCell(valueCell, { href, text, ariaLabel, value, valueBarScale }) {
+export function appendRankingValueCells(valueCell, barCell, { href, text, ariaLabel, value, valueBarScale }) {
   const valueElement = href ? document.createElement("a") : document.createElement("span");
 
   if (href) {
@@ -13,6 +13,8 @@ export function appendRankingValueCell(valueCell, { href, text, ariaLabel, value
 
   const wrapper = document.createElement("div");
   wrapper.className = "ranking-value";
+  wrapper.append(valueElement);
+  valueCell.append(wrapper);
 
   const track = document.createElement("div");
   track.className = "ranking-value-bar";
@@ -23,8 +25,7 @@ export function appendRankingValueCell(valueCell, { href, text, ariaLabel, value
   fill.style.width = `${getValuePercentage(value, valueBarScale)}%`;
 
   track.append(fill);
-  wrapper.append(valueElement, track);
-  valueCell.append(wrapper);
+  barCell.append(track);
 }
 
 function getValuePercentage(value, valueBarScale) {
