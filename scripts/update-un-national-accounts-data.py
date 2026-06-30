@@ -52,7 +52,7 @@ SECTORS = (
     },
     {
         "id": "other",
-        "label": "Finance, real estate, public & other services",
+        "label": "Finance, real estate & other services",
         "sourceItem": "Other Activities (ISIC J-P)",
     },
 )

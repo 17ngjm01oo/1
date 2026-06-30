@@ -2182,8 +2182,8 @@ body[data-country-code] .subtitle {
   display: grid;
   grid-template-columns: repeat(2, max-content);
   justify-content: start;
-  gap: 0 16px;
-  margin: 10px 0;
+  gap: 0 8px;
+  margin: 7px 0;
 }
 
 .ranking-summary.is-average-only {
@@ -2194,12 +2194,12 @@ body[data-country-code] .subtitle {
 .ranking-summary-item {
   display: flex;
   align-items: baseline;
-  gap: 6px;
+  gap: 4px;
   min-width: 0;
 }
 
 .ranking-summary-item + .ranking-summary-item {
-  padding-left: 16px;
+  padding-left: 8px;
   border-left: 1px solid var(--border);
 }
 
