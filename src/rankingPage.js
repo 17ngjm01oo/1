@@ -14,12 +14,37 @@ import { countryPageKindByRankingDirectory } from "./rankingCategories.js";
 import { initializeIndicatorInfoTooltips } from "./indicatorInfoUi.js";
 import "./rankingTopNav.js";
 
+const worldShareHiddenIndicatorCodes = new Set([
+  "NGDPDPC",
+  "PPPPC",
+  "NGDP_RPCH",
+  "PCPIPCH",
+  "LUR",
+  "EN.POP.DNST",
+  "SP.DYN.LE00.IN",
+  "SP.DYN.TFRT.IN",
+  "SM.POP.TOTL.ZS",
+  "TRADE_BALANCE",
+  "SERVICES_TRADE_BALANCE",
+  "BCA_NGDPD",
+  "GGXWDG_NGDP",
+  "GGXWDN_NGDP",
+  "GGXCNL_NGDP",
+  "GGXONLB_NGDP",
+  "GGR_NGDP",
+  "GGX_NGDP",
+  "MILITARY_SPENDING_PERCENT_GDP",
+  "EN.GHG.CO2.PC.CE.AR5",
+  "AG.LND.FRST.ZS",
+]);
+
 export function initializeRankingPage(config) {
   initializeRankingCountrySearch(config);
   initializeIndicatorInfoTooltips();
+  const showWorldShare = shouldShowWorldShare(config);
   const rankingNotes = document.querySelector(".ranking-notes");
   appendTerritoryNote(rankingNotes);
-  appendRankingSummaryNote(rankingNotes);
+  appendRankingSummaryNote(rankingNotes, showWorldShare);
 
   const state = {
     allRankingRows: [],
@@ -33,6 +58,7 @@ export function initializeRankingPage(config) {
     elements: {
       count: document.querySelector("#rankingCount"),
       summary: null,
+      worldShareItem: null,
       pageTitle: document.querySelector("#ranking-title"),
       tableBody: document.querySelector("#rankingTableBody"),
       tableTitle: document.querySelector("#ranking-table-title"),
@@ -72,10 +98,16 @@ function initializeRankingCountrySearch(config) {
   });
 }
 
-function appendRankingSummaryNote(container) {
+function shouldShowWorldShare(config) {
+  return !worldShareHiddenIndicatorCodes.has(config.indicatorCode);
+}
+
+function appendRankingSummaryNote(container, showWorldShare) {
   appendNote(container, {
     className: "ranking-summary-note",
-    text: "Average and World Share are calculated from the table and exclude territories.",
+    text: showWorldShare
+      ? "Average and World Share are calculated from the table and exclude territories."
+      : "Average is calculated from the table and excludes territories.",
   });
 }
 
@@ -90,7 +122,7 @@ function getCountryPagePathSegment(config) {
 
 async function initializeRanking(config, state) {
   state.activeScope = initializeRankingFilters();
-  ensureRankingSummary(state);
+  ensureRankingSummary(config, state);
 
   if (!config.staticDataPath) {
     throw new Error(`staticDataPath is required for ${config.logName} ranking.`);
@@ -340,7 +372,7 @@ function renderRankingTable(config, state, rankingRows) {
   rankingTableBody.append(fragment);
 }
 
-function ensureRankingSummary(state) {
+function ensureRankingSummary(config, state) {
   const rankingCard = document.querySelector(".ranking-card");
   const rankingTableWrap = document.querySelector(".ranking-table-wrap");
   const rankingNotes = document.querySelector(".ranking-notes");
@@ -350,16 +382,20 @@ function ensureRankingSummary(state) {
   }
 
   const summary = document.createElement("dl");
+  const showWorldShare = shouldShowWorldShare(config);
   summary.className = "ranking-summary";
+  summary.classList.toggle("is-average-only", !showWorldShare);
   summary.innerHTML = `
     <div class="ranking-summary-item">
       <dt class="ranking-summary-label">Average:</dt>
       <dd class="ranking-summary-value" data-summary-key="average">-</dd>
     </div>
-    <div class="ranking-summary-item">
-      <dt class="ranking-summary-label">World Share:</dt>
-      <dd class="ranking-summary-value" data-summary-key="world-share">-</dd>
-    </div>
+    ${showWorldShare ? `
+      <div class="ranking-summary-item" data-summary-key="world-share-item">
+        <dt class="ranking-summary-label">World Share:</dt>
+        <dd class="ranking-summary-value" data-summary-key="world-share">-</dd>
+      </div>
+    ` : ""}
   `;
 
   if (rankingNotes) {
@@ -371,6 +407,7 @@ function ensureRankingSummary(state) {
   }
 
   state.elements.summary = summary;
+  state.elements.worldShareItem = summary.querySelector('[data-summary-key="world-share-item"]');
   state.elements.worldShareValue = summary.querySelector('[data-summary-key="world-share"]');
   state.elements.averageValue = summary.querySelector('[data-summary-key="average"]');
 }
@@ -379,19 +416,22 @@ function renderRankingSummary(config, state, rankingRows) {
   const worldShareElement = state.elements.worldShareValue;
   const averageElement = state.elements.averageValue;
 
-  if (!worldShareElement || !averageElement) {
+  if (!averageElement) {
     return;
   }
 
   const visibleRows = rankingRows.filter((row) => !isTerritory(row));
-  const worldRows = state.allRankingRows.filter((row) => !isTerritory(row));
-  const visibleTotal = sumRankingValues(visibleRows, true);
-  const worldTotal = sumRankingValues(worldRows, true);
-  const worldShare = worldTotal > 0 ? (visibleTotal / worldTotal) * 100 : null;
   const average = visibleRows.length > 0 ? sumRankingValues(visibleRows) / visibleRows.length : null;
 
-  worldShareElement.textContent = formatRankingPercent(worldShare);
   averageElement.textContent = formatRankingAverage(average, config);
+
+  if (shouldShowWorldShare(config) && worldShareElement) {
+    const worldRows = state.allRankingRows.filter((row) => !isTerritory(row));
+    const visibleTotal = sumRankingValues(visibleRows, true);
+    const worldTotal = sumRankingValues(worldRows, true);
+    const worldShare = worldTotal > 0 ? (visibleTotal / worldTotal) * 100 : null;
+    worldShareElement.textContent = formatRankingPercent(worldShare);
+  }
 }
 
 function showRankingSummaryLoading(state) {
