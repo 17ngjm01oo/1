@@ -11,10 +11,8 @@ export function appendRankingValueCells(valueCell, barCell, { href, text, ariaLa
 
   valueElement.append(valueText);
 
-  const wrapper = document.createElement("div");
-  wrapper.className = "ranking-value";
-  wrapper.append(valueElement);
-  valueCell.append(wrapper);
+  valueElement.className = "ranking-value";
+  valueCell.append(valueElement);
 
   const track = document.createElement("div");
   track.className = "ranking-value-bar";

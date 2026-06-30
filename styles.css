@@ -2190,6 +2190,12 @@ body[data-country-code] .subtitle {
   table-layout: fixed;
 }
 
+.ranking-table {
+  --ranking-rank-width: 52px;
+  --ranking-flag-width: 58px;
+  --ranking-country-width: 41%;
+}
+
 .country-hub-table {
   overflow: hidden;
   border-collapse: separate;
@@ -2214,7 +2220,7 @@ body[data-country-code] .subtitle {
 }
 
 .ranking-table td:nth-child(1) {
-  width: 52px;
+  width: var(--ranking-rank-width);
 }
 
 .ranking-table tbody td {
@@ -2231,16 +2237,17 @@ body[data-country-code] .subtitle {
 
 .ranking-table td:nth-child(2),
 .country-hub-table td:nth-child(1) {
-  width: 58px;
+  width: var(--ranking-flag-width);
 }
 
 .ranking-table td:nth-child(3) {
-  width: 41%;
+  width: var(--ranking-country-width);
   text-align: left;
 }
 
+.ranking-table td:nth-child(4),
 .ranking-table td:nth-child(5) {
-  width: 23%;
+  width: calc((100% - var(--ranking-country-width) - var(--ranking-rank-width) - var(--ranking-flag-width)) / 2);
 }
 
 .ranking-table tbody tr:last-child td,
@@ -2264,15 +2271,9 @@ body[data-country-code] .subtitle {
   text-decoration: underline;
 }
 
-.ranking-value a {
+.ranking-value {
   color: var(--accent);
   text-decoration: none;
-}
-
-.ranking-value {
-  display: grid;
-  justify-items: end;
-  min-width: 0;
 }
 
 .ranking-value-bar {
@@ -2600,6 +2601,12 @@ body[data-country-code] .subtitle {
     font-size: 0.86rem;
   }
 
+  .ranking-table {
+    --ranking-rank-width: 34px;
+    --ranking-flag-width: 38px;
+    --ranking-country-width: 37%;
+  }
+
   .ranking-table td,
   .country-hub-table td {
     padding: 3px 5px;
@@ -2607,14 +2614,6 @@ body[data-country-code] .subtitle {
 
   .country-hub-table td:nth-child(3) {
     width: 112px;
-  }
-
-  .ranking-table td:nth-child(1) {
-    width: 34px;
-  }
-
-  .ranking-table td:nth-child(2) {
-    width: 38px;
   }
 
   .ranking-table td:nth-child(1),
@@ -2626,14 +2625,6 @@ body[data-country-code] .subtitle {
 
   .country-hub-table td:nth-child(1) {
     width: 38px;
-  }
-
-  .ranking-table td:nth-child(3) {
-    width: 37%;
-  }
-
-  .ranking-table td:nth-child(5) {
-    width: 25%;
   }
 
   .status-bar {
