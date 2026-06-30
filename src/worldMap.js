@@ -24,7 +24,7 @@ const MAP_FOCUS_BOUNDS = {
   NATO: [-94, 19, 45, 65],
   Africa: [-17, -34, 53, 35],
   "North America": [-172, 7, -52, 72],
-  "South America": [-82, -39, -34, 14],
+  "South America": [-79, -53, -37, 9],
   Oceania: [112, -45, 180, -2],
 };
 const COUNTRY_FOCUS_BOUNDS = {

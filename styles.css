@@ -2210,10 +2210,6 @@ body[data-country-code] .subtitle {
   vertical-align: middle;
 }
 
-.ranking-table td {
-  text-align: right;
-}
-
 .ranking-table td:not(:last-child),
 .country-hub-table td:not(:last-child) {
   border-right: 1px solid var(--border);
@@ -2235,9 +2231,12 @@ body[data-country-code] .subtitle {
   text-align: center;
 }
 
-.ranking-table td:nth-child(2),
-.country-hub-table td:nth-child(1) {
+.ranking-table td:nth-child(2) {
   width: var(--ranking-flag-width);
+}
+
+.country-hub-table td:nth-child(1) {
+  width: 48px;
 }
 
 .ranking-table td:nth-child(3) {
@@ -2248,6 +2247,10 @@ body[data-country-code] .subtitle {
 .ranking-table td:nth-child(4),
 .ranking-table td:nth-child(5) {
   width: calc((100% - var(--ranking-country-width) - var(--ranking-rank-width) - var(--ranking-flag-width)) / 2);
+}
+
+.ranking-table td:nth-child(4) {
+  text-align: left;
 }
 
 .ranking-table tbody tr:last-child td,
@@ -2262,8 +2265,8 @@ body[data-country-code] .subtitle {
 }
 
 .country-hub-table td:nth-child(3) {
-  width: 180px;
-  text-align: right;
+  width: 144px;
+  text-align: left;
 }
 
 .ranking-table a:hover,
