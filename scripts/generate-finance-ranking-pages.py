@@ -6,38 +6,38 @@ from ranking_page_generator import generate_ranking_pages
 RANKING_TYPES = [
     {
         "directory": "government-gross-debt",
-        "title": "Government Gross Debt (% of GDP) Ranking by Country",
+        "title": "Government Gross Debt (% of GDP) Rankings by Country",
         "script": "governmentGrossDebtRanking.js",
     },
     {
         "directory": "government-net-debt",
-        "title": "Government Net Debt (% of GDP) Ranking by Country",
+        "title": "Government Net Debt (% of GDP) Rankings by Country",
         "script": "governmentNetDebtRanking.js",
     },
     {
         "directory": "fiscal-balance",
-        "title": "Fiscal Balance (% of GDP) Ranking by Country",
+        "title": "Fiscal Balance (% of GDP) Rankings by Country",
         "script": "fiscalBalanceRanking.js",
     },
     {
         "directory": "primary-fiscal-balance",
-        "title": "Primary Fiscal Balance (% of GDP) Ranking by Country",
+        "title": "Primary Fiscal Balance (% of GDP) Rankings by Country",
         "script": "primaryFiscalBalanceRanking.js",
     },
     {
         "directory": "government-revenue",
-        "title": "Government Revenue (% of GDP) Ranking by Country",
+        "title": "Government Revenue (% of GDP) Rankings by Country",
         "script": "governmentRevenueRanking.js",
     },
     {
         "directory": "government-spending",
-        "title": "Government Spending (% of GDP) Ranking by Country",
+        "title": "Government Spending (% of GDP) Rankings by Country",
         "script": "governmentSpendingRanking.js",
     },
     {
         **WORLD_BANK_RANKING_NOTES,
         "directory": "total-reserves",
-        "title": "Total Reserves Ranking by Country",
+        "title": "Total Reserves Rankings by Country",
         "script": "totalReservesIncludingGoldRanking.js",
     },
 ]

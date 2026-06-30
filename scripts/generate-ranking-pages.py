@@ -6,37 +6,37 @@ from ranking_page_generator import generate_ranking_pages
 RANKING_TYPES = [
     {
         "directory": "gdp",
-        "title": "GDP Ranking by Country",
+        "title": "GDP Rankings by Country",
         "script": "nominalGdpRanking.js",
     },
     {
         "directory": "gdp-per-capita",
-        "title": "GDP per Capita Ranking by Country",
+        "title": "GDP per Capita Rankings by Country",
         "script": "gdpPerCapitaRanking.js",
     },
     {
         "directory": "gdp-growth",
-        "title": "GDP Growth Ranking by Country",
+        "title": "GDP Growth Rankings by Country",
         "script": "realGdpGrowthRanking.js",
     },
     {
         "directory": "inflation-rate",
-        "title": "Inflation Rate Ranking by Country",
+        "title": "Inflation Rate Rankings by Country",
         "script": "inflationRateRanking.js",
     },
     {
         "directory": "unemployment-rate",
-        "title": "Unemployment Rate Ranking by Country",
+        "title": "Unemployment Rate Rankings by Country",
         "script": "unemploymentRateRanking.js",
     },
     {
         "directory": "ppp-gdp",
-        "title": "PPP GDP Ranking by Country",
+        "title": "PPP GDP Rankings by Country",
         "script": "pppRanking.js",
     },
     {
         "directory": "ppp-gdp-per-capita",
-        "title": "PPP GDP per Capita Ranking by Country",
+        "title": "PPP GDP per Capita Rankings by Country",
         "script": "pppPerCapitaRanking.js",
     },
 ]

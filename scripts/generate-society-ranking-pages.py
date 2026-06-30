@@ -8,13 +8,13 @@ RANKING_TYPES = [
     {
         **SIPRI_RANKING_NOTES,
         "directory": "military-spending",
-        "title": "Military Spending Ranking by Country",
+        "title": "Military Spending Rankings by Country",
         "script": "militarySpendingRanking.js",
     },
     {
         **SIPRI_RANKING_NOTES,
         "directory": "military-spending-percent-gdp",
-        "title": "Military Spending (% of GDP) Ranking by Country",
+        "title": "Military Spending (% of GDP) Rankings by Country",
         "script": "militarySpendingPercentGdpRanking.js",
     },
 ]

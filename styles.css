@@ -1782,12 +1782,12 @@ h1 {
   margin: 0;
 }
 
-.ranking-page-title,
 .ranking-card-header h2 {
   font-size: clamp(1.22rem, 2.45vw, 1.72rem);
 }
 
 body[data-country-code][data-page-kind] .page-title,
+.ranking-page-title,
 .indicator-header h2 {
   font-size: clamp(1.16rem, 3.3vw, 1.84rem);
 }
@@ -2643,8 +2643,9 @@ body[data-country-code] .subtitle {
     font-size: clamp(1.38rem, 6.5vw, 1.75rem);
   }
 
+  body[data-country-code][data-page-kind] .page-title,
   .ranking-page-title {
-    font-size: clamp(1.16rem, 5.3vw, 1.48rem);
+    font-size: clamp(1.16rem, 3.3vw, 1.84rem);
   }
 
   .ranking-card-header h2 {

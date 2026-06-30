@@ -7,25 +7,25 @@ RANKING_TYPES = [
     {
         **WORLD_BANK_RANKING_NOTES,
         "directory": "co2-emissions",
-        "title": "CO2 Emissions Ranking by Country",
+        "title": "CO2 Emissions Rankings by Country",
         "script": "co2EmissionsRanking.js",
     },
     {
         **WORLD_BANK_RANKING_NOTES,
         "directory": "co2-emissions-per-capita",
-        "title": "CO2 Emissions per Capita Ranking by Country",
+        "title": "CO2 Emissions per Capita Rankings by Country",
         "script": "co2EmissionsPerCapitaRanking.js",
     },
     {
         **CIA_RANKING_NOTES,
         "directory": "area",
-        "title": "Area (km²) Ranking by Country",
+        "title": "Area (km²) Rankings by Country",
         "script": "areaRanking.js",
     },
     {
         **WORLD_BANK_RANKING_NOTES,
         "directory": "forest-area",
-        "title": "Forest Area Ranking by Country",
+        "title": "Forest Area Rankings by Country",
         "script": "forestAreaPercentOfLandAreaRanking.js",
     },
 ]

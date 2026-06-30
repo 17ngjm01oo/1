@@ -28,7 +28,7 @@ const MAP_FOCUS_BOUNDS = {
   Oceania: [112, -45, 180, -2],
 };
 const COUNTRY_FOCUS_BOUNDS = {
-  USA: [-172, 7, -52, 72],
+  USA: [-164, 19, -60, 71],
   FRA: [-6, 41, 10, 52],
   ESP: [-10, 35, 5, 44],
   PRT: [-10, 36, -6, 43],

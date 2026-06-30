@@ -9,7 +9,7 @@ from ranking_page_generator import generate_ranking_pages
 RANKING_TYPES = [
     {
         "directory": "population",
-        "title": "Population Ranking by Country",
+        "title": "Population Rankings by Country",
         "script": "populationRanking.js",
         "source_note": "Source: World Bank; IMF World Economic Outlook for Taiwan only.",
         "data_note": "",
@@ -17,31 +17,31 @@ RANKING_TYPES = [
     {
         **WORLD_BANK_RANKING_NOTES,
         "directory": "population-density",
-        "title": "Population Density Ranking by Country",
+        "title": "Population Density Rankings by Country",
         "script": "populationDensityRanking.js",
     },
     {
         **WORLD_BANK_RANKING_NOTES,
         "directory": "life-expectancy",
-        "title": "Life Expectancy Ranking by Country",
+        "title": "Life Expectancy Rankings by Country",
         "script": "lifeExpectancyRanking.js",
     },
     {
         **WORLD_BANK_RANKING_NOTES,
         "directory": "fertility-rate",
-        "title": "Fertility Rate Ranking by Country",
+        "title": "Fertility Rate Rankings by Country",
         "script": "fertilityRateRanking.js",
     },
     {
         **WORLD_BANK_RANKING_NOTES,
         "directory": "immigrants",
-        "title": "Immigrants Ranking by Country",
+        "title": "Immigrants Rankings by Country",
         "script": "immigrantsRanking.js",
     },
     {
         **WORLD_BANK_RANKING_NOTES,
         "directory": "immigrants-percent-population",
-        "title": "Immigrants (% of Population) Ranking by Country",
+        "title": "Immigrants (% of Population) Rankings by Country",
         "script": "immigrantsPercentPopulationRanking.js",
     },
 ]

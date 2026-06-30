@@ -30,10 +30,13 @@ export function initializeRankingPage(config) {
     rankingDataByYear: new Map(),
     elements: {
       count: document.querySelector("#rankingCount"),
+      pageTitle: document.querySelector("#ranking-title"),
       tableBody: document.querySelector("#rankingTableBody"),
       tableTitle: document.querySelector("#ranking-table-title"),
     },
   };
+  state.basePageTitle = state.elements.pageTitle?.textContent?.trim() ?? "";
+  state.baseDocumentTitle = document.title.trim();
 
   state.sortOrder = initializeRankingSort({
     initialValue: state.sortOrder,
@@ -90,11 +93,14 @@ async function initializeRanking(config, state) {
     throw new Error(`Static ${config.logName} ranking manifest has no years for ${config.indicatorCode}.`);
   }
 
+  updateRankingYearTitles(state);
+
   initializeRankingYear({
     years: availableYears,
     initialValue: state.selectedYear,
     onChange(year) {
       state.selectedYear = year;
+      updateRankingYearTitles(state);
       showRankingLoading({
         countElement: state.elements.count,
       });
@@ -229,6 +235,22 @@ function updateRankingTitle(state, scope) {
 
   const scopeLabel = scope?.label ?? "World";
   rankingTableTitle.textContent = `Scope: ${scopeLabel}`;
+}
+
+function updateRankingYearTitles(state) {
+  if (!state.selectedYear) {
+    return;
+  }
+
+  const titleSuffix = ` – ${state.selectedYear}`;
+
+  if (state.elements.pageTitle && state.basePageTitle) {
+    state.elements.pageTitle.textContent = `${state.basePageTitle}${titleSuffix}`;
+  }
+
+  if (state.baseDocumentTitle) {
+    document.title = `${state.baseDocumentTitle}${titleSuffix}`;
+  }
 }
 
 function filterRankingRows(rankingRows, scope, showTerritories) {
