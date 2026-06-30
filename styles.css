@@ -10,16 +10,16 @@
   --error: #9f2f2f;
   --error-bg: #fff0f0;
   --territory-bg: #fffced;
-  --section-gap: 8px;
-  --section-gap-compact: 8px;
+  --section-gap: 6px;
+  --section-gap-compact: 6px;
   --card-padding-block: 22px;
   --card-padding-inline: 22px;
   --card-padding: var(--card-padding-block) var(--card-padding-inline);
   --card-padding-block-mobile: 14px;
   --card-padding-inline-mobile: 10px;
   --card-padding-mobile: var(--card-padding-block-mobile) var(--card-padding-inline-mobile);
-  --nav-card-padding: 14px 18px;
-  --nav-card-padding-mobile: 10px;
+  --nav-card-padding: 10px 14px;
+  --nav-card-padding-mobile: 8px 10px;
   --footer-card-padding: 6px 18px;
   --footer-card-padding-mobile: 3px 10px;
   --home-entry-copy-padding: 14px 24px;
@@ -100,8 +100,8 @@ body {
 }
 
 .top-nav-card {
-  grid-template-columns: repeat(3, max-content);
-  gap: 12px;
+  grid-template-columns: repeat(5, max-content);
+  gap: 8px;
   padding: var(--nav-card-padding);
 }
 
@@ -306,7 +306,7 @@ body {
   width: max-content;
   max-width: 100%;
   color: var(--muted);
-  font-size: 1.12rem;
+  font-size: 1rem;
   font-weight: 700;
   text-decoration: none;
   overflow-wrap: anywhere;
@@ -314,7 +314,7 @@ body {
 
 .country-hub-nav-separator {
   color: var(--border);
-  font-size: 1.12rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
@@ -2366,7 +2366,7 @@ body[data-country-code] .subtitle {
   }
 
   .top-nav-card {
-    gap: 10px;
+    gap: 8px;
     padding: var(--nav-card-padding-mobile);
     border-radius: var(--radius-component);
   }

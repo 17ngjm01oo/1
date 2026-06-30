@@ -77,9 +77,6 @@ def render_country_page(country: dict[str, str], config: CountryPageConfig) -> s
     <script type="module" src="../../../src/countryIndicatorPage.js"></script>
   </head>
   <body data-country-code="{country_code}" data-page-kind="{html.escape(config.page_kind)}">
-    <header class="site-header">
-      <a class="site-home-link" href="../../../">HOME</a>
-    </header>
     <main class="page-shell">
 {render_rankings_top_nav()}
 

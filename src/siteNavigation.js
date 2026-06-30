@@ -11,6 +11,8 @@ export function renderSiteHubLinks({ rootHref = "./" } = {}) {
 
   navCards.forEach((navCard) => {
     navCard.replaceChildren(
+      createSiteHubLink(rootHref, "Home", isHomePage()),
+      createSiteHubSeparator(),
       createSiteHubLink(`${rootHref}countries/`, "Countries", isCountryHubPage()),
       createSiteHubSeparator(),
       createSiteHubLink(`${rootHref}rankings/`, "Rankings", isRankingsPage()),
@@ -73,6 +75,10 @@ export function renderTopNavigationLinks({
 
 function isCountryHubPage() {
   return document.body.dataset.pageKind === "country-hub";
+}
+
+function isHomePage() {
+  return document.body.dataset.pageKind === "home";
 }
 
 function isRankingsPage() {

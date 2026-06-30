@@ -95,9 +95,6 @@ def render_ranking_page(ranking_type: dict[str, str], scope: dict[str, str], is_
     data-ranking-scope-label="{escape(scope["label"])}"
     data-ranking-scope-slug="{escape(scope["slug"])}"
   >
-    <header class="site-header">
-      <a class="site-home-link" href="{root_href}">HOME</a>
-    </header>
     <main class="page-shell ranking-page">
 {render_rankings_top_nav()}
 

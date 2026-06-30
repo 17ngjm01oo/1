@@ -59,9 +59,6 @@ def render_country_overview_page(country: dict[str, str], category: dict[str, st
     <script type="module" src="{root_href}src/countryOverviewPage.js"></script>
   </head>
   <body data-country-code="{country_code}" data-root-href="{root_href}" data-country-root-href="{country_root_href}" data-country-overview-category="{category_id}">
-    <header class="site-header">
-      <a class="site-home-link" href="{root_href}">HOME</a>
-    </header>
     <main class="page-shell">
 {render_rankings_top_nav()}
 
