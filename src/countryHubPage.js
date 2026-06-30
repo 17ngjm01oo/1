@@ -19,6 +19,12 @@ const categoryList = document.querySelector("#categoryList");
 const regionPanel = document.querySelector("#region-heading")?.closest(".category-panel");
 const categoryPanel = document.querySelector("#category-heading")?.closest(".category-panel");
 const countryHubControls = document.querySelector("#countryHubControls");
+const categoryMapFocusById = {
+  ASEAN: "ASEAN",
+  EU: "EU",
+  Eurozone: "EU",
+  NATO: "NATO",
+};
 let activeScope = null;
 let showTerritories = true;
 let worldMap = null;
@@ -142,13 +148,14 @@ function updateMapScope(matchingCountries = getMatchingCountries()) {
 
   if (activeScope?.type === "category") {
     worldMap.setScope({
+      focusId: categoryMapFocusById[activeScope.id] ?? "",
       highlightedCountryCodes: new Set(matchingCountries.map((country) => country.code)),
     });
     return;
   }
 
   worldMap.setScope({
-    regionId: activeScope?.type === "region" ? activeScope.id : "",
+    focusId: activeScope?.type === "region" ? activeScope.id : "",
   });
 }
 

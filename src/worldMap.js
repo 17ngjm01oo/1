@@ -16,9 +16,12 @@ const REGION_COLORS = {
   "South America": "#6E9F74",
   Oceania: "#D6908B",
 };
-const REGION_FOCUS_BOUNDS = {
+const MAP_FOCUS_BOUNDS = {
   Asia: [40, -8, 155, 58],
+  ASEAN: [88, -10, 144, 28],
   Europe: [-25, 34, 60, 72],
+  EU: [-20, 35, 38, 66],
+  NATO: [-94, 19, 45, 65],
   Africa: [-17, -34, 53, 35],
   "North America": [-172, 7, -52, 72],
   "South America": [-82, -39, -34, 14],
@@ -75,7 +78,7 @@ export async function renderWorldMap({
     renderMapPaths({ svg, tooltip, container, mapCountries, countryLookup, focusCountryCode, defaultZoom });
 
     return {
-      setScope({ regionId = "", highlightedCountryCodes = null } = {}) {
+      setScope({ focusId = "", highlightedCountryCodes = null } = {}) {
         hideMapTooltip(tooltip);
         renderMapPaths({
           svg,
@@ -83,14 +86,14 @@ export async function renderWorldMap({
           container,
           mapCountries,
           countryLookup,
-          regionId,
+          focusId,
           defaultZoom,
           highlightedCountryCodes,
         });
       },
       focusRegion(regionId) {
         hideMapTooltip(tooltip);
-        renderMapPaths({ svg, tooltip, container, mapCountries, countryLookup, regionId, defaultZoom });
+        renderMapPaths({ svg, tooltip, container, mapCountries, countryLookup, focusId: regionId, defaultZoom });
       },
       focusCountry(countryCode) {
         hideMapTooltip(tooltip);
@@ -109,7 +112,7 @@ function renderMapPaths({
   container,
   mapCountries,
   countryLookup,
-  regionId = "",
+  focusId = "",
   focusCountryCode = "",
   defaultZoom = 1,
   highlightedCountryCodes = null,
@@ -119,10 +122,10 @@ function renderMapPaths({
       [MAP_PADDING, MAP_PADDING],
       [MAP_WIDTH - MAP_PADDING, MAP_HEIGHT - MAP_PADDING],
     ],
-    getCountryFocusGeometry(focusCountryCode, mapCountries, countryLookup) ?? getFocusGeometry(regionId) ?? mapCountries,
+    getCountryFocusGeometry(focusCountryCode, mapCountries, countryLookup) ?? getMapFocusGeometry(focusId) ?? mapCountries,
   );
 
-  if (!focusCountryCode && !regionId && defaultZoom !== 1) {
+  if (!focusCountryCode && !focusId && defaultZoom !== 1) {
     projection.scale(projection.scale() * defaultZoom);
   }
 
@@ -163,8 +166,8 @@ function getCountryFocusGeometry(countryCode, mapCountries, countryLookup) {
   }) ?? null;
 }
 
-function getFocusGeometry(regionId) {
-  const bounds = REGION_FOCUS_BOUNDS[regionId];
+function getMapFocusGeometry(focusId) {
+  const bounds = MAP_FOCUS_BOUNDS[focusId];
 
   if (!bounds) {
     return null;
