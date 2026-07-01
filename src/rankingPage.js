@@ -41,10 +41,12 @@ const worldShareHiddenIndicatorCodes = new Set([
 export function initializeRankingPage(config) {
   initializeRankingCountrySearch(config);
   initializeIndicatorInfoTooltips();
-  const showWorldShare = shouldShowWorldShare(config);
+  const initialScope = getRankingScopeFromBody();
+  const showWorldShare = shouldShowWorldShare(config, initialScope);
   const rankingNotes = document.querySelector(".ranking-notes");
   appendTerritoryNote(rankingNotes);
   appendRankingSummaryNote(rankingNotes, showWorldShare);
+  removeLegacyRankingScopeTitle();
 
   const state = {
     allRankingRows: [],
@@ -61,13 +63,11 @@ export function initializeRankingPage(config) {
       worldShareItem: null,
       pageTitle: document.querySelector("#ranking-title"),
       tableBody: document.querySelector("#rankingTableBody"),
-      tableTitle: document.querySelector("#ranking-table-title"),
       worldShareValue: null,
       averageValue: null,
     },
   };
   state.basePageTitle = state.elements.pageTitle?.textContent?.trim() ?? "";
-  state.baseDocumentTitle = document.title.trim();
 
   state.sortOrder = initializeRankingSort({
     initialValue: state.sortOrder,
@@ -98,17 +98,41 @@ function initializeRankingCountrySearch(config) {
   });
 }
 
-function shouldShowWorldShare(config) {
-  return !worldShareHiddenIndicatorCodes.has(config.indicatorCode);
+function shouldShowWorldShare(config, scope = null) {
+  return !isWorldScope(scope) && !worldShareHiddenIndicatorCodes.has(config.indicatorCode);
+}
+
+function getRankingScopeFromBody() {
+  const type = document.body.dataset.rankingScopeType;
+  const id = document.body.dataset.rankingScopeId;
+
+  if (!type || !id) {
+    return null;
+  }
+
+  return { type, id };
+}
+
+function isWorldScope(scope) {
+  return scope?.type === "world" || scope?.id === "WORLD";
 }
 
 function appendRankingSummaryNote(container, showWorldShare) {
   appendNote(container, {
     className: "ranking-summary-note",
     text: showWorldShare
-      ? "Average and World Share are calculated from the table and exclude territories."
-      : "Average is calculated from the table and excludes territories.",
+      ? "Average is an unweighted mean calculated from the table; World Share is also calculated from the table. Territories are excluded from both."
+      : "Average is an unweighted mean calculated from the table and excludes territories.",
   });
+}
+
+function removeLegacyRankingScopeTitle() {
+  const rankingTableTitle = document.querySelector("#ranking-table-title");
+  const rankingCard = rankingTableTitle?.closest(".ranking-card");
+
+  rankingCard?.removeAttribute("aria-labelledby");
+  rankingCard?.setAttribute("aria-label", "Ranking table");
+  rankingTableTitle?.remove();
 }
 
 function getCountryPagePathSegment(config) {
@@ -138,14 +162,14 @@ async function initializeRanking(config, state) {
     throw new Error(`Static ${config.logName} ranking manifest has no years for ${config.indicatorCode}.`);
   }
 
-  updateRankingYearTitles(state);
+  updateRankingPageTitle(state, state.activeScope);
 
   initializeRankingYear({
     years: availableYears,
     initialValue: state.selectedYear,
     onChange(year) {
       state.selectedYear = year;
-      updateRankingYearTitles(state);
+      updateRankingPageTitle(state, state.activeScope);
       showRankingLoading({
         countElement: state.elements.count,
       });
@@ -262,7 +286,7 @@ function renderScopedRanking(config, state) {
     filterRankingRows(state.allRankingRows, state.activeScope, state.showTerritories),
     state.sortOrder,
   );
-  updateRankingTitle(state, state.activeScope);
+  updateRankingPageTitle(state, state.activeScope);
   renderRankingTable(config, state, rankingRows);
   renderRankingSummary(config, state, rankingRows);
   updateRankingCount(state, rankingRows);
@@ -273,31 +297,24 @@ function sortRankingRows(rankingRows, sortOrder) {
   return [...rankingRows].sort((countryA, countryB) => direction * (countryA.value - countryB.value));
 }
 
-function updateRankingTitle(state, scope) {
-  const rankingTableTitle = state.elements.tableTitle;
-
-  if (!rankingTableTitle) {
+function updateRankingPageTitle(state, scope) {
+  if (!state.basePageTitle) {
     return;
   }
 
-  const scopeLabel = scope?.label ?? "World";
-  rankingTableTitle.textContent = `Scope: ${scopeLabel}`;
+  const title = getRankingPageTitle(state, scope);
+
+  if (state.elements.pageTitle) {
+    state.elements.pageTitle.textContent = title;
+  }
+
+  document.title = title;
 }
 
-function updateRankingYearTitles(state) {
-  if (!state.selectedYear) {
-    return;
-  }
-
-  const titleSuffix = ` – ${state.selectedYear}`;
-
-  if (state.elements.pageTitle && state.basePageTitle) {
-    state.elements.pageTitle.textContent = `${state.basePageTitle}${titleSuffix}`;
-  }
-
-  if (state.baseDocumentTitle) {
-    document.title = `${state.baseDocumentTitle}${titleSuffix}`;
-  }
+function getRankingPageTitle(state, scope) {
+  const scopeLabel = scope?.label ?? "World";
+  const yearSegment = state.selectedYear ? `, ${state.selectedYear}` : "";
+  return `${state.basePageTitle}: ${scopeLabel}${yearSegment}`;
 }
 
 function filterRankingRows(rankingRows, scope, showTerritories) {
@@ -374,36 +391,26 @@ function renderRankingTable(config, state, rankingRows) {
 
 function ensureRankingSummary(config, state) {
   const rankingCard = document.querySelector(".ranking-card");
-  const rankingTableWrap = document.querySelector(".ranking-table-wrap");
-  const rankingNotes = document.querySelector(".ranking-notes");
+  const rankingCardHeader = rankingCard?.querySelector(".ranking-card-header");
 
-  if (!rankingCard || state.elements.summary) {
+  if (!rankingCardHeader || state.elements.summary) {
     return;
   }
 
-  const summary = document.createElement("dl");
-  const showWorldShare = shouldShowWorldShare(config);
-  summary.className = "ranking-summary";
-  summary.classList.toggle("is-average-only", !showWorldShare);
+  const summary = document.createElement("p");
+  const showWorldShare = shouldShowWorldShare(config, state.activeScope);
+  summary.className = "ranking-summary ranking-count";
   summary.innerHTML = `
-    <div class="ranking-summary-item">
-      <dt class="ranking-summary-label">Average:</dt>
-      <dd class="ranking-summary-value" data-summary-key="average">-</dd>
-    </div>
+    <span>Average: <span data-summary-key="average">-</span></span>
     ${showWorldShare ? `
-      <div class="ranking-summary-item" data-summary-key="world-share-item">
-        <dt class="ranking-summary-label">World Share:</dt>
-        <dd class="ranking-summary-value" data-summary-key="world-share">-</dd>
-      </div>
+      <span data-summary-key="world-share-item">World Share: <span data-summary-key="world-share">-</span></span>
     ` : ""}
   `;
 
-  if (rankingNotes) {
-    rankingNotes.before(summary);
-  } else if (rankingTableWrap) {
-    rankingTableWrap.after(summary);
+  if (state.elements.count) {
+    state.elements.count.after(summary);
   } else {
-    rankingCard.append(summary);
+    rankingCardHeader.prepend(summary);
   }
 
   state.elements.summary = summary;
@@ -425,7 +432,7 @@ function renderRankingSummary(config, state, rankingRows) {
 
   averageElement.textContent = formatRankingAverage(average, config);
 
-  if (shouldShowWorldShare(config) && worldShareElement) {
+  if (shouldShowWorldShare(config, state.activeScope) && worldShareElement) {
     const worldRows = state.allRankingRows.filter((row) => !isTerritory(row));
     const visibleTotal = sumRankingValues(visibleRows, true);
     const worldTotal = sumRankingValues(worldRows, true);

@@ -67,7 +67,7 @@ def write_ranking_page(ranking_type: dict[str, str], scope: dict[str, str], is_b
 def render_ranking_page(ranking_type: dict[str, str], scope: dict[str, str], is_base_page: bool) -> str:
     root_href = "../../" if is_base_page else "../../../"
     ranking_base_href = "./" if is_base_page else "../"
-    page_title = f"{ranking_type['title']} - {scope['label']}"
+    page_title = f"{ranking_type['title']}: {scope['label']}"
     subtitle_markup = render_subtitle(ranking_type["directory"])
     source_note = ranking_type.get("source_note", "")
     data_note = ranking_type.get("data_note", "")
@@ -140,9 +140,8 @@ def render_ranking_page(ranking_type: dict[str, str], scope: dict[str, str], is_
         </div>
       </section>
 
-      <section class="ranking-card" aria-labelledby="ranking-table-title">
+      <section class="ranking-card" aria-label="Ranking table">
         <header class="ranking-card-header">
-          <h2 id="ranking-table-title">Scope: {escape(scope["label"])}</h2>
           <p id="rankingCount" class="ranking-count" aria-live="polite">Loading ranking data...</p>
         </header>
 

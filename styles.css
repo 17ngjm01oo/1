@@ -1782,10 +1782,6 @@ h1 {
   margin: 0;
 }
 
-.ranking-card-header h2 {
-  font-size: clamp(1.22rem, 2.45vw, 1.72rem);
-}
-
 body[data-country-code][data-page-kind] .page-title,
 .ranking-page-title,
 .indicator-header h2 {
@@ -2004,12 +2000,6 @@ body[data-country-code] .subtitle {
   gap: 6px;
 }
 
-.ranking-card-header h2 {
-  grid-column: 1 / -1;
-  margin: 0;
-  white-space: nowrap;
-}
-
 .ranking-count,
 .entity-count {
   margin: 0;
@@ -2025,8 +2015,22 @@ body[data-country-code] .subtitle {
 
 .ranking-card-header .ranking-count {
   grid-column: 1;
-  grid-row: 2;
+  grid-row: 1;
   align-self: center;
+}
+
+.ranking-card-header .ranking-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 8px;
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+
+.ranking-card-header .ranking-summary span + span {
+  padding-left: 8px;
+  border-left: 1px solid var(--border);
 }
 
 .ranking-controls {
@@ -2176,49 +2180,6 @@ body[data-country-code] .subtitle {
 
 .ranking-table-wrap {
   overflow: hidden;
-}
-
-.ranking-summary {
-  display: grid;
-  grid-template-columns: repeat(2, max-content);
-  justify-content: start;
-  gap: 0 8px;
-  margin: 7px 0;
-}
-
-.ranking-summary.is-average-only {
-  grid-template-columns: max-content;
-  gap: 0;
-}
-
-.ranking-summary-item {
-  display: flex;
-  align-items: baseline;
-  gap: 4px;
-  min-width: 0;
-}
-
-.ranking-summary-item + .ranking-summary-item {
-  padding-left: 8px;
-  border-left: 1px solid var(--border);
-}
-
-.ranking-summary-label {
-  color: var(--muted);
-  font-size: 0.9rem;
-  font-weight: 700;
-  text-transform: none;
-  letter-spacing: 0;
-  flex: 0 0 auto;
-}
-
-.ranking-summary-value {
-  margin: 0;
-  color: var(--text);
-  font-size: 0.9rem;
-  font-weight: 700;
-  line-height: 1.2;
-  flex: 0 0 auto;
 }
 
 .ranking-table,
@@ -2689,10 +2650,6 @@ body[data-country-code] .subtitle {
   body[data-country-code][data-page-kind] .page-title,
   .ranking-page-title {
     font-size: clamp(1.16rem, 3.3vw, 1.84rem);
-  }
-
-  .ranking-card-header h2 {
-    font-size: clamp(1.02rem, 4.7vw, 1.28rem);
   }
 
 }
